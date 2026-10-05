@@ -1,5 +1,6 @@
 import os
 import glob
+import socket
 from fastapi import APIRouter, Depends, HTTPException, Query, Header, Response, Request
 from fastapi.responses import FileResponse
 from typing import List, Dict
@@ -113,7 +114,7 @@ async def get_status():
     if is_online and time.time() - monitor_state.get("last_seen", time.time()) > 5:
         monitor_state["online"] = False
         is_online = False
-        
+
     return {
         "monitor_online": is_online,
         "frame_count": monitor_state.get("frame_count", 0),
@@ -121,6 +122,15 @@ async def get_status():
         "battery_level": monitor_state.get("battery_level", 100),
         "is_charging": monitor_state.get("is_charging", False),
     }
+
+@auth_router.get("/api/health")
+async def health():
+    """Unauthenticated liveness probe for the apps' connection-status chip.
+
+    Deliberately minimal: it must work even with a missing/expired token so
+    the UI can say "server unreachable" vs "wrong token".
+    """
+    return {"ok": True, "name": socket.gethostname() or "pettrack"}
 
 @router.post("/api/frame/web")
 async def receive_web_frame(request: Request, token: str = ""):

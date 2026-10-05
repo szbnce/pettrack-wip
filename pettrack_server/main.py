@@ -15,6 +15,7 @@ from api_routes import router as zones_router, auth_router, monitor_state, activ
 from tasks import cleanup_old_images
 from vision import process_and_save_frame
 from database import init_db, get_zones
+from discovery import start_advertiser, stop_advertiser
 
 app = FastAPI()
 
@@ -53,7 +54,10 @@ async def startup_event():
         s.close()
     except:
         ip = "127.0.0.1"
-    
+
+    # Advertise on the LAN (mDNS) so apps can find this server without typing an IP.
+    start_advertiser(ip=ip, port=8000)
+
     qr_data = f'{{"ip": "{ip}:8000", "secret": "{SECRET_TOKEN}"}}'
     qr_img = qrcode.make(qr_data)
     qr = qrcode.QRCode()
@@ -85,6 +89,10 @@ async def startup_event():
     print("="*55)
     print(f"WEB DASHBOARD PIN: {web_pin}")
     print("="*55 + "\n")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    stop_advertiser()
 
 from fastapi.staticfiles import StaticFiles
 

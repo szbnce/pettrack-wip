@@ -128,3 +128,22 @@ def test_media_token_opens_only_its_own_file(client):
     # ...nor any general API endpoint.
     assert client.get(f"/api/pet?token={stolen}").status_code == 403
     assert client.get(f"/api/zones?token={stolen}").status_code == 403
+
+
+# --- public health endpoint (connection-status chip) --------------------------
+
+def test_health_needs_no_token(client):
+    r = client.get("/api/health")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["ok"] is True
+    assert isinstance(body["name"], str) and body["name"]
+
+
+def test_health_is_public_even_with_any_token(client):
+    # A media token is fine here too - health is public and says nothing secret.
+    _make_replays(client)
+    tok = _pin_token(client)
+    media_tok = client.get("/api/replays", headers={"x-api-token": tok}).json()["replays"]
+    stolen = media_tok[0]["url"].split("token=")[1]
+    assert client.get(f"/api/health?token={stolen}").status_code == 200
