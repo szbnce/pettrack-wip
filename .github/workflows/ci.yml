@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  app:
+    name: pettrack_app (analyze, l10n, test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pettrack_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Static analysis
+        run: flutter analyze
+      - name: i18n parity (all locales)
+        run: python3 ../tools/check_i18n.py
+      - name: Generated l10n classes are up to date
+        run: |
+          flutter gen-l10n
+          git diff --exit-code -- lib/l10n \
+            || (echo "::error::lib/l10n out of sync - run 'flutter gen-l10n' and commit" && exit 1)
+      - name: Widget tests
+        run: flutter test
+
+  server:
+    name: pettrack_server (pytest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pettrack_server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: API tests
+        run: pytest tests -q
