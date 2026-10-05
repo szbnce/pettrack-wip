@@ -28,5 +28,11 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app needs to access the local network to connect to the PetTrack server.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_pettrack._tcp</string>
+	</array>
 </dict>
 </plist>

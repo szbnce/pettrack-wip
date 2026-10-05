@@ -1235,6 +1235,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'v1.0 Pre-Release'**
   String get appVersion;
+
+  /// No description provided for @discoveryBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Find server on network'**
+  String get discoveryBtn;
+
+  /// No description provided for @discoveryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Servers on your network'**
+  String get discoveryTitle;
+
+  /// No description provided for @discoverySearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching your local network…'**
+  String get discoverySearching;
+
+  /// No description provided for @discoveryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No PetTrack server found yet.'**
+  String get discoveryEmpty;
+
+  /// No description provided for @discoveryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure the server is running and you are on the same Wi-Fi.'**
+  String get discoveryHint;
+
+  /// No description provided for @discoveryNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic discovery is not available on this device. Enter the server address manually.'**
+  String get discoveryNotSupported;
+
+  /// No description provided for @discoveryTapToUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to connect'**
+  String get discoveryTapToUse;
 }
 
 class _AppLocalizationsDelegate

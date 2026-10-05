@@ -608,4 +608,26 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get appVersion => 'v1.0 Pre-Release';
+
+  @override
+  String get discoveryBtn => '네트워크에서 서버 찾기';
+
+  @override
+  String get discoveryTitle => '네트워크의 서버';
+
+  @override
+  String get discoverySearching => '로컬 네트워크 검색 중…';
+
+  @override
+  String get discoveryEmpty => '아직 PetTrack 서버를 찾지 못했습니다.';
+
+  @override
+  String get discoveryHint => '서버가 실행 중이고 같은 Wi-Fi에 연결되어 있는지 확인하세요.';
+
+  @override
+  String get discoveryNotSupported =>
+      '이 기기에서는 자동 검색을 사용할 수 없습니다. 서버 주소를 직접 입력하세요.';
+
+  @override
+  String get discoveryTapToUse => '탭하여 연결';
 }

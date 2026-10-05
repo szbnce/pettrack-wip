@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/screens/monitor_screen.dart';
+import 'package:pettrack_app/utils/server_url.dart';
+import 'package:pettrack_app/widgets/server_discovery_dialog.dart';
 
 class MonitorSetupScreen extends StatefulWidget {
   const MonitorSetupScreen({super.key});
@@ -27,8 +29,10 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
     try {
       final data = jsonDecode(rawData);
       if (data['ip'] != null && data['secret'] != null) {
+        // The server QR holds "host:port"; wizard QRs hold a full URL.
+        final serverUrl = normalizeServerUrl(data['ip'] as String);
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('server_ip', data['ip']);
+        await prefs.setString('server_ip', serverUrl);
         await prefs.setString('server_token', data['secret']);
 
         String clientId = prefs.getString('client_id') ?? '';
@@ -43,7 +47,7 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => MonitorScreen(
-              serverIp: data['ip'],
+              serverIp: serverUrl,
               token: data['secret'],
               clientId: clientId,
             ),
@@ -106,24 +110,7 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
 
     // Demo logic moved to _startDemoMode()
 
-    String targetIp = ipInput;
-    if (!targetIp.startsWith('http://') && !targetIp.startsWith('https://')) {
-      targetIp = 'http://$targetIp';
-    }
-
-    final uri = Uri.tryParse(targetIp);
-    if (uri != null && !uri.hasPort) {
-      // If it's a local IP or localhost, append :8000 by default unless HTTPS
-      final host = uri.host;
-      final isIpOrLocal =
-          RegExp(r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$').hasMatch(host) ||
-          host == 'localhost';
-      if (isIpOrLocal &&
-          uri.scheme != 'https' &&
-          !targetIp.contains(':$host')) {
-        targetIp = '${uri.scheme}://$host:8000${uri.path}';
-      }
-    }
+    final targetIp = normalizeServerUrl(ipInput);
 
     _ipController.text = targetIp;
 
@@ -239,6 +226,13 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
                                 hintText: l10n.serverIpHint,
                                 border: const OutlineInputBorder(),
                               ),
+                            ),
+                            const SizedBox(height: 10),
+                            ServerDiscoveryButton(
+                              onSelected: (address) {
+                                _ipController.text =
+                                    normalizeServerUrl(address);
+                              },
                             ),
                             const SizedBox(height: 10),
                             Row(

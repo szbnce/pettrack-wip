@@ -314,5 +314,12 @@
   "errInvalidPin": "PIN 无效！",
   "errNetwork": "网络错误！",
   "defaultPetName": "宠物",
-  "appVersion": "v1.0 Pre-Release"
+  "appVersion": "v1.0 Pre-Release",
+  "discoveryBtn": "在网络中查找服务器",
+  "discoveryTitle": "您网络中的服务器",
+  "discoverySearching": "正在搜索本地网络…",
+  "discoveryEmpty": "尚未找到 PetTrack 服务器。",
+  "discoveryHint": "请确保服务器正在运行，并且手机连接到同一个 Wi-Fi。",
+  "discoveryNotSupported": "此设备不支持自动查找。请手动输入服务器地址。",
+  "discoveryTapToUse": "点按以连接"
 }

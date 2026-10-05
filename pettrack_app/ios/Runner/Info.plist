@@ -12,6 +12,10 @@
 	<string>This app needs photo library access to upload pet profile pictures.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>This app needs to access the local network to connect to the PetTrack server.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_pettrack._tcp</string>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs location access.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

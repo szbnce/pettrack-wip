@@ -619,4 +619,27 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get appVersion => 'v1.0 Pre-Release';
+
+  @override
+  String get discoveryBtn => 'Trova il server in rete';
+
+  @override
+  String get discoveryTitle => 'Server nella tua rete';
+
+  @override
+  String get discoverySearching => 'Ricerca nella rete locale…';
+
+  @override
+  String get discoveryEmpty => 'Nessun server PetTrack trovato.';
+
+  @override
+  String get discoveryHint =>
+      'Assicurati che il server sia in esecuzione e che tu sia sulla stessa Wi-Fi.';
+
+  @override
+  String get discoveryNotSupported =>
+      'La ricerca automatica non è disponibile su questo dispositivo. Inserisci l\'indirizzo del server manualmente.';
+
+  @override
+  String get discoveryTapToUse => 'Tocca per connetterti';
 }

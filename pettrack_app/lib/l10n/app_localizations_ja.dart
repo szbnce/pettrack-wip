@@ -610,4 +610,26 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get appVersion => 'v1.0 Pre-Release';
+
+  @override
+  String get discoveryBtn => 'ネットワークからサーバーを探す';
+
+  @override
+  String get discoveryTitle => 'ネットワーク上のサーバー';
+
+  @override
+  String get discoverySearching => 'ローカルネットワークを検索中…';
+
+  @override
+  String get discoveryEmpty => 'PetTrackサーバーがまだ見つかりません。';
+
+  @override
+  String get discoveryHint => 'サーバーが起動していて、同じWi-Fiに接続しているか確認してください。';
+
+  @override
+  String get discoveryNotSupported =>
+      'このデバイスでは自動検索を利用できません。サーバーアドレスを手動で入力してください。';
+
+  @override
+  String get discoveryTapToUse => 'タップして接続';
 }

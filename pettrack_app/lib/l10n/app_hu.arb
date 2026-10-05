@@ -214,5 +214,12 @@
   "errNetwork": "Hálózati hiba!",
   "defaultPetName": "Kedvenc",
   "appVersion": "v1.0 Pre-Release",
-  "zoneVisits": "Zónalátogatások"
+  "zoneVisits": "Zónalátogatások",
+  "discoveryBtn": "Szerver keresése a hálózaton",
+  "discoveryTitle": "Szerverek a hálózaton",
+  "discoverySearching": "Keresés a helyi hálózaton…",
+  "discoveryEmpty": "Még nem találtam PetTrack szervert.",
+  "discoveryHint": "Győződj meg róla, hogy a szerver fut, és ugyanazon a Wi-Fi-n vagy.",
+  "discoveryNotSupported": "Az automatikus keresés ezen az eszközön nem elérhető. Írd be a szerver címét kézzel.",
+  "discoveryTapToUse": "Koppints a csatlakozáshoz"
 }

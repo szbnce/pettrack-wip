@@ -314,5 +314,12 @@
   "errInvalidPin": "잘못된 PIN입니다!",
   "errNetwork": "네트워크 오류!",
   "defaultPetName": "반려동물",
-  "appVersion": "v1.0 Pre-Release"
+  "appVersion": "v1.0 Pre-Release",
+  "discoveryBtn": "네트워크에서 서버 찾기",
+  "discoveryTitle": "네트워크의 서버",
+  "discoverySearching": "로컬 네트워크 검색 중…",
+  "discoveryEmpty": "아직 PetTrack 서버를 찾지 못했습니다.",
+  "discoveryHint": "서버가 실행 중이고 같은 Wi-Fi에 연결되어 있는지 확인하세요.",
+  "discoveryNotSupported": "이 기기에서는 자동 검색을 사용할 수 없습니다. 서버 주소를 직접 입력하세요.",
+  "discoveryTapToUse": "탭하여 연결"
 }

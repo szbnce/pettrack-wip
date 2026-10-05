@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
+import 'package:pettrack_app/utils/server_url.dart';
+import 'package:pettrack_app/widgets/server_discovery_dialog.dart';
 import 'qr_scanner_screen.dart';
 import 'main_navigation.dart';
 
@@ -117,24 +119,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
     // Demo logic moved to _startDemoMode()
 
-    String targetIp = ipInput;
-    if (!targetIp.startsWith('http://') && !targetIp.startsWith('https://')) {
-      targetIp = 'http://$targetIp';
-    }
-
-    final uri = Uri.tryParse(targetIp);
-    if (uri != null && !uri.hasPort) {
-      // If it's a local IP or localhost, append :8000 by default unless HTTPS
-      final host = uri.host;
-      final isIpOrLocal =
-          RegExp(r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$').hasMatch(host) ||
-          host == 'localhost';
-      if (isIpOrLocal &&
-          uri.scheme != 'https' &&
-          !targetIp.contains(':$host')) {
-        targetIp = '${uri.scheme}://$host:8000${uri.path}';
-      }
-    }
+    final targetIp = normalizeServerUrl(ipInput);
 
     _ipController.text = targetIp;
 
@@ -237,6 +222,9 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   }
 
   Future<void> _processLogin(String ip, String secret) async {
+    // QR payloads may hold "host:port" (server terminal) or a full URL
+    // (in-app QR) — normalize so both work.
+    ip = normalizeServerUrl(ip);
     setState(() => _isLoading = true);
     try {
       final response = await http
@@ -456,6 +444,12 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                       hintText: l10n.serverIpHint,
                       border: const OutlineInputBorder(),
                     ),
+                  ),
+                  const SizedBox(height: 10),
+                  ServerDiscoveryButton(
+                    onSelected: (address) {
+                      _ipController.text = normalizeServerUrl(address);
+                    },
                   ),
                   const SizedBox(height: 10),
                   TextField(

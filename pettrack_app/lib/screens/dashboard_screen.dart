@@ -38,6 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   WebSocketChannel? _clientChannel;
   Timer? _timer;
   bool _isServerOnline = true;
+  int _statusFailures = 0;
   List<dynamic> _activities = [];
   final Map<String, DateTime> _lastZoneAlerts = {};
   Uint8List? _profilePicBytes;
@@ -174,17 +175,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
         onDone: () {
           if (mounted) {
+            setState(() => _isServerOnline = false);
             Future.delayed(const Duration(seconds: 3), _connectClientSocket);
           }
         },
         onError: (e) {
           if (mounted) {
+            setState(() => _isServerOnline = false);
             Future.delayed(const Duration(seconds: 3), _connectClientSocket);
           }
         },
       );
     } catch (e) {
       if (mounted) {
+        setState(() => _isServerOnline = false);
         Future.delayed(const Duration(seconds: 3), _connectClientSocket);
       }
     }
@@ -332,6 +336,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       if (response.statusCode == 200 && mounted) {
         final data = jsonDecode(response.body);
         setState(() {
+          _isServerOnline = true;
+          _statusFailures = 0;
           if (data['monitor_id'] != null) {
             _monitorId = data['monitor_id'];
           }
@@ -352,8 +358,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _isCharging = data['is_charging'] ?? false;
           }
         });
+      } else if (mounted) {
+        _noteStatusFailure();
       }
-    } catch (_) {}
+    } catch (_) {
+      if (mounted) _noteStatusFailure();
+    }
+  }
+
+  /// Two consecutive failed status polls -> show the unreachable overlay.
+  /// One blip should not flash the screen.
+  void _noteStatusFailure() {
+    _statusFailures++;
+    if (_statusFailures >= 2 && _isServerOnline) {
+      setState(() => _isServerOnline = false);
+    }
   }
 
   @override

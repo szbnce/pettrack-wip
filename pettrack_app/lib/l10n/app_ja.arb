@@ -314,5 +314,12 @@
   "errInvalidPin": "PINが無効です！",
   "errNetwork": "ネットワークエラー！",
   "defaultPetName": "ペット",
-  "appVersion": "v1.0 Pre-Release"
+  "appVersion": "v1.0 Pre-Release",
+  "discoveryBtn": "ネットワークからサーバーを探す",
+  "discoveryTitle": "ネットワーク上のサーバー",
+  "discoverySearching": "ローカルネットワークを検索中…",
+  "discoveryEmpty": "PetTrackサーバーがまだ見つかりません。",
+  "discoveryHint": "サーバーが起動していて、同じWi-Fiに接続しているか確認してください。",
+  "discoveryNotSupported": "このデバイスでは自動検索を利用できません。サーバーアドレスを手動で入力してください。",
+  "discoveryTapToUse": "タップして接続"
 }

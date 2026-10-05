@@ -607,4 +607,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get appVersion => 'v1.0 Pre-Release';
+
+  @override
+  String get discoveryBtn => '在网络中查找服务器';
+
+  @override
+  String get discoveryTitle => '您网络中的服务器';
+
+  @override
+  String get discoverySearching => '正在搜索本地网络…';
+
+  @override
+  String get discoveryEmpty => '尚未找到 PetTrack 服务器。';
+
+  @override
+  String get discoveryHint => '请确保服务器正在运行，并且手机连接到同一个 Wi-Fi。';
+
+  @override
+  String get discoveryNotSupported => '此设备不支持自动查找。请手动输入服务器地址。';
+
+  @override
+  String get discoveryTapToUse => '点按以连接';
 }

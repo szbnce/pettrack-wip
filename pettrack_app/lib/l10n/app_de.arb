@@ -314,5 +314,12 @@
   "errInvalidPin": "Ungültige PIN!",
   "errNetwork": "Netzwerkfehler!",
   "defaultPetName": "Haustier",
-  "appVersion": "v1.0 Pre-Release"
+  "appVersion": "v1.0 Pre-Release",
+  "discoveryBtn": "Server im Netzwerk finden",
+  "discoveryTitle": "Server in deinem Netzwerk",
+  "discoverySearching": "Lokales Netzwerk wird durchsucht…",
+  "discoveryEmpty": "Noch kein PetTrack-Server gefunden.",
+  "discoveryHint": "Stelle sicher, dass der Server läuft und du im selben WLAN bist.",
+  "discoveryNotSupported": "Automatische Suche ist auf diesem Gerät nicht verfügbar. Gib die Serveradresse manuell ein.",
+  "discoveryTapToUse": "Tippen zum Verbinden"
 }

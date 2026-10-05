@@ -615,4 +615,27 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get appVersion => 'v1.0 Pre-Release';
+
+  @override
+  String get discoveryBtn => 'Szerver keresése a hálózaton';
+
+  @override
+  String get discoveryTitle => 'Szerverek a hálózaton';
+
+  @override
+  String get discoverySearching => 'Keresés a helyi hálózaton…';
+
+  @override
+  String get discoveryEmpty => 'Még nem találtam PetTrack szervert.';
+
+  @override
+  String get discoveryHint =>
+      'Győződj meg róla, hogy a szerver fut, és ugyanazon a Wi-Fi-n vagy.';
+
+  @override
+  String get discoveryNotSupported =>
+      'Az automatikus keresés ezen az eszközön nem elérhető. Írd be a szerver címét kézzel.';
+
+  @override
+  String get discoveryTapToUse => 'Koppints a csatlakozáshoz';
 }

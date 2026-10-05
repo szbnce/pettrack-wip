@@ -314,5 +314,12 @@
   "errInvalidPin": "PIN non valido!",
   "errNetwork": "Errore di rete!",
   "defaultPetName": "Animale",
-  "appVersion": "v1.0 Pre-Release"
+  "appVersion": "v1.0 Pre-Release",
+  "discoveryBtn": "Trova il server in rete",
+  "discoveryTitle": "Server nella tua rete",
+  "discoverySearching": "Ricerca nella rete locale…",
+  "discoveryEmpty": "Nessun server PetTrack trovato.",
+  "discoveryHint": "Assicurati che il server sia in esecuzione e che tu sia sulla stessa Wi-Fi.",
+  "discoveryNotSupported": "La ricerca automatica non è disponibile su questo dispositivo. Inserisci l'indirizzo del server manualmente.",
+  "discoveryTapToUse": "Tocca per connetterti"
 }
