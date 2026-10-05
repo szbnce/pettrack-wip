@@ -58,6 +58,8 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#security-basics">Security basics</a></li>
+        <li><a href="#development--testing">Development &amp; testing</a></li>
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
@@ -129,43 +131,63 @@ PetTrack is a lightweight Pet monitor that upcycles old phones, and uses them as
 ### Prerequisites
 
 * An old phone (Android 7+ / iPhone 6s+)
-* A PC/Server (Anything that is capable of running Docker, but there are scripts to run natively, outside docker)
-* [A DDNS service](https://www.noip.com) (optional)
+* A PC/Server for the backend — pick **either** install method below:
+  * anything that can run Docker, **or**
+  * any machine with Python 3.10+ (Linux, Windows, macOS)
+* [A DDNS service](https://www.noip.com) (optional, only for access from outside your LAN)
 
 ### Installation
-Docker:
+
+Both options get you to the same place: a PetTrack server with the web dashboard at
+`http://<server_ip>:8000`. Pick whichever you are more comfortable with.
+
+#### Option A — Docker
 
 1. Clone the repo
    ```sh
    git clone https://github.com/szbnce/PetTrack.git
+   cd PetTrack
    ```
-2. Install  packages
+2. Build and start the container
    ```sh
    docker compose up -d --build pettrack
    ```
-3. Check the logs for the 4 number PIN to access server
-   ```bash
+3. Read the startup logs and note the **4-digit PIN** (and the QR code for pairing phones)
+   ```sh
    docker logs pettrack
    ```
-Your server should be reachable from the web at `http://<server_ip>:8000` (Both server and Web interface).
+4. Your server is now reachable at `http://<server_ip>:8000` (server API + web dashboard).
 
-Natively (Linux, Windows, MacOS):
+Your data (replays, snapshots, database, secrets) lives in `./pettrack_server/`, so it
+survives container rebuilds.
+
+#### Option B — Native (Linux, Windows, macOS)
 
 1. Clone the repo
-   ```
+   ```sh
    git clone https://github.com/szbnce/PetTrack.git
+   cd PetTrack
    ```
-2. Install  packages
+2. Install system packages (Python 3 and Node.js)
+   ```sh
+   ./install_linux.sh        # or ./install_macos.sh, or install_windows.bat
    ```
-   ./install_linux.sh / ./install_macos.sh / install_windows.bat
+3. Start the server
+   ```sh
+   ./run_linux_and_macos.sh  # or run_windows.bat
    ```
-3. Run the server
-   ```
-   ./run_linux_and_macos.sh / run_windows.bat
-   ```
+   The first run creates a virtualenv, installs the Python dependencies, and builds
+   the web dashboard into `pettrack_server/static`.
+4. Read the terminal output and note the **4-digit PIN** (and the QR code for pairing phones).
 
-### Now, the phone app:
-On phones, you can either use the Web interface and put a shortcut to it on your home screen or you can sideload the app to use natively.
+Your server is now reachable at `http://<server_ip>:8000` (server API + web dashboard).
+
+> Building the phone apps yourself? Install the [Flutter SDK](https://docs.flutter.dev/get-started/install)
+> as well — the web dashboard build in step 3 needs it.
+
+#### First steps (both options)
+
+On phones, you can either use the web interface (add a home-screen shortcut) or sideload the native app.
 
 Android:
 
@@ -183,7 +205,7 @@ iOS:
 
 Web:
 
-1. Open the [Web interface](https://pettrackdemo.szabence.com)
+1. Open `http://<server_ip>:8000` on your own server (or the [demo](https://pettrackdemo.szabence.com)).
 2. Select your language, select if you want to use it as a Monitor or Client, then enter the IP and Port (On the Monitor phone, you should use the local IP, not the external IP, on the Client you should use the external IP, if DDNS is set up, or Tailscale.)
 
 WearOS:
@@ -196,6 +218,27 @@ WearOS:
 6. Open a terminal and run: `adb install <path_to_apk>`
 7. Open the app on the watch and paired phone
 8. In settings, scroll to the bottom, there is a Sync watch button, press it, and it will now work on the watch!
+
+### Security basics
+
+PetTrack is built for your own homelab — a bit of care keeps it that way:
+
+* The **4-digit PIN** and the **secret token** in `pettrack_server/.env` unlock your
+  camera feed. Treat them like passwords; don't commit or share that file.
+* The PIN login is rate-limited (5 attempts), and PIN logins only receive a scoped,
+  time-limited token — never the master secret itself.
+* By default the server is meant for a **trusted LAN**. If you want access from outside,
+  use a VPN (e.g. [Tailscale](https://tailscale.com/)) or put a reverse proxy with HTTPS
+  (e.g. Caddy) in front of port 8000 — don't just port-forward plain HTTP to the internet.
+* Cross-origin browser access is disabled by default. If you host the web dashboard on a
+  different origin, whitelist it with `PETTRACK_CORS_ORIGINS` in `.env`.
+
+### Development & testing
+
+* `flutter analyze` / `flutter test` — app static analysis and widget tests
+* `python3 tools/check_i18n.py` — translation parity across all 7 locales
+* `pip install -r requirements-dev.txt && pytest tests` — server API tests
+* All of the above run in CI (GitHub Actions) on every push to `main`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -247,7 +290,7 @@ You can read the Privacy Policy for PetTrack by referring to the [`PRIVACY_POLIC
 <!-- LICENSE -->
 ## License
 
-Distributed under the GNU License. To read more, please refer to the `LICENSE` file.
+Distributed under the GNU General Public License v3.0. To read more, please refer to the `LICENSE` file.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
