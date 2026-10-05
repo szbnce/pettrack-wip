@@ -20,6 +20,10 @@ MOTION_MIN_PIXELS = int(os.getenv("PETTRACK_MOTION_MIN_PIXELS", "12"))
 MOTION_MAX_COVERAGE = float(os.getenv("PETTRACK_MOTION_MAX_COVERAGE", "0.45"))
 MOTION_TIMEOUT = float(os.getenv("PETTRACK_MOTION_TIMEOUT", "5"))
 DARK_BRIGHTNESS = float(os.getenv("PETTRACK_DARK_BRIGHTNESS", "25"))
+# Tier 3 (optional): PETTRACK_CLASSIFIER = "auto" (use model if present) or "off".
+CLASSIFIER_MODE = os.getenv("PETTRACK_CLASSIFIER", "auto").strip().lower()
+CLASSIFIER_MIN_CONF = float(os.getenv("PETTRACK_CLASSIFIER_MIN_CONF", "0.2"))
+CLASSIFIER_CROP_FRACTION = 0.5
 
 _last_zones: set = set()
 _last_pet_center = None  # normalized (0..1) coordinates of the moving blob
@@ -31,10 +35,38 @@ _recording_end_time = 0.0
 _current_video_path = ""
 _fps = 5
 
+# Tier 3 classifier is optional: load lazily and tolerate its absence.
+_classifier = None
+_classifier_loaded = False
+_last_ignored_log = 0.0
+
+
+def _get_classifier():
+    global _classifier, _classifier_loaded
+    if not _classifier_loaded:
+        _classifier_loaded = True
+        if CLASSIFIER_MODE == "off":
+            return None
+        from classifier import load_classifier
+
+        _classifier = load_classifier()
+        if _classifier is not None:
+            print("Vision tier 3: pet classifier active", flush=True)
+    return _classifier
+
 
 def _full_decode(image_bytes: bytes):
     nparr = np.frombuffer(image_bytes, np.uint8)
     return cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+
+def _crop_around_center(frame, cx_norm: float, cy_norm: float):
+    """Square crop of the full frame around the normalized blob center (BGR)."""
+    h, w = frame.shape[:2]
+    size = max(32, int(min(h, w) * CLASSIFIER_CROP_FRACTION))
+    x0 = int(max(0, min(w - size, cx_norm * w - size / 2)))
+    y0 = int(max(0, min(h - size, cy_norm * h - size / 2)))
+    return frame[y0 : y0 + size, x0 : x0 + size]
 
 
 async def process_and_save_frame(image_bytes: bytes):
@@ -47,6 +79,7 @@ async def process_and_save_frame(image_bytes: bytes):
     """
     global _last_zones, _last_pet_center, _last_motion_time, _prev_small
     global _video_writer, _recording_end_time, _current_video_path
+    global _last_ignored_log
 
     timestamp = int(time.time())
     now = time.time()
@@ -94,13 +127,33 @@ async def process_and_save_frame(image_bytes: bytes):
     _prev_small = small
 
     if result.motion and result.center is not None:
-        _last_motion_time = now
         # Normalized coordinates (0..1) so zone polygons (also normalized)
         # can be tested without knowing the full frame size.
-        _last_pet_center = (
-            result.center[0] / small.shape[1],
-            result.center[1] / small.shape[0],
-        )
+        cx_norm = result.center[0] / small.shape[1]
+        cy_norm = result.center[1] / small.shape[0]
+
+        # Tier 3 (optional): is the moving blob actually a pet?
+        classifier = _get_classifier()
+        if classifier is not None:
+            if frame is None:
+                frame = _full_decode(image_bytes)
+            if frame is None:
+                return
+            crop = _crop_around_center(frame, cx_norm, cy_norm)
+            rgb = np.ascontiguousarray(crop[:, :, ::-1])
+            verdict = classifier.classify_rgb(rgb, min_confidence=CLASSIFIER_MIN_CONF)
+            if not verdict.is_pet:
+                if now - _last_ignored_log > 30:
+                    _last_ignored_log = now
+                    print(
+                        f"Ignored motion (not a pet? {verdict.label} "
+                        f"{verdict.confidence:.2f})",
+                        flush=True,
+                    )
+                return
+
+        _last_motion_time = now
+        _last_pet_center = (cx_norm, cy_norm)
     elif now - _last_motion_time > MOTION_TIMEOUT:
         # No motion for a while, stop claiming to know where the pet is.
         _last_pet_center = None

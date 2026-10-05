@@ -1,0 +1,84 @@
+# PetTrack roadmap — from tinkerer tool to something you can show a general audience
+
+Ideas collected while building the vision pipeline. Grouped by how much they
+buy for how much work. Nothing here is scheduled — this is the wish list.
+
+## Quick wins (hours each, big first-impression impact)
+
+1. **Plain-language settings + Advanced drawer.** Today the app speaks
+   "threshold / coverage / zone polygon". Split everyday settings
+   (notifications, sound, dark mode, pet profile) from engineering knobs
+   (`PETTRACK_*`, ports, tokens) behind an "Advanced" section — and label
+   things the way a pet owner would say them ("Notify me when Berci leaves
+   the bed zone").
+2. **Connection status that never leaves you guessing.** One persistent,
+   human-readable status chip: `Connected to home server` / `Reconnecting…` /
+   `Server unreachable — are you on the same Wi-Fi?`, with a one-tap retry.
+   Half of "the app is buggy" reports are silent connection drops.
+3. **First-run wizard.** Three screens: *who is your pet* (name, photo),
+   *where is the camera* (pick monitor device), *what should I watch for*
+   (draw your first zone or tap a preset: "bed", "cage", "door"). No IP
+   typing if we can help it (see pairing below).
+4. **Replay timeline instead of a file list.** A day strip with event dots;
+   tap a dot → clip plays. Seconds of work to find "that moment at 14:20"
+   vs. scrolling filenames like `replay_1777…`.
+5. **Notification wording + quiet hours.** "Berci entered the kitchen zone
+   · 14:20 · tap to watch" with a snapshot thumbnail, plus "don't notify
+   me between 23:00 and 7:00".
+6. **Accessibility pass.** Screen-reader labels on icon buttons, respects OS
+   text scaling, color-blind-safe zone overlays (not color-only), minimum
+   tap-target sizes. Cheap to do incrementally, mandatory for a real audience.
+
+## Medium (a day or two each)
+
+7. **Zero-config pairing (mDNS / QR).** The server advertises
+   `_pettrack._tcp` on the LAN; the app shows "PetTrack server found:
+   homelab-pi — Connect?". QR pairing already exists for the token — extend it
+   to carry host + port so nobody types an IP ever again.
+8. **One-line install + HTTPS by default.** A single install script that also
+   brings up Caddy (or mkcert) so phones talk HTTPS on the LAN; bad TLS on a
+   local IP is the #1 self-host pain. Document Tailscale as the "access from
+   outside" path in one paragraph.
+9. **Multi-camera.** Several monitor phones → one dashboard with camera
+   picker (and "which camera saw the event" on replays). The server
+   fan-out already supports multiple `/ws` monitors; the app UI is the work.
+10. **Push notifications that work outside the LAN.** ntfy.sh / Gotify /
+    WebPush bridge so events reach you at school/work without exposing the
+    server — opt-in, with a "test notification" button.
+11. **Live talk / treat-cam basics (stretch).** Two-way audio is hard on old
+    phones; even a "play a sound" button (whistle, treat dispenser via a
+    smart plug webhook) is a delight feature for pet owners.
+12. **In-app update story.** For the sideloaded APK: a "new version
+    available" screen that installs the release APK with one tap (Android
+    package installer). Kills the "which APK do I need?" support burden.
+
+## Larger / longer term
+
+13. **Multi-pet profiles & per-pet events.** When the tier-3 classifier (or a
+    small custom model) can tell pets apart: "Berci vs. guest cat" event
+    streams, per-pet activity stats ("Berci was active 3h 12m today").
+14. **Activity insights.** A simple daily/weekly chart of zone time, rest
+    vs. active — the kind of screenshot people post on social media. Great
+    for "show a general audience" marketing.
+15. **Health & watchdog.** Server-side: "camera offline for 10 minutes" alert,
+    disk-space warnings for replays, auto-pruning old replays with a retention
+    setting. Self-hosters trust a tool that tells them when *it* is broken.
+16. **Public landing page + demo mode.** The demo site exists; give it a real
+    landing page (problem → photos → 3-step install → screenshots) and a
+    "demo mode" with synthetic data so visitors can click around without a
+    camera.
+17. **Security leftovers (keep shipping these quietly).** Short-lived JWTs
+    with refresh, revocation on logout, scoped monitor tokens, persistent PIN
+    lockout, HTTPS everywhere — mostly invisible work that keeps the project
+    safe to recommend.
+
+## Suggested order for "audience-ready"
+
+1. First-run wizard + pairing (kills the tinkerer IP-typing experience)
+2. Connection status + notification quality (kills "is it working?" anxiety)
+3. Replay timeline + quiet hours (daily-use pleasure)
+4. HTTPS-by-default + one-line install (removes the scariest setup step)
+5. Accessibility + plain-language settings (polish that shows)
+
+Everything above is additive to the current stack (Flutter + FastAPI + the
+tiered vision pipeline) — no rewrites needed.

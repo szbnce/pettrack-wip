@@ -133,3 +133,6 @@ pettrack_server/pettrack.db
 pettrack_server/captured_images/
 
 pettrack_server/replays/
+
+# Optional tier-3 model (~14 MB, fetched via tools/fetch_classifier_model.py)
+pettrack_server/models/

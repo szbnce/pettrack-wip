@@ -1,0 +1,2 @@
+# Optional tier-3 pet classifier (vision). The server runs fine without these.
+onnxruntime>=1.19.0

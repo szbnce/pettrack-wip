@@ -259,6 +259,32 @@ Tune it via environment / `.env`:
 | `PETTRACK_MOTION_TIMEOUT` | `5` | Seconds without motion before the tracked position is dropped |
 | `PETTRACK_DARK_BRIGHTNESS` | `25` | Below this mean brightness, detection pauses |
 
+#### Optional tier 3: pet / not-pet filter
+
+For even less noise (people walking past, curtains, shadows), PetTrack can run a
+small ONNX image classifier on every moving blob and only raise zone events for
+actual pets. It is **off by default** — the ~14 MB model is not bundled with the
+repo:
+
+```sh
+pip install -r pettrack_server/requirements-classifier.txt   # onnxruntime
+python3 tools/fetch_classifier_model.py                      # model + labels
+```
+
+The server picks it up on the next start. With a rabbit in the house it happily
+recognizes photos of her as `Angora, Angora rabbit` / `wood rabbit`, and drops
+everything else.
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `PETTRACK_CLASSIFIER` | `auto` | `auto` (use model if present) or `off` |
+| `PETTRACK_CLASSIFIER_MODEL` | `models/classifier.onnx` | Path to an ImageNet-style ONNX classifier |
+| `PETTRACK_CLASSIFIER_LABELS` | `models/imagenet_classes.txt` | Label list (one per line, `synset.txt` format) |
+| `PETTRACK_CLASSIFIER_MIN_CONF` | `0.2` | Minimum confidence for a "pet" verdict |
+
+Works with any ImageNet-compatible ONNX classifier — bring your own model if
+you want.
+
 ### Development & testing
 
 * `flutter analyze` / `flutter test` — app static analysis and widget tests

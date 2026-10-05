@@ -133,3 +133,105 @@ def test_lighting_change_is_not_motion(tmp_path, monkeypatch):
     asyncio.run(vision.process_and_save_frame(_jpeg(_frame(80))))
     asyncio.run(vision.process_and_save_frame(_jpeg(_frame(140))))  # lights on
     assert events == []
+
+
+# --- tier 3: classifier gating -----------------------------------------------
+
+class _FakeClassifier:
+    def __init__(self, verdict):
+        self._verdict = verdict
+        self.calls = 0
+
+    def classify_rgb(self, crop, min_confidence=0.2):
+        self.calls += 1
+        return self._verdict
+
+
+def _install_classifier(monkeypatch, vision, verdict):
+    from classifier import Classification
+
+    fake = _FakeClassifier(
+        verdict if isinstance(verdict, Classification) else Classification(*verdict)
+    )
+    monkeypatch.setattr(vision, "_classifier_loaded", True)
+    monkeypatch.setattr(vision, "_classifier", fake)
+    return fake
+
+
+def test_non_pet_motion_is_ignored(tmp_path, monkeypatch):
+    api_routes, vision = _load_vision(tmp_path, monkeypatch)
+
+    api_routes.active_zones["zone_a"] = [
+        {"x": 0.5, "y": 0.0},
+        {"x": 1.0, "y": 0.0},
+        {"x": 1.0, "y": 1.0},
+        {"x": 0.5, "y": 1.0},
+    ]
+
+    events = []
+
+    async def fake_log_event(kind, zone_name=None):
+        events.append((kind, zone_name))
+
+    monkeypatch.setattr(vision, "log_event", fake_log_event)
+    fake = _install_classifier(monkeypatch, vision, (False, 0.9, "sports car, sport car"))
+
+    base = _frame(100)
+    asyncio.run(vision.process_and_save_frame(_jpeg(base)))
+    asyncio.run(vision.process_and_save_frame(_jpeg(_with_square(base, 220, 100, 280, 160))))
+
+    assert fake.calls == 1  # the blob was classified...
+    assert events == []  # ...and dropped: no zone events
+
+
+def test_pet_motion_still_triggers_events(tmp_path, monkeypatch):
+    api_routes, vision = _load_vision(tmp_path, monkeypatch)
+
+    api_routes.active_zones["zone_a"] = [
+        {"x": 0.5, "y": 0.0},
+        {"x": 1.0, "y": 0.0},
+        {"x": 1.0, "y": 1.0},
+        {"x": 0.5, "y": 1.0},
+    ]
+
+    events = []
+
+    async def fake_log_event(kind, zone_name=None):
+        events.append((kind, zone_name))
+
+    monkeypatch.setattr(vision, "log_event", fake_log_event)
+    fake = _install_classifier(monkeypatch, vision, (True, 0.7, "wood rabbit, cottontail rabbit"))
+
+    base = _frame(100)
+    asyncio.run(vision.process_and_save_frame(_jpeg(base)))
+    asyncio.run(vision.process_and_save_frame(_jpeg(_with_square(base, 220, 100, 280, 160))))
+
+    assert fake.calls == 1
+    assert events == [("zone_enter", "zone_a")]
+
+
+def test_classifier_absent_keeps_everything(tmp_path, monkeypatch):
+    """No model installed -> motion pipeline behaves exactly as before."""
+    api_routes, vision = _load_vision(tmp_path, monkeypatch)
+
+    api_routes.active_zones["zone_a"] = [
+        {"x": 0.5, "y": 0.0},
+        {"x": 1.0, "y": 0.0},
+        {"x": 1.0, "y": 1.0},
+        {"x": 0.5, "y": 1.0},
+    ]
+
+    events = []
+
+    async def fake_log_event(kind, zone_name=None):
+        events.append((kind, zone_name))
+
+    monkeypatch.setattr(vision, "log_event", fake_log_event)
+    monkeypatch.setattr(vision, "_classifier_loaded", True)
+    monkeypatch.setattr(vision, "_classifier", None)
+
+    base = _frame(100)
+    asyncio.run(vision.process_and_save_frame(_jpeg(base)))
+    asyncio.run(vision.process_and_save_frame(_jpeg(_with_square(base, 220, 100, 280, 160))))
+
+    assert events == [("zone_enter", "zone_a")]
