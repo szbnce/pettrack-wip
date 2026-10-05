@@ -82,7 +82,8 @@ class MedicalDataManager {
 
     try {
       final response = await http.get(
-        Uri.parse('$serverIp/api/medical?token=$token'),
+        Uri.parse('$serverIp/api/medical'),
+        headers: {'x-api-token': token},
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -124,7 +125,8 @@ class MedicalDataManager {
 
     try {
       final response = await http.get(
-        Uri.parse('$serverIp/api/medical?token=$token'),
+        Uri.parse('$serverIp/api/medical'),
+        headers: {'x-api-token': token},
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -164,8 +166,11 @@ class MedicalDataManager {
       final vacStr = prefs.getString(_vacKey) ?? '[]';
 
       await http.post(
-        Uri.parse('$serverIp/api/medical?token=$token'),
-        headers: {'Content-Type': 'application/json'},
+        Uri.parse('$serverIp/api/medical'),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-token': token,
+        },
         body: jsonEncode({
           'medications': jsonDecode(medStr),
           'vaccines': jsonDecode(vacStr),

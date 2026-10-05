@@ -93,3 +93,38 @@ def test_replay_path_traversal_rejected(client):
 def test_protected_endpoints_require_token(client):
     for path in ("/api/zones", "/api/pet", "/api/activity", "/api/replays"):
         assert client.get(path).status_code == 401, path
+
+
+# --- media tokens (signed replay links) --------------------------------------
+
+def _make_replays(client):
+    import os
+    os.makedirs("replays", exist_ok=True)
+    for name in ("clip.mp4", "other.mp4"):
+        with open(os.path.join("replays", name), "wb") as f:
+            f.write(b"\x00\x00\x00\x18ftypmp42")
+
+
+def test_replay_listing_embeds_short_lived_url(client):
+    _make_replays(client)
+    tok = _pin_token(client)
+    r = client.get("/api/replays", headers={"x-api-token": tok})
+    assert r.status_code == 200
+    by_name = {x["filename"]: x for x in r.json()["replays"]}
+    assert by_name["clip.mp4"]["url"].startswith("/api/replays/clip.mp4?token=")
+    media_tok = by_name["clip.mp4"]["url"].split("token=")[1]
+    assert media_tok != tok and media_tok.startswith("eyJ")
+
+
+def test_media_token_opens_only_its_own_file(client):
+    _make_replays(client)
+    tok = _pin_token(client)
+    media_tok = client.get("/api/replays", headers={"x-api-token": tok}).json()["replays"]
+    urls = {x["filename"]: x["url"] for x in media_tok}
+    assert client.get(urls["clip.mp4"]).status_code == 200
+    # Same token must not unlock the other file...
+    stolen = urls["clip.mp4"].split("token=")[1]
+    assert client.get(f"/api/replays/other.mp4?token={stolen}").status_code == 403
+    # ...nor any general API endpoint.
+    assert client.get(f"/api/pet?token={stolen}").status_code == 403
+    assert client.get(f"/api/zones?token={stolen}").status_code == 403

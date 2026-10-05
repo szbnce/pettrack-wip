@@ -66,9 +66,13 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     }
   }
 
-  void _playVideo(String filename) {
+  void _playVideo(Map<String, dynamic> replay) {
     final l10n = AppLocalizations.of(context)!;
-    final url = '${widget.serverIp}/api/replays/$filename';
+    // The server returns a signed, file-scoped URL (short-lived token).
+    // Fallback for older servers: put the session token into the URL.
+    final signedPath =
+        replay['url'] as String? ?? '/api/replays/${replay['filename']}?token=${widget.token}';
+    final url = '${widget.serverIp}$signedPath';
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -82,7 +86,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
               Flexible(
                 child: Container(
                   color: Colors.black,
-                  child: VideoPlayerWidget(videoUrl: url, token: widget.token),
+                  child: VideoPlayerWidget(videoUrl: url),
                 ),
               ),
               Container(
@@ -98,7 +102,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                     ),
                     TextButton.icon(
                       onPressed: () async {
-                        final uri = Uri.parse('$url?token=${widget.token}');
+                        final uri = Uri.parse(url);
                         if (await canLaunchUrl(uri)) {
                           await launchUrl(
                             uri,
@@ -185,7 +189,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
           final sizeMb = (replay['size'] / (1024 * 1024)).toStringAsFixed(1);
 
           return InkWell(
-            onTap: () => _playVideo(replay['filename']),
+            onTap: () => _playVideo(replay),
             borderRadius: BorderRadius.circular(12),
             child: Container(
               decoration: BoxDecoration(

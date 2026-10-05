@@ -39,10 +39,19 @@ def get_fernet_key(secret: str) -> bytes:
 fernet = Fernet(get_fernet_key(SECRET_TOKEN))
 
 JWT_TTL_SECONDS = 86400 * 3650
+MEDIA_TOKEN_TTL_SECONDS = 3600
 
 def mint_token() -> str:
     return jwt.encode(
         {"auth": "ok", "exp": time.time() + JWT_TTL_SECONDS},
+        SECRET_TOKEN,
+        algorithm="HS256",
+    )
+
+def mint_media_token(filename: str) -> str:
+    """Short-lived token scoped to a single replay file, safe for URLs."""
+    return jwt.encode(
+        {"auth": "media", "file": filename, "exp": time.time() + MEDIA_TOKEN_TTL_SECONDS},
         SECRET_TOKEN,
         algorithm="HS256",
     )
@@ -57,9 +66,18 @@ def token_valid(req_token: str) -> bool:
     except jwt.PyJWTError:
         return hmac.compare_digest(req_token, SECRET_TOKEN)
 
-async def verify_token(token: str = Query(None), x_api_token: str = Header(None)):
-    if not token_valid(token or x_api_token):
+async def verify_token(request: Request, token: str = Query(None), x_api_token: str = Header(None)):
+    req_token = token or x_api_token
+    if not token_valid(req_token):
         raise HTTPException(status_code=401, detail="Invalid token")
+
+    # A media token only unlocks the replay file it was minted for.
+    try:
+        payload = jwt.decode(req_token, SECRET_TOKEN, algorithms=["HS256"])
+    except jwt.PyJWTError:
+        return  # raw secret: full access
+    if "file" in payload and not request.url.path.startswith("/api/replays/"):
+        raise HTTPException(status_code=403, detail="Media token not valid here")
 
 router = APIRouter(dependencies=[Depends(verify_token)])
 auth_router = APIRouter()
@@ -273,7 +291,10 @@ async def list_replays():
             files.append({
                 "filename": filename,
                 "timestamp": int(os.path.getmtime(file_path)),
-                "size": os.path.getsize(file_path)
+                "size": os.path.getsize(file_path),
+                # Short-lived, file-scoped URL so clients never have to put
+                # their long-lived token into a link.
+                "url": f"/api/replays/{filename}?token={mint_media_token(filename)}",
             })
     
     # Sort newest first
@@ -332,13 +353,22 @@ def range_requests_response(request: Request, file_path: str, content_type: str)
     )
 
 @router.get("/api/replays/{filename}")
-async def get_replay_video(filename: str, request: Request):
+async def get_replay_video(filename: str, request: Request, token: str = Query(None), x_api_token: str = Header(None)):
     folder = "replays"
     safe_filename = os.path.basename(filename)
     file_path = os.path.join(folder, safe_filename)
     if not os.path.exists(file_path) or not file_path.endswith(".mp4"):
         raise HTTPException(status_code=404, detail="Replay not found")
-    
+
+    # A media token is only valid for the exact file it was minted for.
+    req_token = token or x_api_token
+    try:
+        payload = jwt.decode(req_token, SECRET_TOKEN, algorithms=["HS256"])
+        if "file" in payload and payload["file"] != safe_filename:
+            raise HTTPException(status_code=403, detail="Token is not valid for this file")
+    except jwt.PyJWTError:
+        pass  # raw secret or already-validated token
+
     if request.headers.get("range"):
         return range_requests_response(request, file_path, "video/mp4")
     return FileResponse(file_path, media_type="video/mp4")

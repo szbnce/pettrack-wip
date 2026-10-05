@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
+  /// Signed, file-scoped replay URL (the server embeds a short-lived token).
   final String videoUrl;
-  final String token;
 
   const VideoPlayerWidget({
     super.key,
     required this.videoUrl,
-    required this.token,
   });
 
   @override
@@ -23,12 +22,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    final uri = Uri.parse(widget.videoUrl);
-    final uriWithToken = uri.replace(
-      queryParameters: {...uri.queryParameters, 'token': widget.token},
-    );
-
-    _controller = VideoPlayerController.networkUrl(uriWithToken)
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
       ..initialize()
           .then((_) {
             setState(() {
