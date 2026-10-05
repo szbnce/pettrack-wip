@@ -59,6 +59,7 @@
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
         <li><a href="#security-basics">Security basics</a></li>
+        <li><a href="#vision-pipeline">Vision pipeline</a></li>
         <li><a href="#development--testing">Development &amp; testing</a></li>
       </ul>
     </li>
@@ -233,11 +234,36 @@ PetTrack is built for your own homelab — a bit of care keeps it that way:
 * Cross-origin browser access is disabled by default. If you host the web dashboard on a
   different origin, whitelist it with `PETTRACK_CORS_ORIGINS` in `.env`.
 
+### Vision pipeline
+
+Motion detection is built in cheap tiers so old / low-power homelab hardware
+mostly stays idle when nothing is happening:
+
+1. **Thumbnail diff (every frame):** a ~160px grayscale thumbnail is diffed
+   against the previous one — Pillow + numpy only, no OpenCV work.
+2. **Localize + zones (only when something moves):** the moving blob's center
+   is tested against your zones. Whole-frame brightness shifts (lights turning
+   on) are rejected as "not a pet".
+3. **Full frames only while recording:** the expensive full-resolution decode
+   happens just for replay clips.
+
+Tune it via environment / `.env`:
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `PETTRACK_VISION_MODE` | `motion` | `motion` or `off` (disable detection) |
+| `PETTRACK_MOTION_THRESHOLD` | `25` | Per-pixel brightness delta that counts as change |
+| `PETTRACK_MOTION_MIN_PIXELS` | `12` | Ignore specks / compression noise |
+| `PETTRACK_MOTION_MAX_COVERAGE` | `0.45` | Above this = lighting change, not motion |
+| `PETTRACK_MOTION_WIDTH` | `160` | Thumbnail width in pixels |
+| `PETTRACK_MOTION_TIMEOUT` | `5` | Seconds without motion before the tracked position is dropped |
+| `PETTRACK_DARK_BRIGHTNESS` | `25` | Below this mean brightness, detection pauses |
+
 ### Development & testing
 
 * `flutter analyze` / `flutter test` — app static analysis and widget tests
 * `python3 tools/check_i18n.py` — translation parity across all 7 locales
-* `pip install -r requirements-dev.txt && pytest tests` — server API tests
+* `pip install -r requirements.txt -r requirements-dev.txt && pytest tests` — server API + vision tests
 * All of the above run in CI (GitHub Actions) on every push to `main`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

@@ -6,122 +6,133 @@ import asyncio
 import subprocess
 from api_routes import active_zones
 from database import log_event
+from motion import decode_small, detect_motion, mean_brightness, point_in_polygon
 
 os.makedirs("captured_images", exist_ok=True)
 os.makedirs("replays", exist_ok=True)
 
-_last_zones: set = set()
-_last_pet_center = None
+# --- configuration (env-overridable, homelab-friendly defaults) ---
+# PETTRACK_VISION_MODE: "motion" (default) or "off" to disable detection entirely.
+VISION_MODE = os.getenv("PETTRACK_VISION_MODE", "motion").strip().lower()
+SMALL_WIDTH = int(os.getenv("PETTRACK_MOTION_WIDTH", "160"))
+MOTION_THRESHOLD = int(os.getenv("PETTRACK_MOTION_THRESHOLD", "25"))
+MOTION_MIN_PIXELS = int(os.getenv("PETTRACK_MOTION_MIN_PIXELS", "12"))
+MOTION_MAX_COVERAGE = float(os.getenv("PETTRACK_MOTION_MAX_COVERAGE", "0.45"))
+MOTION_TIMEOUT = float(os.getenv("PETTRACK_MOTION_TIMEOUT", "5"))
+DARK_BRIGHTNESS = float(os.getenv("PETTRACK_DARK_BRIGHTNESS", "25"))
 
-_bg_subtractor = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=50, detectShadows=False)
+_last_zones: set = set()
+_last_pet_center = None  # normalized (0..1) coordinates of the moving blob
+_last_motion_time = 0.0
+_prev_small = None
 
 _video_writer = None
-_recording_end_time = 0
+_recording_end_time = 0.0
 _current_video_path = ""
 _fps = 5
 
+
+def _full_decode(image_bytes: bytes):
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    return cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+
 async def process_and_save_frame(image_bytes: bytes):
-    global _last_zones, _last_pet_center, _video_writer, _recording_end_time, _current_video_path
+    """Tiered pipeline: cheap thumbnail diff first, expensive work only if needed.
+
+    Tier 1 (every frame): decode a ~160px grayscale thumbnail and diff it
+    against the previous one — Pillow + numpy, no OpenCV.
+    Tier 2 (only on motion): localize the moving blob, run zone checks.
+    Full-resolution decode happens only while a replay is recording.
+    """
+    global _last_zones, _last_pet_center, _last_motion_time, _prev_small
+    global _video_writer, _recording_end_time, _current_video_path
 
     timestamp = int(time.time())
+    now = time.time()
 
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-    if img is None:
-        print("Failed to decode image", flush=True)
-        return
-    
-    height, width = img.shape[:2]
-
-    # Write to video if recording
+    # Recording needs full frames; nothing else does.
+    frame = None
     if _video_writer is not None:
-        _video_writer.write(img)
-        if time.time() > _recording_end_time:
+        frame = _full_decode(image_bytes)
+        if frame is not None:
+            _video_writer.write(frame)
+        if now > _recording_end_time:
             _video_writer.release()
             _video_writer = None
             print(f"Finished recording raw video: {_current_video_path}", flush=True)
-            
+
             raw_path = _current_video_path.replace(".mp4", "_raw.mp4")
-            subprocess.Popen(f"ffmpeg -y -i {raw_path} -vcodec libx264 -pix_fmt yuv420p {_current_video_path} && rm {raw_path}", shell=True)
+            subprocess.Popen(
+                f"ffmpeg -y -i {raw_path} -vcodec libx264 -pix_fmt yuv420p {_current_video_path} && rm {raw_path}",
+                shell=True,
+            )
             print(f"Started FFmpeg conversion for {_current_video_path}", flush=True)
 
-    # For motion detection, we downscale
-    small_img = cv2.resize(img, (320, 240))
-    gray = cv2.cvtColor(small_img, cv2.COLOR_BGR2GRAY)
-    
-    # Check if the frame is too dark (low light condition)
-    mean_brightness = cv2.mean(gray)[0]
-    if mean_brightness < 25:
-        # Too dark, skip motion detection
-        if _last_pet_center is not None:
-            if time.time() - globals().get('_last_motion_time', 0) > 5.0:
-                print("DEBUG: Motion timed out in dark mode, clearing _last_pet_center", flush=True)
-                _last_pet_center = None
+    if VISION_MODE == "off":
         return
 
-    gray = cv2.GaussianBlur(gray, (21, 21), 0)
+    small = decode_small(image_bytes, SMALL_WIDTH)
+    if small is None:
+        print("Failed to decode image", flush=True)
+        return
 
-    fg_mask = _bg_subtractor.apply(gray)
-    thresh = cv2.threshold(fg_mask, 25, 255, cv2.THRESH_BINARY)[1]
-    thresh = cv2.dilate(thresh, None, iterations=2)
-    contours, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if mean_brightness(small) < DARK_BRIGHTNESS:
+        # Too dark to trust detection; drop the tracked pet after a timeout.
+        if _last_pet_center is not None and now - _last_motion_time > MOTION_TIMEOUT:
+            _last_pet_center = None
+        _prev_small = small
+        return
 
-    current_pet_center = None
-    largest_area = 0
+    result = detect_motion(
+        _prev_small,
+        small,
+        threshold=MOTION_THRESHOLD,
+        min_pixels=MOTION_MIN_PIXELS,
+        max_coverage=MOTION_MAX_COVERAGE,
+    )
+    _prev_small = small
 
-    for contour in contours:
-        area = cv2.contourArea(contour)
-        if area > 800 and area > largest_area:
-            largest_area = area
-            (x, y, w, h) = cv2.boundingRect(contour)
-            scale_x = width / 320
-            scale_y = height / 240
-            cx = int((x + w / 2) * scale_x)
-            cy = int((y + h / 2) * scale_y)
-            current_pet_center = (cx, cy)
-    
-    if current_pet_center is not None:
-        _last_pet_center = current_pet_center
-        # Update motion time
-        global _last_motion_time
-        _last_motion_time = time.time()
-        print(f"DEBUG: Motion detected at {current_pet_center}, Area: {largest_area}", flush=True)
-    elif time.time() - globals().get('_last_motion_time', 0) > 5.0:
-        # No motion for 5 seconds, clear the pet center
-        if _last_pet_center is not None:
-            print("DEBUG: Motion timed out, clearing _last_pet_center", flush=True)
+    if result.motion and result.center is not None:
+        _last_motion_time = now
+        # Normalized coordinates (0..1) so zone polygons (also normalized)
+        # can be tested without knowing the full frame size.
+        _last_pet_center = (
+            result.center[0] / small.shape[1],
+            result.center[1] / small.shape[0],
+        )
+    elif now - _last_motion_time > MOTION_TIMEOUT:
+        # No motion for a while, stop claiming to know where the pet is.
         _last_pet_center = None
-    
+
     current_zones = set()
-
     if _last_pet_center is not None:
-        if not active_zones:
-            print("DEBUG: active_zones is empty!", flush=True)
+        px, py = _last_pet_center
         for zone_name, polygon_points in active_zones.items():
-            pts = np.array([[int(p["x"] * width), int(p["y"] * height)] for p in polygon_points], np.int32)
-            pts = pts.reshape((-1, 1, 2))
-            is_inside = cv2.pointPolygonTest(pts, _last_pet_center, measureDist=False)
-            if is_inside >= 0:
+            pts = [(p["x"], p["y"]) for p in polygon_points]
+            if point_in_polygon(px, py, pts):
                 current_zones.add(zone_name)
-        
-        # print(f"DEBUG: Current zones: {current_zones}", flush=True)
-    
-    entered = current_zones - _last_zones
-    if len(entered) > 0:
-        # Start or extend recording for 30 seconds
-        _recording_end_time = time.time() + 30
-        if _video_writer is None:
-            _current_video_path = f"replays/replay_{timestamp}.mp4"
-            raw_path = _current_video_path.replace(".mp4", "_raw.mp4")
-            # Write raw mp4v first, then convert with ffmpeg for web compatibility
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-            _video_writer = cv2.VideoWriter(raw_path, fourcc, _fps, (width, height))
-            _video_writer.write(img)
-            print(f"Started recording: {_current_video_path}", flush=True)
 
-        # Save snapshot
-        file_path = f"captured_images/frame_{timestamp}.png"
+    entered = current_zones - _last_zones
+    if entered:
+        # Start or extend a 30 second replay recording.
+        _recording_end_time = now + 30
+        if _video_writer is None:
+            if frame is None:
+                frame = _full_decode(image_bytes)
+            if frame is not None:
+                height, width = frame.shape[:2]
+                _current_video_path = f"replays/replay_{timestamp}.mp4"
+                raw_path = _current_video_path.replace(".mp4", "_raw.mp4")
+                # Write raw mp4v first, then convert with ffmpeg for web compatibility
+                fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+                _video_writer = cv2.VideoWriter(raw_path, fourcc, _fps, (width, height))
+                _video_writer.write(frame)
+                print(f"Started recording: {_current_video_path}", flush=True)
+
+        # Save snapshot (the original bytes — no decode needed)
+        ext = "jpg" if image_bytes[:2] == b"\xff\xd8" else "png"
+        file_path = f"captured_images/frame_{timestamp}.{ext}"
         with open(file_path, "wb") as f:
             f.write(image_bytes)
 
@@ -135,4 +146,3 @@ async def process_and_save_frame(image_bytes: bytes):
         await log_event("zone_exit", zone_name=zone)
 
     _last_zones = current_zones
-
