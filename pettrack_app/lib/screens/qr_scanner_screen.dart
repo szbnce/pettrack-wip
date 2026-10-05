@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:pettrack_app/l10n/app_localizations.dart';
 
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({super.key});
@@ -15,9 +16,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kamera beolvasása'),
+        title: Text(l10n.qrScannerTitle),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -70,9 +72,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                   color: Colors.black54,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text(
-                  'Olvassa be a terminálban lévő QR kódot!',
-                  style: TextStyle(color: Colors.white),
+                child: Text(
+                  l10n.qrScannerHint,
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),

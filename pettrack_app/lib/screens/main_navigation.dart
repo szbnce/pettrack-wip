@@ -129,7 +129,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             context: context,
             icon: Icons.history_outlined,
             activeIcon: Icons.history,
-            label: "Replays",
+            label: l10n.navReplays,
             index: 3,
           ),
           _buildSidebarItem(
@@ -172,7 +172,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      "Log Out",
+                      l10n.logOut,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onSurface.withValues(
@@ -250,7 +250,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         case 2:
           return l10n.navMedical;
         case 3:
-          return "Replays";
+          return l10n.navReplays;
         case 4:
           return l10n.navSettings;
         default:
@@ -268,7 +268,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         icon: const Icon(Icons.medical_services),
         label: l10n.navMedical,
       ),
-      NavigationDestination(icon: const Icon(Icons.history), label: "Replays"),
+      NavigationDestination(
+        icon: const Icon(Icons.history),
+        label: l10n.navReplays,
+      ),
       NavigationDestination(
         icon: const Icon(Icons.settings),
         label: l10n.navSettings,

@@ -12,498 +12,395 @@ class AppLocalizationsJa extends AppLocalizations {
   String get appName => 'PetTrack';
 
   @override
-  String get settingsTitle => 'Settings';
+  String get settingsTitle => '設定';
 
   @override
-  String get uploadProfilePicture => 'Upload profile picture';
+  String get uploadProfilePicture => 'プロフィール画像をアップロード';
 
   @override
-  String get serverIp => 'Server IP';
+  String get serverIp => 'サーバーIP';
 
   @override
-  String get serverIpHint => 'e.g. 192.168.1.100';
+  String get serverIpHint => '例: 192.168.1.100';
 
   @override
-  String get secretToken => 'Secret Token';
+  String get secretToken => 'シークレットトークン';
 
   @override
-  String get petName => 'Pet name';
+  String get petName => 'ペットの名前';
 
   @override
-  String get petNameHint => 'Enter the name';
+  String get petNameHint => '名前を入力';
 
   @override
-  String get save => 'Save';
+  String get save => '保存';
 
   @override
-  String get navDashboard => 'Dashboard';
+  String get navDashboard => 'ダッシュボード';
 
   @override
-  String get navZones => 'Zones';
+  String get navZones => 'ゾーン';
 
   @override
-  String get navSettings => 'Settings';
+  String get navSettings => '設定';
 
   @override
-  String get greeting => 'Hi Boss!';
+  String get liveVideo => 'ライブ映像';
 
   @override
-  String greetingSubtitle(String petName) {
-    return 'Here is $petName\'s day today.';
-  }
+  String get activities => 'アクティビティ';
 
   @override
-  String get liveVideo => 'Live Video';
-
-  @override
-  String lastMovement(String time) {
-    return 'Last movement: $time';
-  }
-
-  @override
-  String get distance => 'Distance';
-
-  @override
-  String get feedings => 'Feedings';
-
-  @override
-  String get activities => 'Activities';
-
-  @override
-  String get noRecentEvents => 'No recent events';
+  String get noRecentEvents => '最近のイベントはありません';
 
   @override
   String zoneEntered(String petName, String zone) {
-    return '$petName entered $zone';
+    return '$petNameが$zoneに入りました';
   }
 
   @override
-  String get zoneVisits => 'Zone Visits';
+  String get zoneVisits => 'ゾーン訪問';
 
   @override
   String zoneLeft(String petName, String zone) {
-    return '$petName left $zone';
+    return '$petNameが$zoneを出ました';
   }
 
   @override
-  String get cameraDetectedMovement => 'Camera detected movement.';
+  String get cameraDetectedMovement => 'カメラが動きを検出しました。';
 
   @override
-  String get editZones => 'Edit Zones';
+  String get editZones => 'ゾーンを編集';
 
   @override
-  String get addNewZone => 'Add new zone';
+  String get addNewZone => '新しいゾーンを追加';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'キャンセル';
 
   @override
-  String get existingZones => 'Existing zones';
+  String get existingZones => '既存のゾーン';
 
   @override
-  String get safeZone => 'Safe zone';
+  String get safeZone => 'セーフゾーン';
 
   @override
-  String get warningZone => 'Warning zone';
+  String get today => '今日';
 
   @override
-  String get alertZone => 'Alert zone';
+  String get language => '言語';
 
   @override
-  String get today => 'Today';
+  String get lastUpdated => '最終更新';
 
   @override
-  String get language => 'Language';
-
-  @override
-  String get active => 'Active';
-
-  @override
-  String get mainMonitor => 'Main Monitor';
-
-  @override
-  String get favoriteZone => 'Favorite zone';
-
-  @override
-  String get lastSeen => 'Last seen';
-
-  @override
-  String get mostSeen => 'Most seen';
-
-  @override
-  String get lastUpdated => 'Last updated';
-
-  @override
-  String get noDataAvailable => 'No data available.';
-
-  @override
-  String get justNow => 'Just now';
+  String get justNow => 'たった今';
 
   @override
   String minsAgo(int mins) {
-    return '$mins mins ago';
+    return '$mins分前';
   }
 
   @override
   String hoursAgo(int hours) {
-    return '$hours hours ago';
+    return '$hours時間前';
   }
 
   @override
   String daysAgo(int days) {
-    return '$days days ago';
+    return '$days日前';
   }
 
   @override
-  String get unknown => 'Unknown';
+  String get unknown => '不明';
 
   @override
-  String get leftTheZone => 'Left the zone.';
+  String get leftTheZone => 'ゾーンを出ました。';
 
   @override
   String get greetingsList =>
-      'Hi Boss!|Welcome back!|Have a nice day!|Hey!|How are you?|Hello!|What\'s up?|Good to see you again!|Ready?|Let\'s see what they are doing!';
+      'やあ、ボス！|おかえり！|いい一日を！|やあ！|元気？|こんにちは！|調子はどう？|また会えて嬉しいよ！|準備はいい？|何をしているか見てみよう！';
 
   @override
   String get subGreetingsList =>
-      'Everything is fine here.|Seems to be sleeping.|Full of energy!|Watching the area.|Waiting for dinner.|Sniffing something.|Resting peacefully.|At the favorite spot.|Wants to play.|Everything is quiet.';
+      'ここは順調です。|眠っているようです。|元気いっぱい！|あたりを見張っています。|夕食を待っています。|何かを嗅いでいます。|落ち着いて休んでいます。|お気に入りの場所です。|遊びたがっています。|静かです。';
 
   @override
-  String get petTypeTitle => 'Pet Type';
+  String get petTypeTitle => 'ペットの種類';
 
   @override
-  String get petTypeDog => 'Dog';
+  String get petTypeDog => '犬';
 
   @override
-  String get petTypeCat => 'Cat';
+  String get petTypeCat => '猫';
 
   @override
-  String get petTypeRabbit => 'Rabbit';
+  String get petTypeRabbit => 'うさぎ';
 
   @override
-  String get petTypeGuineaPig => 'Guinea Pig';
+  String get petTypeGuineaPig => 'モルモット';
 
   @override
-  String get petTypeBird => 'Bird';
+  String get petTypeBird => '鳥';
 
   @override
-  String get petTypeOther => 'Other';
+  String get petTypeOther => 'その他';
 
   @override
-  String get alertsTitle => 'Notifications';
+  String get alertsTitle => '通知';
 
   @override
-  String get alertsZone => 'Zone alerts (Enter/Exit)';
+  String get alertsZone => 'ゾーン通知（入退場）';
 
   @override
-  String get alertsBattery => 'Low battery alert';
+  String get alertsBattery => 'バッテリー低下アラート';
 
   @override
   String batteryThreshold(int level) {
-    return 'Battery threshold: $level%';
+    return 'バッテリーしきい値: $level%';
   }
 
   @override
-  String get testNotification => 'Test Notification';
+  String get testNotification => 'テスト通知';
 
   @override
-  String get testNotifTitle => 'Test Notification';
+  String get testNotifTitle => 'テスト通知';
 
   @override
-  String get testNotifBody => 'You have successfully set up notifications!';
-
-  @override
-  String get batteryLowTitle => 'Battery Low!';
-
-  @override
-  String batteryLowBody(int level) {
-    return 'The pet tracker battery is below $level%.';
-  }
-
-  @override
-  String get cameraOffline => 'Camera Offline';
+  String get testNotifBody => '通知の設定が完了しました！';
 
   @override
   String secondsAgo(int seconds) {
-    return '$seconds seconds ago';
+    return '$seconds秒前';
   }
 
   @override
-  String get toiletZone => 'Litter Box / Toilet';
+  String get toiletZone => 'トイレ／猫砂';
 
   @override
-  String get bedZone => 'Bed / Resting Area';
+  String get bedZone => 'ベッド／休憩エリア';
 
   @override
-  String get waterZone => 'Water Bowl';
+  String get waterZone => '水入れ';
 
   @override
-  String get foodZone => 'Food Bowl';
+  String get foodZone => 'フード皿';
 
   @override
-  String get playZone => 'Play Area';
+  String get playZone => '遊びエリア';
 
   @override
-  String get appearance => 'Appearance (Theme)';
+  String get appearance => '外観（テーマ）';
 
   @override
-  String get themeSystem => 'System default';
+  String get themeSystem => 'システムデフォルト';
 
   @override
-  String get themeLight => 'Light Mode';
+  String get themeLight => 'ライトモード';
 
   @override
-  String get themeDark => 'Dark Mode';
+  String get themeDark => 'ダークモード';
 
   @override
   String failedToLoadPetProfile(String e) {
-    return 'Failed to load Pet Profile $e';
+    return 'ペットプロフィールの読み込みに失敗しました $e';
   }
 
   @override
-  String get invalidSecretToken => 'Invalid Secret Token!';
-
-  @override
-  String get serverUnreachable => 'Server Unreachable!';
-
-  @override
-  String decodingErrorZones(String e) {
-    return 'Decoding error at zones: $e';
-  }
+  String get invalidSecretToken => '無効なシークレットトークンです！';
 
   @override
   String decodingError(String e) {
-    return 'Decoding error: $e';
+    return 'デコードエラー: $e';
   }
 
   @override
-  String profileUploadError(String e) {
-    return 'Profile upload error: $e';
-  }
+  String get setupWelcomeTitle => 'PetTrackへようこそ！';
 
   @override
-  String get setupWelcomeTitle => 'Welcome to PetTrack!';
+  String get setupWelcomeDesc => 'ペットを見守る最良の方法。\n\nまず、サーバーに接続しましょう。';
 
   @override
-  String get setupWelcomeDesc =>
-      'The best way to keep track of your pet.\n\nFirst, let\'s connect to the server.';
+  String get setupScanBtn => 'QRコードを読み取る';
 
   @override
-  String get setupScanBtn => 'Read QR Code';
+  String get setupSuccessTitle => '成功！';
 
   @override
-  String get setupSuccessTitle => 'Success!';
+  String get setupSuccessDesc => '接続は暗号化されています。\n次にペットを登録しましょう。';
 
   @override
-  String get setupSuccessDesc =>
-      'The connection is encrypted.\nNow let\'s register your pet.';
+  String get setupNextBtn => '次のステップ';
 
   @override
-  String get setupNextBtn => 'Next Step';
+  String get setupErrConnect => 'サーバーへの接続に失敗しました！ネットワークを確認してください。';
 
   @override
-  String get setupPinTitle => 'Setup a Web PIN';
+  String get setupErrSave => 'プロフィールの保存に失敗しました。';
 
   @override
-  String get setupPinDesc =>
-      'Create a 4-digit PIN to securely login from your browser.';
+  String get setupErrEmpty => '名前を入力してください！';
 
   @override
-  String get setupFinishBtn => 'Finish and Start';
-
-  @override
-  String get setupErrConnect =>
-      'Failed to connect to the server! Check the network.';
-
-  @override
-  String get setupErrSave => 'Failed to save profile.';
-
-  @override
-  String get setupErrEmpty => 'Please enter a name and a 4-digit PIN!';
-
-  @override
-  String get setupMonitorTitle => 'Monitor Setup';
+  String get setupMonitorTitle => 'モニター設定';
 
   @override
   String get setupMonitorDesc =>
-      'Open the Monitor app on the other phone and scan this QR code to connect!';
+      'もう一方のスマホでMonitorアプリを開き、このQRコードをスキャンして接続してください！';
 
   @override
-  String get settingsShowQrBtn => 'Show QR Code';
+  String get settingsShowQrBtn => 'QRコードを表示';
 
   @override
-  String get settingsQrDialogDesc => 'Scan with the old phone:';
+  String get settingsQrDialogDesc => '古いスマホでスキャンしてください：';
 
   @override
-  String get settingsQrDialogDone => 'Done';
+  String get settingsQrDialogDone => '完了';
 
   @override
-  String get settingsResetApp => 'Reset App & Restart Setup';
+  String get settingsResetApp => 'アプリをリセットして設定をやり直す';
 
   @override
-  String get settingsResetConfirmTitle => 'Are you sure?';
+  String get settingsResetConfirmTitle => '本当によろしいですか？';
 
   @override
   String get settingsResetConfirmDesc =>
-      'This will delete all saved data and restart the setup wizard.';
+      '保存されたすべてのデータが削除され、セットアップウィザードが再起動します。';
 
   @override
-  String get serverUnreachableTitle => 'Server Unreachable';
+  String get serverUnreachableTitle => 'サーバーに接続できません';
 
   @override
   String get serverUnreachableDesc =>
-      'Cannot connect to the PetTrack server.\nPlease check your network or if the server is running.';
+      'PetTrackサーバーに接続できません。\nネットワークやサーバーの起動状態を確認してください。';
 
   @override
-  String get profileAndSystem => 'Profile & System';
+  String get profileAndSystem => 'プロフィールとシステム';
 
   @override
-  String get monitorAndConnection => 'Monitor & Connection';
+  String get monitorAndConnection => 'モニターと接続';
 
   @override
-  String get offlineStatus => 'OFFLINE!';
+  String get offlineStatus => 'オフライン！';
 
   @override
-  String get liveStatus => 'Live';
+  String get liveStatus => 'ライブ';
 
   @override
-  String get searchingStatus => 'Searching...';
+  String get searchingStatus => '検索中...';
 
   @override
-  String get navMedical => 'Medical';
+  String get navMedical => '医療';
 
   @override
-  String get medications => 'Medications';
+  String get medications => '投薬';
 
   @override
-  String get vaccines => 'Vaccines';
+  String get vaccines => 'ワクチン';
 
   @override
-  String get addMedication => 'Add Medication';
+  String get addMedication => '投薬を追加';
 
   @override
-  String get addVaccine => 'Add Vaccine';
+  String get addVaccine => 'ワクチンを追加';
 
   @override
-  String get dose => 'Dose';
+  String get dose => '用量';
 
   @override
-  String get time => 'Time';
+  String get time => '時刻';
 
   @override
-  String get dateGiven => 'Date Given';
+  String get dateGiven => '投与日';
 
   @override
-  String get nextDue => 'Next Due';
+  String get nextDue => '次回予定';
 
   @override
-  String get enableAlert => 'Enable Alert';
+  String get enableAlert => 'アラートを有効にする';
 
   @override
-  String get medName => 'Medication name';
+  String get medName => '薬の名前';
 
   @override
-  String get vacName => 'Vaccine name';
+  String get vacName => 'ワクチン名';
 
   @override
-  String get noMedications => 'No medications added yet.';
+  String get noMedications => '投薬はまだ追加されていません。';
 
   @override
-  String get noVaccines => 'No vaccines added yet.';
+  String get noVaccines => 'ワクチンはまだ追加されていません。';
 
   @override
-  String get saveMedication => 'Save Medication';
+  String get saveMedication => '投薬を保存';
 
   @override
-  String get saveVaccine => 'Save Vaccine';
+  String get saveVaccine => 'ワクチンを保存';
 
   @override
-  String get cardColor => 'Card Color:';
+  String get cardColor => 'カードの色:';
 
   @override
-  String get alertFrequency => 'Alert frequency (in hours)';
+  String get alertFrequency => 'アラート間隔（時間）';
 
   @override
-  String get alertFrequencyHint => 'e.g, 12 or 24';
+  String get alertFrequencyHint => '例: 12 または 24';
 
   @override
-  String get medTimeTitle => 'Medication Time!';
+  String get medTimeTitle => '投薬の時間です！';
 
   @override
   String medTimeBody(String name, String dose) {
-    return 'Time to give: $name ($dose)';
+    return '投与する時間: $name（$dose）';
   }
 
   @override
   String everyXHours(int hours) {
-    return 'Every $hours hours';
+    return '$hours時間ごと';
   }
 
   @override
-  String get setupTitle => 'PetTrack Monitor Setup';
+  String get setupTitle => 'PetTrackモニター設定';
 
   @override
-  String get setupNextStep => 'Next step';
+  String get monitorTitle => 'PetTrackモニター';
 
   @override
-  String get setupAutostartWarning =>
-      'Before you start this, go out from the app, go into the app information and turn on Autostart for this to work!';
+  String get monitorSleepMode => 'スリープモード（画面を暗くする）';
 
   @override
-  String get setupServerIp => 'Backend server IP and Port';
+  String get aboutTitle => 'このアプリについて';
 
   @override
-  String get setupDeviceName => 'Device Name (Monitor ID)';
+  String get aboutDescription => 'このアプリはカメラ映像を安全にPetTrackバックエンドへ配信します。';
 
   @override
-  String get setupSecurityToken => 'Security Token';
+  String get monitorStreamingLive => 'ライブ映像を配信中...';
 
   @override
-  String get setupSaveAndStart => 'Save & Start';
+  String get monitorWaitingForStart => 'STARTコマンドを待機中...';
 
   @override
-  String get monitorTitle => 'PetTrack Monitor';
+  String get monitorReconnecting => '再接続中...';
 
   @override
-  String get monitorSleepMode => 'Sleep Mode (Dim Screen)';
+  String get start => '開始';
 
   @override
-  String get aboutTitle => 'About';
-
-  @override
-  String get aboutDescription =>
-      'This app securely streams your camera feed to the PetTrack backend.';
-
-  @override
-  String get monitorStreamingLive => 'Streaming live video...';
-
-  @override
-  String get monitorWaitingForStart => 'Waiting for START command...';
-
-  @override
-  String get monitorReconnecting => 'Reconnecting...';
-
-  @override
-  String get start => 'Start';
-
-  @override
-  String get stop => 'Stop';
+  String get stop => '停止';
 
   @override
   String monitorServer(String ip) {
-    return 'Server:\n$ip';
+    return 'サーバー:\n$ip';
   }
 
   @override
-  String get monitorSleeping => 'Sleeping... Double tap to wake';
+  String get monitorSleeping => 'スリープ中... ダブルタップで起動';
 
   @override
   String errorConnectionFailed(String error) {
-    return 'Failed to connect to server! Check IP and Token.\nError: $error';
+    return 'サーバーへの接続に失敗しました！IPとトークンを確認してください。\nエラー: $error';
   }
-
-  @override
-  String get languageTitle => 'Language';
 
   @override
   String get languageEnglish => 'English';
@@ -512,47 +409,205 @@ class AppLocalizationsJa extends AppLocalizations {
   String get languageHungarian => 'Magyar';
 
   @override
-  String get setupScanQrTitle => 'Scan the QR code from the PetTrack App';
+  String get setupScanQrTitle => 'PetTrackアプリのQRコードをスキャンしてください';
 
   @override
-  String get lightMode => '☀️ Light Mode';
+  String get lightMode => '☀️ ライトモード';
 
   @override
-  String get darkMode => '🌙 Dark Mode';
+  String get darkMode => '🌙 ダークモード';
 
   @override
-  String get welcomeTitle => 'Welcome to PetTrack';
+  String get welcomeTitle => 'PetTrackへようこそ';
 
   @override
-  String get chooseMode => 'Choose your mode';
+  String get chooseMode => 'モードを選択';
 
   @override
-  String get modeClient => 'Client (Viewer)';
+  String get modeClient => 'クライアント（閲覧）';
 
   @override
-  String get modeClientDesc => 'This device will watch the stream.';
+  String get modeClientDesc => 'このデバイスは映像を視聴します。';
 
   @override
-  String get modeMonitor => 'Monitor (Camera)';
+  String get modeMonitor => 'モニター（カメラ）';
 
   @override
-  String get modeMonitorDesc => 'This device will stream video.';
+  String get modeMonitorDesc => 'このデバイスは映像を配信します。';
 
   @override
-  String get enterPin => 'Enter PIN';
+  String get enterPin => 'PINを入力';
 
   @override
-  String get demoModeTitle => 'Demo Mode';
+  String get demoModeTitle => 'デモモード';
 
   @override
-  String get demoModePrompt => 'Would you like to enter Demo Mode?';
+  String get demoModePrompt => 'デモモードに入りますか？';
 
   @override
-  String get exit => 'Exit';
+  String get exit => '終了';
 
   @override
-  String get demoLivePreview => 'DEMO MODE, LIVE PREVIEW HERE!';
+  String get demoLivePreview => 'デモモード、ライブプレビューはこちら！';
 
   @override
-  String get loading => 'Loading...';
+  String get zoneSaved => 'ゾーンを保存しました！';
+
+  @override
+  String zoneSaveError(String e) {
+    return 'エラー: $e';
+  }
+
+  @override
+  String get newZoneTitle => '新しいゾーンの追加';
+
+  @override
+  String get zoneNameHint => 'ゾーン名...';
+
+  @override
+  String get noZonesYet => 'まだゾーンがありません。';
+
+  @override
+  String get yes => 'はい';
+
+  @override
+  String get no => 'いいえ';
+
+  @override
+  String get submitPin => 'PINを送信';
+
+  @override
+  String get demoModeBtn => 'デモモード';
+
+  @override
+  String get orSeparator => 'または';
+
+  @override
+  String get setupErrPin => '接続に失敗したか、PINが無効です！';
+
+  @override
+  String get saveSuccess => '設定を保存しました！';
+
+  @override
+  String get navReplays => 'リプレイ';
+
+  @override
+  String get replaysTitle => 'リプレイ';
+
+  @override
+  String get logOut => 'ログアウト';
+
+  @override
+  String replaysLoadError(int code) {
+    return 'リプレイの読み込みに失敗しました（エラー $code）';
+  }
+
+  @override
+  String replaysNetworkError(String e) {
+    return 'ネットワークエラー: $e';
+  }
+
+  @override
+  String get close => '閉じる';
+
+  @override
+  String get openDownload => '開く / ダウンロード';
+
+  @override
+  String get retry => '再試行';
+
+  @override
+  String get noReplays => 'まだリプレイが録画されていません。';
+
+  @override
+  String replaySizeMb(String size) {
+    return '${size}MB';
+  }
+
+  @override
+  String get qrScannerTitle => 'QRコードをスキャン';
+
+  @override
+  String get qrScannerHint => 'サーバーのターミナルに表示されたQRコードをスキャンしてください！';
+
+  @override
+  String get notifChannelAlertsName => 'PetTrackアラート';
+
+  @override
+  String get notifChannelAlertsDesc => 'ゾーンの変更とバッテリーに関する通知';
+
+  @override
+  String get notifChannelMedicalName => '医療リマインダー';
+
+  @override
+  String get notifChannelMedicalDesc => '投薬に関する通知';
+
+  @override
+  String get syncToWatch => 'スマートウォッチと同期';
+
+  @override
+  String get syncStarting => '同期を開始しています...';
+
+  @override
+  String get syncSuccess => 'ウォッチに送信しました！';
+
+  @override
+  String get syncNoWatch => '接続されたウォッチが見つかりません。';
+
+  @override
+  String get onlineStatus => 'オンライン';
+
+  @override
+  String get eventLog => 'イベントログ';
+
+  @override
+  String get shareInviteText => 'うちのペットの様子を見て！';
+
+  @override
+  String get chooseLanguageTitle => '言語を選択';
+
+  @override
+  String get languageChinese => '中文';
+
+  @override
+  String get languageItalian => 'Italiano';
+
+  @override
+  String get languageGerman => 'Deutsch';
+
+  @override
+  String get languageJapanese => '日本語';
+
+  @override
+  String get languageKorean => '한국어';
+
+  @override
+  String get aiGeneratedMarker => '（AI生成）';
+
+  @override
+  String get wearSynced => '同期しました！';
+
+  @override
+  String get wearOpenAppOnPhone => 'スマホでアプリを開いてください。';
+
+  @override
+  String get wearManual => '手動';
+
+  @override
+  String get wearSetupTitle => 'セットアップ';
+
+  @override
+  String get pinHint => '4桁のPIN';
+
+  @override
+  String get errInvalidPin => 'PINが無効です！';
+
+  @override
+  String get errNetwork => 'ネットワークエラー！';
+
+  @override
+  String get defaultPetName => 'ペット';
+
+  @override
+  String get appVersion => 'v1.0 Pre-Release';
 }

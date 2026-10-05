@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:url_launcher/url_launcher.dart';
+import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../widgets/video_player_widget.dart';
 
@@ -19,7 +20,10 @@ class ReplaysScreen extends StatefulWidget {
 class _ReplaysScreenState extends State<ReplaysScreen> {
   List<dynamic> _replays = [];
   bool _isLoading = true;
-  String? _error;
+  // Error state is kept structured so the localized message can be
+  // built safely in build() (no BuildContext use after async gaps).
+  int _errorStatus = 0;
+  String _errorDetail = '';
 
   @override
   void initState() {
@@ -30,7 +34,8 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
   Future<void> _fetchReplays() async {
     setState(() {
       _isLoading = true;
-      _error = null;
+      _errorStatus = 0;
+      _errorDetail = '';
     });
 
     try {
@@ -49,19 +54,20 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
         });
       } else {
         setState(() {
-          _error = 'Failed to load replays (Error ${response.statusCode})';
+          _errorStatus = response.statusCode;
           _isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        _error = 'Network error: $e';
+        _errorDetail = e.toString();
         _isLoading = false;
       });
     }
   }
 
   void _playVideo(String filename) {
+    final l10n = AppLocalizations.of(context)!;
     final url = '${widget.serverIp}/api/replays/$filename';
     showDialog(
       context: context,
@@ -88,7 +94,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                     TextButton.icon(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.close),
-                      label: const Text('Close'),
+                      label: Text(l10n.close),
                     ),
                     TextButton.icon(
                       onPressed: () async {
@@ -101,7 +107,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                         }
                       },
                       icon: const Icon(Icons.open_in_browser),
-                      label: const Text('Open / Download'),
+                      label: Text(l10n.openDownload),
                     ),
                   ],
                 ),
@@ -115,24 +121,28 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isDesktop = MediaQuery.of(context).size.width >= 800;
 
     Widget content;
     if (_isLoading) {
       content = const Center(child: CircularProgressIndicator());
-    } else if (_error != null) {
+    } else if (_errorStatus != 0 || _errorDetail.isNotEmpty) {
+      final errorText = _errorStatus != 0
+          ? l10n.replaysLoadError(_errorStatus)
+          : l10n.replaysNetworkError(_errorDetail);
       content = Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
             const SizedBox(height: 16),
-            Text(_error!, style: const TextStyle(color: Colors.white70)),
+            Text(errorText, style: const TextStyle(color: Colors.white70)),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _fetchReplays,
-              child: const Text('Retry'),
+              child: Text(l10n.retry),
             ),
           ],
         ),
@@ -148,9 +158,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
               color: Colors.white24,
             ),
             const SizedBox(height: 16),
-            const Text(
-              "No replays recorded yet.",
-              style: TextStyle(color: Colors.white54, fontSize: 18),
+            Text(
+              l10n.noReplays,
+              style: const TextStyle(color: Colors.white54, fontSize: 18),
             ),
           ],
         ),
@@ -225,7 +235,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                             ),
                           ),
                           Text(
-                            "${sizeMb}MB",
+                            l10n.replaySizeMb(sizeMb),
                             style: const TextStyle(
                               color: Colors.white54,
                               fontSize: 10,
@@ -252,9 +262,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Replays",
-                      style: TextStyle(
+                    Text(
+                      l10n.replaysTitle,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,

@@ -11,12 +11,7 @@
   "navDashboard": "Kezdőlap",
   "navZones": "Zónák",
   "navSettings": "Beállítások",
-  "greeting": "Szia Gazda!",
-  "greetingSubtitle": "Íme {petName} mai napja.",
   "liveVideo": "Élő Videó",
-  "lastMovement": "Utolsó mozgás: {time}",
-  "distance": "Távolság",
-  "feedings": "Etetés",
   "activities": "Tevékenységek",
   "noRecentEvents": "Nincs friss esemény",
   "zoneEntered": "{petName} belépett a(z) {zone} területre",
@@ -27,17 +22,9 @@
   "cancel": "Mégse",
   "existingZones": "Meglévő zónák",
   "safeZone": "Biztonságos zóna",
-  "warningZone": "Figyelmeztető zóna",
-  "alertZone": "Riasztási zóna",
   "today": "Ma",
   "language": "Nyelv",
-  "active": "Aktív",
-  "mainMonitor": "Fő Monitor",
-  "favoriteZone": "Kedvenc zóna",
-  "lastSeen": "Utolsó észlelés",
-  "mostSeen": "Legtöbbet látott",
   "lastUpdated": "Utoljára frissítve",
-  "noDataAvailable": "Nincs adat.",
   "justNow": "Épp most",
   "minsAgo": "{mins} perce",
   "hoursAgo": "{hours} órája",
@@ -60,9 +47,6 @@
   "testNotification": "Értesítés tesztelése",
   "testNotifTitle": "Teszt értesítés",
   "testNotifBody": "Sikeresen beállítottad az értesítéseket!",
-  "batteryLowTitle": "Alacsony akkumlátor!",
-  "batteryLowBody": "A monitor {level}% alá merült.",
-  "cameraOffline": "Nincs kamera élőkép",
   "secondsAgo": "{seconds} másodperce",
   "toiletZone": "Alomtálca / WC",
   "bedZone": "Fekvőhely",
@@ -75,22 +59,16 @@
   "themeDark": "Sötét mód",
   "failedToLoadPetProfile": "Nem sikerült betölteni a profilt: {e}",
   "invalidSecretToken": "Hibás Secret Token!",
-  "serverUnreachable": "Szerver nem elérhető!",
-  "decodingErrorZones": "Dekódolási hiba zónáknál: {e}",
   "decodingError": "Dekódolási hiba: {e}",
-  "profileUploadError": "Profil feltöltés hiba: {e}",
   "setupWelcomeTitle": "Üdvözöl a PetTrack!",
   "setupWelcomeDesc": "A legbiztonságosabb kisállatfigyelő\n\nElső lépésként olvasd be a szerver QR kódját!",
   "setupScanBtn": "QR kód beolvasása",
   "setupSuccessTitle": "Sikeres csatlakozás!",
   "setupSuccessDesc": "A kapcsolat titkosítva.\nMost adjuk meg a kedvenced adatait.",
   "setupNextBtn": "Tovább",
-  "setupPinTitle": "Webes pin beállítása",
-  "setupPinDesc": "Hozz létre egy 4 számjegyű PIN kódot a böngészős belépéshez.",
-  "setupFinishBtn": "Befejezés és indítás",
   "setupErrConnect": "Hiba a szerverhez csatlakozáskor! Ellenőrizd a hálózatot.",
   "setupErrSave": "Hiba a profil mentésekor!",
-  "setupErrEmpty": "Adj meg egy nevet és egy 4 számjegyű PIN kódot!",
+  "setupErrEmpty": "Adj meg egy nevet!",
   "setupMonitorTitle": "Kamera beállítása",
   "setupMonitorDesc": "Nyisd meg a Monitor appot a régi telefonodon, és olvasd be ezt a QR kódot a csatlakozáshoz!",
   "settingsShowQrBtn": "QR kód megjelenítése",
@@ -129,12 +107,6 @@
   "medTimeBody": "Ideje beadni: {name} ({dose})",
   "everyXHours": "Minden {hours} órában",
   "setupTitle": "PetTrack Monitor Beállítás",
-  "setupNextStep": "Következő lépés",
-  "setupAutostartWarning": "Mielőtt továbbhaladsz, lépj ki az alkalmazásból, menj az app infókba, és engedélyezd az Automatikus indítast (Autostart)!",
-  "setupServerIp": "Szerver IP címe és Port",
-  "setupDeviceName": "Ezköz neve (Monitor ID)",
-  "setupSecurityToken": "Biztonsági Token",
-  "setupSaveAndStart": "Mentés és indítás",
   "monitorTitle": "PetTrack Monitor",
   "monitorSleepMode": "Alvó mód (Képernyő sötétítése)",
   "aboutTitle": "Névjegy",
@@ -147,7 +119,6 @@
   "monitorServer": "Szerver:\n{ip}",
   "monitorSleeping": "Alvó mód.... Dupla koppintás az ébresztéshez",
   "errorConnectionFailed": "Sikertelen csatlakozás a szerverhez! Ellenőrizd az IP-t és a Tokent.\nHiba: {error}",
-  "languageTitle": "Nyelv",
   "languageEnglish": "English",
   "languageHungarian": "Magyar",
   "setupScanQrTitle": "Olvasd be a QR kódot a PetTrack appból",
@@ -163,5 +134,85 @@
   "demoModeTitle": "Demo Mód",
   "demoModePrompt": "Szeretnél belépni a Demo módba?",
   "exit": "Kilépés",
-  "demoLivePreview": "DEMO MÓD, ÉLŐKÉP HELYE!"
+  "demoLivePreview": "DEMO MÓD, ÉLŐKÉP HELYE!",
+  "zoneSaved": "Zóna elmentve!",
+  "zoneSaveError": "Hiba: {e}",
+  "@zoneSaveError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "newZoneTitle": "Új zóna felvétele",
+  "zoneNameHint": "Zóna neve...",
+  "noZonesYet": "Nincsenek még zónák.",
+  "yes": "Igen",
+  "no": "Nem",
+  "submitPin": "PIN küldése",
+  "demoModeBtn": "Demó mód",
+  "orSeparator": "VAGY",
+  "setupErrPin": "Sikertelen csatlakozás vagy hibás PIN!",
+  "saveSuccess": "Beállítások elmentve!",
+  "navReplays": "Visszajátszások",
+  "replaysTitle": "Visszajátszások",
+  "logOut": "Kijelentkezés",
+  "replaysLoadError": "Nem sikerült betölteni a visszajátszásokat (Hiba {code})",
+  "@replaysLoadError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "replaysNetworkError": "Hálózati hiba: {e}",
+  "@replaysNetworkError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "close": "Bezárás",
+  "openDownload": "Megnyitás / Letöltés",
+  "retry": "Újra",
+  "noReplays": "Még nincsenek visszajátszások.",
+  "replaySizeMb": "{size}MB",
+  "@replaySizeMb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "qrScannerTitle": "QR kód beolvasása",
+  "qrScannerHint": "Olvassa be a terminálban lévő QR kódot!",
+  "notifChannelAlertsName": "PetTrack Riasztások",
+  "notifChannelAlertsDesc": "Értesítések zónaváltásról és akkumulátorról",
+  "notifChannelMedicalName": "Gyógyszer emlékeztetők",
+  "notifChannelMedicalDesc": "Értesítések a gyógyszerek beadásáról",
+  "syncToWatch": "Szinkronizálás Okosórával",
+  "syncStarting": "Szinkronizálás indítása...",
+  "syncSuccess": "Sikeresen elküldve az órára!",
+  "syncNoWatch": "Nem található csatlakoztatott óra.",
+  "onlineStatus": "Online",
+  "eventLog": "Eseménynapló",
+  "shareInviteText": "Nézd, mit csinál a kedvencem!",
+  "chooseLanguageTitle": "Válassz nyelvet",
+  "languageChinese": "中文",
+  "languageItalian": "Italiano",
+  "languageGerman": "Deutsch",
+  "languageJapanese": "日本語",
+  "languageKorean": "한국어",
+  "aiGeneratedMarker": "(AI-GENERÁLT)",
+  "wearSynced": "Szinkronizálva!",
+  "wearOpenAppOnPhone": "Nyisd meg az appot a telefonon.",
+  "wearManual": "Manuális",
+  "wearSetupTitle": "Beállítás",
+  "pinHint": "4-jegyű PIN",
+  "errInvalidPin": "Hibás PIN!",
+  "errNetwork": "Hálózati hiba!",
+  "defaultPetName": "Kedvenc",
+  "appVersion": "v1.0 Pre-Release",
+  "zoneVisits": "Zónalátogatások"
 }

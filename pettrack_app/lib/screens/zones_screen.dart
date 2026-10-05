@@ -69,7 +69,6 @@ class _ZonesScreenState extends State<ZonesScreen> {
         setState(() {
           // Add a dummy 'type' for UI colors since the API only returns name and polygon
           _existingZones = fetchedZones.map((z) {
-            debugPrint("DEBUG ZONE FETCHED: ${z['name']} -> ${z['type']}");
             return {
               "name": z['name'],
               "polygon": z['polygon'],
@@ -110,6 +109,39 @@ class _ZonesScreenState extends State<ZonesScreen> {
     } catch (_) {}
   }
 
+  /// Saves the given zone list on the server. Returns null on success,
+  /// or the error message when the save failed.
+  Future<String?> _persistZones(List<dynamic> zones) async {
+    try {
+      final response = await http
+          .post(
+            Uri.parse('${widget.serverIp}/api/zones'),
+            headers: {
+              'x-api-token': widget.token,
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode(
+              zones
+                  .map(
+                    (z) => {
+                      "name": z['name'],
+                      "polygon": z['polygon'],
+                      "type": z['type'] ?? 'safe',
+                    },
+                  )
+                  .toList(),
+            ),
+          )
+          .timeout(const Duration(seconds: 3));
+      if (response.statusCode != 200) {
+        return 'HTTP ${response.statusCode}';
+      }
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<void> _saveZone() async {
     if (_currentPolygon.length < 3 || _zoneNameController.text.isEmpty) return;
 
@@ -126,56 +158,47 @@ class _ZonesScreenState extends State<ZonesScreen> {
       "type": _selectedZoneType,
     };
 
-    final allZonesToSave = _existingZones
-        .map(
-          (z) => {
-            "name": z['name'],
-            "polygon": z['polygon'],
-            "type": z['type'] ?? 'safe',
-          },
-        )
-        .toList();
-    allZonesToSave.add(zoneConfig);
+    final allZonesToSave = List<dynamic>.from(_existingZones)..add(zoneConfig);
 
-    try {
-      await http.post(
-        Uri.parse('${widget.serverIp}/api/zones'),
-        headers: {
-          'x-api-token': widget.token,
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(allZonesToSave),
-      );
+    final error = await _persistZones(allZonesToSave);
+    if (!mounted) return;
 
-      if (mounted) {
-        setState(() {
-          _existingZones.add({
-            "id": DateTime.now().millisecondsSinceEpoch.toString(),
-            "name": _zoneNameController.text.trim(),
-            "polygon": _currentPolygon
-                .map(
-                  (p) => {
-                    "x": p.dx / _canvasSize.width,
-                    "y": p.dy / _canvasSize.height,
-                  },
-                )
-                .toList(),
-            "type": _selectedZoneType,
-          });
-          _isDrawing = false;
-          _currentPolygon.clear();
-          _zoneNameController.clear();
-        });
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Zóna elmentve!')));
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Hiba: $e')));
-      }
+    final l10n = AppLocalizations.of(context)!;
+    if (error == null) {
+      setState(() {
+        _existingZones.add(zoneConfig);
+        _isDrawing = false;
+        _currentPolygon.clear();
+        _zoneNameController.clear();
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.zoneSaved)));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.zoneSaveError(error))));
+    }
+  }
+
+  Future<void> _deleteZone(Map<String, dynamic> zone) async {
+    final l10n = AppLocalizations.of(context)!;
+    final previousZones = List<dynamic>.from(_existingZones);
+    setState(() {
+      _existingZones.remove(zone);
+    });
+
+    final error = await _persistZones(_existingZones);
+    if (!mounted) return;
+
+    if (error != null) {
+      // Roll back to the previous list when the server rejected the change.
+      setState(() {
+        _existingZones = previousZones;
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.zoneSaveError(error))));
     }
   }
 
@@ -281,7 +304,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Új zóna felvétele",
+                  l10n.newZoneTitle,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -293,7 +316,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
                   controller: _zoneNameController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
-                    hintText: 'Zóna neve...',
+                    hintText: l10n.zoneNameHint,
                     hintStyle: const TextStyle(color: Colors.white54),
                     filled: true,
                     fillColor: Colors.black.withValues(alpha: 0.2),
@@ -469,10 +492,10 @@ class _ZonesScreenState extends State<ZonesScreen> {
               color: Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                "Nincsenek még zónák.",
-                style: TextStyle(color: Colors.white54, fontSize: 14),
+                l10n.noZonesYet,
+                style: const TextStyle(color: Colors.white54, fontSize: 14),
               ),
             ),
           )
@@ -552,11 +575,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
-                  onPressed: () {
-                    setState(() {
-                      _existingZones.remove(zone);
-                    });
-                  },
+                  onPressed: () => _deleteZone(zone),
                 ),
               ),
             );

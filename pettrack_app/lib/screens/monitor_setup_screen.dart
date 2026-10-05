@@ -67,11 +67,11 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('No'),
+            child: Text(l10n.no),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Yes'),
+            child: Text(l10n.yes),
           ),
         ],
       ),
@@ -168,8 +168,9 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
     } catch (e) {
       setState(() => _isProcessing = false);
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to connect or invalid PIN')),
+          SnackBar(content: Text(l10n.setupErrPin)),
         );
       }
     }
@@ -256,7 +257,7 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
                                 const SizedBox(width: 16),
                                 ElevatedButton(
                                   onPressed: _handlePinSubmit,
-                                  child: const Text('Submit'),
+                                  child: Text(l10n.submitPin),
                                 ),
                               ],
                             ),
@@ -264,7 +265,7 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
                             TextButton.icon(
                               onPressed: () => _startDemoMode(context),
                               icon: const Icon(Icons.play_circle_fill),
-                              label: const Text('Demo Mode'),
+                              label: Text(l10n.demoModeBtn),
                               style: TextButton.styleFrom(
                                 foregroundColor: Colors.orange,
                               ),

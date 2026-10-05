@@ -180,41 +180,11 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get navSettings;
 
-  /// No description provided for @greeting.
-  ///
-  /// In en, this message translates to:
-  /// **'Hi Boss!'**
-  String get greeting;
-
-  /// No description provided for @greetingSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Here is {petName}\'s day today.'**
-  String greetingSubtitle(String petName);
-
   /// No description provided for @liveVideo.
   ///
   /// In en, this message translates to:
   /// **'Live Video'**
   String get liveVideo;
-
-  /// No description provided for @lastMovement.
-  ///
-  /// In en, this message translates to:
-  /// **'Last movement: {time}'**
-  String lastMovement(String time);
-
-  /// No description provided for @distance.
-  ///
-  /// In en, this message translates to:
-  /// **'Distance'**
-  String get distance;
-
-  /// No description provided for @feedings.
-  ///
-  /// In en, this message translates to:
-  /// **'Feedings'**
-  String get feedings;
 
   /// No description provided for @activities.
   ///
@@ -282,18 +252,6 @@ abstract class AppLocalizations {
   /// **'Safe zone'**
   String get safeZone;
 
-  /// No description provided for @warningZone.
-  ///
-  /// In en, this message translates to:
-  /// **'Warning zone'**
-  String get warningZone;
-
-  /// No description provided for @alertZone.
-  ///
-  /// In en, this message translates to:
-  /// **'Alert zone'**
-  String get alertZone;
-
   /// No description provided for @today.
   ///
   /// In en, this message translates to:
@@ -306,47 +264,11 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get language;
 
-  /// No description provided for @active.
-  ///
-  /// In en, this message translates to:
-  /// **'Active'**
-  String get active;
-
-  /// No description provided for @mainMonitor.
-  ///
-  /// In en, this message translates to:
-  /// **'Main Monitor'**
-  String get mainMonitor;
-
-  /// No description provided for @favoriteZone.
-  ///
-  /// In en, this message translates to:
-  /// **'Favorite zone'**
-  String get favoriteZone;
-
-  /// No description provided for @lastSeen.
-  ///
-  /// In en, this message translates to:
-  /// **'Last seen'**
-  String get lastSeen;
-
-  /// No description provided for @mostSeen.
-  ///
-  /// In en, this message translates to:
-  /// **'Most seen'**
-  String get mostSeen;
-
   /// No description provided for @lastUpdated.
   ///
   /// In en, this message translates to:
   /// **'Last updated'**
   String get lastUpdated;
-
-  /// No description provided for @noDataAvailable.
-  ///
-  /// In en, this message translates to:
-  /// **'No data available.'**
-  String get noDataAvailable;
 
   /// No description provided for @justNow.
   ///
@@ -480,24 +402,6 @@ abstract class AppLocalizations {
   /// **'You have successfully set up notifications!'**
   String get testNotifBody;
 
-  /// No description provided for @batteryLowTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Battery Low!'**
-  String get batteryLowTitle;
-
-  /// No description provided for @batteryLowBody.
-  ///
-  /// In en, this message translates to:
-  /// **'The pet tracker battery is below {level}%.'**
-  String batteryLowBody(int level);
-
-  /// No description provided for @cameraOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Camera Offline'**
-  String get cameraOffline;
-
   /// No description provided for @secondsAgo.
   ///
   /// In en, this message translates to:
@@ -570,29 +474,11 @@ abstract class AppLocalizations {
   /// **'Invalid Secret Token!'**
   String get invalidSecretToken;
 
-  /// No description provided for @serverUnreachable.
-  ///
-  /// In en, this message translates to:
-  /// **'Server Unreachable!'**
-  String get serverUnreachable;
-
-  /// No description provided for @decodingErrorZones.
-  ///
-  /// In en, this message translates to:
-  /// **'Decoding error at zones: {e}'**
-  String decodingErrorZones(String e);
-
   /// No description provided for @decodingError.
   ///
   /// In en, this message translates to:
   /// **'Decoding error: {e}'**
   String decodingError(String e);
-
-  /// No description provided for @profileUploadError.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile upload error: {e}'**
-  String profileUploadError(String e);
 
   /// No description provided for @setupWelcomeTitle.
   ///
@@ -630,24 +516,6 @@ abstract class AppLocalizations {
   /// **'Next Step'**
   String get setupNextBtn;
 
-  /// No description provided for @setupPinTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Setup a Web PIN'**
-  String get setupPinTitle;
-
-  /// No description provided for @setupPinDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Create a 4-digit PIN to securely login from your browser.'**
-  String get setupPinDesc;
-
-  /// No description provided for @setupFinishBtn.
-  ///
-  /// In en, this message translates to:
-  /// **'Finish and Start'**
-  String get setupFinishBtn;
-
   /// No description provided for @setupErrConnect.
   ///
   /// In en, this message translates to:
@@ -663,7 +531,7 @@ abstract class AppLocalizations {
   /// No description provided for @setupErrEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a name and a 4-digit PIN!'**
+  /// **'Please enter a name!'**
   String get setupErrEmpty;
 
   /// No description provided for @setupMonitorTitle.
@@ -894,42 +762,6 @@ abstract class AppLocalizations {
   /// **'PetTrack Monitor Setup'**
   String get setupTitle;
 
-  /// No description provided for @setupNextStep.
-  ///
-  /// In en, this message translates to:
-  /// **'Next step'**
-  String get setupNextStep;
-
-  /// No description provided for @setupAutostartWarning.
-  ///
-  /// In en, this message translates to:
-  /// **'Before you start this, go out from the app, go into the app information and turn on Autostart for this to work!'**
-  String get setupAutostartWarning;
-
-  /// No description provided for @setupServerIp.
-  ///
-  /// In en, this message translates to:
-  /// **'Backend server IP and Port'**
-  String get setupServerIp;
-
-  /// No description provided for @setupDeviceName.
-  ///
-  /// In en, this message translates to:
-  /// **'Device Name (Monitor ID)'**
-  String get setupDeviceName;
-
-  /// No description provided for @setupSecurityToken.
-  ///
-  /// In en, this message translates to:
-  /// **'Security Token'**
-  String get setupSecurityToken;
-
-  /// No description provided for @setupSaveAndStart.
-  ///
-  /// In en, this message translates to:
-  /// **'Save & Start'**
-  String get setupSaveAndStart;
-
   /// No description provided for @monitorTitle.
   ///
   /// In en, this message translates to:
@@ -1001,12 +833,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to connect to server! Check IP and Token.\nError: {error}'**
   String errorConnectionFailed(String error);
-
-  /// No description provided for @languageTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get languageTitle;
 
   /// No description provided for @languageEnglish.
   ///
@@ -1104,11 +930,311 @@ abstract class AppLocalizations {
   /// **'DEMO MODE, LIVE PREVIEW HERE!'**
   String get demoLivePreview;
 
-  /// No description provided for @loading.
+  /// No description provided for @zoneSaved.
   ///
   /// In en, this message translates to:
-  /// **'Loading...'**
-  String get loading;
+  /// **'Zone saved!'**
+  String get zoneSaved;
+
+  /// No description provided for @zoneSaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {e}'**
+  String zoneSaveError(String e);
+
+  /// No description provided for @newZoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adding a new zone'**
+  String get newZoneTitle;
+
+  /// No description provided for @zoneNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Zone name...'**
+  String get zoneNameHint;
+
+  /// No description provided for @noZonesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No zones yet.'**
+  String get noZonesYet;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @submitPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit PIN'**
+  String get submitPin;
+
+  /// No description provided for @demoModeBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo Mode'**
+  String get demoModeBtn;
+
+  /// No description provided for @orSeparator.
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get orSeparator;
+
+  /// No description provided for @setupErrPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to connect or invalid PIN!'**
+  String get setupErrPin;
+
+  /// No description provided for @saveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings saved!'**
+  String get saveSuccess;
+
+  /// No description provided for @navReplays.
+  ///
+  /// In en, this message translates to:
+  /// **'Replays'**
+  String get navReplays;
+
+  /// No description provided for @replaysTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replays'**
+  String get replaysTitle;
+
+  /// No description provided for @logOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get logOut;
+
+  /// No description provided for @replaysLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load replays (Error {code})'**
+  String replaysLoadError(int code);
+
+  /// No description provided for @replaysNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error: {e}'**
+  String replaysNetworkError(String e);
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @openDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Open / Download'**
+  String get openDownload;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @noReplays.
+  ///
+  /// In en, this message translates to:
+  /// **'No replays recorded yet.'**
+  String get noReplays;
+
+  /// No description provided for @replaySizeMb.
+  ///
+  /// In en, this message translates to:
+  /// **'{size}MB'**
+  String replaySizeMb(String size);
+
+  /// No description provided for @qrScannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR Code'**
+  String get qrScannerTitle;
+
+  /// No description provided for @qrScannerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the QR code shown in the server terminal!'**
+  String get qrScannerHint;
+
+  /// No description provided for @notifChannelAlertsName.
+  ///
+  /// In en, this message translates to:
+  /// **'PetTrack Alerts'**
+  String get notifChannelAlertsName;
+
+  /// No description provided for @notifChannelAlertsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications about zone changes and battery'**
+  String get notifChannelAlertsDesc;
+
+  /// No description provided for @notifChannelMedicalName.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Alerts'**
+  String get notifChannelMedicalName;
+
+  /// No description provided for @notifChannelMedicalDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications about giving medication'**
+  String get notifChannelMedicalDesc;
+
+  /// No description provided for @syncToWatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync with Smartwatch'**
+  String get syncToWatch;
+
+  /// No description provided for @syncStarting.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting sync...'**
+  String get syncStarting;
+
+  /// No description provided for @syncSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully sent to the watch!'**
+  String get syncSuccess;
+
+  /// No description provided for @syncNoWatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No connected watch found.'**
+  String get syncNoWatch;
+
+  /// No description provided for @onlineStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get onlineStatus;
+
+  /// No description provided for @eventLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Log'**
+  String get eventLog;
+
+  /// No description provided for @shareInviteText.
+  ///
+  /// In en, this message translates to:
+  /// **'Look what my pet is doing!'**
+  String get shareInviteText;
+
+  /// No description provided for @chooseLanguageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Language'**
+  String get chooseLanguageTitle;
+
+  /// No description provided for @languageChinese.
+  ///
+  /// In en, this message translates to:
+  /// **'中文'**
+  String get languageChinese;
+
+  /// No description provided for @languageItalian.
+  ///
+  /// In en, this message translates to:
+  /// **'Italiano'**
+  String get languageItalian;
+
+  /// No description provided for @languageGerman.
+  ///
+  /// In en, this message translates to:
+  /// **'Deutsch'**
+  String get languageGerman;
+
+  /// No description provided for @languageJapanese.
+  ///
+  /// In en, this message translates to:
+  /// **'日本語'**
+  String get languageJapanese;
+
+  /// No description provided for @languageKorean.
+  ///
+  /// In en, this message translates to:
+  /// **'한국어'**
+  String get languageKorean;
+
+  /// No description provided for @aiGeneratedMarker.
+  ///
+  /// In en, this message translates to:
+  /// **'(AI-GENERATED)'**
+  String get aiGeneratedMarker;
+
+  /// No description provided for @wearSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced!'**
+  String get wearSynced;
+
+  /// No description provided for @wearOpenAppOnPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the app on your phone.'**
+  String get wearOpenAppOnPhone;
+
+  /// No description provided for @wearManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get wearManual;
+
+  /// No description provided for @wearSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup'**
+  String get wearSetupTitle;
+
+  /// No description provided for @pinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'4-digit PIN'**
+  String get pinHint;
+
+  /// No description provided for @errInvalidPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid PIN!'**
+  String get errInvalidPin;
+
+  /// No description provided for @errNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error!'**
+  String get errNetwork;
+
+  /// No description provided for @defaultPetName.
+  ///
+  /// In en, this message translates to:
+  /// **'Pet'**
+  String get defaultPetName;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'v1.0 Pre-Release'**
+  String get appVersion;
 }
 
 class _AppLocalizationsDelegate

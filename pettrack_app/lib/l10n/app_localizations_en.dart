@@ -45,26 +45,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navSettings => 'Settings';
 
   @override
-  String get greeting => 'Hi Boss!';
-
-  @override
-  String greetingSubtitle(String petName) {
-    return 'Here is $petName\'s day today.';
-  }
-
-  @override
   String get liveVideo => 'Live Video';
-
-  @override
-  String lastMovement(String time) {
-    return 'Last movement: $time';
-  }
-
-  @override
-  String get distance => 'Distance';
-
-  @override
-  String get feedings => 'Feedings';
 
   @override
   String get activities => 'Activities';
@@ -104,37 +85,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get safeZone => 'Safe zone';
 
   @override
-  String get warningZone => 'Warning zone';
-
-  @override
-  String get alertZone => 'Alert zone';
-
-  @override
   String get today => 'Today';
 
   @override
   String get language => 'Language';
 
   @override
-  String get active => 'Active';
-
-  @override
-  String get mainMonitor => 'Main Monitor';
-
-  @override
-  String get favoriteZone => 'Favorite zone';
-
-  @override
-  String get lastSeen => 'Last seen';
-
-  @override
-  String get mostSeen => 'Most seen';
-
-  @override
   String get lastUpdated => 'Last updated';
-
-  @override
-  String get noDataAvailable => 'No data available.';
 
   @override
   String get justNow => 'Just now';
@@ -213,17 +170,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get testNotifBody => 'You have successfully set up notifications!';
 
   @override
-  String get batteryLowTitle => 'Battery Low!';
-
-  @override
-  String batteryLowBody(int level) {
-    return 'The pet tracker battery is below $level%.';
-  }
-
-  @override
-  String get cameraOffline => 'Camera Offline';
-
-  @override
   String secondsAgo(int seconds) {
     return '$seconds seconds ago';
   }
@@ -264,21 +210,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidSecretToken => 'Invalid Secret Token!';
 
   @override
-  String get serverUnreachable => 'Server Unreachable!';
-
-  @override
-  String decodingErrorZones(String e) {
-    return 'Decoding error at zones: $e';
-  }
-
-  @override
   String decodingError(String e) {
     return 'Decoding error: $e';
-  }
-
-  @override
-  String profileUploadError(String e) {
-    return 'Profile upload error: $e';
   }
 
   @override
@@ -302,16 +235,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setupNextBtn => 'Next Step';
 
   @override
-  String get setupPinTitle => 'Setup a Web PIN';
-
-  @override
-  String get setupPinDesc =>
-      'Create a 4-digit PIN to securely login from your browser.';
-
-  @override
-  String get setupFinishBtn => 'Finish and Start';
-
-  @override
   String get setupErrConnect =>
       'Failed to connect to the server! Check the network.';
 
@@ -319,7 +242,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setupErrSave => 'Failed to save profile.';
 
   @override
-  String get setupErrEmpty => 'Please enter a name and a 4-digit PIN!';
+  String get setupErrEmpty => 'Please enter a name!';
 
   @override
   String get setupMonitorTitle => 'Monitor Setup';
@@ -443,25 +366,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setupTitle => 'PetTrack Monitor Setup';
 
   @override
-  String get setupNextStep => 'Next step';
-
-  @override
-  String get setupAutostartWarning =>
-      'Before you start this, go out from the app, go into the app information and turn on Autostart for this to work!';
-
-  @override
-  String get setupServerIp => 'Backend server IP and Port';
-
-  @override
-  String get setupDeviceName => 'Device Name (Monitor ID)';
-
-  @override
-  String get setupSecurityToken => 'Security Token';
-
-  @override
-  String get setupSaveAndStart => 'Save & Start';
-
-  @override
   String get monitorTitle => 'PetTrack Monitor';
 
   @override
@@ -501,9 +405,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String errorConnectionFailed(String error) {
     return 'Failed to connect to server! Check IP and Token.\nError: $error';
   }
-
-  @override
-  String get languageTitle => 'Language';
 
   @override
   String get languageEnglish => 'English';
@@ -554,5 +455,164 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoLivePreview => 'DEMO MODE, LIVE PREVIEW HERE!';
 
   @override
-  String get loading => 'Loading...';
+  String get zoneSaved => 'Zone saved!';
+
+  @override
+  String zoneSaveError(String e) {
+    return 'Error: $e';
+  }
+
+  @override
+  String get newZoneTitle => 'Adding a new zone';
+
+  @override
+  String get zoneNameHint => 'Zone name...';
+
+  @override
+  String get noZonesYet => 'No zones yet.';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get submitPin => 'Submit PIN';
+
+  @override
+  String get demoModeBtn => 'Demo Mode';
+
+  @override
+  String get orSeparator => 'OR';
+
+  @override
+  String get setupErrPin => 'Failed to connect or invalid PIN!';
+
+  @override
+  String get saveSuccess => 'Settings saved!';
+
+  @override
+  String get navReplays => 'Replays';
+
+  @override
+  String get replaysTitle => 'Replays';
+
+  @override
+  String get logOut => 'Log Out';
+
+  @override
+  String replaysLoadError(int code) {
+    return 'Failed to load replays (Error $code)';
+  }
+
+  @override
+  String replaysNetworkError(String e) {
+    return 'Network error: $e';
+  }
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get openDownload => 'Open / Download';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get noReplays => 'No replays recorded yet.';
+
+  @override
+  String replaySizeMb(String size) {
+    return '${size}MB';
+  }
+
+  @override
+  String get qrScannerTitle => 'Scan QR Code';
+
+  @override
+  String get qrScannerHint => 'Scan the QR code shown in the server terminal!';
+
+  @override
+  String get notifChannelAlertsName => 'PetTrack Alerts';
+
+  @override
+  String get notifChannelAlertsDesc =>
+      'Notifications about zone changes and battery';
+
+  @override
+  String get notifChannelMedicalName => 'Medical Alerts';
+
+  @override
+  String get notifChannelMedicalDesc => 'Notifications about giving medication';
+
+  @override
+  String get syncToWatch => 'Sync with Smartwatch';
+
+  @override
+  String get syncStarting => 'Starting sync...';
+
+  @override
+  String get syncSuccess => 'Successfully sent to the watch!';
+
+  @override
+  String get syncNoWatch => 'No connected watch found.';
+
+  @override
+  String get onlineStatus => 'Online';
+
+  @override
+  String get eventLog => 'Event Log';
+
+  @override
+  String get shareInviteText => 'Look what my pet is doing!';
+
+  @override
+  String get chooseLanguageTitle => 'Choose Language';
+
+  @override
+  String get languageChinese => '中文';
+
+  @override
+  String get languageItalian => 'Italiano';
+
+  @override
+  String get languageGerman => 'Deutsch';
+
+  @override
+  String get languageJapanese => '日本語';
+
+  @override
+  String get languageKorean => '한국어';
+
+  @override
+  String get aiGeneratedMarker => '(AI-GENERATED)';
+
+  @override
+  String get wearSynced => 'Synced!';
+
+  @override
+  String get wearOpenAppOnPhone => 'Open the app on your phone.';
+
+  @override
+  String get wearManual => 'Manual';
+
+  @override
+  String get wearSetupTitle => 'Setup';
+
+  @override
+  String get pinHint => '4-digit PIN';
+
+  @override
+  String get errInvalidPin => 'Invalid PIN!';
+
+  @override
+  String get errNetwork => 'Network error!';
+
+  @override
+  String get defaultPetName => 'Pet';
+
+  @override
+  String get appVersion => 'v1.0 Pre-Release';
 }

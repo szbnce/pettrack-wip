@@ -416,7 +416,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.serverIp.contains('demo_ip') ? "Online" : l10n.liveVideo,
+                widget.serverIp.contains('demo_ip')
+                    ? l10n.onlineStatus
+                    : l10n.liveVideo,
                 style: Theme.of(
                   context,
                 ).textTheme.headlineMedium?.copyWith(color: Colors.white),
@@ -666,7 +668,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final Map<String, int> zoneVisits = {};
     for (var ev in _activities) {
       if (ev['event_type'] == 'zone_enter') {
-        final name = ev['zone_name'] ?? 'Unknown';
+        final name = ev['zone_name'] ?? l10n.unknown;
         zoneVisits[name] = (zoneVisits[name] ?? 0) + 1;
       }
     }
@@ -814,7 +816,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Event Log", // Will use localization if available
+                l10n.eventLog,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -926,6 +928,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _takeSnapshot() async {
     if (_currentUiImage == null) return;
+    final l10n = AppLocalizations.of(context)!;
     try {
       final byteData = await _currentUiImage!.toByteData(
         format: ui.ImageByteFormat.png,
@@ -942,7 +945,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // ignore: deprecated_member_use
       await Share.shareXFiles([
         XFile(file.path),
-      ], text: 'Look what my pet is doing!');
+      ], text: l10n.shareInviteText);
     } catch (e) {
       debugPrint('Snapshot error: $e');
     }

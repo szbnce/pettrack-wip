@@ -1,39 +1,20 @@
 {
   "appName": "PetTrack",
-  "settingsTitle": "Settings",
-  "uploadProfilePicture": "Upload profile picture",
-  "serverIp": "Server IP",
-  "serverIpHint": "e.g. 192.168.1.100",
-  "secretToken": "Secret Token",
-  "petName": "Pet name",
-  "petNameHint": "Enter the name",
-  "save": "Save",
-  "navDashboard": "Dashboard",
-  "navZones": "Zones",
-  "navSettings": "Settings",
-  "greeting": "Hi Boss!",
-  "greetingSubtitle": "Here is {petName}'s day today.",
-  "@greetingSubtitle": {
-    "placeholders": {
-      "petName": {
-        "type": "String"
-      }
-    }
-  },
-  "liveVideo": "Live Video",
-  "lastMovement": "Last movement: {time}",
-  "@lastMovement": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "distance": "Distance",
-  "feedings": "Feedings",
-  "activities": "Activities",
-  "noRecentEvents": "No recent events",
-  "zoneEntered": "{petName} entered {zone}",
+  "settingsTitle": "Einstellungen",
+  "uploadProfilePicture": "Profilbild hochladen",
+  "serverIp": "Server-IP",
+  "serverIpHint": "z. B. 192.168.1.100",
+  "secretToken": "Geheimtoken",
+  "petName": "Name des Haustiers",
+  "petNameHint": "Namen eingeben",
+  "save": "Speichern",
+  "navDashboard": "Übersicht",
+  "navZones": "Zonen",
+  "navSettings": "Einstellungen",
+  "liveVideo": "Live-Video",
+  "activities": "Aktivitäten",
+  "noRecentEvents": "Keine aktuellen Ereignisse",
+  "zoneEntered": "{petName} hat {zone} betreten",
   "@zoneEntered": {
     "placeholders": {
       "petName": {
@@ -44,7 +25,8 @@
       }
     }
   },
-  "zoneLeft": "{petName} left {zone}",
+  "zoneVisits": "Zonenbesuche",
+  "zoneLeft": "{petName} hat {zone} verlassen",
   "@zoneLeft": {
     "placeholders": {
       "petName": {
@@ -55,25 +37,17 @@
       }
     }
   },
-  "cameraDetectedMovement": "Camera detected movement.",
-  "editZones": "Edit Zones",
-  "addNewZone": "Add new zone",
-  "cancel": "Cancel",
-  "existingZones": "Existing zones",
-  "safeZone": "Safe zone",
-  "warningZone": "Warning zone",
-  "alertZone": "Alert zone",
-  "today": "Today",
-  "language": "Language",
-  "active": "Active",
-  "mainMonitor": "Main Monitor",
-  "favoriteZone": "Favorite zone",
-  "lastSeen": "Last seen",
-  "mostSeen": "Most seen",
-  "lastUpdated": "Last updated",
-  "noDataAvailable": "No data available.",
-  "justNow": "Just now",
-  "minsAgo": "{mins} mins ago",
+  "cameraDetectedMovement": "Die Kamera hat eine Bewegung erkannt.",
+  "editZones": "Zonen bearbeiten",
+  "addNewZone": "Neue Zone hinzufügen",
+  "cancel": "Abbrechen",
+  "existingZones": "Vorhandene Zonen",
+  "safeZone": "Sichere Zone",
+  "today": "Heute",
+  "language": "Sprache",
+  "lastUpdated": "Zuletzt aktualisiert",
+  "justNow": "Gerade eben",
+  "minsAgo": "vor {mins} Min.",
   "@minsAgo": {
     "placeholders": {
       "mins": {
@@ -81,7 +55,7 @@
       }
     }
   },
-  "hoursAgo": "{hours} hours ago",
+  "hoursAgo": "vor {hours} Std.",
   "@hoursAgo": {
     "placeholders": {
       "hours": {
@@ -89,7 +63,7 @@
       }
     }
   },
-  "daysAgo": "{days} days ago",
+  "daysAgo": "vor {days} Tagen",
   "@daysAgo": {
     "placeholders": {
       "days": {
@@ -97,21 +71,21 @@
       }
     }
   },
-  "unknown": "Unknown",
-  "leftTheZone": "Left the zone.",
-  "greetingsList": "Hi Boss!|Welcome back!|Have a nice day!|Hey!|How are you?|Hello!|What's up?|Good to see you again!|Ready?|Let's see what they are doing!",
-  "subGreetingsList": "Everything is fine here.|Seems to be sleeping.|Full of energy!|Watching the area.|Waiting for dinner.|Sniffing something.|Resting peacefully.|At the favorite spot.|Wants to play.|Everything is quiet.",
-  "petTypeTitle": "Pet Type",
-  "petTypeDog": "Dog",
-  "petTypeCat": "Cat",
-  "petTypeRabbit": "Rabbit",
-  "petTypeGuineaPig": "Guinea Pig",
-  "petTypeBird": "Bird",
-  "petTypeOther": "Other",
-  "alertsTitle": "Notifications",
-  "alertsZone": "Zone alerts (Enter/Exit)",
-  "alertsBattery": "Low battery alert",
-  "batteryThreshold": "Battery threshold: {level}%",
+  "unknown": "Unbekannt",
+  "leftTheZone": "Zone verlassen.",
+  "greetingsList": "Hi Boss!|Willkommen zurück!|Schönen Tag!|Hey!|Wie geht's?|Hallo!|Was gibt's Neues?|Schön, dich wiederzusehen!|Bereit?|Lass uns sehen, was los ist!",
+  "subGreetingsList": "Alles in Ordnung hier.|Scheint zu schlafen.|Voller Energie!|Beobachtet die Umgebung.|Wartet auf das Futter.|Schnüffelt an etwas.|Ruhet sich aus.|Am Lieblingsplatz.|Will spielen.|Alles ruhig.",
+  "petTypeTitle": "Haustiertyp",
+  "petTypeDog": "Hund",
+  "petTypeCat": "Katze",
+  "petTypeRabbit": "Kaninchen",
+  "petTypeGuineaPig": "Meerschweinchen",
+  "petTypeBird": "Vogel",
+  "petTypeOther": "Sonstiges",
+  "alertsTitle": "Benachrichtigungen",
+  "alertsZone": "Zonenwarnungen (Betreten/Verlassen)",
+  "alertsBattery": "Warnung bei niedrigem Akku",
+  "batteryThreshold": "Akkuschwelle: {level}%",
   "@batteryThreshold": {
     "placeholders": {
       "level": {
@@ -119,20 +93,10 @@
       }
     }
   },
-  "testNotification": "Test Notification",
-  "testNotifTitle": "Test Notification",
-  "testNotifBody": "You have successfully set up notifications!",
-  "batteryLowTitle": "Battery Low!",
-  "batteryLowBody": "The pet tracker battery is below {level}%.",
-  "@batteryLowBody": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "cameraOffline": "Camera Offline",
-  "secondsAgo": "{seconds} seconds ago",
+  "testNotification": "Testbenachrichtigung",
+  "testNotifTitle": "Testbenachrichtigung",
+  "testNotifBody": "Benachrichtigungen wurden erfolgreich eingerichtet!",
+  "secondsAgo": "vor {seconds} Sek.",
   "@secondsAgo": {
     "placeholders": {
       "seconds": {
@@ -140,16 +104,16 @@
       }
     }
   },
-  "toiletZone": "Litter Box / Toilet",
-  "bedZone": "Bed / Resting Area",
-  "waterZone": "Water Bowl",
-  "foodZone": "Food Bowl",
-  "playZone": "Play Area",
-  "appearance": "Appearance (Theme)",
-  "themeSystem": "System default",
-  "themeLight": "Light Mode",
-  "themeDark": "Dark Mode",
-  "failedToLoadPetProfile": "Failed to load Pet Profile {e}",
+  "toiletZone": "Katzentoilette / WC",
+  "bedZone": "Schlaf- / Ruhebereich",
+  "waterZone": "Wasserschale",
+  "foodZone": "Futternapf",
+  "playZone": "Spielbereich",
+  "appearance": "Erscheinungsbild (Design)",
+  "themeSystem": "Systemstandard",
+  "themeLight": "Heller Modus",
+  "themeDark": "Dunkler Modus",
+  "failedToLoadPetProfile": "Haustierprofil konnte nicht geladen werden: {e}",
   "@failedToLoadPetProfile": {
     "placeholders": {
       "e": {
@@ -157,17 +121,8 @@
       }
     }
   },
-  "invalidSecretToken": "Invalid Secret Token!",
-  "serverUnreachable": "Server Unreachable!",
-  "decodingErrorZones": "Decoding error at zones: {e}",
-  "@decodingErrorZones": {
-    "placeholders": {
-      "e": {
-        "type": "String"
-      }
-    }
-  },
-  "decodingError": "Decoding error: {e}",
+  "invalidSecretToken": "Ungültiges Geheimtoken!",
+  "decodingError": "Dekodierfehler: {e}",
   "@decodingError": {
     "placeholders": {
       "e": {
@@ -175,62 +130,51 @@
       }
     }
   },
-  "profileUploadError": "Profile upload error: {e}",
-  "@profileUploadError": {
-    "placeholders": {
-      "e": {
-        "type": "String"
-      }
-    }
-  },
-  "setupWelcomeTitle": "Welcome to PetTrack!",
-  "setupWelcomeDesc": "The best way to keep track of your pet.\n\nFirst, let's connect to the server.",
-  "setupScanBtn": "Read QR Code",
-  "setupSuccessTitle": "Success!",
-  "setupSuccessDesc": "The connection is encrypted.\nNow let's register your pet.",
-  "setupNextBtn": "Next Step",
-  "setupPinTitle": "Setup a Web PIN",
-  "setupPinDesc": "Create a 4-digit PIN to securely login from your browser.",
-  "setupFinishBtn": "Finish and Start",
-  "setupErrConnect": "Failed to connect to the server! Check the network.",
-  "setupErrSave": "Failed to save profile.",
-  "setupErrEmpty": "Please enter a name and a 4-digit PIN!",
-  "setupMonitorTitle": "Monitor Setup",
-  "setupMonitorDesc": "Open the Monitor app on the other phone and scan this QR code to connect!",
-  "settingsShowQrBtn": "Show QR Code",
-  "settingsQrDialogDesc": "Scan with the old phone:",
-  "settingsQrDialogDone": "Done",
-  "settingsResetApp": "Reset App & Restart Setup",
-  "settingsResetConfirmTitle": "Are you sure?",
-  "settingsResetConfirmDesc": "This will delete all saved data and restart the setup wizard.",
-  "serverUnreachableTitle": "Server Unreachable",
-  "serverUnreachableDesc": "Cannot connect to the PetTrack server.\nPlease check your network or if the server is running.",
-  "profileAndSystem": "Profile & System",
-  "monitorAndConnection": "Monitor & Connection",
+  "setupWelcomeTitle": "Willkommen bei PetTrack!",
+  "setupWelcomeDesc": "Die beste Möglichkeit, dein Haustier im Blick zu behalten.\n\nVerbinden wir uns zuerst mit dem Server.",
+  "setupScanBtn": "QR-Code lesen",
+  "setupSuccessTitle": "Geschafft!",
+  "setupSuccessDesc": "Die Verbindung ist verschlüsselt.\nJetzt registrieren wir dein Haustier.",
+  "setupNextBtn": "Nächster Schritt",
+  "setupErrConnect": "Verbindung zum Server fehlgeschlagen! Netzwerk prüfen.",
+  "setupErrSave": "Profil konnte nicht gespeichert werden.",
+  "setupErrEmpty": "Bitte gib einen Namen ein!",
+  "setupMonitorTitle": "Monitor-Einrichtung",
+  "setupMonitorDesc": "Öffne die Monitor-App auf dem anderen Handy und scanne diesen QR-Code, um dich zu verbinden!",
+  "settingsShowQrBtn": "QR-Code anzeigen",
+  "settingsQrDialogDesc": "Mit dem alten Handy scannen:",
+  "settingsQrDialogDone": "Fertig",
+  "settingsResetApp": "App zurücksetzen & Einrichtung neu starten",
+  "settingsResetConfirmTitle": "Bist du sicher?",
+  "settingsResetConfirmDesc": "Dadurch werden alle gespeicherten Daten gelöscht und der Einrichtungsassistent neu gestartet.",
+  "serverUnreachableTitle": "Server nicht erreichbar",
+  "serverUnreachableDesc": "Keine Verbindung zum PetTrack-Server.\nBitte prüfe dein Netzwerk oder ob der Server läuft.",
+  "profileAndSystem": "Profil & System",
+  "monitorAndConnection": "Monitor & Verbindung",
   "offlineStatus": "OFFLINE!",
   "liveStatus": "Live",
-  "searchingStatus": "Searching...",
-  "navMedical": "Medical",
-  "medications": "Medications",
-  "vaccines": "Vaccines",
-  "addMedication": "Add Medication",
-  "addVaccine": "Add Vaccine",
-  "dose": "Dose",
-  "time": "Time",
-  "dateGiven": "Date Given",
-  "nextDue": "Next Due",
-  "enableAlert": "Enable Alert",
-  "medName": "Medication name",
-  "vacName": "Vaccine name",
-  "noMedications": "No medications added yet.",
-  "noVaccines": "No vaccines added yet.",
-  "saveMedication": "Save Medication",
-  "saveVaccine": "Save Vaccine",
-  "cardColor": "Card Color:",
-  "alertFrequency": "Alert frequency (in hours)",
-  "alertFrequencyHint": "e.g, 12 or 24",
-  "medTimeTitle": "Medication Time!",
-  "medTimeBody": "Time to give: {name} ({dose})",
+  "searchingStatus": "Suche...",
+  "navMedical": "Medizinisch",
+  "medications": "Medikamente",
+  "vaccines": "Impfungen",
+  "addMedication": "Medikament hinzufügen",
+  "addVaccine": "Impfung hinzufügen",
+  "dose": "Dosis",
+  "time": "Zeit",
+  "dateGiven": "Verabreicht am",
+  "nextDue": "Nächste Fälligkeit",
+  "enableAlert": "Benachrichtigung aktivieren",
+  "medName": "Name des Medikaments",
+  "vacName": "Name des Impfstoffs",
+  "noMedications": "Noch keine Medikamente hinzugefügt.",
+  "noVaccines": "Noch keine Impfungen hinzugefügt.",
+  "saveMedication": "Medikament speichern",
+  "saveVaccine": "Impfung speichern",
+  "cardColor": "Kartenfarbe:",
+  "alertFrequency": "Benachrichtigungsintervall (in Stunden)",
+  "alertFrequencyHint": "z. B. 12 oder 24",
+  "medTimeTitle": "Medikamentenzeit!",
+  "medTimeBody": "Zeit zu geben: {name} ({dose})",
   "@medTimeBody": {
     "placeholders": {
       "name": {
@@ -241,7 +185,7 @@
       }
     }
   },
-  "everyXHours": "Every {hours} hours",
+  "everyXHours": "Alle {hours} Stunden",
   "@everyXHours": {
     "placeholders": {
       "hours": {
@@ -249,22 +193,16 @@
       }
     }
   },
-  "setupTitle": "PetTrack Monitor Setup",
-  "setupNextStep": "Next step",
-  "setupAutostartWarning": "Before you start this, go out from the app, go into the app information and turn on Autostart for this to work!",
-  "setupServerIp": "Backend server IP and Port",
-  "setupDeviceName": "Device Name (Monitor ID)",
-  "setupSecurityToken": "Security Token",
-  "setupSaveAndStart": "Save & Start",
+  "setupTitle": "PetTrack Monitor-Einrichtung",
   "monitorTitle": "PetTrack Monitor",
-  "monitorSleepMode": "Sleep Mode (Dim Screen)",
-  "aboutTitle": "About",
-  "aboutDescription": "This app securely streams your camera feed to the PetTrack backend.",
-  "monitorStreamingLive": "Streaming live video...",
-  "monitorWaitingForStart": "Waiting for START command...",
-  "monitorReconnecting": "Reconnecting...",
+  "monitorSleepMode": "Ruhezustand (Bildschirm dimmen)",
+  "aboutTitle": "Über",
+  "aboutDescription": "Diese App streamt deinen Kamerastrom sicher an das PetTrack-Backend.",
+  "monitorStreamingLive": "Live-Video wird gestreamt...",
+  "monitorWaitingForStart": "Warte auf START-Befehl...",
+  "monitorReconnecting": "Verbindung wird wiederhergestellt...",
   "start": "Start",
-  "stop": "Stop",
+  "stop": "Stopp",
   "monitorServer": "Server:\n{ip}",
   "@monitorServer": {
     "placeholders": {
@@ -273,8 +211,8 @@
       }
     }
   },
-  "monitorSleeping": "Sleeping... Double tap to wake",
-  "errorConnectionFailed": "Failed to connect to server! Check IP and Token.\nError: {error}",
+  "monitorSleeping": "Schlafend... Zweimal tippen zum Aufwecken",
+  "errorConnectionFailed": "Verbindung zum Server fehlgeschlagen! IP und Token prüfen.\nFehler: {error}",
   "@errorConnectionFailed": {
     "placeholders": {
       "error": {
@@ -282,23 +220,99 @@
       }
     }
   },
-  "languageTitle": "Language",
   "languageEnglish": "English",
   "languageHungarian": "Magyar",
-  "setupScanQrTitle": "Scan the QR code from the PetTrack App",
-  "lightMode": "☀️ Light Mode",
-  "darkMode": "🌙 Dark Mode",
-  "welcomeTitle": "Welcome to PetTrack",
-  "chooseMode": "Choose your mode",
-  "modeClient": "Client (Viewer)",
-  "modeClientDesc": "This device will watch the stream.",
-  "modeMonitor": "Monitor (Camera)",
-  "modeMonitorDesc": "This device will stream video.",
-  "enterPin": "Enter PIN",
-  "demoModeTitle": "Demo Mode",
-  "demoModePrompt": "Would you like to enter Demo Mode?",
-  "exit": "Exit",
-  "demoLivePreview": "DEMO MODE, LIVE PREVIEW HERE!",
-  "loading": "Loading...",
-  "@@locale": "de"
+  "setupScanQrTitle": "Scanne den QR-Code aus der PetTrack-App",
+  "lightMode": "☀️ Heller Modus",
+  "darkMode": "🌙 Dunkler Modus",
+  "welcomeTitle": "Willkommen bei PetTrack",
+  "chooseMode": "Wähle deinen Modus",
+  "modeClient": "Client (Betrachter)",
+  "modeClientDesc": "Dieses Gerät wird den Stream ansehen.",
+  "modeMonitor": "Monitor (Kamera)",
+  "modeMonitorDesc": "Dieses Gerät wird Video streamen.",
+  "enterPin": "PIN eingeben",
+  "demoModeTitle": "Demo-Modus",
+  "demoModePrompt": "Möchtest du in den Demo-Modus wechseln?",
+  "exit": "Beenden",
+  "demoLivePreview": "DEMO-MODUS, LIVE-VORSCHAU HIER!",
+  "zoneSaved": "Zone gespeichert!",
+  "zoneSaveError": "Fehler: {e}",
+  "@zoneSaveError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "newZoneTitle": "Neue Zone hinzufügen",
+  "zoneNameHint": "Zonenname...",
+  "noZonesYet": "Noch keine Zonen.",
+  "yes": "Ja",
+  "no": "Nein",
+  "submitPin": "PIN senden",
+  "demoModeBtn": "Demo-Modus",
+  "orSeparator": "ODER",
+  "setupErrPin": "Verbindung fehlgeschlagen oder ungültige PIN!",
+  "saveSuccess": "Einstellungen gespeichert!",
+  "navReplays": "Aufnahmen",
+  "replaysTitle": "Aufnahmen",
+  "logOut": "Abmelden",
+  "replaysLoadError": "Aufnahmen konnten nicht geladen werden (Fehler {code})",
+  "@replaysLoadError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "replaysNetworkError": "Netzwerkfehler: {e}",
+  "@replaysNetworkError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "close": "Schließen",
+  "openDownload": "Öffnen / Herunterladen",
+  "retry": "Erneut versuchen",
+  "noReplays": "Noch keine Aufnahmen aufgezeichnet.",
+  "replaySizeMb": "{size}MB",
+  "@replaySizeMb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "qrScannerTitle": "QR-Code scannen",
+  "qrScannerHint": "Scanne den QR-Code im Server-Terminal!",
+  "notifChannelAlertsName": "PetTrack-Warnungen",
+  "notifChannelAlertsDesc": "Benachrichtigungen zu Zonenwechseln und Akku",
+  "notifChannelMedicalName": "Medizinische Erinnerungen",
+  "notifChannelMedicalDesc": "Benachrichtigungen zur Medikamentengabe",
+  "syncToWatch": "Mit Smartwatch synchronisieren",
+  "syncStarting": "Synchronisierung wird gestartet...",
+  "syncSuccess": "Erfolgreich an die Uhr gesendet!",
+  "syncNoWatch": "Keine verbundene Uhr gefunden.",
+  "onlineStatus": "Online",
+  "eventLog": "Ereignisprotokoll",
+  "shareInviteText": "Schau mal, was mein Haustier macht!",
+  "chooseLanguageTitle": "Sprache wählen",
+  "languageChinese": "中文",
+  "languageItalian": "Italiano",
+  "languageGerman": "Deutsch",
+  "languageJapanese": "日本語",
+  "languageKorean": "한국어",
+  "aiGeneratedMarker": "(KI-GENERIERT)",
+  "wearSynced": "Synchronisiert!",
+  "wearOpenAppOnPhone": "Öffne die App auf deinem Handy.",
+  "wearManual": "Manuell",
+  "wearSetupTitle": "Einrichtung",
+  "pinHint": "4-stellige PIN",
+  "errInvalidPin": "Ungültige PIN!",
+  "errNetwork": "Netzwerkfehler!",
+  "defaultPetName": "Haustier",
+  "appVersion": "v1.0 Pre-Release"
 }

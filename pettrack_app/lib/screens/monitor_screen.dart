@@ -148,11 +148,10 @@ class _MonitorScreenState extends State<MonitorScreen> {
       debugPrint("Failed to connect: $e");
       _scheduleReconnect();
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Failed to connect to server! Check IP and Token.\nError: $e',
-            ),
+            content: Text(l10n.errorConnectionFailed(e.toString())),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 5),
           ),
@@ -342,8 +341,8 @@ class _MonitorScreenState extends State<MonitorScreen> {
               } else if (value == 'about') {
                 showAboutDialog(
                   context: context,
-                  applicationName: 'PetTrack Monitor',
-                  applicationVersion: 'v1.0 Pre-Release',
+                  applicationName: l10n.monitorTitle,
+                  applicationVersion: l10n.appVersion,
                   applicationIcon: const Icon(
                     Icons.pets,
                     size: 50,

@@ -45,26 +45,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get navSettings => 'Beállítások';
 
   @override
-  String get greeting => 'Szia Gazda!';
-
-  @override
-  String greetingSubtitle(String petName) {
-    return 'Íme $petName mai napja.';
-  }
-
-  @override
   String get liveVideo => 'Élő Videó';
-
-  @override
-  String lastMovement(String time) {
-    return 'Utolsó mozgás: $time';
-  }
-
-  @override
-  String get distance => 'Távolság';
-
-  @override
-  String get feedings => 'Etetés';
 
   @override
   String get activities => 'Tevékenységek';
@@ -78,7 +59,7 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get zoneVisits => 'Zone Visits';
+  String get zoneVisits => 'Zónalátogatások';
 
   @override
   String zoneLeft(String petName, String zone) {
@@ -104,37 +85,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get safeZone => 'Biztonságos zóna';
 
   @override
-  String get warningZone => 'Figyelmeztető zóna';
-
-  @override
-  String get alertZone => 'Riasztási zóna';
-
-  @override
   String get today => 'Ma';
 
   @override
   String get language => 'Nyelv';
 
   @override
-  String get active => 'Aktív';
-
-  @override
-  String get mainMonitor => 'Fő Monitor';
-
-  @override
-  String get favoriteZone => 'Kedvenc zóna';
-
-  @override
-  String get lastSeen => 'Utolsó észlelés';
-
-  @override
-  String get mostSeen => 'Legtöbbet látott';
-
-  @override
   String get lastUpdated => 'Utoljára frissítve';
-
-  @override
-  String get noDataAvailable => 'Nincs adat.';
 
   @override
   String get justNow => 'Épp most';
@@ -213,17 +170,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get testNotifBody => 'Sikeresen beállítottad az értesítéseket!';
 
   @override
-  String get batteryLowTitle => 'Alacsony akkumlátor!';
-
-  @override
-  String batteryLowBody(int level) {
-    return 'A monitor $level% alá merült.';
-  }
-
-  @override
-  String get cameraOffline => 'Nincs kamera élőkép';
-
-  @override
   String secondsAgo(int seconds) {
     return '$seconds másodperce';
   }
@@ -264,21 +210,8 @@ class AppLocalizationsHu extends AppLocalizations {
   String get invalidSecretToken => 'Hibás Secret Token!';
 
   @override
-  String get serverUnreachable => 'Szerver nem elérhető!';
-
-  @override
-  String decodingErrorZones(String e) {
-    return 'Dekódolási hiba zónáknál: $e';
-  }
-
-  @override
   String decodingError(String e) {
     return 'Dekódolási hiba: $e';
-  }
-
-  @override
-  String profileUploadError(String e) {
-    return 'Profil feltöltés hiba: $e';
   }
 
   @override
@@ -302,16 +235,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get setupNextBtn => 'Tovább';
 
   @override
-  String get setupPinTitle => 'Webes pin beállítása';
-
-  @override
-  String get setupPinDesc =>
-      'Hozz létre egy 4 számjegyű PIN kódot a böngészős belépéshez.';
-
-  @override
-  String get setupFinishBtn => 'Befejezés és indítás';
-
-  @override
   String get setupErrConnect =>
       'Hiba a szerverhez csatlakozáskor! Ellenőrizd a hálózatot.';
 
@@ -319,7 +242,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get setupErrSave => 'Hiba a profil mentésekor!';
 
   @override
-  String get setupErrEmpty => 'Adj meg egy nevet és egy 4 számjegyű PIN kódot!';
+  String get setupErrEmpty => 'Adj meg egy nevet!';
 
   @override
   String get setupMonitorTitle => 'Kamera beállítása';
@@ -443,25 +366,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get setupTitle => 'PetTrack Monitor Beállítás';
 
   @override
-  String get setupNextStep => 'Következő lépés';
-
-  @override
-  String get setupAutostartWarning =>
-      'Mielőtt továbbhaladsz, lépj ki az alkalmazásból, menj az app infókba, és engedélyezd az Automatikus indítast (Autostart)!';
-
-  @override
-  String get setupServerIp => 'Szerver IP címe és Port';
-
-  @override
-  String get setupDeviceName => 'Ezköz neve (Monitor ID)';
-
-  @override
-  String get setupSecurityToken => 'Biztonsági Token';
-
-  @override
-  String get setupSaveAndStart => 'Mentés és indítás';
-
-  @override
   String get monitorTitle => 'PetTrack Monitor';
 
   @override
@@ -501,9 +405,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String errorConnectionFailed(String error) {
     return 'Sikertelen csatlakozás a szerverhez! Ellenőrizd az IP-t és a Tokent.\nHiba: $error';
   }
-
-  @override
-  String get languageTitle => 'Nyelv';
 
   @override
   String get languageEnglish => 'English';
@@ -554,5 +455,164 @@ class AppLocalizationsHu extends AppLocalizations {
   String get demoLivePreview => 'DEMO MÓD, ÉLŐKÉP HELYE!';
 
   @override
-  String get loading => 'Loading...';
+  String get zoneSaved => 'Zóna elmentve!';
+
+  @override
+  String zoneSaveError(String e) {
+    return 'Hiba: $e';
+  }
+
+  @override
+  String get newZoneTitle => 'Új zóna felvétele';
+
+  @override
+  String get zoneNameHint => 'Zóna neve...';
+
+  @override
+  String get noZonesYet => 'Nincsenek még zónák.';
+
+  @override
+  String get yes => 'Igen';
+
+  @override
+  String get no => 'Nem';
+
+  @override
+  String get submitPin => 'PIN küldése';
+
+  @override
+  String get demoModeBtn => 'Demó mód';
+
+  @override
+  String get orSeparator => 'VAGY';
+
+  @override
+  String get setupErrPin => 'Sikertelen csatlakozás vagy hibás PIN!';
+
+  @override
+  String get saveSuccess => 'Beállítások elmentve!';
+
+  @override
+  String get navReplays => 'Visszajátszások';
+
+  @override
+  String get replaysTitle => 'Visszajátszások';
+
+  @override
+  String get logOut => 'Kijelentkezés';
+
+  @override
+  String replaysLoadError(int code) {
+    return 'Nem sikerült betölteni a visszajátszásokat (Hiba $code)';
+  }
+
+  @override
+  String replaysNetworkError(String e) {
+    return 'Hálózati hiba: $e';
+  }
+
+  @override
+  String get close => 'Bezárás';
+
+  @override
+  String get openDownload => 'Megnyitás / Letöltés';
+
+  @override
+  String get retry => 'Újra';
+
+  @override
+  String get noReplays => 'Még nincsenek visszajátszások.';
+
+  @override
+  String replaySizeMb(String size) {
+    return '${size}MB';
+  }
+
+  @override
+  String get qrScannerTitle => 'QR kód beolvasása';
+
+  @override
+  String get qrScannerHint => 'Olvassa be a terminálban lévő QR kódot!';
+
+  @override
+  String get notifChannelAlertsName => 'PetTrack Riasztások';
+
+  @override
+  String get notifChannelAlertsDesc =>
+      'Értesítések zónaváltásról és akkumulátorról';
+
+  @override
+  String get notifChannelMedicalName => 'Gyógyszer emlékeztetők';
+
+  @override
+  String get notifChannelMedicalDesc => 'Értesítések a gyógyszerek beadásáról';
+
+  @override
+  String get syncToWatch => 'Szinkronizálás Okosórával';
+
+  @override
+  String get syncStarting => 'Szinkronizálás indítása...';
+
+  @override
+  String get syncSuccess => 'Sikeresen elküldve az órára!';
+
+  @override
+  String get syncNoWatch => 'Nem található csatlakoztatott óra.';
+
+  @override
+  String get onlineStatus => 'Online';
+
+  @override
+  String get eventLog => 'Eseménynapló';
+
+  @override
+  String get shareInviteText => 'Nézd, mit csinál a kedvencem!';
+
+  @override
+  String get chooseLanguageTitle => 'Válassz nyelvet';
+
+  @override
+  String get languageChinese => '中文';
+
+  @override
+  String get languageItalian => 'Italiano';
+
+  @override
+  String get languageGerman => 'Deutsch';
+
+  @override
+  String get languageJapanese => '日本語';
+
+  @override
+  String get languageKorean => '한국어';
+
+  @override
+  String get aiGeneratedMarker => '(AI-GENERÁLT)';
+
+  @override
+  String get wearSynced => 'Szinkronizálva!';
+
+  @override
+  String get wearOpenAppOnPhone => 'Nyisd meg az appot a telefonon.';
+
+  @override
+  String get wearManual => 'Manuális';
+
+  @override
+  String get wearSetupTitle => 'Beállítás';
+
+  @override
+  String get pinHint => '4-jegyű PIN';
+
+  @override
+  String get errInvalidPin => 'Hibás PIN!';
+
+  @override
+  String get errNetwork => 'Hálózati hiba!';
+
+  @override
+  String get defaultPetName => 'Kedvenc';
+
+  @override
+  String get appVersion => 'v1.0 Pre-Release';
 }

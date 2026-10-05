@@ -1,39 +1,20 @@
 {
   "appName": "PetTrack",
-  "settingsTitle": "Settings",
-  "uploadProfilePicture": "Upload profile picture",
-  "serverIp": "Server IP",
-  "serverIpHint": "e.g. 192.168.1.100",
-  "secretToken": "Secret Token",
-  "petName": "Pet name",
-  "petNameHint": "Enter the name",
-  "save": "Save",
-  "navDashboard": "Dashboard",
-  "navZones": "Zones",
-  "navSettings": "Settings",
-  "greeting": "Hi Boss!",
-  "greetingSubtitle": "Here is {petName}'s day today.",
-  "@greetingSubtitle": {
-    "placeholders": {
-      "petName": {
-        "type": "String"
-      }
-    }
-  },
-  "liveVideo": "Live Video",
-  "lastMovement": "Last movement: {time}",
-  "@lastMovement": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "distance": "Distance",
-  "feedings": "Feedings",
-  "activities": "Activities",
-  "noRecentEvents": "No recent events",
-  "zoneEntered": "{petName} entered {zone}",
+  "settingsTitle": "设置",
+  "uploadProfilePicture": "上传头像",
+  "serverIp": "服务器 IP",
+  "serverIpHint": "例如 192.168.1.100",
+  "secretToken": "密钥令牌",
+  "petName": "宠物名字",
+  "petNameHint": "请输入名字",
+  "save": "保存",
+  "navDashboard": "仪表盘",
+  "navZones": "区域",
+  "navSettings": "设置",
+  "liveVideo": "实时视频",
+  "activities": "活动",
+  "noRecentEvents": "最近没有事件",
+  "zoneEntered": "{petName}进入了{zone}",
   "@zoneEntered": {
     "placeholders": {
       "petName": {
@@ -44,7 +25,8 @@
       }
     }
   },
-  "zoneLeft": "{petName} left {zone}",
+  "zoneVisits": "区域访问",
+  "zoneLeft": "{petName}离开了{zone}",
   "@zoneLeft": {
     "placeholders": {
       "petName": {
@@ -55,25 +37,17 @@
       }
     }
   },
-  "cameraDetectedMovement": "Camera detected movement.",
-  "editZones": "Edit Zones",
-  "addNewZone": "Add new zone",
-  "cancel": "Cancel",
-  "existingZones": "Existing zones",
-  "safeZone": "Safe zone",
-  "warningZone": "Warning zone",
-  "alertZone": "Alert zone",
-  "today": "Today",
-  "language": "Language",
-  "active": "Active",
-  "mainMonitor": "Main Monitor",
-  "favoriteZone": "Favorite zone",
-  "lastSeen": "Last seen",
-  "mostSeen": "Most seen",
-  "lastUpdated": "Last updated",
-  "noDataAvailable": "No data available.",
-  "justNow": "Just now",
-  "minsAgo": "{mins} mins ago",
+  "cameraDetectedMovement": "摄像头检测到移动。",
+  "editZones": "编辑区域",
+  "addNewZone": "添加新区域",
+  "cancel": "取消",
+  "existingZones": "现有区域",
+  "safeZone": "安全区域",
+  "today": "今天",
+  "language": "语言",
+  "lastUpdated": "最后更新",
+  "justNow": "刚刚",
+  "minsAgo": "{mins}分钟前",
   "@minsAgo": {
     "placeholders": {
       "mins": {
@@ -81,7 +55,7 @@
       }
     }
   },
-  "hoursAgo": "{hours} hours ago",
+  "hoursAgo": "{hours}小时前",
   "@hoursAgo": {
     "placeholders": {
       "hours": {
@@ -89,7 +63,7 @@
       }
     }
   },
-  "daysAgo": "{days} days ago",
+  "daysAgo": "{days}天前",
   "@daysAgo": {
     "placeholders": {
       "days": {
@@ -97,21 +71,21 @@
       }
     }
   },
-  "unknown": "Unknown",
-  "leftTheZone": "Left the zone.",
-  "greetingsList": "Hi Boss!|Welcome back!|Have a nice day!|Hey!|How are you?|Hello!|What's up?|Good to see you again!|Ready?|Let's see what they are doing!",
-  "subGreetingsList": "Everything is fine here.|Seems to be sleeping.|Full of energy!|Watching the area.|Waiting for dinner.|Sniffing something.|Resting peacefully.|At the favorite spot.|Wants to play.|Everything is quiet.",
-  "petTypeTitle": "Pet Type",
-  "petTypeDog": "Dog",
-  "petTypeCat": "Cat",
-  "petTypeRabbit": "Rabbit",
-  "petTypeGuineaPig": "Guinea Pig",
-  "petTypeBird": "Bird",
-  "petTypeOther": "Other",
-  "alertsTitle": "Notifications",
-  "alertsZone": "Zone alerts (Enter/Exit)",
-  "alertsBattery": "Low battery alert",
-  "batteryThreshold": "Battery threshold: {level}%",
+  "unknown": "未知",
+  "leftTheZone": "离开了区域。",
+  "greetingsList": "嗨，老板！|欢迎回来！|祝你今天愉快！|嘿！|你好吗？|你好！|最近怎么样？|很高兴又见到你！|准备好了吗？|来看看它们在做什么！",
+  "subGreetingsList": "这里一切都好。|好像在睡觉。|精力充沛！|正在观察周围。|在等晚饭。|在闻什么东西。|在安静休息。|在最喜欢的地方。|想玩耍。|一切安静。",
+  "petTypeTitle": "宠物类型",
+  "petTypeDog": "狗",
+  "petTypeCat": "猫",
+  "petTypeRabbit": "兔子",
+  "petTypeGuineaPig": "豚鼠",
+  "petTypeBird": "鸟",
+  "petTypeOther": "其他",
+  "alertsTitle": "通知",
+  "alertsZone": "区域提醒（进入/离开）",
+  "alertsBattery": "低电量提醒",
+  "batteryThreshold": "电量阈值：{level}%",
   "@batteryThreshold": {
     "placeholders": {
       "level": {
@@ -119,20 +93,10 @@
       }
     }
   },
-  "testNotification": "Test Notification",
-  "testNotifTitle": "Test Notification",
-  "testNotifBody": "You have successfully set up notifications!",
-  "batteryLowTitle": "Battery Low!",
-  "batteryLowBody": "The pet tracker battery is below {level}%.",
-  "@batteryLowBody": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "cameraOffline": "Camera Offline",
-  "secondsAgo": "{seconds} seconds ago",
+  "testNotification": "测试通知",
+  "testNotifTitle": "测试通知",
+  "testNotifBody": "通知设置成功！",
+  "secondsAgo": "{seconds}秒前",
   "@secondsAgo": {
     "placeholders": {
       "seconds": {
@@ -140,16 +104,16 @@
       }
     }
   },
-  "toiletZone": "Litter Box / Toilet",
-  "bedZone": "Bed / Resting Area",
-  "waterZone": "Water Bowl",
-  "foodZone": "Food Bowl",
-  "playZone": "Play Area",
-  "appearance": "Appearance (Theme)",
-  "themeSystem": "System default",
-  "themeLight": "Light Mode",
-  "themeDark": "Dark Mode",
-  "failedToLoadPetProfile": "Failed to load Pet Profile {e}",
+  "toiletZone": "猫砂盆 / 厕所",
+  "bedZone": "床 / 休息区",
+  "waterZone": "水碗",
+  "foodZone": "食盆",
+  "playZone": "玩耍区",
+  "appearance": "外观（主题）",
+  "themeSystem": "跟随系统",
+  "themeLight": "浅色模式",
+  "themeDark": "深色模式",
+  "failedToLoadPetProfile": "加载宠物资料失败 {e}",
   "@failedToLoadPetProfile": {
     "placeholders": {
       "e": {
@@ -157,17 +121,8 @@
       }
     }
   },
-  "invalidSecretToken": "Invalid Secret Token!",
-  "serverUnreachable": "Server Unreachable!",
-  "decodingErrorZones": "Decoding error at zones: {e}",
-  "@decodingErrorZones": {
-    "placeholders": {
-      "e": {
-        "type": "String"
-      }
-    }
-  },
-  "decodingError": "Decoding error: {e}",
+  "invalidSecretToken": "密钥令牌无效！",
+  "decodingError": "解码错误：{e}",
   "@decodingError": {
     "placeholders": {
       "e": {
@@ -175,62 +130,51 @@
       }
     }
   },
-  "profileUploadError": "Profile upload error: {e}",
-  "@profileUploadError": {
-    "placeholders": {
-      "e": {
-        "type": "String"
-      }
-    }
-  },
-  "setupWelcomeTitle": "Welcome to PetTrack!",
-  "setupWelcomeDesc": "The best way to keep track of your pet.\n\nFirst, let's connect to the server.",
-  "setupScanBtn": "Read QR Code",
-  "setupSuccessTitle": "Success!",
-  "setupSuccessDesc": "The connection is encrypted.\nNow let's register your pet.",
-  "setupNextBtn": "Next Step",
-  "setupPinTitle": "Setup a Web PIN",
-  "setupPinDesc": "Create a 4-digit PIN to securely login from your browser.",
-  "setupFinishBtn": "Finish and Start",
-  "setupErrConnect": "Failed to connect to the server! Check the network.",
-  "setupErrSave": "Failed to save profile.",
-  "setupErrEmpty": "Please enter a name and a 4-digit PIN!",
-  "setupMonitorTitle": "Monitor Setup",
-  "setupMonitorDesc": "Open the Monitor app on the other phone and scan this QR code to connect!",
-  "settingsShowQrBtn": "Show QR Code",
-  "settingsQrDialogDesc": "Scan with the old phone:",
-  "settingsQrDialogDone": "Done",
-  "settingsResetApp": "Reset App & Restart Setup",
-  "settingsResetConfirmTitle": "Are you sure?",
-  "settingsResetConfirmDesc": "This will delete all saved data and restart the setup wizard.",
-  "serverUnreachableTitle": "Server Unreachable",
-  "serverUnreachableDesc": "Cannot connect to the PetTrack server.\nPlease check your network or if the server is running.",
-  "profileAndSystem": "Profile & System",
-  "monitorAndConnection": "Monitor & Connection",
-  "offlineStatus": "OFFLINE!",
-  "liveStatus": "Live",
-  "searchingStatus": "Searching...",
-  "navMedical": "Medical",
-  "medications": "Medications",
-  "vaccines": "Vaccines",
-  "addMedication": "Add Medication",
-  "addVaccine": "Add Vaccine",
-  "dose": "Dose",
-  "time": "Time",
-  "dateGiven": "Date Given",
-  "nextDue": "Next Due",
-  "enableAlert": "Enable Alert",
-  "medName": "Medication name",
-  "vacName": "Vaccine name",
-  "noMedications": "No medications added yet.",
-  "noVaccines": "No vaccines added yet.",
-  "saveMedication": "Save Medication",
-  "saveVaccine": "Save Vaccine",
-  "cardColor": "Card Color:",
-  "alertFrequency": "Alert frequency (in hours)",
-  "alertFrequencyHint": "e.g, 12 or 24",
-  "medTimeTitle": "Medication Time!",
-  "medTimeBody": "Time to give: {name} ({dose})",
+  "setupWelcomeTitle": "欢迎使用 PetTrack！",
+  "setupWelcomeDesc": "照看宠物的最佳方式。\n\n首先，让我们连接到服务器。",
+  "setupScanBtn": "读取二维码",
+  "setupSuccessTitle": "成功！",
+  "setupSuccessDesc": "连接已加密。\n现在来登记你的宠物。",
+  "setupNextBtn": "下一步",
+  "setupErrConnect": "连接服务器失败！请检查网络。",
+  "setupErrSave": "保存资料失败。",
+  "setupErrEmpty": "请输入名字！",
+  "setupMonitorTitle": "监视器设置",
+  "setupMonitorDesc": "在另一部手机上打开 Monitor 应用，扫描此二维码进行连接！",
+  "settingsShowQrBtn": "显示二维码",
+  "settingsQrDialogDesc": "用旧手机扫描：",
+  "settingsQrDialogDone": "完成",
+  "settingsResetApp": "重置应用并重新设置",
+  "settingsResetConfirmTitle": "确定吗？",
+  "settingsResetConfirmDesc": "这将删除所有保存的数据并重新启动设置向导。",
+  "serverUnreachableTitle": "无法连接服务器",
+  "serverUnreachableDesc": "无法连接到 PetTrack 服务器。\n请检查网络或服务器是否在运行。",
+  "profileAndSystem": "资料与系统",
+  "monitorAndConnection": "监视器与连接",
+  "offlineStatus": "离线！",
+  "liveStatus": "直播",
+  "searchingStatus": "搜索中...",
+  "navMedical": "健康",
+  "medications": "用药",
+  "vaccines": "疫苗",
+  "addMedication": "添加用药",
+  "addVaccine": "添加疫苗",
+  "dose": "剂量",
+  "time": "时间",
+  "dateGiven": "给药日期",
+  "nextDue": "下次到期",
+  "enableAlert": "启用提醒",
+  "medName": "药品名称",
+  "vacName": "疫苗名称",
+  "noMedications": "还没有添加用药。",
+  "noVaccines": "还没有添加疫苗。",
+  "saveMedication": "保存用药",
+  "saveVaccine": "保存疫苗",
+  "cardColor": "卡片颜色：",
+  "alertFrequency": "提醒频率（小时）",
+  "alertFrequencyHint": "例如 12 或 24",
+  "medTimeTitle": "用药时间到！",
+  "medTimeBody": "该给药了：{name}（{dose}）",
   "@medTimeBody": {
     "placeholders": {
       "name": {
@@ -241,7 +185,7 @@
       }
     }
   },
-  "everyXHours": "Every {hours} hours",
+  "everyXHours": "每{hours}小时",
   "@everyXHours": {
     "placeholders": {
       "hours": {
@@ -249,23 +193,17 @@
       }
     }
   },
-  "setupTitle": "PetTrack Monitor Setup",
-  "setupNextStep": "Next step",
-  "setupAutostartWarning": "Before you start this, go out from the app, go into the app information and turn on Autostart for this to work!",
-  "setupServerIp": "Backend server IP and Port",
-  "setupDeviceName": "Device Name (Monitor ID)",
-  "setupSecurityToken": "Security Token",
-  "setupSaveAndStart": "Save & Start",
-  "monitorTitle": "PetTrack Monitor",
-  "monitorSleepMode": "Sleep Mode (Dim Screen)",
-  "aboutTitle": "About",
-  "aboutDescription": "This app securely streams your camera feed to the PetTrack backend.",
-  "monitorStreamingLive": "Streaming live video...",
-  "monitorWaitingForStart": "Waiting for START command...",
-  "monitorReconnecting": "Reconnecting...",
-  "start": "Start",
-  "stop": "Stop",
-  "monitorServer": "Server:\n{ip}",
+  "setupTitle": "PetTrack 监视器设置",
+  "monitorTitle": "PetTrack 监视器",
+  "monitorSleepMode": "休眠模式（调暗屏幕）",
+  "aboutTitle": "关于",
+  "aboutDescription": "此应用安全地将摄像头画面传输到 PetTrack 后端。",
+  "monitorStreamingLive": "正在直播视频...",
+  "monitorWaitingForStart": "等待 START 命令...",
+  "monitorReconnecting": "正在重新连接...",
+  "start": "开始",
+  "stop": "停止",
+  "monitorServer": "服务器：\n{ip}",
   "@monitorServer": {
     "placeholders": {
       "ip": {
@@ -273,8 +211,8 @@
       }
     }
   },
-  "monitorSleeping": "Sleeping... Double tap to wake",
-  "errorConnectionFailed": "Failed to connect to server! Check IP and Token.\nError: {error}",
+  "monitorSleeping": "休眠中... 双击唤醒",
+  "errorConnectionFailed": "连接服务器失败！请检查 IP 和令牌。\n错误：{error}",
   "@errorConnectionFailed": {
     "placeholders": {
       "error": {
@@ -282,23 +220,99 @@
       }
     }
   },
-  "languageTitle": "Language",
   "languageEnglish": "English",
   "languageHungarian": "Magyar",
-  "setupScanQrTitle": "Scan the QR code from the PetTrack App",
-  "lightMode": "☀️ Light Mode",
-  "darkMode": "🌙 Dark Mode",
-  "welcomeTitle": "Welcome to PetTrack",
-  "chooseMode": "Choose your mode",
-  "modeClient": "Client (Viewer)",
-  "modeClientDesc": "This device will watch the stream.",
-  "modeMonitor": "Monitor (Camera)",
-  "modeMonitorDesc": "This device will stream video.",
-  "enterPin": "Enter PIN",
-  "demoModeTitle": "Demo Mode",
-  "demoModePrompt": "Would you like to enter Demo Mode?",
-  "exit": "Exit",
-  "demoLivePreview": "DEMO MODE, LIVE PREVIEW HERE!",
-  "loading": "Loading...",
-  "@@locale": "zh"
+  "setupScanQrTitle": "扫描 PetTrack 应用中的二维码",
+  "lightMode": "☀️ 浅色模式",
+  "darkMode": "🌙 深色模式",
+  "welcomeTitle": "欢迎使用 PetTrack",
+  "chooseMode": "选择模式",
+  "modeClient": "客户端（观看）",
+  "modeClientDesc": "此设备将观看直播。",
+  "modeMonitor": "监视器（摄像头）",
+  "modeMonitorDesc": "此设备将传输视频。",
+  "enterPin": "输入 PIN",
+  "demoModeTitle": "演示模式",
+  "demoModePrompt": "要进入演示模式吗？",
+  "exit": "退出",
+  "demoLivePreview": "演示模式，实时预览在这里！",
+  "zoneSaved": "区域已保存！",
+  "zoneSaveError": "错误：{e}",
+  "@zoneSaveError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "newZoneTitle": "添加新区域",
+  "zoneNameHint": "区域名称...",
+  "noZonesYet": "还没有区域。",
+  "yes": "是",
+  "no": "否",
+  "submitPin": "提交 PIN",
+  "demoModeBtn": "演示模式",
+  "orSeparator": "或",
+  "setupErrPin": "连接失败或 PIN 无效！",
+  "saveSuccess": "设置已保存！",
+  "navReplays": "回放",
+  "replaysTitle": "回放",
+  "logOut": "退出登录",
+  "replaysLoadError": "加载回放失败（错误 {code}）",
+  "@replaysLoadError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "replaysNetworkError": "网络错误：{e}",
+  "@replaysNetworkError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "close": "关闭",
+  "openDownload": "打开 / 下载",
+  "retry": "重试",
+  "noReplays": "还没有录制的回放。",
+  "replaySizeMb": "{size}MB",
+  "@replaySizeMb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "qrScannerTitle": "扫描二维码",
+  "qrScannerHint": "扫描服务器终端中显示的二维码！",
+  "notifChannelAlertsName": "PetTrack 提醒",
+  "notifChannelAlertsDesc": "区域变化和电量相关通知",
+  "notifChannelMedicalName": "健康提醒",
+  "notifChannelMedicalDesc": "用药相关通知",
+  "syncToWatch": "与智能手表同步",
+  "syncStarting": "正在开始同步...",
+  "syncSuccess": "已成功发送到手表！",
+  "syncNoWatch": "未找到已连接的手表。",
+  "onlineStatus": "在线",
+  "eventLog": "事件日志",
+  "shareInviteText": "看看我的宠物在做什么！",
+  "chooseLanguageTitle": "选择语言",
+  "languageChinese": "中文",
+  "languageItalian": "Italiano",
+  "languageGerman": "Deutsch",
+  "languageJapanese": "日本語",
+  "languageKorean": "한국어",
+  "aiGeneratedMarker": "（AI 生成）",
+  "wearSynced": "已同步！",
+  "wearOpenAppOnPhone": "请在手机上打开应用。",
+  "wearManual": "手动",
+  "wearSetupTitle": "设置",
+  "pinHint": "4 位 PIN",
+  "errInvalidPin": "PIN 无效！",
+  "errNetwork": "网络错误！",
+  "defaultPetName": "宠物",
+  "appVersion": "v1.0 Pre-Release"
 }

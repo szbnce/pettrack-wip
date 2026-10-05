@@ -142,7 +142,7 @@ class _PetTrackAppState extends State<PetTrackApp> {
       valueListenable: PetTrackApp.themeNotifier,
       builder: (context, currentMode, child) {
         return MaterialApp(
-          title: 'PetTrack',
+          onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,

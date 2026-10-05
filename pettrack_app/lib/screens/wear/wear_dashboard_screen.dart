@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:pettrack_app/l10n/app_localizations.dart';
 
 class WearDashboardScreen extends StatefulWidget {
   final String serverIp;
@@ -21,7 +22,7 @@ class WearDashboardScreen extends StatefulWidget {
 }
 
 class _WearDashboardScreenState extends State<WearDashboardScreen> {
-  String _petName = 'Betöltés...';
+  String _petName = '';
   String _batteryLevel = '--';
   String _currentZone = '--';
   bool _isLoading = true;
@@ -91,7 +92,7 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
       if (response.statusCode == 200 && mounted) {
         final data = jsonDecode(response.body);
         setState(() {
-          _petName = data['name'] ?? 'Kedvenc';
+          _petName = data['name'] ?? '';
         });
       }
 
@@ -136,6 +137,7 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.black,
       body: _isLoading
@@ -148,7 +150,7 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
                   const Icon(Icons.pets, color: Colors.teal, size: 24),
                   const SizedBox(height: 8),
                   Text(
-                    _petName,
+                    _petName.isEmpty ? l10n.defaultPetName : _petName,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,

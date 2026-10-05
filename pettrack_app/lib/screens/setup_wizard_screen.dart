@@ -36,7 +36,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     'dog',
     'cat',
     'rabbit',
-    'guineaPig',
+    'guineapig',
     'bird',
     'other',
   ];
@@ -49,7 +49,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         return l10n.petTypeCat;
       case 'rabbit':
         return l10n.petTypeRabbit;
-      case 'guineaPig':
+      case 'guineapig':
         return l10n.petTypeGuineaPig;
       case 'bird':
         return l10n.petTypeBird;
@@ -79,11 +79,11 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('No'),
+            child: Text(l10n.no),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Yes'),
+            child: Text(l10n.yes),
           ),
         ],
       ),
@@ -228,8 +228,9 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to connect or invalid PIN')),
+          SnackBar(content: Text(l10n.setupErrPin)),
         );
       }
     }
@@ -451,8 +452,8 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                   TextField(
                     controller: _ipController,
                     decoration: InputDecoration(
-                      labelText: 'Server IP (e.g. 192.168.1.100)',
-                      hintText: '192.168.1.X:8000',
+                      labelText: l10n.serverIp,
+                      hintText: l10n.serverIpHint,
                       border: const OutlineInputBorder(),
                     ),
                   ),
@@ -468,17 +469,17 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                   ),
                   ElevatedButton(
                     onPressed: _handlePinSubmit,
-                    child: const Text('Submit PIN'),
+                    child: Text(l10n.submitPin),
                   ),
                   const SizedBox(height: 16),
                   TextButton.icon(
                     onPressed: () => _startDemoMode(context),
                     icon: const Icon(Icons.play_circle_fill),
-                    label: const Text('Demo Mode'),
+                    label: Text(l10n.demoModeBtn),
                     style: TextButton.styleFrom(foregroundColor: Colors.orange),
                   ),
                   const SizedBox(height: 16),
-                  const Text('OR'),
+                  Text(l10n.orSeparator),
                 ],
               ),
               actionButton: _isLoading
@@ -534,11 +535,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                 ],
               ),
               actionButton: ElevatedButton(
-                onPressed: () {
-                  if (_nameController.text.isNotEmpty) {
-                    _finishSetup();
-                  }
-                },
+                onPressed: _finishSetup,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,

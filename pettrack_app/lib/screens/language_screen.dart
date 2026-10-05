@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/main.dart';
 import 'package:pettrack_app/screens/welcome_screen.dart';
 
@@ -27,6 +28,7 @@ class LanguageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -37,10 +39,10 @@ class LanguageScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Choose Language\nVálassz nyelvet',
+              Text(
+                l10n.chooseLanguageTitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 48),
               Expanded(
@@ -50,7 +52,7 @@ class LanguageScreen extends StatelessWidget {
                       _buildLangButton(
                         context,
                         'hu',
-                        'Magyar',
+                        l10n.languageHungarian,
                         colorScheme.primary,
                         colorScheme.onPrimary,
                       ),
@@ -58,7 +60,7 @@ class LanguageScreen extends StatelessWidget {
                       _buildLangButton(
                         context,
                         'en',
-                        'English',
+                        l10n.languageEnglish,
                         colorScheme.secondary,
                         colorScheme.onSecondary,
                       ),
@@ -66,7 +68,7 @@ class LanguageScreen extends StatelessWidget {
                       _buildLangButton(
                         context,
                         'zh',
-                        '中文 (AI-GENERATED)',
+                        '${l10n.languageChinese} ${l10n.aiGeneratedMarker}',
                         Colors.orange.shade700,
                         Colors.white,
                       ),
@@ -74,7 +76,7 @@ class LanguageScreen extends StatelessWidget {
                       _buildLangButton(
                         context,
                         'it',
-                        'Italiano (AI-GENERATED)',
+                        '${l10n.languageItalian} ${l10n.aiGeneratedMarker}',
                         Colors.green.shade700,
                         Colors.white,
                       ),
@@ -82,7 +84,7 @@ class LanguageScreen extends StatelessWidget {
                       _buildLangButton(
                         context,
                         'de',
-                        'Deutsch (AI-GENERATED)',
+                        '${l10n.languageGerman} ${l10n.aiGeneratedMarker}',
                         Colors.blue.shade700,
                         Colors.white,
                       ),
@@ -90,7 +92,7 @@ class LanguageScreen extends StatelessWidget {
                       _buildLangButton(
                         context,
                         'ja',
-                        '日本語 (AI-GENERATED)',
+                        '${l10n.languageJapanese} ${l10n.aiGeneratedMarker}',
                         Colors.purple.shade700,
                         Colors.white,
                       ),
@@ -98,7 +100,7 @@ class LanguageScreen extends StatelessWidget {
                       _buildLangButton(
                         context,
                         'ko',
-                        '한국어 (AI-GENERATED)',
+                        '${l10n.languageKorean} ${l10n.aiGeneratedMarker}',
                         Colors.red.shade700,
                         Colors.white,
                       ),

@@ -11,26 +11,7 @@
   "navDashboard": "Dashboard",
   "navZones": "Zones",
   "navSettings": "Settings",
-  "greeting": "Hi Boss!",
-  "greetingSubtitle": "Here is {petName}'s day today.",
-  "@greetingSubtitle": {
-    "placeholders": {
-      "petName": {
-        "type": "String"
-      }
-    }
-  },
   "liveVideo": "Live Video",
-  "lastMovement": "Last movement: {time}",
-  "@lastMovement": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "distance": "Distance",
-  "feedings": "Feedings",
   "activities": "Activities",
   "noRecentEvents": "No recent events",
   "zoneEntered": "{petName} entered {zone}",
@@ -62,17 +43,9 @@
   "cancel": "Cancel",
   "existingZones": "Existing zones",
   "safeZone": "Safe zone",
-  "warningZone": "Warning zone",
-  "alertZone": "Alert zone",
   "today": "Today",
   "language": "Language",
-  "active": "Active",
-  "mainMonitor": "Main Monitor",
-  "favoriteZone": "Favorite zone",
-  "lastSeen": "Last seen",
-  "mostSeen": "Most seen",
   "lastUpdated": "Last updated",
-  "noDataAvailable": "No data available.",
   "justNow": "Just now",
   "minsAgo": "{mins} mins ago",
   "@minsAgo": {
@@ -123,16 +96,6 @@
   "testNotification": "Test Notification",
   "testNotifTitle": "Test Notification",
   "testNotifBody": "You have successfully set up notifications!",
-  "batteryLowTitle": "Battery Low!",
-  "batteryLowBody": "The pet tracker battery is below {level}%.",
-  "@batteryLowBody": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
-  "cameraOffline": "Camera Offline",
   "secondsAgo": "{seconds} seconds ago",
   "@secondsAgo": {
     "placeholders": {
@@ -159,25 +122,8 @@
     }
   },
   "invalidSecretToken": "Invalid Secret Token!",
-  "serverUnreachable": "Server Unreachable!",
-  "decodingErrorZones": "Decoding error at zones: {e}",
-  "@decodingErrorZones": {
-    "placeholders": {
-      "e": {
-        "type": "String"
-      }
-    }
-  },
   "decodingError": "Decoding error: {e}",
   "@decodingError": {
-    "placeholders": {
-      "e": {
-        "type": "String"
-      }
-    }
-  },
-  "profileUploadError": "Profile upload error: {e}",
-  "@profileUploadError": {
     "placeholders": {
       "e": {
         "type": "String"
@@ -190,12 +136,9 @@
   "setupSuccessTitle": "Success!",
   "setupSuccessDesc": "The connection is encrypted.\nNow let's register your pet.",
   "setupNextBtn": "Next Step",
-  "setupPinTitle": "Setup a Web PIN",
-  "setupPinDesc": "Create a 4-digit PIN to securely login from your browser.",
-  "setupFinishBtn": "Finish and Start",
   "setupErrConnect": "Failed to connect to the server! Check the network.",
   "setupErrSave": "Failed to save profile.",
-  "setupErrEmpty": "Please enter a name and a 4-digit PIN!",
+  "setupErrEmpty": "Please enter a name!",
   "setupMonitorTitle": "Monitor Setup",
   "setupMonitorDesc": "Open the Monitor app on the other phone and scan this QR code to connect!",
   "settingsShowQrBtn": "Show QR Code",
@@ -251,12 +194,6 @@
     }
   },
   "setupTitle": "PetTrack Monitor Setup",
-  "setupNextStep": "Next step",
-  "setupAutostartWarning": "Before you start this, go out from the app, go into the app information and turn on Autostart for this to work!",
-  "setupServerIp": "Backend server IP and Port",
-  "setupDeviceName": "Device Name (Monitor ID)",
-  "setupSecurityToken": "Security Token",
-  "setupSaveAndStart": "Save & Start",
   "monitorTitle": "PetTrack Monitor",
   "monitorSleepMode": "Sleep Mode (Dim Screen)",
   "aboutTitle": "About",
@@ -283,7 +220,6 @@
       }
     }
   },
-  "languageTitle": "Language",
   "languageEnglish": "English",
   "languageHungarian": "Magyar",
   "setupScanQrTitle": "Scan the QR code from the PetTrack App",
@@ -300,5 +236,83 @@
   "demoModePrompt": "Would you like to enter Demo Mode?",
   "exit": "Exit",
   "demoLivePreview": "DEMO MODE, LIVE PREVIEW HERE!",
-  "loading": "Loading..."
+  "zoneSaved": "Zone saved!",
+  "zoneSaveError": "Error: {e}",
+  "@zoneSaveError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "newZoneTitle": "Adding a new zone",
+  "zoneNameHint": "Zone name...",
+  "noZonesYet": "No zones yet.",
+  "yes": "Yes",
+  "no": "No",
+  "submitPin": "Submit PIN",
+  "demoModeBtn": "Demo Mode",
+  "orSeparator": "OR",
+  "setupErrPin": "Failed to connect or invalid PIN!",
+  "saveSuccess": "Settings saved!",
+  "navReplays": "Replays",
+  "replaysTitle": "Replays",
+  "logOut": "Log Out",
+  "replaysLoadError": "Failed to load replays (Error {code})",
+  "@replaysLoadError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "replaysNetworkError": "Network error: {e}",
+  "@replaysNetworkError": {
+    "placeholders": {
+      "e": {
+        "type": "String"
+      }
+    }
+  },
+  "close": "Close",
+  "openDownload": "Open / Download",
+  "retry": "Retry",
+  "noReplays": "No replays recorded yet.",
+  "replaySizeMb": "{size}MB",
+  "@replaySizeMb": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "qrScannerTitle": "Scan QR Code",
+  "qrScannerHint": "Scan the QR code shown in the server terminal!",
+  "notifChannelAlertsName": "PetTrack Alerts",
+  "notifChannelAlertsDesc": "Notifications about zone changes and battery",
+  "notifChannelMedicalName": "Medical Alerts",
+  "notifChannelMedicalDesc": "Notifications about giving medication",
+  "syncToWatch": "Sync with Smartwatch",
+  "syncStarting": "Starting sync...",
+  "syncSuccess": "Successfully sent to the watch!",
+  "syncNoWatch": "No connected watch found.",
+  "onlineStatus": "Online",
+  "eventLog": "Event Log",
+  "shareInviteText": "Look what my pet is doing!",
+  "chooseLanguageTitle": "Choose Language",
+  "languageChinese": "中文",
+  "languageItalian": "Italiano",
+  "languageGerman": "Deutsch",
+  "languageJapanese": "日本語",
+  "languageKorean": "한국어",
+  "aiGeneratedMarker": "(AI-GENERATED)",
+  "wearSynced": "Synced!",
+  "wearOpenAppOnPhone": "Open the app on your phone.",
+  "wearManual": "Manual",
+  "wearSetupTitle": "Setup",
+  "pinHint": "4-digit PIN",
+  "errInvalidPin": "Invalid PIN!",
+  "errNetwork": "Network error!",
+  "defaultPetName": "Pet",
+  "appVersion": "v1.0 Pre-Release"
 }

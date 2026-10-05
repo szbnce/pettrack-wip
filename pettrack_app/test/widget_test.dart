@@ -1,29 +1,38 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pettrack_app/l10n/app_localizations.dart';
+import 'package:pettrack_app/screens/language_screen.dart';
 
-import 'package:pettrack_app/main.dart';
+Widget _wrap(Widget child, {Locale? locale}) {
+  return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: locale,
+    home: child,
+  );
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const PetTrackApp());
+  testWidgets('language picker shows every supported language', (tester) async {
+    await tester.pumpWidget(_wrap(const LanguageScreen()));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Choose Language'), findsOneWidget);
+    expect(find.text('Magyar'), findsOneWidget);
+    expect(find.text('English'), findsOneWidget);
+    expect(find.text('中文 (AI-GENERATED)'), findsOneWidget);
+    expect(find.text('Italiano (AI-GENERATED)'), findsOneWidget);
+    expect(find.text('Deutsch (AI-GENERATED)'), findsOneWidget);
+    expect(find.text('日本語 (AI-GENERATED)'), findsOneWidget);
+    expect(find.text('한국어 (AI-GENERATED)'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('language picker localizes its title', (tester) async {
+    await tester.pumpWidget(
+      _wrap(const LanguageScreen(), locale: const Locale('hu')),
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Válassz nyelvet'), findsOneWidget);
+    expect(find.text('Choose Language'), findsNothing);
+    expect(find.text('Magyar (AI-GENERÁLT)'), findsNothing);
   });
 }

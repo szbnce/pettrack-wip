@@ -111,6 +111,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  /// Normalizes user input to the scheme-less "host:port" form the
+  /// monitor app expects in the pairing QR code.
+  String _normalizeHost(String input) {
+    var ip = input.trim();
+    if (ip.startsWith('http://')) ip = ip.replaceAll('http://', '');
+    if (ip.startsWith('https://')) ip = ip.replaceAll('https://', '');
+    if (!ip.contains(':')) ip = '$ip:8000';
+    return ip;
+  }
+
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(
@@ -128,6 +138,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context)!;
     final prefs = await SharedPreferences.getInstance();
     String ip = _ipController.text.trim();
     if (!ip.startsWith('http://') && !ip.startsWith('https://')) {
@@ -151,6 +162,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _isLoading = true);
 
     String jwtToken = prefs.getString('jwt_token') ?? '';
+    final storedSecret = prefs.getString('secret_token') ?? '';
+
+    // Get a fresh JWT when the secret changed or there is no valid token yet,
+    // otherwise the save below would silently fail with the stale token.
+    if (!ip.contains('demo_ip') && (secret != storedSecret || jwtToken.isEmpty)) {
+      try {
+        final loginRes = await http
+            .post(
+              Uri.parse('$ip/api/auth/login'),
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({'secret': secret}),
+            )
+            .timeout(const Duration(seconds: 3));
+        if (loginRes.statusCode != 200) {
+          throw Exception("Login Failed");
+        }
+        jwtToken = jsonDecode(loginRes.body)['token'];
+      } catch (_) {
+        if (!mounted) return;
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.invalidSecretToken)),
+        );
+        return;
+      }
+    }
 
     try {
       await http
@@ -214,7 +251,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             pageBuilder: (context, animation, secondaryAnimation) =>
                 MainNavigationScreen(
                   serverIp: _ipController.text.trim(),
-                  token: _tokenController.text.trim(),
+                  token: jwtToken,
                   petName: _petNameController.text.trim(),
                 ),
             transitionsBuilder:
@@ -226,7 +263,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("${AppLocalizations.of(context)!.save} OK"),
+            content: Text(l10n.saveSuccess),
             backgroundColor: AppColors.primary,
           ),
         );
@@ -389,28 +426,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: DropdownButton<String>(
                       value: _languageCode,
                       isExpanded: true,
-                      items: const [
-                        DropdownMenuItem(value: 'en', child: Text('English')),
-                        DropdownMenuItem(value: 'hu', child: Text('Magyar')),
+                      items: [
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Text(l10n.languageEnglish),
+                        ),
+                        DropdownMenuItem(
+                          value: 'hu',
+                          child: Text(l10n.languageHungarian),
+                        ),
                         DropdownMenuItem(
                           value: 'zh',
-                          child: Text('中文 (AI-GENERATED)'),
+                          child: Text(
+                            '${l10n.languageChinese} ${l10n.aiGeneratedMarker}',
+                          ),
                         ),
                         DropdownMenuItem(
                           value: 'it',
-                          child: Text('Italiano (AI-GENERATED)'),
+                          child: Text(
+                            '${l10n.languageItalian} ${l10n.aiGeneratedMarker}',
+                          ),
                         ),
                         DropdownMenuItem(
                           value: 'de',
-                          child: Text('Deutsch (AI-GENERATED)'),
+                          child: Text(
+                            '${l10n.languageGerman} ${l10n.aiGeneratedMarker}',
+                          ),
                         ),
                         DropdownMenuItem(
                           value: 'ja',
-                          child: Text('日本語 (AI-GENERATED)'),
+                          child: Text(
+                            '${l10n.languageJapanese} ${l10n.aiGeneratedMarker}',
+                          ),
                         ),
                         DropdownMenuItem(
                           value: 'ko',
-                          child: Text('한국어 (AI-GENERATED)'),
+                          child: Text(
+                            '${l10n.languageKorean} ${l10n.aiGeneratedMarker}',
+                          ),
                         ),
                       ],
                       onChanged: (String? newValue) async {
@@ -560,7 +613,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       child: QrImageView(
                         data: jsonEncode({
-                          "ip": "${_ipController.text}:8000",
+                          "ip": _normalizeHost(_ipController.text),
                           "secret": _tokenController.text,
                         }),
                         version: QrVersions.auto,
@@ -661,6 +714,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildSyncToWatchButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -668,29 +722,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: double.infinity,
           child: OutlinedButton.icon(
             onPressed: () async {
+              final l10n = AppLocalizations.of(context)!;
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Szinkronizálás indítása...')),
+                SnackBar(content: Text(l10n.syncStarting)),
               );
               final success = await WearSyncService().sendCredentialsToWatch(
                 _ipController.text,
                 _tokenController.text,
               );
-              if (mounted) {
+              if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      success
-                          ? 'Sikeresen elküldve az órára!'
-                          : 'Nem található csatlakoztatott óra.',
+                      success ? l10n.syncSuccess : l10n.syncNoWatch,
                     ),
                   ),
                 );
               }
             },
             icon: const Icon(Icons.watch, color: Colors.blueAccent),
-            label: const Text(
-              "Szinkronizálás Okosórával",
-              style: TextStyle(
+            label: Text(
+              l10n.syncToWatch,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.blueAccent,

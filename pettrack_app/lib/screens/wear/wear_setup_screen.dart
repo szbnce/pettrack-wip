@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../../services/wear_sync_service.dart';
 import 'wear_dashboard_screen.dart';
 
@@ -44,6 +45,7 @@ class _WearSetupScreenState extends State<WearSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
@@ -59,7 +61,7 @@ class _WearSetupScreenState extends State<WearSetupScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                _isSyncing ? "Szinkronizálva!" : "Nyisd meg az appot a telefonon.",
+                _isSyncing ? l10n.wearSynced : l10n.wearOpenAppOnPhone,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,
@@ -84,7 +86,7 @@ class _WearSetupScreenState extends State<WearSetupScreen> {
                     backgroundColor: Colors.grey[800],
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   ),
-                  child: const Text('Manuális', style: TextStyle(color: Colors.white, fontSize: 12)),
+                  child: Text(l10n.wearManual, style: const TextStyle(color: Colors.white, fontSize: 12)),
                 ),
               ],
             ],
@@ -108,6 +110,7 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
@@ -116,16 +119,16 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Beállítás',
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+              Text(
+                l10n.wearSetupTitle,
+                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _ipController,
                 style: const TextStyle(color: Colors.white, fontSize: 12),
                 decoration: InputDecoration(
-                  hintText: 'Szerver IP',
+                  hintText: l10n.serverIp,
                   hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
                   fillColor: Colors.grey[900],
@@ -141,7 +144,7 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                 keyboardType: TextInputType.number,
                 maxLength: 4,
                 decoration: InputDecoration(
-                  hintText: '4-jegyű PIN',
+                  hintText: l10n.pinHint,
                   counterText: '',
                   hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
@@ -193,7 +196,7 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString('server_ip', targetIp);
                             await prefs.setString('api_token', token);
-                            if (mounted) {
+                            if (context.mounted) {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder: (_) => WearDashboardScreen(
@@ -205,16 +208,18 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                             }
                           }
                         } else {
-                          if (mounted) {
+                          if (context.mounted) {
+                            final l10n = AppLocalizations.of(context)!;
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Hibás PIN!')),
+                              SnackBar(content: Text(l10n.errInvalidPin)),
                             );
                           }
                         }
                       } catch (e) {
-                        if (mounted) {
+                        if (context.mounted) {
+                          final l10n = AppLocalizations.of(context)!;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Hálózati hiba!')),
+                            SnackBar(content: Text(l10n.errNetwork)),
                           );
                         }
                       }
