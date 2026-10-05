@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:battery_plus/battery_plus.dart';
+import 'package:image/image.dart' as img;
 import 'package:http/http.dart' as http;
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/theme/colors.dart';
@@ -248,13 +249,29 @@ class _MonitorScreenState extends State<MonitorScreen> {
       if (boundary == null) return;
 
       final image = await boundary.toImage(pixelRatio: 1.0);
-
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      final bytes = byteData?.buffer.asUint8List();
+      final width = image.width;
+      final height = image.height;
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
 
       image.dispose(); // Prevent OOM memory leak
 
-      if (bytes != null && _socket != null) {
+      if (byteData == null) return;
+
+      // Encode as JPEG and cap the width: a PNG screenshot of the preview was
+      // 1-3 MB per frame and burned CPU on old phones; a ~1280px JPEG at q80
+      // is roughly 50-150 KB and keeps the stream light.
+      var frame = img.Image.fromBytes(
+        width: width,
+        height: height,
+        bytes: byteData.buffer,
+        order: img.ChannelOrder.rgba,
+      );
+      if (frame.width > 1280) {
+        frame = img.copyResize(frame, width: 1280);
+      }
+      final bytes = img.encodeJpg(frame, quality: 80);
+
+      if (_socket != null) {
         _socket!.sink.add(bytes);
       }
     } catch (e) {

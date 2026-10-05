@@ -97,6 +97,10 @@ def update_latest_frame(data: bytes):
     latest_frame_info["data"] = data
     latest_frame_info["timestamp"] = time.time()
 
+def frame_media_type(data: bytes) -> str:
+    """JPEG or PNG, whichever the monitor actually sent."""
+    return "image/jpeg" if data[:2] == b"\xff\xd8" else "image/png"
+
 class PinRequest(BaseModel):
     pin: str
 
@@ -235,7 +239,7 @@ async def get_latest_frame():
         headers = {
             "Last-Modified": formatdate(latest_frame_info["timestamp"], usegmt=True)
         }
-        return Response(content=latest_frame_info["data"], media_type="image/png", headers=headers)
+        return Response(content=latest_frame_info["data"], media_type=frame_media_type(latest_frame_info["data"]), headers=headers)
     
     folder = "captured_images"
     if not os.path.exists(folder):
@@ -251,7 +255,7 @@ async def get_latest_frame():
     headers = {
         "Last-Modified": formatdate(os.path.getmtime(latest), usegmt=True)
     }
-    return Response(content=img_data, media_type="image/png", headers=headers)
+    return Response(content=img_data, media_type=frame_media_type(img_data), headers=headers)
 
 
 @router.get("/api/frame/web")
@@ -260,7 +264,7 @@ async def get_web_frame():
         headers = {
             "Last-Modified": formatdate(latest_frame_info["timestamp"], usegmt=True)
         }
-        return Response(content=latest_frame_info["data"], media_type="image/jpeg", headers=headers)
+        return Response(content=latest_frame_info["data"], media_type=frame_media_type(latest_frame_info["data"]), headers=headers)
 
     folder = "captured_images"
     if not os.path.exists(folder):
@@ -276,7 +280,7 @@ async def get_web_frame():
     headers = {
         "Last-Modified": formatdate(os.path.getmtime(latest), usegmt=True)
     }
-    return Response(content=img_data, media_type="image/jpeg", headers=headers)
+    return Response(content=img_data, media_type=frame_media_type(img_data), headers=headers)
 
 @router.get("/api/replays")
 async def list_replays():
