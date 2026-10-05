@@ -12,6 +12,7 @@ import jwt
 from cryptography.fernet import Fernet
 import base64
 import hashlib
+import hmac
 import secrets
 from dotenv import load_dotenv, set_key
 from pydantic import BaseModel
@@ -37,16 +38,28 @@ def get_fernet_key(secret: str) -> bytes:
 
 fernet = Fernet(get_fernet_key(SECRET_TOKEN))
 
-async def verify_token(token: str = Query(None), x_api_token: str = Header(None)):
-    req_token = token or x_api_token
-    if not req_token:
-        raise HTTPException(status_code=401, detail="Token missing")
+JWT_TTL_SECONDS = 86400 * 3650
 
+def mint_token() -> str:
+    return jwt.encode(
+        {"auth": "ok", "exp": time.time() + JWT_TTL_SECONDS},
+        SECRET_TOKEN,
+        algorithm="HS256",
+    )
+
+def token_valid(req_token: str) -> bool:
+    """Accepts a signed JWT or the raw secret (constant-time compare)."""
+    if not req_token:
+        return False
     try:
-        payload = jwt.decode(req_token, SECRET_TOKEN, algorithms=["HS256"])
+        jwt.decode(req_token, SECRET_TOKEN, algorithms=["HS256"])
+        return True
     except jwt.PyJWTError:
-        if req_token != SECRET_TOKEN:
-            raise HTTPException(status_code=401, detail="Invalid token")
+        return hmac.compare_digest(req_token, SECRET_TOKEN)
+
+async def verify_token(token: str = Query(None), x_api_token: str = Header(None)):
+    if not token_valid(token or x_api_token):
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 router = APIRouter(dependencies=[Depends(verify_token)])
 auth_router = APIRouter()
@@ -89,7 +102,7 @@ async def get_status():
 
 @router.post("/api/frame/web")
 async def receive_web_frame(request: Request, token: str = ""):
-    if token != SECRET_TOKEN:
+    if not token_valid(token):
         return {"error": "Invalid token"}
     data = await request.body()
     update_latest_frame(data)
@@ -110,44 +123,47 @@ async def receive_web_frame(request: Request, token: str = ""):
 
 @auth_router.post("/api/auth/login")
 async def login(req: LoginRequest):
-    if req.secret != SECRET_TOKEN:
+    if not hmac.compare_digest(req.secret, SECRET_TOKEN or ""):
         raise HTTPException(status_code=401, detail="Invalid secret")
-    
-    encoded_jwt = jwt.encode({"auth": "ok", "exp": time.time() + 86400 * 3650}, SECRET_TOKEN, algorithm="HS256")
-    return {"token": encoded_jwt}
+
+    return {"token": mint_token()}
 
 @auth_router.post("/api/auth/set_pin")
 async def set_pin(req: PinRequest, x_api_token: str = Header(None)):
-    try:
-        jwt.decode(x_api_token, SECRET_TOKEN, algorithms=["HS256"])
-    except:
+    if not token_valid(x_api_token):
         raise HTTPException(status_code=401, detail="Unauthorized to set PIN")
+    if not re.fullmatch(r"\d{4,8}", req.pin):
+        raise HTTPException(status_code=422, detail="PIN must be 4-8 digits")
 
     set_key(".env", "PETTRACK_WEB_PIN", req.pin)
     os.environ["PETTRACK_WEB_PIN"] = req.pin
     return {"status": "success"}
-    
+
 @auth_router.post("/api/auth/login_pin")
 async def login_pin(req: PinRequest, request: Request):
     ip = request.client.host
     now = time.time()
-    
+
     if ip in failed_login_attempts:
         attempts, last_time = failed_login_attempts[ip]
         if now - last_time > 300:
             failed_login_attempts[ip] = (0, now)
         elif attempts >= 5:
             raise HTTPException(status_code=429, detail="Too many failed attempts. Try again in 5 minutes.")
-            
-    if req.pin != os.getenv("PETTRACK_WEB_PIN"):
+
+    if not hmac.compare_digest(req.pin, os.getenv("PETTRACK_WEB_PIN") or ""):
         attempts, _ = failed_login_attempts.get(ip, (0, now))
         failed_login_attempts[ip] = (attempts + 1, now)
         raise HTTPException(status_code=401, detail="Invalid PIN")
-        
+
     if ip in failed_login_attempts:
         del failed_login_attempts[ip]
-        
-    return {"secret": SECRET_TOKEN}
+
+    # Mint a scoped token instead of handing out the raw master secret.
+    # The "secret" key is kept for existing clients; it now carries a JWT,
+    # which every auth path (header, query, WebSocket) accepts.
+    token = mint_token()
+    return {"token": token, "secret": token}
 
 
 @router.get("/api/pet")
@@ -178,7 +194,6 @@ async def get_zones_list():
 
 @router.post("/api/zones")
 async def update_zones(zones: List[ZoneConfig]):
-    print(f"DEBUG INCOMING ZONES: {zones}", flush=True)
     global active_zones
     active_zones.clear()
     for z in zones:

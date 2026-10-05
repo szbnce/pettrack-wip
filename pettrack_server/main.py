@@ -11,20 +11,26 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from manager import manager, client_manager
-from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, SECRET_TOKEN, fernet, set_key
+from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, SECRET_TOKEN, fernet, set_key, token_valid
 from tasks import cleanup_old_images
 from vision import process_and_save_frame
 from database import init_db, get_zones
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
+# Cross-origin access is off by default: the web dashboard is served from this
+# same origin, and the mobile/wear apps are not subject to CORS. Set
+# PETTRACK_CORS_ORIGINS (comma-separated) to whitelist extra origins if you
+# host the dashboard somewhere else.
+cors_origins = [o.strip() for o in os.getenv("PETTRACK_CORS_ORIGINS", "").split(",") if o.strip()]
+if cors_origins:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"]
+    )
 
 app.include_router(zones_router)
 app.include_router(auth_router)
@@ -84,8 +90,8 @@ from fastapi.staticfiles import StaticFiles
 
 @app.websocket("/ws")
 async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: str = "unknown"):
-    if token != SECRET_TOKEN:
-        print(f"Connection rejected: Invalid Token '{token}'", flush=True)
+    if not token_valid(token):
+        print("Connection rejected: Invalid Token", flush=True)
         await websocket.close(code=1008)
         return
 
@@ -123,15 +129,9 @@ async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: 
 
 @app.websocket("/ws/client")
 async def client_websocket(websocket: WebSocket, token: str = None):
-    if not token:
+    if not token_valid(token):
         await websocket.close(code=1008)
         return
-    if token != SECRET_TOKEN:
-        try:
-            jwt.decode(token, SECRET_TOKEN, algorithms=["HS256"])
-        except Exception:
-            await websocket.close(code=1008)
-            return
     await client_manager.connect(websocket)
     asyncio.create_task(manager.broadcast_text(json.dumps({"action": "set_fps", "fps": 5})))
     try:
