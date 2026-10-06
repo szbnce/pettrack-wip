@@ -321,5 +321,8 @@
   "discoveryEmpty": "Nessun server PetTrack trovato.",
   "discoveryHint": "Assicurati che il server sia in esecuzione e che tu sia sulla stessa Wi-Fi.",
   "discoveryNotSupported": "La ricerca automatica non è disponibile su questo dispositivo. Inserisci l'indirizzo del server manualmente.",
-  "discoveryTapToUse": "Tocca per connetterti"
+  "discoveryTapToUse": "Tocca per connetterti",
+  "tooltipRefresh": "Aggiorna",
+  "tooltipAdd": "Aggiungi",
+  "tooltipDelete": "Elimina"
 }

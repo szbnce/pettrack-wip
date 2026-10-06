@@ -82,3 +82,41 @@ buy for how much work. Nothing here is scheduled — this is the wish list.
 
 Everything above is additive to the current stack (Flutter + FastAPI + the
 tiered vision pipeline) — no rewrites needed.
+
+## Execution order (approved 2026-10-06 — "everything goes, properly, in order")
+
+Deliberate sequence: make it *look* premium first (cheapest, most visible),
+then the one killer feature, then the ecosystem that makes it a real product,
+then the wow features, then platform extras. Each phase lands green
+(analyzer + tests + i18n parity) before the next starts.
+
+### Phase 1 — Design language *(current)*
+1. Bundle brand fonts as assets (offline-safe; drop runtime font fetch)
+2. Full Material 3 colour roles + component theme depth (both modes)
+3. Native splash + refined app icon
+4. Motion & polish vocabulary: hero transitions, skeletons, empty states,
+   pull-to-refresh, haptics
+5. Accessibility quick pass (semantics/tooltips, tap targets)
+
+### Phase 2 — Daily highlight (killer feature)
+6. Server: stitch the day's motion events into one recap clip + thumbnail
+7. App: "Berci's day" card on the dashboard, share sheet, retention setting
+
+### Phase 3 — Ecosystem & trust
+8. Rich notifications (ntfy) + quiet hours + test-notification button
+9. Home Assistant via MQTT discovery (camera + motion + battery entities)
+10. One-line install script + optional Caddy HTTPS; update-check screen
+11. Privacy / about page ("self-hosted — nothing leaves your house") +
+    version & changelog in the UI
+
+### Phase 4 — Wow features
+12. Two-way audio (talk-back) and/or "play a sound" button
+13. Timelapse mode for the monitor phone
+14. Night / low-light enhancement toggle
+15. Audio events (bark / meow) in the activity feed
+16. Multi-camera grid + digital zoom/pan
+
+### Phase 5 — Platform extras
+17. Home-screen widget (live snapshot + status), WearOS complications
+18. Replay timeline UI (day strip with event dots)
+19. Landing page + demo mode + GitHub Releases polish

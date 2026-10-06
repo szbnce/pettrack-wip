@@ -632,4 +632,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get discoveryTapToUse => 'タップして接続';
+
+  @override
+  String get tooltipRefresh => '更新';
+
+  @override
+  String get tooltipAdd => '追加';
+
+  @override
+  String get tooltipDelete => '削除';
 }

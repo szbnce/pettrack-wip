@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
+import '../widgets/empty_state.dart';
+import '../widgets/skeleton_box.dart';
 import '../widgets/video_player_widget.dart';
 
 class ReplaysScreen extends StatefulWidget {
@@ -31,7 +34,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     _fetchReplays();
   }
 
-  Future<void> _fetchReplays() async {
+  Future<void> _fetchReplays({bool haptic = false}) async {
     setState(() {
       _isLoading = true;
       _errorStatus = 0;
@@ -52,6 +55,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
           _replays = data['replays'] ?? [];
           _isLoading = false;
         });
+        if (haptic) HapticFeedback.lightImpact();
       } else {
         setState(() {
           _errorStatus = response.statusCode;
@@ -84,9 +88,12 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(
-                child: Container(
-                  color: Colors.black,
-                  child: VideoPlayerWidget(videoUrl: url),
+                child: Hero(
+                  tag: 'replay-${replay['filename']}',
+                  child: Container(
+                    color: Colors.black,
+                    child: VideoPlayerWidget(videoUrl: url),
+                  ),
                 ),
               ),
               Container(
@@ -131,46 +138,32 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
 
     Widget content;
     if (_isLoading) {
-      content = const Center(child: CircularProgressIndicator());
+      content = SkeletonGrid(crossAxisCount: isDesktop ? 3 : 2);
     } else if (_errorStatus != 0 || _errorDetail.isNotEmpty) {
       final errorText = _errorStatus != 0
           ? l10n.replaysLoadError(_errorStatus)
           : l10n.replaysNetworkError(_errorDetail);
-      content = Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
-            const SizedBox(height: 16),
-            Text(errorText, style: const TextStyle(color: Colors.white70)),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _fetchReplays,
-              child: Text(l10n.retry),
-            ),
-          ],
-        ),
+      content = EmptyState(
+        icon: Icons.error_outline,
+        title: errorText,
+        actionLabel: l10n.retry,
+        onAction: () => _fetchReplays(haptic: true),
+        iconColor: Colors.redAccent,
+        textColor: Colors.white70,
       );
     } else if (_replays.isEmpty) {
-      content = Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.videocam_off_outlined,
-              size: 64,
-              color: Colors.white24,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.noReplays,
-              style: const TextStyle(color: Colors.white54, fontSize: 18),
-            ),
-          ],
-        ),
+      content = EmptyState(
+        icon: Icons.videocam_off_outlined,
+        title: l10n.noReplays,
+        textColor: Colors.white54,
+        iconColor: Colors.white24,
+        actionLabel: l10n.retry,
+        onAction: () => _fetchReplays(haptic: true),
       );
     } else {
-      content = GridView.builder(
+      content = RefreshIndicator(
+        onRefresh: () => _fetchReplays(haptic: true),
+        child: GridView.builder(
         padding: const EdgeInsets.all(16),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: isDesktop ? 3 : 2,
@@ -191,7 +184,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
           return InkWell(
             onTap: () => _playVideo(replay),
             borderRadius: BorderRadius.circular(12),
-            child: Container(
+            child: Hero(
+              tag: 'replay-${replay['filename']}',
+              child: Container(
               decoration: BoxDecoration(
                 color: theme.colorScheme.surfaceContainerHighest.withValues(
                   alpha: 0.3,
@@ -252,8 +247,10 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                 ],
               ),
             ),
+            ),
           );
         },
+        ),
       );
     }
 
@@ -276,7 +273,8 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.refresh),
-                      onPressed: _fetchReplays,
+                      tooltip: l10n.tooltipRefresh,
+                      onPressed: () => _fetchReplays(haptic: true),
                     ),
                   ],
                 ),
@@ -288,7 +286,8 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
         : Scaffold(
             backgroundColor: Colors.transparent,
             floatingActionButton: FloatingActionButton(
-              onPressed: _fetchReplays,
+              onPressed: () => _fetchReplays(haptic: true),
+              tooltip: l10n.tooltipRefresh,
               mini: true,
               child: const Icon(Icons.refresh),
             ),

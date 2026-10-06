@@ -640,4 +640,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get discoveryTapToUse => 'Tippen zum Verbinden';
+
+  @override
+  String get tooltipRefresh => 'Aktualisieren';
+
+  @override
+  String get tooltipAdd => 'Hinzufügen';
+
+  @override
+  String get tooltipDelete => 'Löschen';
 }

@@ -628,4 +628,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get discoveryTapToUse => '点按以连接';
+
+  @override
+  String get tooltipRefresh => '刷新';
+
+  @override
+  String get tooltipAdd => '添加';
+
+  @override
+  String get tooltipDelete => '删除';
 }

@@ -1277,6 +1277,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to connect'**
   String get discoveryTapToUse;
+
+  /// No description provided for @tooltipRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get tooltipRefresh;
+
+  /// No description provided for @tooltipAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get tooltipAdd;
+
+  /// No description provided for @tooltipDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get tooltipDelete;
 }
 
 class _AppLocalizationsDelegate

@@ -638,4 +638,13 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get discoveryTapToUse => 'Koppints a csatlakozáshoz';
+
+  @override
+  String get tooltipRefresh => 'Frissítés';
+
+  @override
+  String get tooltipAdd => 'Hozzáadás';
+
+  @override
+  String get tooltipDelete => 'Törlés';
 }

@@ -321,5 +321,8 @@
   "discoveryEmpty": "Noch kein PetTrack-Server gefunden.",
   "discoveryHint": "Stelle sicher, dass der Server läuft und du im selben WLAN bist.",
   "discoveryNotSupported": "Automatische Suche ist auf diesem Gerät nicht verfügbar. Gib die Serveradresse manuell ein.",
-  "discoveryTapToUse": "Tippen zum Verbinden"
+  "discoveryTapToUse": "Tippen zum Verbinden",
+  "tooltipRefresh": "Aktualisieren",
+  "tooltipAdd": "Hinzufügen",
+  "tooltipDelete": "Löschen"
 }

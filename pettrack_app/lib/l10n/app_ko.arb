@@ -321,5 +321,8 @@
   "discoveryEmpty": "아직 PetTrack 서버를 찾지 못했습니다.",
   "discoveryHint": "서버가 실행 중이고 같은 Wi-Fi에 연결되어 있는지 확인하세요.",
   "discoveryNotSupported": "이 기기에서는 자동 검색을 사용할 수 없습니다. 서버 주소를 직접 입력하세요.",
-  "discoveryTapToUse": "탭하여 연결"
+  "discoveryTapToUse": "탭하여 연결",
+  "tooltipRefresh": "새로 고침",
+  "tooltipAdd": "추가",
+  "tooltipDelete": "삭제"
 }

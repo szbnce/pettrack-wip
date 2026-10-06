@@ -638,4 +638,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoveryTapToUse => 'Tap to connect';
+
+  @override
+  String get tooltipRefresh => 'Refresh';
+
+  @override
+  String get tooltipAdd => 'Add';
+
+  @override
+  String get tooltipDelete => 'Delete';
 }

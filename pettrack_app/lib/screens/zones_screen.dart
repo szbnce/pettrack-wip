@@ -575,6 +575,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  tooltip: l10n.tooltipDelete,
                   onPressed: () => _deleteZone(zone),
                 ),
               ),
@@ -632,13 +633,6 @@ class _ZonesScreenState extends State<ZonesScreen> {
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                onPressed: () {},
-              ),
               title: Text(
                 l10n.editZones,
                 style: const TextStyle(
@@ -646,12 +640,6 @@ class _ZonesScreenState extends State<ZonesScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.pets, color: AppColors.primary),
-                  onPressed: () {},
-                ),
-              ],
               centerTitle: true,
             ),
             body: SingleChildScrollView(

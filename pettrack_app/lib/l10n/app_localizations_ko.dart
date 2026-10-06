@@ -630,4 +630,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get discoveryTapToUse => '탭하여 연결';
+
+  @override
+  String get tooltipRefresh => '새로 고침';
+
+  @override
+  String get tooltipAdd => '추가';
+
+  @override
+  String get tooltipDelete => '삭제';
 }

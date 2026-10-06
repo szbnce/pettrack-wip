@@ -287,6 +287,7 @@ class _MedicalScreenState extends State<MedicalScreen>
     IconData icon,
     VoidCallback onAdd,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -306,6 +307,7 @@ class _MedicalScreenState extends State<MedicalScreen>
         ),
         IconButton(
           onPressed: onAdd,
+          tooltip: l10n.tooltipAdd,
           icon: const Icon(Icons.add_circle, color: AppColors.primary),
         ),
       ],

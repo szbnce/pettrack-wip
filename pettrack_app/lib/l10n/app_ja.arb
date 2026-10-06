@@ -321,5 +321,8 @@
   "discoveryEmpty": "PetTrackサーバーがまだ見つかりません。",
   "discoveryHint": "サーバーが起動していて、同じWi-Fiに接続しているか確認してください。",
   "discoveryNotSupported": "このデバイスでは自動検索を利用できません。サーバーアドレスを手動で入力してください。",
-  "discoveryTapToUse": "タップして接続"
+  "discoveryTapToUse": "タップして接続",
+  "tooltipRefresh": "更新",
+  "tooltipAdd": "追加",
+  "tooltipDelete": "削除"
 }

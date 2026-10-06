@@ -4,11 +4,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:math';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
@@ -277,6 +277,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _fetchActivity();
       _fetchStatus();
     });
+  }
+
+  /// Pull-to-refresh: re-fetch everything at once and confirm with a tick.
+  Future<void> _handleRefresh() async {
+    await Future.wait([
+      _fetchPetProfile(),
+      _fetchZones(),
+      _fetchActivity(),
+      _fetchStatus(),
+    ]);
+    if (mounted) HapticFeedback.lightImpact();
   }
 
   Future<void> _loadSecret() async {
@@ -978,7 +989,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       builder: (context, constraints) {
         if (constraints.maxWidth >= 800) {
           // Desktop Layout
-          return SingleChildScrollView(
+          return RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(32.0),
             child: Center(
               child: ConstrainedBox(
@@ -1021,10 +1035,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
+            ),
           );
         } else {
           // Mobile Layout (legacy)
-          return SingleChildScrollView(
+          return RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1147,6 +1165,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 const SizedBox(height: 32),
               ],
+            ),
             ),
           );
         }

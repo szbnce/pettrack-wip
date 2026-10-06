@@ -159,6 +159,7 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                 children: [
                   IconButton(
                     onPressed: () => Navigator.pop(context),
+                    tooltip: l10n.close,
                     icon: const Icon(Icons.close, color: Colors.red),
                     style: IconButton.styleFrom(backgroundColor: Colors.grey[900]),
                   ),

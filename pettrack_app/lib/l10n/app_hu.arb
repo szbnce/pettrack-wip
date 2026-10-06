@@ -221,5 +221,8 @@
   "discoveryEmpty": "Még nem találtam PetTrack szervert.",
   "discoveryHint": "Győződj meg róla, hogy a szerver fut, és ugyanazon a Wi-Fi-n vagy.",
   "discoveryNotSupported": "Az automatikus keresés ezen az eszközön nem elérhető. Írd be a szerver címét kézzel.",
-  "discoveryTapToUse": "Koppints a csatlakozáshoz"
+  "discoveryTapToUse": "Koppints a csatlakozáshoz",
+  "tooltipRefresh": "Frissítés",
+  "tooltipAdd": "Hozzáadás",
+  "tooltipDelete": "Törlés"
 }
