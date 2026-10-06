@@ -6,6 +6,7 @@ from fastapi.responses import FileResponse
 from typing import List, Dict
 import time
 import asyncio
+from datetime import datetime
 from database import get_events, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data
 from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, MedicalDataSync
 from email.utils import formatdate
@@ -301,6 +302,10 @@ async def list_replays():
     files = []
     for filename in os.listdir(folder):
         if filename.endswith(".mp4"):
+            # Recaps live in the same folder so the existing signed-URL
+            # endpoint can serve them, but they are not events themselves.
+            if filename.startswith("highlight_") or filename.endswith("_raw.mp4"):
+                continue
             file_path = os.path.join(folder, filename)
             files.append({
                 "filename": filename,
@@ -310,10 +315,39 @@ async def list_replays():
                 # their long-lived token into a link.
                 "url": f"/api/replays/{filename}?token={mint_media_token(filename)}",
             })
-    
+
     # Sort newest first
     files.sort(key=lambda x: x["timestamp"], reverse=True)
     return {"replays": files}
+
+
+@router.get("/api/highlight")
+async def get_daily_highlight(date: str = Query(default=None)):
+    """Daily recap: the day's motion moments stitched into one clip.
+
+    Built on demand and cached in replays/highlight_<date>.mp4; returns 404
+    when the day has no motion events (or ffmpeg is unavailable).
+    """
+    import highlight as highlight_mod
+
+    if date is None:
+        day = None
+    else:
+        try:
+            day = datetime.strptime(date, "%Y-%m-%d").date()
+        except ValueError:
+            raise HTTPException(status_code=400, detail="date must be YYYY-MM-DD")
+
+    result = await asyncio.to_thread(highlight_mod.build_daily_highlight, day)
+    if result is None:
+        raise HTTPException(status_code=404, detail="no motion events for this day")
+
+    return {
+        "date": result["date"],
+        "clip_count": result["clip_count"],
+        "filename": result["filename"],
+        "url": f"/api/replays/{result['filename']}?token={mint_media_token(result['filename'])}",
+    }
 
 import re
 from fastapi import Request
