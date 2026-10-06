@@ -14,8 +14,13 @@ def client_command_to_monitor(raw: str) -> str | None:
         cmd = json.loads(raw)
     except (TypeError, ValueError):
         return None
-    if isinstance(cmd, dict) and cmd.get("action") == "play_sound":
+    if not isinstance(cmd, dict):
+        return None
+    if cmd.get("action") == "play_sound":
         return json.dumps({"action": "play_sound"})
+    if cmd.get("action") == "night_mode":
+        # Remote low-light toggle: torch/exposure/gamma on the monitor.
+        return json.dumps({"action": "night_mode", "enabled": bool(cmd.get("enabled"))})
     return None
 
 

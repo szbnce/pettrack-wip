@@ -15,6 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/theme/colors.dart';
 import 'package:pettrack_app/screens/monitor_setup_screen.dart';
+import 'package:pettrack_app/utils/night_vision.dart';
 import 'package:pettrack_app/main.dart';
 import 'package:pettrack_app/screens/welcome_screen.dart';
 
@@ -49,6 +50,9 @@ class _MonitorScreenState extends State<MonitorScreen> {
   Timer? _reconnectTimer;
   bool _shouldStream = false;
   bool _isReconnecting = false;
+  // A viewer can flip this remotely: torch + exposure + gamma lift so the
+  // pet is visible in a dark room.
+  bool _nightMode = false;
 
   late String _currentIp;
   late String _currentToken;
@@ -134,6 +138,8 @@ class _MonitorScreenState extends State<MonitorScreen> {
                 _updateStreamSpeed((data['fps'] as num).toDouble());
               } else if (data['action'] == 'play_sound') {
                 _playCallSound();
+              } else if (data['action'] == 'night_mode') {
+                _setNightMode(data['enabled'] == true);
               }
             } catch (_) {}
           }
@@ -193,6 +199,25 @@ class _MonitorScreenState extends State<MonitorScreen> {
       await _callPlayer.play(AssetSource('sounds/pet_call.wav'));
     } catch (e) {
       debugPrint('Failed to play call sound: $e');
+    }
+  }
+
+  /// A viewer toggled night mode: torch + exposure lift on the camera,
+  /// gamma lift on the outgoing frames. Each step is best-effort — old
+  /// phones may not support torch or exposure control.
+  Future<void> _setNightMode(bool enabled) async {
+    if (mounted) setState(() => _nightMode = enabled);
+    try {
+      await _controller.setFlashMode(enabled ? FlashMode.torch : FlashMode.off);
+    } catch (e) {
+      debugPrint('Torch not available: $e');
+    }
+    try {
+      final max = await _controller.getMaxExposureOffset();
+      final target = enabled ? (max > 0 ? (max < 1.5 ? max : 1.5) : 0.0) : 0.0;
+      await _controller.setExposureOffset(target);
+    } catch (e) {
+      debugPrint('Exposure adjust failed: $e');
     }
   }
 
@@ -281,6 +306,9 @@ class _MonitorScreenState extends State<MonitorScreen> {
       );
       if (frame.width > 1280) {
         frame = img.copyResize(frame, width: 1280);
+      }
+      if (_nightMode) {
+        frame = applyNightBoost(frame);
       }
       final bytes = img.encodeJpg(frame, quality: 80);
 
@@ -448,14 +476,33 @@ class _MonitorScreenState extends State<MonitorScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          _isStreaming
-                              ? l10n.monitorStreamingLive
-                              : _isReconnecting
-                              ? l10n.monitorReconnecting
-                              : l10n.monitorWaitingForStart,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Night mode is toggled remotely by a viewer —
+                            // show the person at the monitor that it is on.
+                            if (_nightMode) ...[
+                              Tooltip(
+                                message: l10n.tooltipNightMode,
+                                child: const Icon(
+                                  Icons.nightlight,
+                                  color: Colors.amber,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
+                            Flexible(
+                              child: Text(
+                                _isStreaming
+                                    ? l10n.monitorStreamingLive
+                                    : _isReconnecting
+                                    ? l10n.monitorReconnecting
+                                    : l10n.monitorWaitingForStart,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 20),
                         Wrap(

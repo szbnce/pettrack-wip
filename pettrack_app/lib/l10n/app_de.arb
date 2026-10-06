@@ -356,6 +356,9 @@
   "timelapseBuilding": "Timelapse des Tages wird erstellt…",
   "timelapseEmpty": "Heute noch nicht genug Bilder",
   "timelapseError": "Timelapse konnte nicht erstellt werden (Fehler {code})",
+  "tooltipNightMode": "Nachtmodus",
+  "nightModeOn": "Nachtmodus aktiviert",
+  "nightModeOff": "Nachtmodus deaktiviert",
   "@timelapseError": {
     "placeholders": {
       "code": {

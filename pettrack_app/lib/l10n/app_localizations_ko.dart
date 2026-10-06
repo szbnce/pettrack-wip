@@ -740,4 +740,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String timelapseError(int code) {
     return '타임랩스를 만들지 못했습니다(오류 $code)';
   }
+
+  @override
+  String get tooltipNightMode => '야간 모드';
+
+  @override
+  String get nightModeOn => '야간 모드를 켰습니다';
+
+  @override
+  String get nightModeOff => '야간 모드를 껐습니다';
 }

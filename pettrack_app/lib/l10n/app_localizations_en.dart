@@ -748,4 +748,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String timelapseError(int code) {
     return 'Could not build the timelapse (error $code)';
   }
+
+  @override
+  String get tooltipNightMode => 'Night mode';
+
+  @override
+  String get nightModeOn => 'Night mode on';
+
+  @override
+  String get nightModeOff => 'Night mode off';
 }

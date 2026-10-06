@@ -753,4 +753,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String timelapseError(int code) {
     return 'Timelapse konnte nicht erstellt werden (Fehler $code)';
   }
+
+  @override
+  String get tooltipNightMode => 'Nachtmodus';
+
+  @override
+  String get nightModeOn => 'Nachtmodus aktiviert';
+
+  @override
+  String get nightModeOff => 'Nachtmodus deaktiviert';
 }

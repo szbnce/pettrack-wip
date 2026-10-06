@@ -742,4 +742,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String timelapseError(int code) {
     return 'タイムラプスを作成できませんでした（エラー $code）';
   }
+
+  @override
+  String get tooltipNightMode => 'ナイトモード';
+
+  @override
+  String get nightModeOn => 'ナイトモードをオンにしました';
+
+  @override
+  String get nightModeOff => 'ナイトモードをオフにしました';
 }

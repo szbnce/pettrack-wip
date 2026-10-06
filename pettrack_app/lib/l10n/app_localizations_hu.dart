@@ -749,4 +749,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String timelapseError(int code) {
     return 'A timelapse elkészítése nem sikerült ($code hiba)';
   }
+
+  @override
+  String get tooltipNightMode => 'Éjszakai mód';
+
+  @override
+  String get nightModeOn => 'Éjszakai mód bekapcsolva';
+
+  @override
+  String get nightModeOff => 'Éjszakai mód kikapcsolva';
 }

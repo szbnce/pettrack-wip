@@ -356,6 +356,9 @@
   "timelapseBuilding": "Building the day's timelapse…",
   "timelapseEmpty": "Not enough frames yet today",
   "timelapseError": "Could not build the timelapse (error {code})",
+  "tooltipNightMode": "Night mode",
+  "nightModeOn": "Night mode on",
+  "nightModeOff": "Night mode off",
   "@timelapseError": {
     "placeholders": {
       "code": {

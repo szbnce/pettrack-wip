@@ -256,6 +256,9 @@
   "timelapseBuilding": "A nap timelapse-ének építése…",
   "timelapseEmpty": "Még nincs elég képkocka mára",
   "timelapseError": "A timelapse elkészítése nem sikerült ({code} hiba)",
+  "tooltipNightMode": "Éjszakai mód",
+  "nightModeOn": "Éjszakai mód bekapcsolva",
+  "nightModeOff": "Éjszakai mód kikapcsolva",
   "@timelapseError": {
     "placeholders": {
       "code": {

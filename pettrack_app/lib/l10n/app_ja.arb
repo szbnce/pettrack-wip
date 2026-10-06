@@ -356,6 +356,9 @@
   "timelapseBuilding": "その日のタイムラプスを作成中…",
   "timelapseEmpty": "今日はまだフレームが足りません",
   "timelapseError": "タイムラプスを作成できませんでした（エラー {code}）",
+  "tooltipNightMode": "ナイトモード",
+  "nightModeOn": "ナイトモードをオンにしました",
+  "nightModeOff": "ナイトモードをオフにしました",
   "@timelapseError": {
     "placeholders": {
       "code": {

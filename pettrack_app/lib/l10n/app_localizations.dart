@@ -1481,6 +1481,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not build the timelapse (error {code})'**
   String timelapseError(int code);
+
+  /// No description provided for @tooltipNightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Night mode'**
+  String get tooltipNightMode;
+
+  /// No description provided for @nightModeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Night mode on'**
+  String get nightModeOn;
+
+  /// No description provided for @nightModeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Night mode off'**
+  String get nightModeOff;
 }
 
 class _AppLocalizationsDelegate

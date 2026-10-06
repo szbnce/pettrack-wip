@@ -56,6 +56,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double _batteryThreshold = 20.0;
   bool _hasAlertedBattery = false;
   bool _hasCameraError = false;
+  // Mirrors the monitor's low-light mode (toggled remotely from here).
+  bool _nightMode = false;
   DateTime? _frameTimestamp;
 
   String get _displayPetName {
@@ -593,6 +595,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Row(
                                 children: [
                                   FloatingActionButton.small(
+                                    onPressed: _toggleNightMode,
+                                    tooltip: l10n.tooltipNightMode,
+                                    backgroundColor: Colors.black.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                    child: Icon(
+                                      Icons.nightlight,
+                                      color: _nightMode
+                                          ? Colors.amber
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  FloatingActionButton.small(
                                     onPressed: _sendPlaySound,
                                     tooltip: l10n.tooltipPlaySound,
                                     backgroundColor: Colors.black.withValues(
@@ -1005,6 +1021,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(l10n.playSoundSent),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  /// Asks the monitor to flip night mode (torch + brighter image).
+  void _toggleNightMode() {
+    final channel = _clientChannel;
+    if (channel == null) return;
+    final enabled = !_nightMode;
+    channel.sink.add(jsonEncode({'action': 'night_mode', 'enabled': enabled}));
+    HapticFeedback.lightImpact();
+    setState(() => _nightMode = enabled);
+    final l10n = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(enabled ? l10n.nightModeOn : l10n.nightModeOff),
         duration: const Duration(seconds: 2),
       ),
     );

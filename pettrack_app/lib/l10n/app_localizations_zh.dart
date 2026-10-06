@@ -738,4 +738,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String timelapseError(int code) {
     return '无法生成延时视频（错误 $code）';
   }
+
+  @override
+  String get tooltipNightMode => '夜间模式';
+
+  @override
+  String get nightModeOn => '夜间模式已开启';
+
+  @override
+  String get nightModeOff => '夜间模式已关闭';
 }

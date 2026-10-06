@@ -356,6 +356,9 @@
   "timelapseBuilding": "오늘의 타임랩스를 만드는 중…",
   "timelapseEmpty": "오늘은 아직 프레임이 충분하지 않습니다",
   "timelapseError": "타임랩스를 만들지 못했습니다(오류 {code})",
+  "tooltipNightMode": "야간 모드",
+  "nightModeOn": "야간 모드를 켰습니다",
+  "nightModeOff": "야간 모드를 껐습니다",
   "@timelapseError": {
     "placeholders": {
       "code": {
