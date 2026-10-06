@@ -16,6 +16,7 @@ from tasks import cleanup_old_images
 from vision import process_and_save_frame
 from database import init_db, get_zones
 from discovery import start_advertiser, stop_advertiser
+import mqtt_bridge
 
 app = FastAPI()
 
@@ -58,6 +59,9 @@ async def startup_event():
     # Advertise on the LAN (mDNS) so apps can find this server without typing an IP.
     start_advertiser(ip=ip, port=8000)
 
+    # Home Assistant MQTT discovery (no-op unless PETTRACK_MQTT_HOST is set).
+    mqtt_bridge.start()
+
     qr_data = f'{{"ip": "{ip}:8000", "secret": "{SECRET_TOKEN}"}}'
     qr_img = qrcode.make(qr_data)
     qr = qrcode.QRCode()
@@ -93,6 +97,7 @@ async def startup_event():
 @app.on_event("shutdown")
 async def shutdown_event():
     stop_advertiser()
+    mqtt_bridge.stop()
 
 from fastapi.staticfiles import StaticFiles
 
@@ -108,6 +113,7 @@ async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: 
     monitor_state["online"] = True
     monitor_state["frame_count"] = 0
     monitor_state["id"] = monitor_id
+    mqtt_bridge.bridge.publish_monitor(True)
     print(f"Monitor {monitor_id} connected!", flush=True)
 
     if len(client_manager.active.connections) > 0:
@@ -129,10 +135,12 @@ async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         monitor_state["online"] = False
+        mqtt_bridge.bridge.publish_monitor(False)
         print(f"Monitor {monitor_id} disconnected normally.", flush=True)
     except Exception as e:
         manager.disconnect(websocket)
         monitor_state["online"] = False
+        mqtt_bridge.bridge.publish_monitor(False)
         print(f"Error: {e}", flush=True)
 
 @app.websocket("/ws/client")

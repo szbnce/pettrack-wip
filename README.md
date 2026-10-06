@@ -285,6 +285,30 @@ everything else.
 Works with any ImageNet-compatible ONNX classifier — bring your own model if
 you want.
 
+### Home Assistant
+
+Point PetTrack at an MQTT broker and its sensors show up in Home Assistant
+automatically — no yaml, no manual entity setup:
+
+```env
+PETTRACK_MQTT_HOST=192.168.1.10
+PETTRACK_MQTT_USER=homeassistant
+PETTRACK_MQTT_PASSWORD=...
+```
+
+Everything is announced as a single **PetTrack** device: Motion, Monitor
+online, Monitor battery, Monitor charging, Last event, and a Camera snapshot
+entity. Without `PETTRACK_MQTT_HOST` the bridge stays completely off.
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `PETTRACK_MQTT_HOST` | *(unset)* | MQTT broker host — unset disables the bridge |
+| `PETTRACK_MQTT_PORT` | `1883` | Broker port |
+| `PETTRACK_MQTT_USER` / `PETTRACK_MQTT_PASSWORD` | *(empty)* | Broker credentials |
+| `PETTRACK_MQTT_DISCOVERY_PREFIX` | `homeassistant` | Home Assistant discovery prefix |
+| `PETTRACK_MQTT_BASE` | `pettrack` | State topic prefix |
+| `PETTRACK_MQTT_CAMERA_INTERVAL` | `30` | Seconds between camera snapshots (`0` = no camera entity) |
+
 ### Development & testing
 
 * `flutter analyze` / `flutter test` — app static analysis and widget tests

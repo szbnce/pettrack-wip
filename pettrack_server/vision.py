@@ -6,6 +6,7 @@ import asyncio
 import subprocess
 from api_routes import active_zones
 from database import log_event
+import mqtt_bridge
 from motion import decode_small, detect_motion, mean_brightness, point_in_polygon
 
 os.makedirs("captured_images", exist_ok=True)
@@ -114,6 +115,7 @@ async def process_and_save_frame(image_bytes: bytes):
         # Too dark to trust detection; drop the tracked pet after a timeout.
         if _last_pet_center is not None and now - _last_motion_time > MOTION_TIMEOUT:
             _last_pet_center = None
+            mqtt_bridge.bridge.publish_motion(False)
         _prev_small = small
         return
 
@@ -154,8 +156,11 @@ async def process_and_save_frame(image_bytes: bytes):
 
         _last_motion_time = now
         _last_pet_center = (cx_norm, cy_norm)
+        mqtt_bridge.bridge.publish_motion(True)
     elif now - _last_motion_time > MOTION_TIMEOUT:
         # No motion for a while, stop claiming to know where the pet is.
+        if _last_pet_center is not None:
+            mqtt_bridge.bridge.publish_motion(False)
         _last_pet_center = None
 
     current_zones = set()
@@ -192,10 +197,12 @@ async def process_and_save_frame(image_bytes: bytes):
     for zone in entered:
         print(f"Event: MOVEMENT DETECTED IN ZONE {zone}", flush=True)
         await log_event("zone_enter", zone_name=zone)
+        mqtt_bridge.bridge.publish_event("zone_enter", zone_name=zone)
 
     exited = _last_zones - current_zones
     for zone in exited:
         print(f"Event: LEFT ZONE {zone}", flush=True)
         await log_event("zone_exit", zone_name=zone)
+        mqtt_bridge.bridge.publish_event("zone_exit", zone_name=zone)
 
     _last_zones = current_zones

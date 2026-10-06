@@ -19,6 +19,7 @@ import secrets
 from dotenv import load_dotenv, set_key
 from pydantic import BaseModel
 from manager import client_manager
+import mqtt_bridge
 
 load_dotenv()
 
@@ -98,6 +99,7 @@ latest_frame_info = {
 def update_latest_frame(data: bytes):
     latest_frame_info["data"] = data
     latest_frame_info["timestamp"] = time.time()
+    mqtt_bridge.bridge.publish_frame(data)
 
 def frame_media_type(data: bytes) -> str:
     """JPEG or PNG, whichever the monitor actually sent."""
@@ -115,6 +117,7 @@ async def get_status():
     if is_online and time.time() - monitor_state.get("last_seen", time.time()) > 5:
         monitor_state["online"] = False
         is_online = False
+        mqtt_bridge.bridge.publish_monitor(False)
 
     return {
         "monitor_online": is_online,
@@ -213,6 +216,10 @@ async def update_pet_profile(pet: PetProfile):
 async def update_monitor_status(update: MonitorUpdate):
     monitor_state["battery_level"] = update.battery_level
     monitor_state["is_charging"] = update.is_charging
+    monitor_state["online"] = True
+    monitor_state["last_seen"] = time.time()
+    mqtt_bridge.bridge.publish_battery(update.battery_level, update.is_charging)
+    mqtt_bridge.bridge.publish_monitor(True)
     return {"status": "ok"}
 
 @router.get("/api/activity")
