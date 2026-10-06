@@ -661,4 +661,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get highlightShare => 'Share';
+
+  @override
+  String get quietHoursTitle => 'Quiet hours';
+
+  @override
+  String get quietHoursSubtitle => 'No zone or battery alerts during this time';
+
+  @override
+  String get quietHoursFrom => 'From';
+
+  @override
+  String get quietHoursTo => 'Until';
+
+  @override
+  String get batteryLowTitle => 'Low battery';
+
+  @override
+  String batteryLowBody(int level) {
+    return 'Battery at $level%';
+  }
 }

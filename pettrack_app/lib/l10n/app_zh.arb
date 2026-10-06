@@ -328,5 +328,11 @@
   "highlightTitle": "今日回顾",
   "highlightSubtitle": "今天的每个瞬间，一支视频",
   "highlightMoments": "{count} 个瞬间",
-  "highlightShare": "分享"
+  "highlightShare": "分享",
+  "quietHoursTitle": "免打扰时段",
+  "quietHoursSubtitle": "此时段不发送区域或电量提醒",
+  "quietHoursFrom": "从",
+  "quietHoursTo": "到",
+  "batteryLowTitle": "电量不足",
+  "batteryLowBody": "电量剩余 {level}%"
 }

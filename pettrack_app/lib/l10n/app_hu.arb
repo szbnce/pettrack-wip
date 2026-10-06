@@ -228,5 +228,11 @@
   "highlightTitle": "Mai összefoglaló",
   "highlightSubtitle": "A mai összes pillanat egyetlen klipben",
   "highlightMoments": "{count} pillanat",
-  "highlightShare": "Megosztás"
+  "highlightShare": "Megosztás",
+  "quietHoursTitle": "Csendes órák",
+  "quietHoursSubtitle": "Ebben az időben nincs zóna- vagy akkumulátor-riasztás",
+  "quietHoursFrom": "Ettől",
+  "quietHoursTo": "Eddig",
+  "batteryLowTitle": "Alacsony akkumulátor",
+  "batteryLowBody": "Akkumulátor: {level}%"
 }

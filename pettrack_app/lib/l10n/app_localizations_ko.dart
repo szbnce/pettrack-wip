@@ -653,4 +653,24 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get highlightShare => '공유';
+
+  @override
+  String get quietHoursTitle => '무음 시간';
+
+  @override
+  String get quietHoursSubtitle => '이 시간에는 구역·배터리 알림을 보내지 않습니다';
+
+  @override
+  String get quietHoursFrom => '시작';
+
+  @override
+  String get quietHoursTo => '종료';
+
+  @override
+  String get batteryLowTitle => '배터리 부족';
+
+  @override
+  String batteryLowBody(int level) {
+    return '배터리 잔량 $level%';
+  }
 }

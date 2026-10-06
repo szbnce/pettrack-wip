@@ -328,5 +328,18 @@
   "highlightTitle": "Today's recap",
   "highlightSubtitle": "Every moment from today in one clip",
   "highlightMoments": "{count} moments",
-  "highlightShare": "Share"
+  "highlightShare": "Share",
+  "quietHoursTitle": "Quiet hours",
+  "quietHoursSubtitle": "No zone or battery alerts during this time",
+  "quietHoursFrom": "From",
+  "quietHoursTo": "Until",
+  "batteryLowTitle": "Low battery",
+  "batteryLowBody": "Battery at {level}%",
+  "@batteryLowBody": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  }
 }

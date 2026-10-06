@@ -661,4 +661,25 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get highlightShare => 'Megosztás';
+
+  @override
+  String get quietHoursTitle => 'Csendes órák';
+
+  @override
+  String get quietHoursSubtitle =>
+      'Ebben az időben nincs zóna- vagy akkumulátor-riasztás';
+
+  @override
+  String get quietHoursFrom => 'Ettől';
+
+  @override
+  String get quietHoursTo => 'Eddig';
+
+  @override
+  String get batteryLowTitle => 'Alacsony akkumulátor';
+
+  @override
+  String batteryLowBody(int level) {
+    return 'Akkumulátor: $level%';
+  }
 }

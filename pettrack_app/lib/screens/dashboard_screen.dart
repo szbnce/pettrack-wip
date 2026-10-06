@@ -42,6 +42,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _statusFailures = 0;
   List<dynamic> _activities = [];
   final Map<String, DateTime> _lastZoneAlerts = {};
+  final Map<String, int> _zoneAlertIds = {};
+  int _nextAlertId = 1000;
   Uint8List? _profilePicBytes;
   List<dynamic> _zonesCache = [];
   String _petType = 'rabbit';
@@ -327,7 +329,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
             if (lastAlert == null ||
                 now.difference(lastAlert).inSeconds >= 60) {
               _lastZoneAlerts[zoneName] = now;
-              debugPrint("Alert: ${isEnter ? 'Enter' : 'Left'} $zoneName");
+              final alertId = _zoneAlertIds.putIfAbsent(
+                zoneName,
+                () => _nextAlertId++,
+              );
+              NotificationService().showNotification(
+                id: alertId,
+                title: isEnter
+                    ? l10n.zoneEntered(_displayPetName, zoneName)
+                    : l10n.zoneLeft(_displayPetName, zoneName),
+                body: '',
+              );
             }
           }
           setState(() => _activities = newEvents);
@@ -347,6 +359,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       if (response.statusCode == 200 && mounted) {
         final data = jsonDecode(response.body);
+        var lowBatteryAlert = false;
         setState(() {
           _isServerOnline = true;
           _statusFailures = 0;
@@ -361,7 +374,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 newBat < _batteryLevel &&
                 !_hasAlertedBattery) {
               _hasAlertedBattery = true;
-              debugPrint("Battery Low: $newBat");
+              lowBatteryAlert = true;
             }
             if (newBat > _batteryThreshold || _isCharging) {
               _hasAlertedBattery = false;
@@ -370,6 +383,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _isCharging = data['is_charging'] ?? false;
           }
         });
+        if (lowBatteryAlert && mounted) {
+          final l10n = AppLocalizations.of(context)!;
+          NotificationService().showNotification(
+            id: 2000,
+            title: l10n.batteryLowTitle,
+            body: l10n.batteryLowBody(data['battery_level'] as int),
+          );
+        }
       } else if (mounted) {
         _noteStatusFailure();
       }

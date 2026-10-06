@@ -1319,6 +1319,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share'**
   String get highlightShare;
+
+  /// No description provided for @quietHoursTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiet hours'**
+  String get quietHoursTitle;
+
+  /// No description provided for @quietHoursSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No zone or battery alerts during this time'**
+  String get quietHoursSubtitle;
+
+  /// No description provided for @quietHoursFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get quietHoursFrom;
+
+  /// No description provided for @quietHoursTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Until'**
+  String get quietHoursTo;
+
+  /// No description provided for @batteryLowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Low battery'**
+  String get batteryLowTitle;
+
+  /// No description provided for @batteryLowBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery at {level}%'**
+  String batteryLowBody(int level);
 }
 
 class _AppLocalizationsDelegate

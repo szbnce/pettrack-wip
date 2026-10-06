@@ -30,6 +30,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _alertsZoneEnabled = true;
   bool _alertsBatteryEnabled = true;
   double _batteryThreshold = 20.0;
+  bool _quietHoursEnabled = false;
+  int _quietHoursFrom = 23 * 60;
+  int _quietHoursTo = 7 * 60;
   bool _isLoading = true;
 
   String _getLocalizedPetType(BuildContext context, String type) {
@@ -69,6 +72,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _alertsZoneEnabled = prefs.getBool('alerts_zone_enabled') ?? true;
       _alertsBatteryEnabled = prefs.getBool('alerts_battery_enabled') ?? true;
       _batteryThreshold = prefs.getDouble('alerts_battery_threshold') ?? 20.0;
+      _quietHoursEnabled = prefs.getBool('quiet_hours_enabled') ?? false;
+      _quietHoursFrom = prefs.getInt('quiet_hours_from') ?? 23 * 60;
+      _quietHoursTo = prefs.getInt('quiet_hours_to') ?? 7 * 60;
     });
 
     if (ip.isNotEmpty && token.isNotEmpty && !ip.contains('demo_ip')) {
@@ -221,6 +227,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await prefs.setBool('alerts_zone_enabled', _alertsZoneEnabled);
     await prefs.setBool('alerts_battery_enabled', _alertsBatteryEnabled);
     await prefs.setDouble('alerts_battery_threshold', _batteryThreshold);
+    await prefs.setBool('quiet_hours_enabled', _quietHoursEnabled);
+    await prefs.setInt('quiet_hours_from', _quietHoursFrom);
+    await prefs.setInt('quiet_hours_to', _quietHoursTo);
 
     if (_profilePicBase64 != null) {
       await prefs.setString('profile_pic', _profilePicBase64!);
@@ -558,6 +567,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
           onChanged: (val) => setState(() => _batteryThreshold = val),
         ),
       ],
+      const Divider(height: 32),
+      SwitchListTile(
+        title: Text(l10n.quietHoursTitle),
+        subtitle: Text(l10n.quietHoursSubtitle),
+        value: _quietHoursEnabled,
+        onChanged: (val) => setState(() => _quietHoursEnabled = val),
+        contentPadding: EdgeInsets.zero,
+      ),
+      if (_quietHoursEnabled) ...[
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.bedtime_outlined),
+          title: Text(l10n.quietHoursFrom),
+          trailing: Text(
+            _formatMinutes(_quietHoursFrom),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          onTap: () => _pickQuietTime(isFrom: true),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.wb_sunny_outlined),
+          title: Text(l10n.quietHoursTo),
+          trailing: Text(
+            _formatMinutes(_quietHoursTo),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          onTap: () => _pickQuietTime(isFrom: false),
+        ),
+      ],
       const SizedBox(height: 16),
       Center(
         child: OutlinedButton.icon(
@@ -568,6 +607,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               id: 999,
               title: l10n.testNotifTitle,
               body: l10n.testNotifBody,
+              respectQuietHours: false,
             );
           },
           icon: const Icon(Icons.notifications_active),
@@ -575,6 +615,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
     ]);
+  }
+
+  /// Formats minutes-after-midnight as a 24h `HH:mm` clock label.
+  String _formatMinutes(int minutes) {
+    final h = (minutes ~/ 60).toString().padLeft(2, '0');
+    final m = (minutes % 60).toString().padLeft(2, '0');
+    return '$h:$m';
+  }
+
+  Future<void> _pickQuietTime({required bool isFrom}) async {
+    final current = isFrom ? _quietHoursFrom : _quietHoursTo;
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: current ~/ 60, minute: current % 60),
+    );
+    if (picked == null || !mounted) return;
+    setState(() {
+      final minutes = picked.hour * 60 + picked.minute;
+      if (isFrom) {
+        _quietHoursFrom = minutes;
+      } else {
+        _quietHoursTo = minutes;
+      }
+    });
   }
 
   Widget _buildMonitorCard(AppLocalizations l10n) {

@@ -328,5 +328,11 @@
   "highlightTitle": "Zusammenfassung von heute",
   "highlightSubtitle": "Jeder Moment von heute in einem Clip",
   "highlightMoments": "{count} Momente",
-  "highlightShare": "Teilen"
+  "highlightShare": "Teilen",
+  "quietHoursTitle": "Ruhezeiten",
+  "quietHoursSubtitle": "Keine Zonen- oder Akku-Warnungen in dieser Zeit",
+  "quietHoursFrom": "Von",
+  "quietHoursTo": "Bis",
+  "batteryLowTitle": "Niedriger Akkustand",
+  "batteryLowBody": "Akku bei {level} %"
 }

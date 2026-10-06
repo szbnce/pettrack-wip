@@ -655,4 +655,24 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get highlightShare => '共有';
+
+  @override
+  String get quietHoursTitle => '消音時間';
+
+  @override
+  String get quietHoursSubtitle => 'この時間帯はゾーン・バッテリー通知を送りません';
+
+  @override
+  String get quietHoursFrom => '開始';
+
+  @override
+  String get quietHoursTo => '終了';
+
+  @override
+  String get batteryLowTitle => 'バッテリー残量低下';
+
+  @override
+  String batteryLowBody(int level) {
+    return 'バッテリー残量 $level%';
+  }
 }

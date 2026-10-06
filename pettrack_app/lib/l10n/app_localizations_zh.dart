@@ -651,4 +651,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get highlightShare => '分享';
+
+  @override
+  String get quietHoursTitle => '免打扰时段';
+
+  @override
+  String get quietHoursSubtitle => '此时段不发送区域或电量提醒';
+
+  @override
+  String get quietHoursFrom => '从';
+
+  @override
+  String get quietHoursTo => '到';
+
+  @override
+  String get batteryLowTitle => '电量不足';
+
+  @override
+  String batteryLowBody(int level) {
+    return '电量剩余 $level%';
+  }
 }
