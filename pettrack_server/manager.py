@@ -1,6 +1,23 @@
 from fastapi import WebSocket
 from typing import List
 from types import SimpleNamespace
+import json
+
+
+def client_command_to_monitor(raw: str) -> str | None:
+    """Translate a viewer's JSON command into a monitor broadcast.
+
+    Returns the message to forward to the monitor, or None when the raw
+    text is not a command we know (talking viewers send nothing today).
+    """
+    try:
+        cmd = json.loads(raw)
+    except (TypeError, ValueError):
+        return None
+    if isinstance(cmd, dict) and cmd.get("action") == "play_sound":
+        return json.dumps({"action": "play_sound"})
+    return None
+
 
 class ConnectionManager:
     def __init__(self):

@@ -719,4 +719,13 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get changelogBody =>
       '1.0.0\n• ダッシュボードに「今日のまとめ」\n• アラートのサイレント時間\n• Home Assistant 連携\n• Material 3 デザイン';
+
+  @override
+  String get tooltipPlaySound => '音を鳴らす';
+
+  @override
+  String get tooltipSnapshot => 'スナップショットを撮る';
+
+  @override
+  String get playSoundSent => 'モニターに音を送信しました';
 }

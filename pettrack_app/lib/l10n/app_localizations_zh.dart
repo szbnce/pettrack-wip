@@ -715,4 +715,13 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get changelogBody =>
       '1.0.0\n• 仪表板上的“今日回顾”\n• 通知免打扰时段\n• Home Assistant 集成\n• Material 3 设计';
+
+  @override
+  String get tooltipPlaySound => '播放声音';
+
+  @override
+  String get tooltipSnapshot => '截取快照';
+
+  @override
+  String get playSoundSent => '声音已发送到监视器';
 }

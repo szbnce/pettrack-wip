@@ -585,20 +585,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
 
-                          // Snapshot Button
+                          // Action Buttons
                           if (_currentUiImage != null)
                             Positioned(
                               bottom: 16,
                               right: 16,
-                              child: FloatingActionButton.small(
-                                onPressed: _takeSnapshot,
-                                backgroundColor: Colors.black.withValues(
-                                  alpha: 0.5,
-                                ),
-                                child: const Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.white,
-                                ),
+                              child: Row(
+                                children: [
+                                  FloatingActionButton.small(
+                                    onPressed: _sendPlaySound,
+                                    tooltip: l10n.tooltipPlaySound,
+                                    backgroundColor: Colors.black.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                    child: const Icon(
+                                      Icons.volume_up,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  FloatingActionButton.small(
+                                    onPressed: _takeSnapshot,
+                                    tooltip: l10n.tooltipSnapshot,
+                                    backgroundColor: Colors.black.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                    child: const Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                         ],
@@ -975,6 +992,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ],
+    );
+  }
+
+  /// Asks the monitor phone to chirp, to get the pet's attention.
+  void _sendPlaySound() {
+    final channel = _clientChannel;
+    if (channel == null) return;
+    channel.sink.add(jsonEncode({'action': 'play_sound'}));
+    HapticFeedback.lightImpact();
+    final l10n = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.playSoundSent),
+        duration: const Duration(seconds: 2),
+      ),
     );
   }
 

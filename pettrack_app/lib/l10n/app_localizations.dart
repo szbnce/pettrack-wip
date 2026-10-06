@@ -1439,6 +1439,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'1.0.0\n• Today\'s recap on the dashboard\n• Quiet hours for alerts\n• Home Assistant integration\n• Material 3 redesign'**
   String get changelogBody;
+
+  /// No description provided for @tooltipPlaySound.
+  ///
+  /// In en, this message translates to:
+  /// **'Play a sound'**
+  String get tooltipPlaySound;
+
+  /// No description provided for @tooltipSnapshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a snapshot'**
+  String get tooltipSnapshot;
+
+  /// No description provided for @playSoundSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound sent to the monitor'**
+  String get playSoundSent;
 }
 
 class _AppLocalizationsDelegate

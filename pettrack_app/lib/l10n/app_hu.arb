@@ -248,5 +248,8 @@
   "privacyBody": "A PetTrack teljesen saját üzemeltetésű — a kamera képe, a felvételek és a kedvenc adatai a te szervereden maradnak.\n\n• Nincs felhő, semmi nem megy sehova\n• Nincs fiók — nincs szolgáltatás, ahová regisztrálni kellene\n• Nincs analitika vagy követés\n• Alapból csak helyi hálózat; a távoli elérés csak az, amit te állítasz be",
   "whatsNewButton": "Újdonságok",
   "whatsNewTitle": "Újdonságok",
-  "changelogBody": "1.0.0\n• „Mai összefoglaló” a kezdőképernyőn\n• Csendes órák a riasztásokhoz\n• Home Assistant integráció\n• Material 3 arculat"
+  "changelogBody": "1.0.0\n• „Mai összefoglaló” a kezdőképernyőn\n• Csendes órák a riasztásokhoz\n• Home Assistant integráció\n• Material 3 arculat",
+  "tooltipPlaySound": "Hang lejátszása",
+  "tooltipSnapshot": "Pillanatkép készítése",
+  "playSoundSent": "Hang elküldve a monitorra"
 }

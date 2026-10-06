@@ -725,4 +725,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelogBody =>
       '1.0.0\n• Today\'s recap on the dashboard\n• Quiet hours for alerts\n• Home Assistant integration\n• Material 3 redesign';
+
+  @override
+  String get tooltipPlaySound => 'Play a sound';
+
+  @override
+  String get tooltipSnapshot => 'Take a snapshot';
+
+  @override
+  String get playSoundSent => 'Sound sent to the monitor';
 }

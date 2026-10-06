@@ -730,4 +730,13 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get changelogBody =>
       '1.0.0\n• „Tagesrückblick“ auf dem Dashboard\n• Ruhezeiten für Benachrichtigungen\n• Home-Assistant-Integration\n• Material-3-Design';
+
+  @override
+  String get tooltipPlaySound => 'Ton abspielen';
+
+  @override
+  String get tooltipSnapshot => 'Snapshot aufnehmen';
+
+  @override
+  String get playSoundSent => 'Ton an den Monitor gesendet';
 }

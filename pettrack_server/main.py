@@ -10,7 +10,7 @@ import qrcode
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
-from manager import manager, client_manager
+from manager import manager, client_manager, client_command_to_monitor
 from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, SECRET_TOKEN, fernet, set_key, token_valid
 from tasks import cleanup_old_images
 from vision import process_and_save_frame
@@ -152,7 +152,13 @@ async def client_websocket(websocket: WebSocket, token: str = None):
     asyncio.create_task(manager.broadcast_text(json.dumps({"action": "set_fps", "fps": 5})))
     try:
         while True:
-            await websocket.receive()
+            message = await websocket.receive()
+            # Viewers can send commands (e.g. "play a sound" on the monitor).
+            text = message.get("text") if isinstance(message, dict) else None
+            if text:
+                forwarded = client_command_to_monitor(text)
+                if forwarded:
+                    await manager.broadcast_text(forwarded)
     except Exception:
         client_manager.disconnect(websocket)
         if len(client_manager.active.connections) == 0:

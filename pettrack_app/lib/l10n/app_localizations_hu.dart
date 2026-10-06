@@ -726,4 +726,13 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String get changelogBody =>
       '1.0.0\n• „Mai összefoglaló” a kezdőképernyőn\n• Csendes órák a riasztásokhoz\n• Home Assistant integráció\n• Material 3 arculat';
+
+  @override
+  String get tooltipPlaySound => 'Hang lejátszása';
+
+  @override
+  String get tooltipSnapshot => 'Pillanatkép készítése';
+
+  @override
+  String get playSoundSent => 'Hang elküldve a monitorra';
 }

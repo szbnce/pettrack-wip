@@ -730,4 +730,13 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelogBody =>
       '1.0.0\n• \"Riepilogo di oggi\" sulla dashboard\n• Ore di silenzio per gli avvisi\n• Integrazione con Home Assistant\n• Design Material 3';
+
+  @override
+  String get tooltipPlaySound => 'Riproduci un suono';
+
+  @override
+  String get tooltipSnapshot => 'Scatta una foto';
+
+  @override
+  String get playSoundSent => 'Suono inviato al monitor';
 }

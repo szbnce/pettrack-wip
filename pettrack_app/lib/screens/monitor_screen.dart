@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -36,6 +37,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
   late CameraController _controller;
 
   WebSocketChannel? _socket;
+  final AudioPlayer _callPlayer = AudioPlayer();
   bool _isInitialized = false;
   bool _isStreaming = false;
   bool _isSleeping = false;
@@ -130,6 +132,8 @@ class _MonitorScreenState extends State<MonitorScreen> {
               final data = json.decode(message);
               if (data['action'] == 'set_fps' && data['fps'] != null) {
                 _updateStreamSpeed((data['fps'] as num).toDouble());
+              } else if (data['action'] == 'play_sound') {
+                _playCallSound();
               }
             } catch (_) {}
           }
@@ -181,6 +185,15 @@ class _MonitorScreenState extends State<MonitorScreen> {
         await _captureAndSendFrame();
       }
     });
+  }
+
+  /// A viewer pressed "play a sound": chirp so the pet looks at the camera.
+  Future<void> _playCallSound() async {
+    try {
+      await _callPlayer.play(AssetSource('sounds/pet_call.wav'));
+    } catch (e) {
+      debugPrint('Failed to play call sound: $e');
+    }
   }
 
   void _updateStreamSpeed(double fps) {
@@ -287,6 +300,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
     _statusTimer?.cancel();
     _reconnectTimer?.cancel();
     _controller.dispose();
+    _callPlayer.dispose();
     _socket?.sink.close();
 
     SystemChrome.setPreferredOrientations([

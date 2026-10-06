@@ -717,4 +717,13 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get changelogBody =>
       '1.0.0\n• 대시보드의 \'오늘의 요약\'\n• 알림 방해 금지 시간대\n• Home Assistant 연동\n• Material 3 디자인';
+
+  @override
+  String get tooltipPlaySound => '소리 재생';
+
+  @override
+  String get tooltipSnapshot => '스냅샷 찍기';
+
+  @override
+  String get playSoundSent => '모니터로 소리를 보냈습니다';
 }

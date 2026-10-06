@@ -348,5 +348,8 @@
   "privacyBody": "PetTrack è completamente self-hosted — il flusso della camera, le registrazioni e i dati dell'animale restano sul tuo server.\n\n• Niente cloud, nulla viene caricato da qualche parte\n• Niente account — non c'è un servizio a cui iscriversi\n• Niente analisi o tracciamento\n• Solo LAN per impostazione predefinita; l'accesso remoto è solo quello che configuri tu",
   "whatsNewButton": "Novità",
   "whatsNewTitle": "Novità",
-  "changelogBody": "1.0.0\n• \"Riepilogo di oggi\" sulla dashboard\n• Ore di silenzio per gli avvisi\n• Integrazione con Home Assistant\n• Design Material 3"
+  "changelogBody": "1.0.0\n• \"Riepilogo di oggi\" sulla dashboard\n• Ore di silenzio per gli avvisi\n• Integrazione con Home Assistant\n• Design Material 3",
+  "tooltipPlaySound": "Riproduci un suono",
+  "tooltipSnapshot": "Scatta una foto",
+  "playSoundSent": "Suono inviato al monitor"
 }
