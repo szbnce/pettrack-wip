@@ -1,6 +1,9 @@
 import os
 import time
 import asyncio
+from datetime import date, timedelta
+
+import timelapse
 
 async def cleanup_old_images():
     folder_path = "captured_images"
@@ -31,6 +34,22 @@ async def cleanup_old_images():
             except Exception as e:
                 print(f"Error in image cleanup task: {e}")
         
+        # Cleanup timelapse stills
+        timelapse_path = timelapse.DEFAULT_FOLDER
+        if os.path.exists(timelapse_path):
+            try:
+                cutoff_day = date.today() - timedelta(days=timelapse.RETENTION_DAYS)
+                for filename in os.listdir(timelapse_path):
+                    if not filename.startswith(timelapse.FRAME_PREFIX):
+                        continue
+                    file_path = os.path.join(timelapse_path, filename)
+                    if os.path.isfile(file_path) and date.fromtimestamp(
+                        os.path.getmtime(file_path)
+                    ) < cutoff_day:
+                        os.remove(file_path)
+            except Exception as e:
+                print(f"Error in timelapse cleanup task: {e}")
+
         # Cleanup replays
         replays_path = "replays"
         if os.path.exists(replays_path):

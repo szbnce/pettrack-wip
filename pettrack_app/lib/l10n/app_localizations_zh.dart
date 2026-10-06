@@ -724,4 +724,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get playSoundSent => '声音已发送到监视器';
+
+  @override
+  String get tooltipTimelapse => '每日延时';
+
+  @override
+  String get timelapseBuilding => '正在生成今天的延时视频…';
+
+  @override
+  String get timelapseEmpty => '今天的帧还不够';
+
+  @override
+  String timelapseError(int code) {
+    return '无法生成延时视频（错误 $code）';
+  }
 }

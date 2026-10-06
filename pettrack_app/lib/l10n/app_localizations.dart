@@ -1457,6 +1457,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sound sent to the monitor'**
   String get playSoundSent;
+
+  /// No description provided for @tooltipTimelapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Day timelapse'**
+  String get tooltipTimelapse;
+
+  /// No description provided for @timelapseBuilding.
+  ///
+  /// In en, this message translates to:
+  /// **'Building the day\'s timelapse…'**
+  String get timelapseBuilding;
+
+  /// No description provided for @timelapseEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough frames yet today'**
+  String get timelapseEmpty;
+
+  /// No description provided for @timelapseError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not build the timelapse (error {code})'**
+  String timelapseError(int code);
 }
 
 class _AppLocalizationsDelegate

@@ -726,4 +726,18 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get playSoundSent => '모니터로 소리를 보냈습니다';
+
+  @override
+  String get tooltipTimelapse => '하루 타임랩스';
+
+  @override
+  String get timelapseBuilding => '오늘의 타임랩스를 만드는 중…';
+
+  @override
+  String get timelapseEmpty => '오늘은 아직 프레임이 충분하지 않습니다';
+
+  @override
+  String timelapseError(int code) {
+    return '타임랩스를 만들지 못했습니다(오류 $code)';
+  }
 }

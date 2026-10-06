@@ -71,12 +71,80 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
   }
 
   void _playVideo(Map<String, dynamic> replay) {
-    final l10n = AppLocalizations.of(context)!;
     // The server returns a signed, file-scoped URL (short-lived token).
     // Fallback for older servers: put the session token into the URL.
     final signedPath =
         replay['url'] as String? ?? '/api/replays/${replay['filename']}?token=${widget.token}';
-    final url = '${widget.serverIp}$signedPath';
+    _showVideoDialog(
+      url: '${widget.serverIp}$signedPath',
+      heroTag: 'replay-${replay['filename']}',
+    );
+  }
+
+  /// Build today's timelapse on the server (cached there) and play it.
+  Future<void> _openTimelapse() async {
+    final l10n = AppLocalizations.of(context)!;
+    // ffmpeg can take a while on a first build — show that we are working.
+    final navigator = Navigator.of(context, rootNavigator: true);
+    final messenger = ScaffoldMessenger.of(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(height: 16),
+              Text(l10n.timelapseBuilding, textAlign: TextAlign.center),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    try {
+      final response = await http
+          .get(
+            Uri.parse('${widget.serverIp}/api/timelapse'),
+            headers: {'x-api-token': widget.token},
+          )
+          .timeout(const Duration(seconds: 60));
+
+      navigator.pop(); // close the loading dialog
+      if (!mounted) return;
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final signedPath = data['url'] as String? ?? '';
+        _showVideoDialog(
+          url: '${widget.serverIp}$signedPath',
+          heroTag: 'timelapse-${data['filename']}',
+        );
+      } else if (response.statusCode == 404) {
+        messenger.showSnackBar(SnackBar(content: Text(l10n.timelapseEmpty)));
+      } else {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.timelapseError(response.statusCode))),
+        );
+      }
+    } catch (e) {
+      navigator.pop(); // close the loading dialog
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.replaysNetworkError(e.toString()))),
+      );
+    }
+  }
+
+  void _showVideoDialog({required String url, String? heroTag}) {
+    final l10n = AppLocalizations.of(context)!;
+    Widget player = Container(
+      color: Colors.black,
+      child: VideoPlayerWidget(videoUrl: url),
+    );
+    if (heroTag != null) player = Hero(tag: heroTag, child: player);
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -87,15 +155,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(
-                child: Hero(
-                  tag: 'replay-${replay['filename']}',
-                  child: Container(
-                    color: Colors.black,
-                    child: VideoPlayerWidget(videoUrl: url),
-                  ),
-                ),
-              ),
+              Flexible(child: player),
               Container(
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 padding: const EdgeInsets.all(8.0),
@@ -271,10 +331,20 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      tooltip: l10n.tooltipRefresh,
-                      onPressed: () => _fetchReplays(haptic: true),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.timelapse),
+                          tooltip: l10n.tooltipTimelapse,
+                          onPressed: _openTimelapse,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.refresh),
+                          tooltip: l10n.tooltipRefresh,
+                          onPressed: () => _fetchReplays(haptic: true),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -285,11 +355,23 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
           )
         : Scaffold(
             backgroundColor: Colors.transparent,
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => _fetchReplays(haptic: true),
-              tooltip: l10n.tooltipRefresh,
-              mini: true,
-              child: const Icon(Icons.refresh),
+            floatingActionButton: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton(
+                  onPressed: _openTimelapse,
+                  tooltip: l10n.tooltipTimelapse,
+                  mini: true,
+                  child: const Icon(Icons.timelapse),
+                ),
+                const SizedBox(height: 12),
+                FloatingActionButton(
+                  onPressed: () => _fetchReplays(haptic: true),
+                  tooltip: l10n.tooltipRefresh,
+                  mini: true,
+                  child: const Icon(Icons.refresh),
+                ),
+              ],
             ),
             body: content,
           );

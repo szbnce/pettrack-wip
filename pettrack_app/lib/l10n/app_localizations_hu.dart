@@ -735,4 +735,18 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get playSoundSent => 'Hang elküldve a monitorra';
+
+  @override
+  String get tooltipTimelapse => 'Napi timelapse';
+
+  @override
+  String get timelapseBuilding => 'A nap timelapse-ének építése…';
+
+  @override
+  String get timelapseEmpty => 'Még nincs elég képkocka mára';
+
+  @override
+  String timelapseError(int code) {
+    return 'A timelapse elkészítése nem sikerült ($code hiba)';
+  }
 }

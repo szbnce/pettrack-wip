@@ -351,5 +351,16 @@
   "changelogBody": "1.0.0\n• 대시보드의 '오늘의 요약'\n• 알림 방해 금지 시간대\n• Home Assistant 연동\n• Material 3 디자인",
   "tooltipPlaySound": "소리 재생",
   "tooltipSnapshot": "스냅샷 찍기",
-  "playSoundSent": "모니터로 소리를 보냈습니다"
+  "playSoundSent": "모니터로 소리를 보냈습니다",
+  "tooltipTimelapse": "하루 타임랩스",
+  "timelapseBuilding": "오늘의 타임랩스를 만드는 중…",
+  "timelapseEmpty": "오늘은 아직 프레임이 충분하지 않습니다",
+  "timelapseError": "타임랩스를 만들지 못했습니다(오류 {code})",
+  "@timelapseError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  }
 }

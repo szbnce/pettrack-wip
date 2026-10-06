@@ -351,5 +351,16 @@
   "changelogBody": "1.0.0\n• „Tagesrückblick“ auf dem Dashboard\n• Ruhezeiten für Benachrichtigungen\n• Home-Assistant-Integration\n• Material-3-Design",
   "tooltipPlaySound": "Ton abspielen",
   "tooltipSnapshot": "Snapshot aufnehmen",
-  "playSoundSent": "Ton an den Monitor gesendet"
+  "playSoundSent": "Ton an den Monitor gesendet",
+  "tooltipTimelapse": "Tages-Timelapse",
+  "timelapseBuilding": "Timelapse des Tages wird erstellt…",
+  "timelapseEmpty": "Heute noch nicht genug Bilder",
+  "timelapseError": "Timelapse konnte nicht erstellt werden (Fehler {code})",
+  "@timelapseError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  }
 }

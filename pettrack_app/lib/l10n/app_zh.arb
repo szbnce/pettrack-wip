@@ -351,5 +351,16 @@
   "changelogBody": "1.0.0\n• 仪表板上的“今日回顾”\n• 通知免打扰时段\n• Home Assistant 集成\n• Material 3 设计",
   "tooltipPlaySound": "播放声音",
   "tooltipSnapshot": "截取快照",
-  "playSoundSent": "声音已发送到监视器"
+  "playSoundSent": "声音已发送到监视器",
+  "tooltipTimelapse": "每日延时",
+  "timelapseBuilding": "正在生成今天的延时视频…",
+  "timelapseEmpty": "今天的帧还不够",
+  "timelapseError": "无法生成延时视频（错误 {code}）",
+  "@timelapseError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  }
 }

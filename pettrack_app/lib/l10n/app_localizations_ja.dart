@@ -728,4 +728,18 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get playSoundSent => 'モニターに音を送信しました';
+
+  @override
+  String get tooltipTimelapse => '1日のタイムラプス';
+
+  @override
+  String get timelapseBuilding => 'その日のタイムラプスを作成中…';
+
+  @override
+  String get timelapseEmpty => '今日はまだフレームが足りません';
+
+  @override
+  String timelapseError(int code) {
+    return 'タイムラプスを作成できませんでした（エラー $code）';
+  }
 }

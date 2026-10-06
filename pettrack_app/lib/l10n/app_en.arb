@@ -352,6 +352,17 @@
   "tooltipPlaySound": "Play a sound",
   "tooltipSnapshot": "Take a snapshot",
   "playSoundSent": "Sound sent to the monitor",
+  "tooltipTimelapse": "Day timelapse",
+  "timelapseBuilding": "Building the day's timelapse…",
+  "timelapseEmpty": "Not enough frames yet today",
+  "timelapseError": "Could not build the timelapse (error {code})",
+  "@timelapseError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
   "@batteryLowBody": {
     "placeholders": {
       "level": {

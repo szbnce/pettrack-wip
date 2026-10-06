@@ -20,6 +20,7 @@ from dotenv import load_dotenv, set_key
 from pydantic import BaseModel
 from manager import client_manager
 import mqtt_bridge
+import timelapse
 
 load_dotenv()
 
@@ -104,6 +105,7 @@ def update_latest_frame(data: bytes):
     latest_frame_info["data"] = data
     latest_frame_info["timestamp"] = time.time()
     mqtt_bridge.bridge.publish_frame(data)
+    timelapse.maybe_sample(data)
 
 def frame_media_type(data: bytes) -> str:
     """JPEG or PNG, whichever the monitor actually sent."""
@@ -318,9 +320,13 @@ async def list_replays():
     files = []
     for filename in os.listdir(folder):
         if filename.endswith(".mp4"):
-            # Recaps live in the same folder so the existing signed-URL
-            # endpoint can serve them, but they are not events themselves.
-            if filename.startswith("highlight_") or filename.endswith("_raw.mp4"):
+            # Recaps and timelapses live in the same folder so the existing
+            # signed-URL endpoint can serve them, but they are not events.
+            if (
+                filename.startswith("highlight_")
+                or filename.startswith("timelapse_")
+                or filename.endswith("_raw.mp4")
+            ):
                 continue
             file_path = os.path.join(folder, filename)
             files.append({
@@ -361,6 +367,32 @@ async def get_daily_highlight(date: str = Query(default=None)):
     return {
         "date": result["date"],
         "clip_count": result["clip_count"],
+        "filename": result["filename"],
+        "url": f"/api/replays/{result['filename']}?token={mint_media_token(result['filename'])}",
+    }
+
+@router.get("/api/timelapse")
+async def get_timelapse(date: str = Query(default=None)):
+    """Daily timelapse: the day's sampled stills stitched into one clip.
+
+    Built on demand and cached in replays/timelapse_<date>.mp4; returns 404
+    when the day has too few stills (or ffmpeg is unavailable).
+    """
+    if date is None:
+        day = None
+    else:
+        try:
+            day = datetime.strptime(date, "%Y-%m-%d").date()
+        except ValueError:
+            raise HTTPException(status_code=400, detail="date must be YYYY-MM-DD")
+
+    result = await asyncio.to_thread(timelapse.build_timelapse, day)
+    if result is None:
+        raise HTTPException(status_code=404, detail="not enough frames for this day")
+
+    return {
+        "date": result["date"],
+        "frame_count": result["frame_count"],
         "filename": result["filename"],
         "url": f"/api/replays/{result['filename']}?token={mint_media_token(result['filename'])}",
     }

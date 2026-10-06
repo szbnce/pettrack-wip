@@ -739,4 +739,18 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get playSoundSent => 'Suono inviato al monitor';
+
+  @override
+  String get tooltipTimelapse => 'Timelapse del giorno';
+
+  @override
+  String get timelapseBuilding => 'Creazione della timelapse del giorno…';
+
+  @override
+  String get timelapseEmpty => 'Non ci sono ancora abbastanza fotogrammi oggi';
+
+  @override
+  String timelapseError(int code) {
+    return 'Impossibile creare la timelapse (errore $code)';
+  }
 }

@@ -251,5 +251,16 @@
   "changelogBody": "1.0.0\n• „Mai összefoglaló” a kezdőképernyőn\n• Csendes órák a riasztásokhoz\n• Home Assistant integráció\n• Material 3 arculat",
   "tooltipPlaySound": "Hang lejátszása",
   "tooltipSnapshot": "Pillanatkép készítése",
-  "playSoundSent": "Hang elküldve a monitorra"
+  "playSoundSent": "Hang elküldve a monitorra",
+  "tooltipTimelapse": "Napi timelapse",
+  "timelapseBuilding": "A nap timelapse-ének építése…",
+  "timelapseEmpty": "Még nincs elég képkocka mára",
+  "timelapseError": "A timelapse elkészítése nem sikerült ({code} hiba)",
+  "@timelapseError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  }
 }

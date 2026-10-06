@@ -734,4 +734,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get playSoundSent => 'Sound sent to the monitor';
+
+  @override
+  String get tooltipTimelapse => 'Day timelapse';
+
+  @override
+  String get timelapseBuilding => 'Building the day\'s timelapse…';
+
+  @override
+  String get timelapseEmpty => 'Not enough frames yet today';
+
+  @override
+  String timelapseError(int code) {
+    return 'Could not build the timelapse (error $code)';
+  }
 }
