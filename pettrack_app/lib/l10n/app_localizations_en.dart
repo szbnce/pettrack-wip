@@ -705,4 +705,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get versionServerOlder => 'The app is newer — update the server';
+
+  @override
+  String get privacyButton => 'Privacy';
+
+  @override
+  String get privacyTitle => 'Privacy';
+
+  @override
+  String get privacyBody =>
+      'PetTrack is fully self-hosted — your camera feed, recordings and pet data stay on your own server.\n\n• No cloud, nothing is uploaded anywhere\n• No account — there is no service to sign up for\n• No analytics or tracking\n• LAN-only by default; remote access is only what you set up yourself';
+
+  @override
+  String get whatsNewButton => 'What\'s new';
+
+  @override
+  String get whatsNewTitle => 'What\'s new';
+
+  @override
+  String get changelogBody =>
+      '1.0.0\n• Today\'s recap on the dashboard\n• Quiet hours for alerts\n• Home Assistant integration\n• Material 3 redesign';
 }

@@ -1403,6 +1403,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The app is newer — update the server'**
   String get versionServerOlder;
+
+  /// No description provided for @privacyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacyButton;
+
+  /// No description provided for @privacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacyTitle;
+
+  /// No description provided for @privacyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'PetTrack is fully self-hosted — your camera feed, recordings and pet data stay on your own server.\n\n• No cloud, nothing is uploaded anywhere\n• No account — there is no service to sign up for\n• No analytics or tracking\n• LAN-only by default; remote access is only what you set up yourself'**
+  String get privacyBody;
+
+  /// No description provided for @whatsNewButton.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new'**
+  String get whatsNewButton;
+
+  /// No description provided for @whatsNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new'**
+  String get whatsNewTitle;
+
+  /// No description provided for @changelogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'1.0.0\n• Today\'s recap on the dashboard\n• Quiet hours for alerts\n• Home Assistant integration\n• Material 3 redesign'**
+  String get changelogBody;
 }
 
 class _AppLocalizationsDelegate

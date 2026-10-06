@@ -706,4 +706,24 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get versionServerOlder => 'Az app újabb — frissítsd a szervert';
+
+  @override
+  String get privacyButton => 'Adatvédelem';
+
+  @override
+  String get privacyTitle => 'Adatvédelem';
+
+  @override
+  String get privacyBody =>
+      'A PetTrack teljesen saját üzemeltetésű — a kamera képe, a felvételek és a kedvenc adatai a te szervereden maradnak.\n\n• Nincs felhő, semmi nem megy sehova\n• Nincs fiók — nincs szolgáltatás, ahová regisztrálni kellene\n• Nincs analitika vagy követés\n• Alapból csak helyi hálózat; a távoli elérés csak az, amit te állítasz be';
+
+  @override
+  String get whatsNewButton => 'Újdonságok';
+
+  @override
+  String get whatsNewTitle => 'Újdonságok';
+
+  @override
+  String get changelogBody =>
+      '1.0.0\n• „Mai összefoglaló” a kezdőképernyőn\n• Csendes órák a riasztásokhoz\n• Home Assistant integráció\n• Material 3 arculat';
 }

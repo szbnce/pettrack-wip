@@ -90,7 +90,7 @@ then the one killer feature, then the ecosystem that makes it a real product,
 then the wow features, then platform extras. Each phase lands green
 (analyzer + tests + i18n parity) before the next starts.
 
-### Phase 1 — Design language *(current)*
+### Phase 1 — Design language *(done)*
 1. Bundle brand fonts as assets (offline-safe; drop runtime font fetch)
 2. Full Material 3 colour roles + component theme depth (both modes)
 3. Native splash + refined app icon
@@ -98,18 +98,18 @@ then the wow features, then platform extras. Each phase lands green
    pull-to-refresh, haptics
 5. Accessibility quick pass (semantics/tooltips, tap targets)
 
-### Phase 2 — Daily highlight (killer feature)
+### Phase 2 — Daily highlight (killer feature) *(done)*
 6. Server: stitch the day's motion events into one recap clip + thumbnail
 7. App: "Berci's day" card on the dashboard, share sheet, retention setting
 
-### Phase 3 — Ecosystem & trust
-8. Rich notifications (ntfy) + quiet hours + test-notification button
+### Phase 3 — Ecosystem & trust *(done)*
+8. Rich notifications + quiet hours + test-notification button
 9. Home Assistant via MQTT discovery (camera + motion + battery entities)
 10. One-line install script + optional Caddy HTTPS; update-check screen
 11. Privacy / about page ("self-hosted — nothing leaves your house") +
     version & changelog in the UI
 
-### Phase 4 — Wow features
+### Phase 4 — Wow features *(current)*
 12. Two-way audio (talk-back) and/or "play a sound" button
 13. Timelapse mode for the monitor phone
 14. Night / low-light enhancement toggle

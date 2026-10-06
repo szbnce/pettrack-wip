@@ -710,4 +710,24 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get versionServerOlder =>
       'Die App ist neuer — bitte den Server aktualisieren';
+
+  @override
+  String get privacyButton => 'Datenschutz';
+
+  @override
+  String get privacyTitle => 'Datenschutz';
+
+  @override
+  String get privacyBody =>
+      'PetTrack ist komplett selbst gehostet — Kamerabild, Aufnahmen und Tierdaten bleiben auf deinem eigenen Server.\n\n• Keine Cloud, nichts wird irgendwohin hochgeladen\n• Kein Konto — es gibt keinen Dienst, bei dem man sich anmeldet\n• Keine Analyse oder Nachverfolgung\n• Standardmäßig nur im LAN; Fernzugriff nur, wenn du ihn selbst einrichtest';
+
+  @override
+  String get whatsNewButton => 'Neuigkeiten';
+
+  @override
+  String get whatsNewTitle => 'Neuigkeiten';
+
+  @override
+  String get changelogBody =>
+      '1.0.0\n• „Tagesrückblick“ auf dem Dashboard\n• Ruhezeiten für Benachrichtigungen\n• Home-Assistant-Integration\n• Material-3-Design';
 }

@@ -694,6 +694,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  void _showInfoDialog(String title, String body) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return AlertDialog(
+          title: Text(title),
+          content: SingleChildScrollView(child: Text(body)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.close),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildAboutCard(AppLocalizations l10n) {
     return _buildCard(l10n.aboutCardTitle, [
       _versionRow(l10n.versionAppLabel, kAppVersion),
@@ -716,6 +735,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
               : const Icon(Icons.system_update),
           label: Text(l10n.versionCheckButton),
         ),
+      ),
+      const SizedBox(height: 4),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton.icon(
+            onPressed: () =>
+                _showInfoDialog(l10n.privacyTitle, l10n.privacyBody),
+            icon: const Icon(Icons.shield_outlined),
+            label: Text(l10n.privacyButton),
+          ),
+          TextButton.icon(
+            onPressed: () =>
+                _showInfoDialog(l10n.whatsNewTitle, l10n.changelogBody),
+            icon: const Icon(Icons.celebration_outlined),
+            label: Text(l10n.whatsNewButton),
+          ),
+        ],
       ),
     ]);
   }

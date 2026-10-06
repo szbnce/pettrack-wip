@@ -697,4 +697,24 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get versionServerOlder => '앱이 더 최신입니다 — 서버를 업데이트하세요';
+
+  @override
+  String get privacyButton => '개인정보 보호';
+
+  @override
+  String get privacyTitle => '개인정보 보호';
+
+  @override
+  String get privacyBody =>
+      'PetTrack은 완전한 셀프 호스팅입니다 — 카메라 영상, 녹화, 반려동물 데이터는 모두 내 서버에만 있습니다.\n\n• 클라우드 없음, 어디에도 업로드되지 않음\n• 계정 없음 — 가입할 서비스가 없음\n• 분석 및 추적 없음\n• 기본은 로컬 네트워크 전용, 원격 접속은 직접 설정한 경우만';
+
+  @override
+  String get whatsNewButton => '새로운 기능';
+
+  @override
+  String get whatsNewTitle => '새로운 기능';
+
+  @override
+  String get changelogBody =>
+      '1.0.0\n• 대시보드의 \'오늘의 요약\'\n• 알림 방해 금지 시간대\n• Home Assistant 연동\n• Material 3 디자인';
 }

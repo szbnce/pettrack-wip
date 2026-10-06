@@ -695,4 +695,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get versionServerOlder => '应用版本较新 — 请更新服务器';
+
+  @override
+  String get privacyButton => '隐私';
+
+  @override
+  String get privacyTitle => '隐私';
+
+  @override
+  String get privacyBody =>
+      'PetTrack 完全自托管 — 摄像头画面、录像和宠物数据都留在你自己的服务器上。\n\n• 没有云端，任何内容都不会上传\n• 没有账户 — 无需注册任何服务\n• 没有分析或追踪\n• 默认仅限局域网；远程访问仅限你自己配置的内容';
+
+  @override
+  String get whatsNewButton => '新功能';
+
+  @override
+  String get whatsNewTitle => '新功能';
+
+  @override
+  String get changelogBody =>
+      '1.0.0\n• 仪表板上的“今日回顾”\n• 通知免打扰时段\n• Home Assistant 集成\n• Material 3 设计';
 }

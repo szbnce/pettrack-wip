@@ -342,5 +342,11 @@
   "versionUnknown": "Nicht verbunden",
   "versionMatch": "App und Server sind synchron",
   "versionAppOlder": "Der Server ist neuer — bitte die App aktualisieren",
-  "versionServerOlder": "Die App ist neuer — bitte den Server aktualisieren"
+  "versionServerOlder": "Die App ist neuer — bitte den Server aktualisieren",
+  "privacyButton": "Datenschutz",
+  "privacyTitle": "Datenschutz",
+  "privacyBody": "PetTrack ist komplett selbst gehostet — Kamerabild, Aufnahmen und Tierdaten bleiben auf deinem eigenen Server.\n\n• Keine Cloud, nichts wird irgendwohin hochgeladen\n• Kein Konto — es gibt keinen Dienst, bei dem man sich anmeldet\n• Keine Analyse oder Nachverfolgung\n• Standardmäßig nur im LAN; Fernzugriff nur, wenn du ihn selbst einrichtest",
+  "whatsNewButton": "Neuigkeiten",
+  "whatsNewTitle": "Neuigkeiten",
+  "changelogBody": "1.0.0\n• „Tagesrückblick“ auf dem Dashboard\n• Ruhezeiten für Benachrichtigungen\n• Home-Assistant-Integration\n• Material-3-Design"
 }
