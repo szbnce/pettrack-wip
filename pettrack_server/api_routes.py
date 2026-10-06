@@ -44,6 +44,10 @@ fernet = Fernet(get_fernet_key(SECRET_TOKEN))
 JWT_TTL_SECONDS = 86400 * 3650
 MEDIA_TOKEN_TTL_SECONDS = 3600
 
+# Reported by /api/version so the apps can show "Server vX" and warn when the
+# two sides are out of step. Keep in sync with the app's kAppVersion.
+SERVER_VERSION = "1.0.0"
+
 def mint_token() -> str:
     return jwt.encode(
         {"auth": "ok", "exp": time.time() + JWT_TTL_SECONDS},
@@ -135,6 +139,11 @@ async def health():
     the UI can say "server unreachable" vs "wrong token".
     """
     return {"ok": True, "name": socket.gethostname() or "pettrack"}
+
+@auth_router.get("/api/version")
+async def get_version():
+    """Unauthenticated version probe for the apps' update check."""
+    return {"version": SERVER_VERSION, "name": socket.gethostname() or "pettrack"}
 
 @router.post("/api/frame/web")
 async def receive_web_frame(request: Request, token: str = ""):

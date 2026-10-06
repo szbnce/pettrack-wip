@@ -671,4 +671,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String batteryLowBody(int level) {
     return '电量剩余 $level%';
   }
+
+  @override
+  String get aboutCardTitle => '关于与更新';
+
+  @override
+  String get versionAppLabel => '应用';
+
+  @override
+  String get versionServerLabel => '服务器';
+
+  @override
+  String get versionCheckButton => '立即检查';
+
+  @override
+  String get versionUnknown => '未连接';
+
+  @override
+  String get versionMatch => '应用与服务器版本一致';
+
+  @override
+  String get versionAppOlder => '服务器版本较新 — 请更新应用';
+
+  @override
+  String get versionServerOlder => '应用版本较新 — 请更新服务器';
 }

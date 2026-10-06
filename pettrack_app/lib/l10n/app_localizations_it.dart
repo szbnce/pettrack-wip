@@ -686,4 +686,28 @@ class AppLocalizationsIt extends AppLocalizations {
   String batteryLowBody(int level) {
     return 'Batteria al $level%';
   }
+
+  @override
+  String get aboutCardTitle => 'Informazioni e aggiornamenti';
+
+  @override
+  String get versionAppLabel => 'App';
+
+  @override
+  String get versionServerLabel => 'Server';
+
+  @override
+  String get versionCheckButton => 'Controlla ora';
+
+  @override
+  String get versionUnknown => 'Non connesso';
+
+  @override
+  String get versionMatch => 'App e server sono allineati';
+
+  @override
+  String get versionAppOlder => 'Il server è più recente — aggiorna l\'app';
+
+  @override
+  String get versionServerOlder => 'L\'app è più recente — aggiorna il server';
 }

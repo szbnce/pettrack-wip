@@ -164,6 +164,20 @@ survives container rebuilds.
 
 #### Option B — Native (Linux, Windows, macOS)
 
+> **The short way (Linux):** one command does the whole server setup —
+> system packages, Python environment, dependencies, optionally a systemd
+> service and HTTPS:
+>
+> ```sh
+> curl -fsSL https://raw.githubusercontent.com/szbnce/PetTrack/main/setup_server.sh | bash
+> ```
+>
+> or, from a cloned repo, with the extras:
+>
+> ```sh
+> ./setup_server.sh --systemd --https pettrack.home.arpa
+> ```
+
 1. Clone the repo
    ```sh
    git clone https://github.com/szbnce/PetTrack.git
@@ -185,6 +199,24 @@ Your server is now reachable at `http://<server_ip>:8000` (server API + web dash
 
 > Building the phone apps yourself? Install the [Flutter SDK](https://docs.flutter.dev/get-started/install)
 > as well — the web dashboard build in step 3 needs it.
+
+#### HTTPS on the LAN (optional but recommended)
+
+Plain HTTP means anyone on the same Wi-Fi can watch the camera stream. The
+setup script can put [Caddy](https://caddyserver.com) in front of the server
+with automatic TLS:
+
+```sh
+./setup_server.sh --https pettrack.home.arpa
+```
+
+* Real domains get Let's Encrypt certificates automatically.
+* LAN-only names (`*.home.arpa`, `*.local`, `*.lan`, `*.internal`) get a
+  private Caddy CA certificate instead — run `sudo caddy trust` on the server
+  and install the root CA on each phone once.
+
+Then connect the app with `https://pettrack.home.arpa` — it switches the live
+stream to `wss://` automatically.
 
 #### First steps (both options)
 

@@ -335,6 +335,14 @@
   "quietHoursTo": "Until",
   "batteryLowTitle": "Low battery",
   "batteryLowBody": "Battery at {level}%",
+  "aboutCardTitle": "About & updates",
+  "versionAppLabel": "App",
+  "versionServerLabel": "Server",
+  "versionCheckButton": "Check now",
+  "versionUnknown": "Not connected",
+  "versionMatch": "App and server versions match",
+  "versionAppOlder": "The server is newer — update the app",
+  "versionServerOlder": "The app is newer — update the server",
   "@batteryLowBody": {
     "placeholders": {
       "level": {

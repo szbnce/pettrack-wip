@@ -673,4 +673,28 @@ class AppLocalizationsKo extends AppLocalizations {
   String batteryLowBody(int level) {
     return '배터리 잔량 $level%';
   }
+
+  @override
+  String get aboutCardTitle => '정보 및 업데이트';
+
+  @override
+  String get versionAppLabel => '앱';
+
+  @override
+  String get versionServerLabel => '서버';
+
+  @override
+  String get versionCheckButton => '지금 확인';
+
+  @override
+  String get versionUnknown => '연결되지 않음';
+
+  @override
+  String get versionMatch => '앱과 서버 버전이 일치합니다';
+
+  @override
+  String get versionAppOlder => '서버가 더 최신입니다 — 앱을 업데이트하세요';
+
+  @override
+  String get versionServerOlder => '앱이 더 최신입니다 — 서버를 업데이트하세요';
 }

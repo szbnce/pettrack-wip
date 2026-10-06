@@ -334,5 +334,13 @@
   "quietHoursFrom": "Von",
   "quietHoursTo": "Bis",
   "batteryLowTitle": "Niedriger Akkustand",
-  "batteryLowBody": "Akku bei {level} %"
+  "batteryLowBody": "Akku bei {level} %",
+  "aboutCardTitle": "Über & Updates",
+  "versionAppLabel": "App",
+  "versionServerLabel": "Server",
+  "versionCheckButton": "Jetzt prüfen",
+  "versionUnknown": "Nicht verbunden",
+  "versionMatch": "App und Server sind synchron",
+  "versionAppOlder": "Der Server ist neuer — bitte die App aktualisieren",
+  "versionServerOlder": "Die App ist neuer — bitte den Server aktualisieren"
 }

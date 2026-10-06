@@ -675,4 +675,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String batteryLowBody(int level) {
     return 'バッテリー残量 $level%';
   }
+
+  @override
+  String get aboutCardTitle => 'バージョンとアップデート';
+
+  @override
+  String get versionAppLabel => 'アプリ';
+
+  @override
+  String get versionServerLabel => 'サーバー';
+
+  @override
+  String get versionCheckButton => '今すぐ確認';
+
+  @override
+  String get versionUnknown => '未接続';
+
+  @override
+  String get versionMatch => 'アプリとサーバーのバージョンは一致しています';
+
+  @override
+  String get versionAppOlder => 'サーバーの方が新しいです — アプリを更新してください';
+
+  @override
+  String get versionServerOlder => 'アプリの方が新しいです — サーバーを更新してください';
 }

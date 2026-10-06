@@ -1355,6 +1355,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Battery at {level}%'**
   String batteryLowBody(int level);
+
+  /// No description provided for @aboutCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About & updates'**
+  String get aboutCardTitle;
+
+  /// No description provided for @versionAppLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get versionAppLabel;
+
+  /// No description provided for @versionServerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Server'**
+  String get versionServerLabel;
+
+  /// No description provided for @versionCheckButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Check now'**
+  String get versionCheckButton;
+
+  /// No description provided for @versionUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected'**
+  String get versionUnknown;
+
+  /// No description provided for @versionMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'App and server versions match'**
+  String get versionMatch;
+
+  /// No description provided for @versionAppOlder.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is newer — update the app'**
+  String get versionAppOlder;
+
+  /// No description provided for @versionServerOlder.
+  ///
+  /// In en, this message translates to:
+  /// **'The app is newer — update the server'**
+  String get versionServerOlder;
 }
 
 class _AppLocalizationsDelegate

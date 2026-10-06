@@ -147,3 +147,14 @@ def test_health_is_public_even_with_any_token(client):
     media_tok = client.get("/api/replays", headers={"x-api-token": tok}).json()["replays"]
     stolen = media_tok[0]["url"].split("token=")[1]
     assert client.get(f"/api/health?token={stolen}").status_code == 200
+
+
+# --- public version endpoint (app update check) ------------------------------
+
+def test_version_needs_no_token(client):
+    r = client.get("/api/version")
+    assert r.status_code == 200
+    body = r.json()
+    # Dotted version, e.g. "1.0.0" — the app compares against its own.
+    assert body["version"].count(".") == 2
+    assert isinstance(body["name"], str) and body["name"]

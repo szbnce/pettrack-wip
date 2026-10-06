@@ -334,5 +334,13 @@
   "quietHoursFrom": "開始",
   "quietHoursTo": "終了",
   "batteryLowTitle": "バッテリー残量低下",
-  "batteryLowBody": "バッテリー残量 {level}%"
+  "batteryLowBody": "バッテリー残量 {level}%",
+  "aboutCardTitle": "バージョンとアップデート",
+  "versionAppLabel": "アプリ",
+  "versionServerLabel": "サーバー",
+  "versionCheckButton": "今すぐ確認",
+  "versionUnknown": "未接続",
+  "versionMatch": "アプリとサーバーのバージョンは一致しています",
+  "versionAppOlder": "サーバーの方が新しいです — アプリを更新してください",
+  "versionServerOlder": "アプリの方が新しいです — サーバーを更新してください"
 }

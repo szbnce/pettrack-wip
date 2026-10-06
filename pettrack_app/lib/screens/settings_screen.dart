@@ -4,7 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
+import '../app_info.dart';
 import '../theme/colors.dart';
+import '../utils/server_url.dart';
 import '../main.dart';
 import 'main_navigation.dart';
 import '../services/notification_service.dart';
@@ -33,6 +35,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _quietHoursEnabled = false;
   int _quietHoursFrom = 23 * 60;
   int _quietHoursTo = 7 * 60;
+  String? _serverVersion;
+  bool _checkingVersion = false;
   bool _isLoading = true;
 
   String _getLocalizedPetType(BuildContext context, String type) {
@@ -108,6 +112,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           );
         }
       }
+    }
+
+    if (ip.isNotEmpty) {
+      _checkServerVersion();
     }
 
     if (mounted) {
@@ -641,6 +649,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  /// Fetches /api/version from the configured server and keeps the result
+  /// for the About card's update check.
+  Future<void> _checkServerVersion() async {
+    final raw = _ipController.text.trim();
+    if (raw.isEmpty) return;
+    setState(() => _checkingVersion = true);
+    final base = normalizeServerUrl(raw);
+    String? version;
+    try {
+      final response = await http
+          .get(Uri.parse('$base/api/version'))
+          .timeout(const Duration(seconds: 4));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        version = data['version'] as String?;
+      }
+    } catch (_) {}
+    if (!mounted) return;
+    setState(() {
+      _serverVersion = version;
+      _checkingVersion = false;
+    });
+  }
+
+  String _versionStatus(AppLocalizations l10n) {
+    final server = _serverVersion;
+    if (server == null) return l10n.versionUnknown;
+    final cmp = compareVersions(kAppVersion, server);
+    if (cmp == 0) return l10n.versionMatch;
+    return cmp < 0 ? l10n.versionAppOlder : l10n.versionServerOlder;
+  }
+
+  Widget _versionRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: Theme.of(context).textTheme.labelLarge),
+          Text(value, style: Theme.of(context).textTheme.titleSmall),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAboutCard(AppLocalizations l10n) {
+    return _buildCard(l10n.aboutCardTitle, [
+      _versionRow(l10n.versionAppLabel, kAppVersion),
+      _versionRow(
+        l10n.versionServerLabel,
+        _serverVersion ?? l10n.versionUnknown,
+      ),
+      const SizedBox(height: 8),
+      Text(_versionStatus(l10n), style: Theme.of(context).textTheme.bodySmall),
+      const SizedBox(height: 12),
+      Center(
+        child: OutlinedButton.icon(
+          onPressed: _checkingVersion ? null : _checkServerVersion,
+          icon: _checkingVersion
+              ? const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.system_update),
+          label: Text(l10n.versionCheckButton),
+        ),
+      ),
+    ]);
+  }
+
   Widget _buildMonitorCard(AppLocalizations l10n) {
     return _buildCard(l10n.monitorAndConnection, [
       Text(l10n.serverIp, style: Theme.of(context).textTheme.labelLarge),
@@ -873,6 +952,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildMonitorCard(l10n),
+                              _buildAboutCard(l10n),
                               _buildSaveButton(l10n),
                               _buildSyncToWatchButton(context),
                             ],
@@ -907,6 +987,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _buildProfileCard(l10n),
                     _buildAlertsCard(l10n),
                     _buildMonitorCard(l10n),
+                    _buildAboutCard(l10n),
                     const SizedBox(height: 16),
                     _buildSaveButton(l10n),
                     _buildSyncToWatchButton(context),

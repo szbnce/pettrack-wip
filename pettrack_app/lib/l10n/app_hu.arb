@@ -234,5 +234,13 @@
   "quietHoursFrom": "Ettől",
   "quietHoursTo": "Eddig",
   "batteryLowTitle": "Alacsony akkumulátor",
-  "batteryLowBody": "Akkumulátor: {level}%"
+  "batteryLowBody": "Akkumulátor: {level}%",
+  "aboutCardTitle": "Névjegy és frissítések",
+  "versionAppLabel": "App",
+  "versionServerLabel": "Szerver",
+  "versionCheckButton": "Ellenőrzés most",
+  "versionUnknown": "Nincs kapcsolat",
+  "versionMatch": "Az app és a szerver szinkronban van",
+  "versionAppOlder": "A szerver újabb — frissítsd az appot",
+  "versionServerOlder": "Az app újabb — frissítsd a szervert"
 }

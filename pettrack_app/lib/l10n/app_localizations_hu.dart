@@ -682,4 +682,28 @@ class AppLocalizationsHu extends AppLocalizations {
   String batteryLowBody(int level) {
     return 'Akkumulátor: $level%';
   }
+
+  @override
+  String get aboutCardTitle => 'Névjegy és frissítések';
+
+  @override
+  String get versionAppLabel => 'App';
+
+  @override
+  String get versionServerLabel => 'Szerver';
+
+  @override
+  String get versionCheckButton => 'Ellenőrzés most';
+
+  @override
+  String get versionUnknown => 'Nincs kapcsolat';
+
+  @override
+  String get versionMatch => 'Az app és a szerver szinkronban van';
+
+  @override
+  String get versionAppOlder => 'A szerver újabb — frissítsd az appot';
+
+  @override
+  String get versionServerOlder => 'Az app újabb — frissítsd a szervert';
 }

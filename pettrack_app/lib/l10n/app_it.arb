@@ -334,5 +334,13 @@
   "quietHoursFrom": "Dalle",
   "quietHoursTo": "Fino alle",
   "batteryLowTitle": "Batteria scarica",
-  "batteryLowBody": "Batteria al {level}%"
+  "batteryLowBody": "Batteria al {level}%",
+  "aboutCardTitle": "Informazioni e aggiornamenti",
+  "versionAppLabel": "App",
+  "versionServerLabel": "Server",
+  "versionCheckButton": "Controlla ora",
+  "versionUnknown": "Non connesso",
+  "versionMatch": "App e server sono allineati",
+  "versionAppOlder": "Il server è più recente — aggiorna l'app",
+  "versionServerOlder": "L'app è più recente — aggiorna il server"
 }

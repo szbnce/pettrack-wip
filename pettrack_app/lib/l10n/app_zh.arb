@@ -334,5 +334,13 @@
   "quietHoursFrom": "从",
   "quietHoursTo": "到",
   "batteryLowTitle": "电量不足",
-  "batteryLowBody": "电量剩余 {level}%"
+  "batteryLowBody": "电量剩余 {level}%",
+  "aboutCardTitle": "关于与更新",
+  "versionAppLabel": "应用",
+  "versionServerLabel": "服务器",
+  "versionCheckButton": "立即检查",
+  "versionUnknown": "未连接",
+  "versionMatch": "应用与服务器版本一致",
+  "versionAppOlder": "服务器版本较新 — 请更新应用",
+  "versionServerOlder": "应用版本较新 — 请更新服务器"
 }

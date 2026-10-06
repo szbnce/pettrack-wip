@@ -334,5 +334,13 @@
   "quietHoursFrom": "시작",
   "quietHoursTo": "종료",
   "batteryLowTitle": "배터리 부족",
-  "batteryLowBody": "배터리 잔량 {level}%"
+  "batteryLowBody": "배터리 잔량 {level}%",
+  "aboutCardTitle": "정보 및 업데이트",
+  "versionAppLabel": "앱",
+  "versionServerLabel": "서버",
+  "versionCheckButton": "지금 확인",
+  "versionUnknown": "연결되지 않음",
+  "versionMatch": "앱과 서버 버전이 일치합니다",
+  "versionAppOlder": "서버가 더 최신입니다 — 앱을 업데이트하세요",
+  "versionServerOlder": "앱이 더 최신입니다 — 서버를 업데이트하세요"
 }
