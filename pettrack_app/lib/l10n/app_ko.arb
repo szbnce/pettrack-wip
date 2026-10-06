@@ -324,5 +324,9 @@
   "discoveryTapToUse": "탭하여 연결",
   "tooltipRefresh": "새로 고침",
   "tooltipAdd": "추가",
-  "tooltipDelete": "삭제"
+  "tooltipDelete": "삭제",
+  "highlightTitle": "오늘의 하이라이트",
+  "highlightSubtitle": "오늘의 모든 순간을 한 클립에",
+  "highlightMoments": "순간 {count}개",
+  "highlightShare": "공유"
 }

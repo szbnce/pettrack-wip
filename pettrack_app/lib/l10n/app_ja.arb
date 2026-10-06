@@ -324,5 +324,9 @@
   "discoveryTapToUse": "タップして接続",
   "tooltipRefresh": "更新",
   "tooltipAdd": "追加",
-  "tooltipDelete": "削除"
+  "tooltipDelete": "削除",
+  "highlightTitle": "今日のまとめ",
+  "highlightSubtitle": "今日のすべての瞬間を1つのクリップに",
+  "highlightMoments": "{count} 件の瞬間",
+  "highlightShare": "共有"
 }

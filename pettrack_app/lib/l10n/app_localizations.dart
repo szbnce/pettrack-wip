@@ -1295,6 +1295,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get tooltipDelete;
+
+  /// No description provided for @highlightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s recap'**
+  String get highlightTitle;
+
+  /// No description provided for @highlightSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Every moment from today in one clip'**
+  String get highlightSubtitle;
+
+  /// No description provided for @highlightMoments.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} moments'**
+  String highlightMoments(Object count);
+
+  /// No description provided for @highlightShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get highlightShare;
 }
 
 class _AppLocalizationsDelegate

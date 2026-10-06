@@ -649,4 +649,18 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tooltipDelete => 'Löschen';
+
+  @override
+  String get highlightTitle => 'Zusammenfassung von heute';
+
+  @override
+  String get highlightSubtitle => 'Jeder Moment von heute in einem Clip';
+
+  @override
+  String highlightMoments(Object count) {
+    return '$count Momente';
+  }
+
+  @override
+  String get highlightShare => 'Teilen';
 }

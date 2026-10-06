@@ -324,5 +324,9 @@
   "discoveryTapToUse": "点按以连接",
   "tooltipRefresh": "刷新",
   "tooltipAdd": "添加",
-  "tooltipDelete": "删除"
+  "tooltipDelete": "删除",
+  "highlightTitle": "今日回顾",
+  "highlightSubtitle": "今天的每个瞬间，一支视频",
+  "highlightMoments": "{count} 个瞬间",
+  "highlightShare": "分享"
 }

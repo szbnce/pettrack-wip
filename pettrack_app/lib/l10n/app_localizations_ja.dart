@@ -641,4 +641,18 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tooltipDelete => '削除';
+
+  @override
+  String get highlightTitle => '今日のまとめ';
+
+  @override
+  String get highlightSubtitle => '今日のすべての瞬間を1つのクリップに';
+
+  @override
+  String highlightMoments(Object count) {
+    return '$count 件の瞬間';
+  }
+
+  @override
+  String get highlightShare => '共有';
 }

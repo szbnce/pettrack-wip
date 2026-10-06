@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../services/notification_service.dart';
+import '../widgets/highlight_card.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String serverIp;
@@ -1012,6 +1013,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               _buildCameraCard(l10n, true),
                               const SizedBox(height: 24),
+                              HighlightCard(
+                                serverIp: widget.serverIp,
+                                token: widget.token,
+                              ),
                               // Stats removed to unify design
                             ],
                           ),
@@ -1112,6 +1117,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 const SizedBox(height: 24),
 
+                HighlightCard(
+                  serverIp: widget.serverIp,
+                  token: widget.token,
+                ),
                 _buildCameraCard(l10n, false),
                 const SizedBox(height: 24),
 

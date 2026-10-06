@@ -224,5 +224,9 @@
   "discoveryTapToUse": "Koppints a csatlakozáshoz",
   "tooltipRefresh": "Frissítés",
   "tooltipAdd": "Hozzáadás",
-  "tooltipDelete": "Törlés"
+  "tooltipDelete": "Törlés",
+  "highlightTitle": "Mai összefoglaló",
+  "highlightSubtitle": "A mai összes pillanat egyetlen klipben",
+  "highlightMoments": "{count} pillanat",
+  "highlightShare": "Megosztás"
 }

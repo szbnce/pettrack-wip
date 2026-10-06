@@ -324,5 +324,9 @@
   "discoveryTapToUse": "Tippen zum Verbinden",
   "tooltipRefresh": "Aktualisieren",
   "tooltipAdd": "Hinzufügen",
-  "tooltipDelete": "Löschen"
+  "tooltipDelete": "Löschen",
+  "highlightTitle": "Zusammenfassung von heute",
+  "highlightSubtitle": "Jeder Moment von heute in einem Clip",
+  "highlightMoments": "{count} Momente",
+  "highlightShare": "Teilen"
 }

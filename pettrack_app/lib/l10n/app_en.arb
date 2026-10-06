@@ -324,5 +324,9 @@
   "discoveryTapToUse": "Tap to connect",
   "tooltipRefresh": "Refresh",
   "tooltipAdd": "Add",
-  "tooltipDelete": "Delete"
+  "tooltipDelete": "Delete",
+  "highlightTitle": "Today's recap",
+  "highlightSubtitle": "Every moment from today in one clip",
+  "highlightMoments": "{count} moments",
+  "highlightShare": "Share"
 }

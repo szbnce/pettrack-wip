@@ -639,4 +639,18 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get tooltipDelete => '삭제';
+
+  @override
+  String get highlightTitle => '오늘의 하이라이트';
+
+  @override
+  String get highlightSubtitle => '오늘의 모든 순간을 한 클립에';
+
+  @override
+  String highlightMoments(Object count) {
+    return '순간 $count개';
+  }
+
+  @override
+  String get highlightShare => '공유';
 }

@@ -647,4 +647,18 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get tooltipDelete => 'Törlés';
+
+  @override
+  String get highlightTitle => 'Mai összefoglaló';
+
+  @override
+  String get highlightSubtitle => 'A mai összes pillanat egyetlen klipben';
+
+  @override
+  String highlightMoments(Object count) {
+    return '$count pillanat';
+  }
+
+  @override
+  String get highlightShare => 'Megosztás';
 }

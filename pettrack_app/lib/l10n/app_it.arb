@@ -324,5 +324,9 @@
   "discoveryTapToUse": "Tocca per connetterti",
   "tooltipRefresh": "Aggiorna",
   "tooltipAdd": "Aggiungi",
-  "tooltipDelete": "Elimina"
+  "tooltipDelete": "Elimina",
+  "highlightTitle": "Riassunto di oggi",
+  "highlightSubtitle": "Ogni momento di oggi in un unico clip",
+  "highlightMoments": "{count} momenti",
+  "highlightShare": "Condividi"
 }

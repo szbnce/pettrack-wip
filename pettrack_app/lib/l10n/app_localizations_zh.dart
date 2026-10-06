@@ -637,4 +637,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tooltipDelete => '删除';
+
+  @override
+  String get highlightTitle => '今日回顾';
+
+  @override
+  String get highlightSubtitle => '今天的每个瞬间，一支视频';
+
+  @override
+  String highlightMoments(Object count) {
+    return '$count 个瞬间';
+  }
+
+  @override
+  String get highlightShare => '分享';
 }
