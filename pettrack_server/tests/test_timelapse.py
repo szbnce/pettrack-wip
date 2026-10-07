@@ -25,8 +25,16 @@ def _write_jpeg(path, value=128, size=(64, 48)):
 
 
 def _touch(path, when: date):
-    """Give a file an mtime inside `when` (noon local time)."""
-    ts = time.mktime((when.year, when.month, when.day, 12, 0, 0, 0, 0, -1))
+    """Give a file an mtime inside `when` — never in the future.
+
+    Noon is the natural stamp for "a still from that day", but anything the
+    tests build right now must look newer than its sources, which breaks
+    when the suite runs in the morning. Clamp to just before now, but always
+    back to inside `when`.
+    """
+    start = time.mktime((when.year, when.month, when.day, 0, 0, 0, 0, 0, -1))
+    noon = time.mktime((when.year, when.month, when.day, 12, 0, 0, 0, 0, -1))
+    ts = max(start, min(noon, time.time() - 1))
     os.utime(path, (ts, ts))
 
 
@@ -74,7 +82,7 @@ def test_frames_for_day_filters_by_day_and_kind(tmp_path):
     _touch(stale, other)
 
     frames = frames_for_day(day, str(tmp_path))
-    # Sorted oldest first by mtime; the two same-day stills tie at noon, so
+    # Sorted oldest first by mtime; the two same-day stills share a stamp, so
     # just require both and neither of the others.
     assert sorted(frames) == sorted([str(late), str(keep)])
     assert str(stale) not in frames

@@ -26,10 +26,16 @@ def _write_clip(path, frames=6, size=(64, 48), fps=5):
 
 
 def _touch(path, when: date):
-    """Give a file an mtime inside `when` (noon local time)."""
-    ts = time.mktime(
-        (when.year, when.month, when.day, 12, 0, 0, 0, 0, -1)
-    )
+    """Give a file an mtime inside `when` — never in the future.
+
+    Noon is the natural stamp for "a clip from that day", but a recap built
+    right now must look newer than its sources or the cache never hits —
+    which breaks when the tests run in the morning. Clamp to just before
+    now, but always back to inside `when`.
+    """
+    start = time.mktime((when.year, when.month, when.day, 0, 0, 0, 0, 0, -1))
+    noon = time.mktime((when.year, when.month, when.day, 12, 0, 0, 0, 0, -1))
+    ts = max(start, min(noon, time.time() - 1))
     os.utime(path, (ts, ts))
 
 
