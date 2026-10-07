@@ -1452,6 +1452,12 @@ abstract class AppLocalizations {
   /// **'All cameras'**
   String get cameraGridLabel;
 
+  /// No description provided for @widgetEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Open PetTrack to load the camera'**
+  String get widgetEmptyHint;
+
   /// No description provided for @tooltipSnapshot.
   ///
   /// In en, this message translates to:

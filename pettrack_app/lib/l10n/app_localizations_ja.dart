@@ -727,6 +727,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cameraGridLabel => 'すべてのカメラ';
 
   @override
+  String get widgetEmptyHint => 'PetTrackを開いてカメラを読み込んでください';
+
+  @override
   String get tooltipSnapshot => 'スナップショットを撮る';
 
   @override

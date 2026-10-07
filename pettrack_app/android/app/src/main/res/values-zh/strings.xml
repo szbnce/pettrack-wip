@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">PetTrack</string>
+    <string name="widget_description">宠物的实时快照与状态</string>
+    <string name="widget_empty_hint">打开 PetTrack 以加载摄像头</string>
+    <string name="widget_snapshot_desc">最新摄像头快照</string>
+</resources>

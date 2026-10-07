@@ -351,6 +351,7 @@
   "changelogBody": "1.0.0\n• 仪表板上的“今日回顾”\n• 通知免打扰时段\n• Home Assistant 集成\n• Material 3 设计",
   "tooltipPlaySound": "播放声音",
   "cameraGridLabel": "全部摄像头",
+  "widgetEmptyHint": "打开 PetTrack 以加载摄像头",
   "tooltipSnapshot": "截取快照",
   "playSoundSent": "声音已发送到监视器",
   "tooltipTimelapse": "每日延时",

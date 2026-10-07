@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">PetTrack</string>
+    <string name="widget_description">ペットのライブスナップショットと状態</string>
+    <string name="widget_empty_hint">PetTrackを開いてカメラを読み込んでください</string>
+    <string name="widget_snapshot_desc">最新のカメラスナップショット</string>
+</resources>

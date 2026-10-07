@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">PetTrack</string>
+    <string name="widget_description">반려동물의 실시간 스냅샷과 상태</string>
+    <string name="widget_empty_hint">PetTrack을 열어 카메라를 불러오세요</string>
+    <string name="widget_snapshot_desc">최신 카메라 스냅샷</string>
+</resources>

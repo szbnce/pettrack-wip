@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">PetTrack</string>
+    <string name="widget_description">Istantanea e stato del tuo animale</string>
+    <string name="widget_empty_hint">Apri PetTrack per caricare la telecamera</string>
+    <string name="widget_snapshot_desc">Istantanea più recente della telecamera</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">PetTrack</string>
+    <string name="widget_description">Live-Snapshot und Status deines Haustiers</string>
+    <string name="widget_empty_hint">Öffne PetTrack, um die Kamera zu laden</string>
+    <string name="widget_snapshot_desc">Neuester Kamera-Snapshot</string>
+</resources>

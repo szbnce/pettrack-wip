@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Static home-widget chrome: this renders outside the Flutter engine,
+         so it uses Android string resources instead of the .arb files. Every
+         dynamic string (pet name, status, battery) is pushed from Dart and is
+         localized through AppLocalizations there. -->
+    <string name="widget_name">PetTrack</string>
+    <string name="widget_description">Live snapshot and status of your pet</string>
+    <string name="widget_empty_hint">Open PetTrack to load the camera</string>
+    <string name="widget_snapshot_desc">Latest camera snapshot</string>
+</resources>

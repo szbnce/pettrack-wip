@@ -723,6 +723,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cameraGridLabel => '全部摄像头';
 
   @override
+  String get widgetEmptyHint => '打开 PetTrack 以加载摄像头';
+
+  @override
   String get tooltipSnapshot => '截取快照';
 
   @override

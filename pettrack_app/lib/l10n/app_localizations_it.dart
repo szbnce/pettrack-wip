@@ -738,6 +738,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cameraGridLabel => 'Tutte le camere';
 
   @override
+  String get widgetEmptyHint => 'Apri PetTrack per caricare la telecamera';
+
+  @override
   String get tooltipSnapshot => 'Scatta una foto';
 
   @override

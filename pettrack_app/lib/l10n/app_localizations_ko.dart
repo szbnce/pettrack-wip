@@ -725,6 +725,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cameraGridLabel => '모든 카메라';
 
   @override
+  String get widgetEmptyHint => 'PetTrack을 열어 카메라를 불러오세요';
+
+  @override
   String get tooltipSnapshot => '스냅샷 찍기';
 
   @override

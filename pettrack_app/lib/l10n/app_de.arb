@@ -351,6 +351,7 @@
   "changelogBody": "1.0.0\n• „Tagesrückblick“ auf dem Dashboard\n• Ruhezeiten für Benachrichtigungen\n• Home-Assistant-Integration\n• Material-3-Design",
   "tooltipPlaySound": "Ton abspielen",
   "cameraGridLabel": "Alle Kameras",
+  "widgetEmptyHint": "Öffne PetTrack, um die Kamera zu laden",
   "tooltipSnapshot": "Snapshot aufnehmen",
   "playSoundSent": "Ton an den Monitor gesendet",
   "tooltipTimelapse": "Tages-Timelapse",

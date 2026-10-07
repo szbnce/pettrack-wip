@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">PetTrack</string>
+    <string name="widget_description">Kedvenced élő pillanatképe és állapota</string>
+    <string name="widget_empty_hint">Nyisd meg a PetTracket a kamera betöltéséhez</string>
+    <string name="widget_snapshot_desc">Legfrissebb kamera-pillanatkép</string>
+</resources>

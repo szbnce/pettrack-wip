@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../services/notification_service.dart';
+import '../services/home_widget_service.dart';
 import '../widgets/highlight_card.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -68,6 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _gridRefresh = 0;
   int _socketGen = 0;
   String? _socketMonitorId;
+  final HomeWidgetService _homeWidget = HomeWidgetService();
 
   String get _displayPetName {
     if (widget.serverIp.contains('demo_ip')) return "Tapsi Hapsi";
@@ -210,6 +212,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   _hasCameraError = false;
                   _isServerOnline = true;
                 });
+                _pushHomeWidget();
               } else {
                 img.dispose();
               }
@@ -251,6 +254,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _clientChannel?.sink.close();
     _clientChannel = null;
     _connectClientSocket();
+  }
+
+  /// Hand the current still + status to the Android home-screen widget.
+  /// Throttled — the home screen does not need every frame.
+  Future<void> _pushHomeWidget() async {
+    if (!_homeWidget.isDue()) return;
+    final image = _currentUiImage;
+    if (image == null) return;
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
+    Uint8List? png;
+    try {
+      final data = await image.toByteData(format: ui.ImageByteFormat.png);
+      png = data?.buffer.asUint8List();
+    } catch (e) {
+      debugPrint('Home widget encode error: $e');
+    }
+    final battery = _focusedBattery;
+    await _homeWidget.push(
+      WidgetSnapshot(
+        title: _displayPetName,
+        status: _getBadgeInfo(l10n).text,
+        batteryLabel: '${battery.$1}%',
+        emptyHint: l10n.widgetEmptyHint,
+        png: png,
+      ),
+    );
   }
 
   /// Polls each camera's still so the grid tiles stay fresh without websockets.

@@ -734,6 +734,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get cameraGridLabel => 'Összes kamera';
 
   @override
+  String get widgetEmptyHint => 'Nyisd meg a PetTracket a kamera betöltéséhez';
+
+  @override
   String get tooltipSnapshot => 'Pillanatkép készítése';
 
   @override
