@@ -750,10 +750,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tooltipTimelapse => 'Timelapse del giorno';
 
   @override
+  String get tooltipRecap => 'Riassunto del giorno';
+
+  @override
+  String get recapBuilding => 'Creazione del riassunto del giorno…';
+
+  @override
+  String get recapEmpty => 'Nessun momento per questo giorno';
+
+  @override
+  String recapError(int code) {
+    return 'Impossibile creare il riassunto (errore $code)';
+  }
+
+  @override
+  String get replayAllDays => 'Tutti i giorni';
+
+  @override
+  String get noReplaysForDay => 'Nessuna ripresa per questo giorno';
+
+  @override
   String get timelapseBuilding => 'Creazione della timelapse del giorno…';
 
   @override
-  String get timelapseEmpty => 'Non ci sono ancora abbastanza fotogrammi oggi';
+  String get timelapseEmpty =>
+      'Non ci sono abbastanza fotogrammi per questo giorno';
 
   @override
   String timelapseError(int code) {

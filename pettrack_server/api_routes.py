@@ -7,7 +7,7 @@ from typing import List, Dict
 import time
 import asyncio
 from datetime import datetime
-from database import get_events, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event
+from database import get_events, get_event_counts_since, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event
 from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, MedicalDataSync, SoundEvent
 from email.utils import formatdate
 import jwt
@@ -362,6 +362,49 @@ async def report_sound_event(event: SoundEvent):
 async def get_activity(limit: int = 50):
     events = await get_events(limit)
     return {"events": events}
+
+@router.get("/api/timeline")
+async def get_timeline(days: int = Query(default=14, ge=1, le=90)):
+    """Day-by-day activity for the replay timeline strip.
+
+    One entry per calendar day that had events or motion clips, bucketed in
+    the server's local timezone — the same calendar the daily recap and
+    timelapse use. Days with nothing are left out; clients fill the gaps.
+    """
+    since = time.time() - days * 86400
+
+    events_by_day: Dict[str, Dict[str, int]] = {}
+    for row in await get_event_counts_since(since):
+        bucket = events_by_day.setdefault(row["day"], {})
+        bucket[row["event_type"]] = int(row["n"])
+
+    clips_by_day: Dict[str, int] = {}
+    folder = "replays"
+    if os.path.isdir(folder):
+        for filename in os.listdir(folder):
+            if not (
+                filename.startswith("replay_")
+                and filename.endswith(".mp4")
+                and not filename.endswith("_raw.mp4")
+            ):
+                continue
+            path = os.path.join(folder, filename)
+            mtime = os.path.getmtime(path)
+            if mtime < since:
+                continue
+            day = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
+            clips_by_day[day] = clips_by_day.get(day, 0) + 1
+
+    out = []
+    for day in sorted(set(events_by_day) | set(clips_by_day)):
+        events = events_by_day.get(day, {})
+        out.append({
+            "date": day,
+            "events": events,
+            "total": sum(events.values()),
+            "clips": clips_by_day.get(day, 0),
+        })
+    return {"days": out}
 
 @router.get("/api/zones")
 async def get_zones_list():

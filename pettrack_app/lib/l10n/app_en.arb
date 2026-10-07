@@ -355,8 +355,14 @@
   "tooltipSnapshot": "Take a snapshot",
   "playSoundSent": "Sound sent to the monitor",
   "tooltipTimelapse": "Day timelapse",
+  "tooltipRecap": "Day recap",
+  "recapBuilding": "Building the day's recap…",
+  "recapEmpty": "No moments for this day",
+  "recapError": "Could not build the recap (error {code})",
+  "replayAllDays": "All days",
+  "noReplaysForDay": "No replays for this day",
   "timelapseBuilding": "Building the day's timelapse…",
-  "timelapseEmpty": "Not enough frames yet today",
+  "timelapseEmpty": "Not enough frames for this day",
   "timelapseError": "Could not build the timelapse (error {code})",
   "tooltipNightMode": "Night mode",
   "nightModeOn": "Night mode on",
@@ -364,6 +370,13 @@
   "alertsSound": "Sound alerts (bark / meow)",
   "soundDetectedTitle": "Sound detected",
   "soundDetectedBody": "Loud noise near the camera.",
+  "@recapError": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
   "@timelapseError": {
     "placeholders": {
       "code": {

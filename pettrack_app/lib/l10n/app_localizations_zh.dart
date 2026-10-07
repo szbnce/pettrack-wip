@@ -735,10 +735,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tooltipTimelapse => '每日延时';
 
   @override
+  String get tooltipRecap => '每日回顾';
+
+  @override
+  String get recapBuilding => '正在生成每日回顾…';
+
+  @override
+  String get recapEmpty => '这一天没有精彩时刻';
+
+  @override
+  String recapError(int code) {
+    return '无法生成回顾（错误 $code）';
+  }
+
+  @override
+  String get replayAllDays => '全部日期';
+
+  @override
+  String get noReplaysForDay => '这一天没有录像';
+
+  @override
   String get timelapseBuilding => '正在生成今天的延时视频…';
 
   @override
-  String get timelapseEmpty => '今天的帧还不够';
+  String get timelapseEmpty => '这一天的帧数不足';
 
   @override
   String timelapseError(int code) {

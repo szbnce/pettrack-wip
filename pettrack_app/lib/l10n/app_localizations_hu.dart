@@ -746,10 +746,30 @@ class AppLocalizationsHu extends AppLocalizations {
   String get tooltipTimelapse => 'Napi timelapse';
 
   @override
+  String get tooltipRecap => 'Napi összefoglaló';
+
+  @override
+  String get recapBuilding => 'A nap összefoglalója készül…';
+
+  @override
+  String get recapEmpty => 'Erre a napra nincsenek pillanatok';
+
+  @override
+  String recapError(int code) {
+    return 'Az összefoglaló nem készült el ($code hiba)';
+  }
+
+  @override
+  String get replayAllDays => 'Összes nap';
+
+  @override
+  String get noReplaysForDay => 'Erre a napra nincsenek felvételek';
+
+  @override
   String get timelapseBuilding => 'A nap timelapse-ének építése…';
 
   @override
-  String get timelapseEmpty => 'Még nincs elég képkocka mára';
+  String get timelapseEmpty => 'Erre a napra nincs elég képkocka';
 
   @override
   String timelapseError(int code) {

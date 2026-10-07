@@ -750,10 +750,30 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tooltipTimelapse => 'Tages-Timelapse';
 
   @override
+  String get tooltipRecap => 'Tages-Recap';
+
+  @override
+  String get recapBuilding => 'Der Tages-Recap wird erstellt…';
+
+  @override
+  String get recapEmpty => 'An diesem Tag keine Momente';
+
+  @override
+  String recapError(int code) {
+    return 'Recap konnte nicht erstellt werden (Fehler $code)';
+  }
+
+  @override
+  String get replayAllDays => 'Alle Tage';
+
+  @override
+  String get noReplaysForDay => 'An diesem Tag keine Aufnahmen';
+
+  @override
   String get timelapseBuilding => 'Timelapse des Tages wird erstellt…';
 
   @override
-  String get timelapseEmpty => 'Heute noch nicht genug Bilder';
+  String get timelapseEmpty => 'Für diesen Tag nicht genug Bilder';
 
   @override
   String timelapseError(int code) {

@@ -745,10 +745,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tooltipTimelapse => 'Day timelapse';
 
   @override
+  String get tooltipRecap => 'Day recap';
+
+  @override
+  String get recapBuilding => 'Building the day\'s recap…';
+
+  @override
+  String get recapEmpty => 'No moments for this day';
+
+  @override
+  String recapError(int code) {
+    return 'Could not build the recap (error $code)';
+  }
+
+  @override
+  String get replayAllDays => 'All days';
+
+  @override
+  String get noReplaysForDay => 'No replays for this day';
+
+  @override
   String get timelapseBuilding => 'Building the day\'s timelapse…';
 
   @override
-  String get timelapseEmpty => 'Not enough frames yet today';
+  String get timelapseEmpty => 'Not enough frames for this day';
 
   @override
   String timelapseError(int code) {

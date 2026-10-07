@@ -739,10 +739,30 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tooltipTimelapse => '1日のタイムラプス';
 
   @override
+  String get tooltipRecap => '1日のまとめ';
+
+  @override
+  String get recapBuilding => '1日のまとめを作成中…';
+
+  @override
+  String get recapEmpty => 'この日の思い出はありません';
+
+  @override
+  String recapError(int code) {
+    return 'まとめを作成できませんでした（エラー $code）';
+  }
+
+  @override
+  String get replayAllDays => 'すべての日';
+
+  @override
+  String get noReplaysForDay => 'この日の録画はありません';
+
+  @override
   String get timelapseBuilding => 'その日のタイムラプスを作成中…';
 
   @override
-  String get timelapseEmpty => '今日はまだフレームが足りません';
+  String get timelapseEmpty => 'この日のフレームが足りません';
 
   @override
   String timelapseError(int code) {

@@ -737,10 +737,30 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tooltipTimelapse => '하루 타임랩스';
 
   @override
+  String get tooltipRecap => '하루 요약';
+
+  @override
+  String get recapBuilding => '하루 요약을 만드는 중…';
+
+  @override
+  String get recapEmpty => '이 날의 순간이 없습니다';
+
+  @override
+  String recapError(int code) {
+    return '요약을 만들 수 없습니다(오류 $code)';
+  }
+
+  @override
+  String get replayAllDays => '모든 날';
+
+  @override
+  String get noReplaysForDay => '이 날의 녹화가 없습니다';
+
+  @override
   String get timelapseBuilding => '오늘의 타임랩스를 만드는 중…';
 
   @override
-  String get timelapseEmpty => '오늘은 아직 프레임이 충분하지 않습니다';
+  String get timelapseEmpty => '이 날의 프레임이 부족합니다';
 
   @override
   String timelapseError(int code) {

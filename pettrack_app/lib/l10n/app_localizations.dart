@@ -1476,6 +1476,42 @@ abstract class AppLocalizations {
   /// **'Day timelapse'**
   String get tooltipTimelapse;
 
+  /// No description provided for @tooltipRecap.
+  ///
+  /// In en, this message translates to:
+  /// **'Day recap'**
+  String get tooltipRecap;
+
+  /// No description provided for @recapBuilding.
+  ///
+  /// In en, this message translates to:
+  /// **'Building the day\'s recap…'**
+  String get recapBuilding;
+
+  /// No description provided for @recapEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No moments for this day'**
+  String get recapEmpty;
+
+  /// No description provided for @recapError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not build the recap (error {code})'**
+  String recapError(int code);
+
+  /// No description provided for @replayAllDays.
+  ///
+  /// In en, this message translates to:
+  /// **'All days'**
+  String get replayAllDays;
+
+  /// No description provided for @noReplaysForDay.
+  ///
+  /// In en, this message translates to:
+  /// **'No replays for this day'**
+  String get noReplaysForDay;
+
   /// No description provided for @timelapseBuilding.
   ///
   /// In en, this message translates to:
@@ -1485,7 +1521,7 @@ abstract class AppLocalizations {
   /// No description provided for @timelapseEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Not enough frames yet today'**
+  /// **'Not enough frames for this day'**
   String get timelapseEmpty;
 
   /// No description provided for @timelapseError.

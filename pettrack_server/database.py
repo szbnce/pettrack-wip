@@ -64,6 +64,23 @@ async def get_events(limit: int = 50):
         rows = await cursor.fetchall()
         return [dict(row) for row in rows]
 
+async def get_event_counts_since(since_ts: float):
+    """Per-day, per-type event counts for the replay timeline strip.
+
+    Days are bucketed in the server's local time so they line up with the
+    daily recap and timelapse, which use the same calendar.
+    """
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute(
+            "SELECT date(timestamp, 'unixepoch', 'localtime') AS day, "
+            "event_type, COUNT(*) AS n FROM events "
+            "WHERE timestamp >= ? GROUP BY day, event_type ORDER BY day",
+            (since_ts,)
+        )
+        rows = await cursor.fetchall()
+        return [dict(row) for row in rows]
+
 async def save_zones(zones_data):
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("DELETE FROM zones")
