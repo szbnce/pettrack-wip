@@ -478,6 +478,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get demoModeBtn => '데모 모드';
 
   @override
+  String get demoNoPlayback => '데모 모드 — 동영상 재생을 사용할 수 없습니다';
+
+  @override
   String get orSeparator => '또는';
 
   @override

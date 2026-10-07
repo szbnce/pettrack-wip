@@ -480,6 +480,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get demoModeBtn => 'デモモード';
 
   @override
+  String get demoNoPlayback => 'デモモード — 動画の再生はできません';
+
+  @override
   String get orSeparator => 'または';
 
   @override

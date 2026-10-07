@@ -151,6 +151,7 @@
   "no": "Nem",
   "submitPin": "PIN küldése",
   "demoModeBtn": "Demó mód",
+  "demoNoPlayback": "Demó mód — a videólejátszás nem elérhető",
   "orSeparator": "VAGY",
   "setupErrPin": "Sikertelen csatlakozás vagy hibás PIN!",
   "saveSuccess": "Beállítások elmentve!",

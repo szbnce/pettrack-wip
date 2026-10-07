@@ -252,6 +252,7 @@
   "no": "No",
   "submitPin": "Submit PIN",
   "demoModeBtn": "Demo Mode",
+  "demoNoPlayback": "Demo mode — video playback is not available",
   "orSeparator": "OR",
   "setupErrPin": "Failed to connect or invalid PIN!",
   "saveSuccess": "Settings saved!",

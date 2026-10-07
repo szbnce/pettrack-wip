@@ -252,6 +252,7 @@
   "no": "否",
   "submitPin": "提交 PIN",
   "demoModeBtn": "演示模式",
+  "demoNoPlayback": "演示模式 — 无法播放视频",
   "orSeparator": "或",
   "setupErrPin": "连接失败或 PIN 无效！",
   "saveSuccess": "设置已保存！",

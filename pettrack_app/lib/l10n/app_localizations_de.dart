@@ -485,6 +485,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get demoModeBtn => 'Demo-Modus';
 
   @override
+  String get demoNoPlayback =>
+      'Demo-Modus — Videowiedergabe ist nicht verfügbar';
+
+  @override
   String get orSeparator => 'ODER';
 
   @override

@@ -477,6 +477,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get demoModeBtn => '演示模式';
 
   @override
+  String get demoNoPlayback => '演示模式 — 无法播放视频';
+
+  @override
   String get orSeparator => '或';
 
   @override

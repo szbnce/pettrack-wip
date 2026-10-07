@@ -252,6 +252,7 @@
   "no": "いいえ",
   "submitPin": "PINを送信",
   "demoModeBtn": "デモモード",
+  "demoNoPlayback": "デモモード — 動画の再生はできません",
   "orSeparator": "または",
   "setupErrPin": "接続に失敗したか、PINが無効です！",
   "saveSuccess": "設定を保存しました！",

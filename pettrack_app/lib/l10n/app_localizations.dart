@@ -984,6 +984,12 @@ abstract class AppLocalizations {
   /// **'Demo Mode'**
   String get demoModeBtn;
 
+  /// No description provided for @demoNoPlayback.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo mode — video playback is not available'**
+  String get demoNoPlayback;
+
   /// No description provided for @orSeparator.
   ///
   /// In en, this message translates to:

@@ -252,6 +252,7 @@
   "no": "No",
   "submitPin": "Invia PIN",
   "demoModeBtn": "Modalità demo",
+  "demoNoPlayback": "Modalità demo — la riproduzione video non è disponibile",
   "orSeparator": "OPPURE",
   "setupErrPin": "Connessione non riuscita o PIN non valido!",
   "saveSuccess": "Impostazioni salvate!",

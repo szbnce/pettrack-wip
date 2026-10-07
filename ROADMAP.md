@@ -109,14 +109,15 @@ then the wow features, then platform extras. Each phase lands green
 11. Privacy / about page ("self-hosted — nothing leaves your house") +
     version & changelog in the UI
 
-### Phase 4 — Wow features *(current)*
+### Phase 4 — Wow features *(done)*
 12. Two-way audio (talk-back) and/or "play a sound" button
 13. Timelapse mode for the monitor phone
 14. Night / low-light enhancement toggle
 15. Audio events (bark / meow) in the activity feed
 16. Multi-camera grid + digital zoom/pan
 
-### Phase 5 — Platform extras
+### Phase 5 — Platform extras *(done — WearOS complications deferred)*
 17. Home-screen widget (live snapshot + status), WearOS complications
+    *(widget done; complications need a standalone watch app — deferred)*
 18. Replay timeline UI (day strip with event dots)
 19. Landing page + demo mode + GitHub Releases polish

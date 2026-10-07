@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PetTrack — your old phone is your new pet monitor</title>
+<meta name="description" content="PetTrack turns an old phone into a self-hosted pet camera: live video, motion replays, daily recap, zone alerts. Free, open source, and nothing leaves your house.">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<style>
+  :root {
+    --bg: #0E1517;
+    --bg-soft: #151D20;
+    --card: #1A2428;
+    --ink: #F2F6F5;
+    --ink-dim: #A8B7B5;
+    --teal: #2CB5A5;
+    --teal-soft: rgba(44, 181, 165, 0.14);
+    --line: rgba(255, 255, 255, 0.08);
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- hero ---- */
+  header {
+    padding: 72px 0 56px;
+    background:
+      radial-gradient(900px 420px at 78% -10%, rgba(44, 181, 165, 0.16), transparent 65%),
+      var(--bg);
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .eyebrow {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 18px 0 14px;
+    font-size: clamp(34px, 5vw, 52px);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+  .lede { font-size: 19px; color: var(--ink-dim); margin: 0 0 28px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-block;
+    padding: 13px 24px;
+    border-radius: 12px;
+    font-weight: 650;
+    font-size: 15px;
+    border: 1px solid transparent;
+    transition: transform 0.12s ease, background 0.12s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn-primary { background: var(--teal); color: #06211E; }
+  .btn-primary:hover { background: #35c9b7; }
+  .btn-ghost { border-color: var(--line); color: var(--ink); }
+  .btn-ghost:hover { background: rgba(255, 255, 255, 0.05); }
+  .hero-shot {
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    transform: rotate(1.2deg);
+  }
+
+  /* ---- generic sections ---- */
+  section { padding: 64px 0; }
+  h2 {
+    font-size: clamp(26px, 3.4vw, 36px);
+    letter-spacing: -0.015em;
+    margin: 0 0 14px;
+  }
+  .section-lede { color: var(--ink-dim); max-width: 640px; margin: 0 0 40px; }
+  .alt { background: var(--bg-soft); }
+
+  /* ---- problem ---- */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  .panel h3 { margin: 0 0 16px; font-size: 19px; }
+  .panel ul { margin: 0; padding-left: 20px; color: var(--ink-dim); }
+  .panel li { margin-bottom: 10px; }
+  .panel.good { border-color: rgba(44, 181, 165, 0.35); }
+  .panel.good h3 { color: var(--teal); }
+
+  /* ---- features ---- */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .feature {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .feature .icon {
+    font-size: 26px;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .feature h3 { margin: 0 0 8px; font-size: 17px; }
+  .feature p { margin: 0; color: var(--ink-dim); font-size: 15px; }
+
+  /* ---- shots ---- */
+  .shots {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .shots figure { margin: 0; }
+  .shots img {
+    border-radius: 12px;
+    border: 1px solid var(--line);
+  }
+  .duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .duo img {
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+  }
+
+  /* ---- install ---- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    counter-reset: step;
+  }
+  .step {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 26px;
+  }
+  .step .num {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--teal-soft);
+    color: var(--teal);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .step h3 { margin: 0 0 8px; font-size: 17px; }
+  .step p { margin: 0; color: var(--ink-dim); font-size: 15px; }
+  code {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 13.5px;
+  }
+
+  /* ---- privacy ---- */
+  .privacy {
+    background: var(--teal-soft);
+    border: 1px solid rgba(44, 181, 165, 0.3);
+    border-radius: var(--radius);
+    padding: 40px;
+    text-align: center;
+  }
+  .privacy h2 { margin-bottom: 10px; }
+  .privacy p { color: var(--ink-dim); max-width: 620px; margin: 0 auto; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px 0 44px;
+    color: var(--ink-dim);
+    font-size: 14px;
+  }
+  .foot-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-shot { transform: none; order: -1; }
+    .features, .steps { grid-template-columns: 1fr; }
+    .compare { grid-template-columns: 1fr; }
+    .shots { grid-template-columns: repeat(2, 1fr); }
+    header { padding: 48px 0 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">Open source · Self-hosted · Free</span>
+      <h1>Your old phone is your new pet monitor.</h1>
+      <p class="lede">
+        PetTrack turns a phone you already own into a pet camera with live
+        video, motion replays and a daily recap — running on your own computer,
+        not someone's cloud.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://pettrackdemo.szabence.com">Try the demo</a>
+        <a class="btn btn-ghost" href="https://github.com/szbnce/PetTrack/releases/latest">Download the app</a>
+        <a class="btn btn-ghost" href="https://github.com/szbnce/PetTrack">View on GitHub</a>
+      </div>
+    </div>
+    <div class="hero-shot">
+      <img src="img/banner.jpg" alt="PetTrack watching Berci the rabbit">
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Why another pet camera?</h2>
+    <p class="section-lede">
+      Because the one you were about to buy charges a subscription to see your
+      own pet, and sends the video through a datacenter on the way.
+    </p>
+    <div class="compare">
+      <div class="panel">
+        <h3>Typical pet cam</h3>
+        <ul>
+          <li>Hardware you can only use with their app</li>
+          <li>Monthly fee for anything past 24 hours of history</li>
+          <li>Video leaves your house for someone else's servers</li>
+          <li>Ads, accounts, and an "update" that adds ads</li>
+        </ul>
+      </div>
+      <div class="panel good">
+        <h3>PetTrack</h3>
+        <ul>
+          <li>Uses a phone you already have as the camera</li>
+          <li>Unlimited history on your own disk</li>
+          <li>Video never leaves your LAN unless you say so</li>
+          <li>Free, open source, yours to change</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>Everything you'd expect — and the daily recap</h2>
+    <p class="section-lede">
+      Live stream, motion replays and zone alerts on day one. Then the parts
+      that make it feel like a product, not a project.
+    </p>
+    <div class="features">
+      <div class="feature">
+        <div class="icon">📹</div>
+        <h3>Live video &amp; talk</h3>
+        <p>Watch from the app or the web dashboard, take snapshots, or call
+your pet with a sound when they're out of frame.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎞️</div>
+        <h3>Daily recap &amp; timelapse</h3>
+        <p>At the end of the day, the moments that mattered stitched into one
+short clip — plus a timelapse of the whole day in seconds.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🗺️</div>
+        <h3>Zones &amp; alerts</h3>
+        <p>Draw the sofa, the food bowl, the no-go corner. Get a notification
+the moment your pet steps in — or out.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🌙</div>
+        <h3>Night mode &amp; sound events</h3>
+        <p>See them in the dark from the app, and hear about the bark or meow
+that happened while you were away.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📱</div>
+        <h3>Widgets &amp; WearOS</h3>
+        <p>A live snapshot and battery status right on your home screen, and
+complications on the watch — no unlock needed.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🏠</div>
+        <h3>Home Assistant ready</h3>
+        <p>Camera, motion and battery entities appear automatically over MQTT,
+so PetTrack fits into the smart home you already have.</p>
+      </div>
+    </div>
+    <div class="duo">
+      <img src="img/pet.jpg" alt="Berci, a lionhead dwarf rabbit">
+      <img src="img/pet-b.jpg" alt="Berci resting">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>On your phone</h2>
+    <p class="section-lede">
+      A dark, calm interface that works the same on Android, iOS, the web and
+      WearOS.
+    </p>
+    <div class="shots">
+      <figure><img src="img/androiddashboard.jpg" alt="PetTrack dashboard"></figure>
+      <figure><img src="img/androidzones.jpg" alt="PetTrack zones"></figure>
+      <figure><img src="img/androidreplay.jpg" alt="PetTrack replays"></figure>
+      <figure><img src="img/androidsettings.jpg" alt="PetTrack settings"></figure>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>Up and running in three steps</h2>
+    <p class="section-lede">
+      No flashing, no soldering, no account. If you can paste one command, you
+      can run PetTrack.
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Start the server</h3>
+        <p>One command on any Linux, macOS or Windows machine — or a single
+<code>docker compose up</code>. The logs print a 4-digit PIN.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Pair your phone</h3>
+        <p>Install the app, scan the QR code from the server logs or the web
+dashboard, and you're connected.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Point the old phone at the pet</h3>
+        <p>Open the monitor mode on the spare phone, prop it up, done. The
+first replays start appearing within minutes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="privacy">
+      <h2>Self-hosted — nothing leaves your house</h2>
+      <p>
+        PetTrack has no cloud, no account and no analytics. The camera, the
+        recordings and the database live on your machine, under your control.
+        Licensed GPLv3 — free to use, free to change, free to share.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <div>PetTrack — made for Berci, shared for every pet.</div>
+    <div>
+      <a href="https://github.com/szbnce/PetTrack">GitHub</a> ·
+      <a href="https://github.com/szbnce/PetTrack/releases/latest">Releases</a> ·
+      <a href="https://pettrackdemo.szabence.com">Demo</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

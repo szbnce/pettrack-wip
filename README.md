@@ -35,6 +35,8 @@
     <br />
     <a href="https://pettrackdemo.szabence.com">Try PetTrack</a>
     &middot;
+    <a href="https://github.com/szbnce/PetTrack/releases/latest">Download the app</a>
+    &middot;
     <a href="https://github.com/szbnce/PetTrack/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
     <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>

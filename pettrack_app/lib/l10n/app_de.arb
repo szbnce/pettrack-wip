@@ -252,6 +252,7 @@
   "no": "Nein",
   "submitPin": "PIN senden",
   "demoModeBtn": "Demo-Modus",
+  "demoNoPlayback": "Demo-Modus — Videowiedergabe ist nicht verfügbar",
   "orSeparator": "ODER",
   "setupErrPin": "Verbindung fehlgeschlagen oder ungültige PIN!",
   "saveSuccess": "Einstellungen gespeichert!",

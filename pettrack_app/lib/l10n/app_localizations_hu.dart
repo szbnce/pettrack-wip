@@ -484,6 +484,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get demoModeBtn => 'Demó mód';
 
   @override
+  String get demoNoPlayback => 'Demó mód — a videólejátszás nem elérhető';
+
+  @override
   String get orSeparator => 'VAGY';
 
   @override

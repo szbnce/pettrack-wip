@@ -40,12 +40,20 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     _fetchReplays();
   }
 
+  bool get _isDemo => widget.serverIp.contains('demo_ip');
+
   Future<void> _fetchReplays({bool haptic = false}) async {
     setState(() {
       _isLoading = true;
       _errorStatus = 0;
       _errorDetail = '';
     });
+
+    if (_isDemo) {
+      _loadDemoData();
+      if (haptic) HapticFeedback.lightImpact();
+      return;
+    }
 
     try {
       // The clip list and the day-strip dots load together so a pull-to
@@ -96,6 +104,57 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  /// Demo mode: synthetic clips and event dots, so the timeline and the
+  /// grid can be explored without a camera or a server.
+  void _loadDemoData() {
+    final now = DateTime.now();
+    final clips = List.generate(6, (i) {
+      final ts = now.subtract(Duration(hours: 5 + i * 17));
+      return <String, dynamic>{
+        'filename': 'demo_replay_$i.mp4',
+        'timestamp': ts.millisecondsSinceEpoch ~/ 1000,
+        'size': (2 + i) * 1024 * 1024,
+        'url': '',
+      };
+    });
+
+    const types = ['zone_enter', 'sound_detected', 'zone_exit'];
+    final byDay = <String, dynamic>{};
+    for (final clip in clips) {
+      final day = DateTime.fromMillisecondsSinceEpoch(
+        (clip['timestamp'] as int) * 1000,
+      );
+      final key = _dayKey(day);
+      final bucket = byDay.putIfAbsent(
+        key,
+        () => <String, dynamic>{
+          'date': key,
+          'events': <String, dynamic>{},
+          'total': 0,
+          'clips': 0,
+        },
+      );
+      bucket['clips'] = (bucket['clips'] as int) + 1;
+      final events = bucket['events'] as Map<String, dynamic>;
+      final type = types[events.length % types.length];
+      events[type] = (events[type] as int? ?? 0) + 2;
+      bucket['total'] = (bucket['total'] as int) + 2;
+    }
+
+    setState(() {
+      _replays = clips;
+      _timelineByDay = byDay;
+      _isLoading = false;
+    });
+  }
+
+  /// Playback needs real video; demo mode just says so.
+  void _demoPlayback() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context)!.demoNoPlayback)),
+    );
   }
 
   /// The strip always covers the last two weeks, quiet days included, so
@@ -160,6 +219,10 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
   }
 
   void _playVideo(Map<String, dynamic> replay) {
+    if (_isDemo) {
+      _demoPlayback();
+      return;
+    }
     // The server returns a signed, file-scoped URL (short-lived token).
     // Fallback for older servers: put the session token into the URL.
     final signedPath =
@@ -174,6 +237,10 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
   /// Build a day's timelapse on the server (cached there) and play it.
   /// [date] is "YYYY-MM-DD"; null means today.
   Future<void> _openTimelapse({String? date}) async {
+    if (_isDemo) {
+      _demoPlayback();
+      return;
+    }
     final l10n = AppLocalizations.of(context)!;
     // ffmpeg can take a while on a first build — show that we are working.
     final navigator = Navigator.of(context, rootNavigator: true);
@@ -217,6 +284,10 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
   /// Build a day's recap (its motion moments stitched together) and play it.
   /// [date] is "YYYY-MM-DD"; null means today.
   Future<void> _openRecap({String? date}) async {
+    if (_isDemo) {
+      _demoPlayback();
+      return;
+    }
     final l10n = AppLocalizations.of(context)!;
     final navigator = Navigator.of(context, rootNavigator: true);
     final messenger = ScaffoldMessenger.of(context);

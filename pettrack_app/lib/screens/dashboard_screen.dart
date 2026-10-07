@@ -751,13 +751,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               child: widget.serverIp.contains('demo_ip')
-                  ? Center(
-                      child: Text(
-                        l10n.demoLivePreview,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  // Demo mode: a bundled still stands in for the live frame
+                  // so the whole dashboard can be explored without a camera.
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.asset(
+                            'assets/demo_frame.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            top: 8,
+                            left: 8,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.6),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                l10n.demoLivePreview,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   : ClipRRect(

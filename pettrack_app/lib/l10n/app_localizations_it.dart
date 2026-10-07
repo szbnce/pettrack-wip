@@ -486,6 +486,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get demoModeBtn => 'Modalità demo';
 
   @override
+  String get demoNoPlayback =>
+      'Modalità demo — la riproduzione video non è disponibile';
+
+  @override
   String get orSeparator => 'OPPURE';
 
   @override

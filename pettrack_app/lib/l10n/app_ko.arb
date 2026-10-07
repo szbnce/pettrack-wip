@@ -252,6 +252,7 @@
   "no": "아니요",
   "submitPin": "PIN 전송",
   "demoModeBtn": "데모 모드",
+  "demoNoPlayback": "데모 모드 — 동영상 재생을 사용할 수 없습니다",
   "orSeparator": "또는",
   "setupErrPin": "연결에 실패했거나 PIN이 잘못되었습니다!",
   "saveSuccess": "설정이 저장되었습니다!",
