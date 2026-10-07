@@ -259,6 +259,9 @@
   "tooltipNightMode": "Éjszakai mód",
   "nightModeOn": "Éjszakai mód bekapcsolva",
   "nightModeOff": "Éjszakai mód kikapcsolva",
+  "alertsSound": "Hangjelzések (ugatás / nyávogás)",
+  "soundDetectedTitle": "Hang észlelve",
+  "soundDetectedBody": "Hangos zaj a kamera közelében.",
   "@timelapseError": {
     "placeholders": {
       "code": {

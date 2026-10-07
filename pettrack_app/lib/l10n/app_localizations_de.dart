@@ -762,4 +762,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get nightModeOff => 'Nachtmodus deaktiviert';
+
+  @override
+  String get alertsSound => 'Geräuschalarme (Bellen / Miauen)';
+
+  @override
+  String get soundDetectedTitle => 'Geräusch erkannt';
+
+  @override
+  String get soundDetectedBody => 'Lautes Geräusch in der Nähe der Kamera.';
 }

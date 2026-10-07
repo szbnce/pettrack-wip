@@ -7,8 +7,8 @@ from typing import List, Dict
 import time
 import asyncio
 from datetime import datetime
-from database import get_events, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data
-from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, MedicalDataSync
+from database import get_events, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event
+from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, MedicalDataSync, SoundEvent
 from email.utils import formatdate
 import jwt
 from cryptography.fernet import Fernet
@@ -232,6 +232,23 @@ async def update_monitor_status(update: MonitorUpdate):
     mqtt_bridge.bridge.publish_battery(update.battery_level, update.is_charging)
     mqtt_bridge.bridge.publish_monitor(True)
     return {"status": "ok"}
+
+# Sound events (bark / meow / loud noise) come from the monitor's mic-level
+# sampler. A pet can bark for a whole minute, so collapse bursts into one
+# event per window instead of one per sample.
+SOUND_EVENT_COOLDOWN = 60.0
+_last_sound_event = 0.0
+
+@router.post("/api/monitor/sound")
+async def report_sound_event(event: SoundEvent):
+    global _last_sound_event
+    now = time.time()
+    if now - _last_sound_event < SOUND_EVENT_COOLDOWN:
+        return {"status": "ok", "logged": False}
+    _last_sound_event = now
+    await log_event("sound_detected", details=f"{event.level:.0f} dB")
+    mqtt_bridge.bridge.publish_event("sound_detected")
+    return {"status": "ok", "logged": True}
 
 @router.get("/api/activity")
 async def get_activity(limit: int = 50):

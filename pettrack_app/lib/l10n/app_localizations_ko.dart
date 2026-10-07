@@ -749,4 +749,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get nightModeOff => '야간 모드를 껐습니다';
+
+  @override
+  String get alertsSound => '소리 알림(짖음 / 야옹)';
+
+  @override
+  String get soundDetectedTitle => '소리 감지됨';
+
+  @override
+  String get soundDetectedBody => '카메라 근처에서 큰 소리가 났습니다.';
 }

@@ -359,6 +359,9 @@
   "tooltipNightMode": "Night mode",
   "nightModeOn": "Night mode on",
   "nightModeOff": "Night mode off",
+  "alertsSound": "Sound alerts (bark / meow)",
+  "soundDetectedTitle": "Sound detected",
+  "soundDetectedBody": "Loud noise near the camera.",
   "@timelapseError": {
     "placeholders": {
       "code": {

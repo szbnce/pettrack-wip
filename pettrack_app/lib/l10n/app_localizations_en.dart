@@ -757,4 +757,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nightModeOff => 'Night mode off';
+
+  @override
+  String get alertsSound => 'Sound alerts (bark / meow)';
+
+  @override
+  String get soundDetectedTitle => 'Sound detected';
+
+  @override
+  String get soundDetectedBody => 'Loud noise near the camera.';
 }

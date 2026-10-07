@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-feature android:name="android.hardware.type.watch" android:required="false" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Microphone loudness only, for sound events (audio never leaves the phone). -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- Needed for mDNS server discovery (nsd) on Wi-Fi. -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <application

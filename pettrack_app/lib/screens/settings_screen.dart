@@ -31,6 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _themeModeString = 'system';
   bool _alertsZoneEnabled = true;
   bool _alertsBatteryEnabled = true;
+  bool _alertsSoundEnabled = true;
   double _batteryThreshold = 20.0;
   bool _quietHoursEnabled = false;
   int _quietHoursFrom = 23 * 60;
@@ -75,6 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _themeModeString = prefs.getString('theme_mode') ?? 'system';
       _alertsZoneEnabled = prefs.getBool('alerts_zone_enabled') ?? true;
       _alertsBatteryEnabled = prefs.getBool('alerts_battery_enabled') ?? true;
+      _alertsSoundEnabled = prefs.getBool('alerts_sound_enabled') ?? true;
       _batteryThreshold = prefs.getDouble('alerts_battery_threshold') ?? 20.0;
       _quietHoursEnabled = prefs.getBool('quiet_hours_enabled') ?? false;
       _quietHoursFrom = prefs.getInt('quiet_hours_from') ?? 23 * 60;
@@ -234,6 +236,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await prefs.setString('theme_mode', _themeModeString);
     await prefs.setBool('alerts_zone_enabled', _alertsZoneEnabled);
     await prefs.setBool('alerts_battery_enabled', _alertsBatteryEnabled);
+    await prefs.setBool('alerts_sound_enabled', _alertsSoundEnabled);
     await prefs.setDouble('alerts_battery_threshold', _batteryThreshold);
     await prefs.setBool('quiet_hours_enabled', _quietHoursEnabled);
     await prefs.setInt('quiet_hours_from', _quietHoursFrom);
@@ -561,6 +564,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: Text(l10n.alertsBattery),
         value: _alertsBatteryEnabled,
         onChanged: (val) => setState(() => _alertsBatteryEnabled = val),
+        contentPadding: EdgeInsets.zero,
+      ),
+      SwitchListTile(
+        title: Text(l10n.alertsSound),
+        value: _alertsSoundEnabled,
+        onChanged: (val) => setState(() => _alertsSoundEnabled = val),
         contentPadding: EdgeInsets.zero,
       ),
       if (_alertsBatteryEnabled) ...[

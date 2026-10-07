@@ -359,6 +359,9 @@
   "tooltipNightMode": "ナイトモード",
   "nightModeOn": "ナイトモードをオンにしました",
   "nightModeOff": "ナイトモードをオフにしました",
+  "alertsSound": "音の通知（鳴き声）",
+  "soundDetectedTitle": "音を検出しました",
+  "soundDetectedBody": "カメラの近くで大きな音がしました。",
   "@timelapseError": {
     "placeholders": {
       "code": {

@@ -747,4 +747,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nightModeOff => '夜间模式已关闭';
+
+  @override
+  String get alertsSound => '声音提醒（吠叫 / 猫叫）';
+
+  @override
+  String get soundDetectedTitle => '检测到声音';
+
+  @override
+  String get soundDetectedBody => '摄像头附近有大声响。';
 }

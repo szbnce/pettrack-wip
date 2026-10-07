@@ -359,6 +359,9 @@
   "tooltipNightMode": "Modalità notte",
   "nightModeOn": "Modalità notte attivata",
   "nightModeOff": "Modalità notte disattivata",
+  "alertsSound": "Avvisi sonori (abbaiare / miagolare)",
+  "soundDetectedTitle": "Suono rilevato",
+  "soundDetectedBody": "Rumore forte vicino alla telecamera.",
   "@timelapseError": {
     "placeholders": {
       "code": {

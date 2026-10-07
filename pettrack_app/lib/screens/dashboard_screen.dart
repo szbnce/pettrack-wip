@@ -53,6 +53,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _isCharging = false;
   bool _alertsZoneEnabled = true;
   bool _alertsBatteryEnabled = true;
+  bool _alertsSoundEnabled = true;
   double _batteryThreshold = 20.0;
   bool _hasAlertedBattery = false;
   bool _hasCameraError = false;
@@ -66,6 +67,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return widget.petName.isEmpty
         ? AppLocalizations.of(context)!.unknown
         : widget.petName;
+  }
+
+  /// Icon + copy for one activity event, shared by every feed style.
+  (IconData, Color, String, String) _eventDisplay(
+    Map<String, dynamic> ev,
+    AppLocalizations l10n,
+  ) {
+    final type = ev['event_type'];
+    if (type == 'sound_detected') {
+      return (
+        Icons.volume_up,
+        AppColors.tertiary,
+        l10n.soundDetectedTitle,
+        l10n.soundDetectedBody,
+      );
+    }
+    final isEnter = type == 'zone_enter';
+    final zone = ev['zone_name'] ?? l10n.unknown;
+    return (
+      isEnter ? Icons.meeting_room : Icons.directions_walk,
+      isEnter ? AppColors.primary : AppColors.secondary,
+      isEnter
+          ? l10n.zoneEntered(_displayPetName, zone)
+          : l10n.zoneLeft(_displayPetName, zone),
+      isEnter ? l10n.cameraDetectedMovement : l10n.leftTheZone,
+    );
   }
 
   IconData _getPetIcon(String type) {
@@ -205,6 +232,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() {
         _alertsZoneEnabled = prefs.getBool('alerts_zone_enabled') ?? true;
         _alertsBatteryEnabled = prefs.getBool('alerts_battery_enabled') ?? true;
+        _alertsSoundEnabled = prefs.getBool('alerts_sound_enabled') ?? true;
         _batteryThreshold = prefs.getDouble('alerts_battery_threshold') ?? 20.0;
       });
     }
@@ -321,27 +349,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 newEvents.isNotEmpty &&
                 _activities.first['timestamp'] !=
                     newEvents.first['timestamp'])) {
-          if (_activities.isNotEmpty && _alertsZoneEnabled) {
+          if (_activities.isNotEmpty && (_alertsZoneEnabled || _alertsSoundEnabled)) {
             final ev = newEvents.first;
-            final isEnter = ev['event_type'] == 'zone_enter';
             final l10n = AppLocalizations.of(context)!;
-            final zoneName = ev['zone_name'] ?? l10n.unknown;
-            final now = DateTime.now();
-            final lastAlert = _lastZoneAlerts[zoneName];
-            if (lastAlert == null ||
-                now.difference(lastAlert).inSeconds >= 60) {
-              _lastZoneAlerts[zoneName] = now;
-              final alertId = _zoneAlertIds.putIfAbsent(
-                zoneName,
-                () => _nextAlertId++,
-              );
+            final eventType = ev['event_type'];
+            if (eventType == 'sound_detected' && _alertsSoundEnabled) {
               NotificationService().showNotification(
-                id: alertId,
-                title: isEnter
-                    ? l10n.zoneEntered(_displayPetName, zoneName)
-                    : l10n.zoneLeft(_displayPetName, zoneName),
-                body: '',
+                id: 3000,
+                title: l10n.soundDetectedTitle,
+                body: l10n.soundDetectedBody,
               );
+            } else if (eventType != 'sound_detected' && _alertsZoneEnabled) {
+              final isEnter = eventType == 'zone_enter';
+              final zoneName = ev['zone_name'] ?? l10n.unknown;
+              final now = DateTime.now();
+              final lastAlert = _lastZoneAlerts[zoneName];
+              if (lastAlert == null ||
+                  now.difference(lastAlert).inSeconds >= 60) {
+                _lastZoneAlerts[zoneName] = now;
+                final alertId = _zoneAlertIds.putIfAbsent(
+                  zoneName,
+                  () => _nextAlertId++,
+                );
+                NotificationService().showNotification(
+                  id: alertId,
+                  title: isEnter
+                      ? l10n.zoneEntered(_displayPetName, zoneName)
+                      : l10n.zoneLeft(_displayPetName, zoneName),
+                  body: '',
+                );
+              }
             }
           }
           setState(() => _activities = newEvents);
@@ -940,13 +977,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Divider(color: Colors.white.withValues(alpha: 0.1)),
               itemBuilder: (context, index) {
                 final ev = _activities[index];
-                final isEnter = ev['event_type'] == 'zone_enter';
                 final date = DateTime.fromMillisecondsSinceEpoch(
                   (ev['timestamp'] * 1000).toInt(),
                 );
                 final timeString =
                     "${date.hour}:${date.minute.toString().padLeft(2, '0')}";
-                final zone = ev['zone_name'] ?? l10n.unknown;
+                final title = _eventDisplay(ev, l10n).$3;
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -963,9 +999,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        isEnter
-                            ? l10n.zoneEntered(_displayPetName, zone)
-                            : l10n.zoneLeft(_displayPetName, zone),
+                        title,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 14,
@@ -1236,23 +1270,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     itemCount: _activities.length,
                     itemBuilder: (context, index) {
                       final ev = _activities[index];
-                      final isEnter = ev['event_type'] == 'zone_enter';
                       final date = DateTime.fromMillisecondsSinceEpoch(
                         (ev['timestamp'] * 1000).toInt(),
                       );
                       final timeString =
                           "${date.hour}:${date.minute.toString().padLeft(2, '0')}";
-                      final zone = ev['zone_name'] ?? l10n.unknown;
+                      final (icon, color, title, subtitle) = _eventDisplay(
+                        ev,
+                        l10n,
+                      );
 
                       return _buildTimelineItem(
-                        isEnter ? Icons.meeting_room : Icons.directions_walk,
-                        isEnter ? AppColors.primary : AppColors.secondary,
-                        isEnter
-                            ? l10n.zoneEntered(_displayPetName, zone)
-                            : l10n.zoneLeft(_displayPetName, zone),
-                        isEnter
-                            ? l10n.cameraDetectedMovement
-                            : l10n.leftTheZone,
+                        icon,
+                        color,
+                        title,
+                        subtitle,
                         timeString,
                         isLast: index == _activities.length - 1,
                       );

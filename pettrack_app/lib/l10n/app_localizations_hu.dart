@@ -758,4 +758,13 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get nightModeOff => 'Éjszakai mód kikapcsolva';
+
+  @override
+  String get alertsSound => 'Hangjelzések (ugatás / nyávogás)';
+
+  @override
+  String get soundDetectedTitle => 'Hang észlelve';
+
+  @override
+  String get soundDetectedBody => 'Hangos zaj a kamera közelében.';
 }

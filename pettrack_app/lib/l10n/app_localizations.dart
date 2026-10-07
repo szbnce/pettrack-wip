@@ -1499,6 +1499,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Night mode off'**
   String get nightModeOff;
+
+  /// No description provided for @alertsSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound alerts (bark / meow)'**
+  String get alertsSound;
+
+  /// No description provided for @soundDetectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound detected'**
+  String get soundDetectedTitle;
+
+  /// No description provided for @soundDetectedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Loud noise near the camera.'**
+  String get soundDetectedBody;
 }
 
 class _AppLocalizationsDelegate

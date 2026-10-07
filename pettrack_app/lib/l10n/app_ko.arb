@@ -359,6 +359,9 @@
   "tooltipNightMode": "야간 모드",
   "nightModeOn": "야간 모드를 켰습니다",
   "nightModeOff": "야간 모드를 껐습니다",
+  "alertsSound": "소리 알림(짖음 / 야옹)",
+  "soundDetectedTitle": "소리 감지됨",
+  "soundDetectedBody": "카메라 근처에서 큰 소리가 났습니다.",
   "@timelapseError": {
     "placeholders": {
       "code": {

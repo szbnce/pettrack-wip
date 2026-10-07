@@ -762,4 +762,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get nightModeOff => 'Modalità notte disattivata';
+
+  @override
+  String get alertsSound => 'Avvisi sonori (abbaiare / miagolare)';
+
+  @override
+  String get soundDetectedTitle => 'Suono rilevato';
+
+  @override
+  String get soundDetectedBody => 'Rumore forte vicino alla telecamera.';
 }

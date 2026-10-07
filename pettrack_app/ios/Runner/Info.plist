@@ -7,7 +7,7 @@
 		<key>NSCameraUsageDescription</key>
 		<string>This app needs camera access to scan QR codes and stream video.</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>This app needs microphone access for the camera.</string>
+		<string>This app measures microphone loudness to detect sound events. Audio is never recorded or uploaded.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>This app needs photo library access to upload pet profile pictures.</string>
 		<key>NSLocalNetworkUsageDescription</key>

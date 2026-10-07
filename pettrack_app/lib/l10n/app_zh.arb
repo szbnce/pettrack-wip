@@ -359,6 +359,9 @@
   "tooltipNightMode": "夜间模式",
   "nightModeOn": "夜间模式已开启",
   "nightModeOff": "夜间模式已关闭",
+  "alertsSound": "声音提醒（吠叫 / 猫叫）",
+  "soundDetectedTitle": "检测到声音",
+  "soundDetectedBody": "摄像头附近有大声响。",
   "@timelapseError": {
     "placeholders": {
       "code": {

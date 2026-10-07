@@ -14,6 +14,10 @@ class MonitorUpdate(BaseModel):
     battery_level: int
     is_charging: bool
 
+class SoundEvent(BaseModel):
+    # Loudness in dBFS as measured on the monitor; kept for the event details.
+    level: float = 0.0
+
 class PetProfile(BaseModel):
     name: str
     type: str

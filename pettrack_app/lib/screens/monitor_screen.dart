@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:record/record.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -16,6 +17,7 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/theme/colors.dart';
 import 'package:pettrack_app/screens/monitor_setup_screen.dart';
 import 'package:pettrack_app/utils/night_vision.dart';
+import 'package:pettrack_app/utils/sound_detect.dart';
 import 'package:pettrack_app/main.dart';
 import 'package:pettrack_app/screens/welcome_screen.dart';
 
@@ -39,6 +41,10 @@ class _MonitorScreenState extends State<MonitorScreen> {
 
   WebSocketChannel? _socket;
   final AudioPlayer _callPlayer = AudioPlayer();
+  final AudioRecorder _soundRecorder = AudioRecorder();
+  StreamSubscription<Amplitude>? _soundSub;
+  StreamSubscription<Uint8List>? _pcmSub;
+  DateTime? _lastSoundReport;
   bool _isInitialized = false;
   bool _isStreaming = false;
   bool _isSleeping = false;
@@ -179,6 +185,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
     WakelockPlus.enable();
     debugPrint("Starting Stream");
 
+    _startSoundWatch();
     _sendBatteryStatus();
     _statusTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       _sendBatteryStatus();
@@ -200,6 +207,71 @@ class _MonitorScreenState extends State<MonitorScreen> {
     } catch (e) {
       debugPrint('Failed to play call sound: $e');
     }
+  }
+
+  /// Watch the mic for loud noises (bark / meow) while streaming.
+  ///
+  /// Only the loudness number leaves the phone — the audio itself is never
+  /// recorded or sent anywhere. Requires a mic permission prompt on first use.
+  Future<void> _startSoundWatch() async {
+    if (_soundSub != null) return;
+    try {
+      if (!await _soundRecorder.hasPermission()) {
+        debugPrint('Mic permission denied — sound events off');
+        return;
+      }
+      // Amplitude needs an active recording session; the stream itself is
+      // drained and discarded.
+      final pcm = await _soundRecorder.startStream(
+        const RecordConfig(numChannels: 1, sampleRate: 16000),
+      );
+      _pcmSub = pcm.listen((_) {}, onError: (_) {});
+      _soundSub = _soundRecorder
+          .onAmplitudeChanged(const Duration(milliseconds: 250))
+          .listen(
+            _onSoundLevel,
+            onError: (e) => debugPrint('Sound watch error: $e'),
+          );
+    } catch (e) {
+      debugPrint('Failed to start sound watch: $e');
+    }
+  }
+
+  void _onSoundLevel(Amplitude amp) {
+    if (!isSoundLevelEvent(amp.current)) return;
+    final now = DateTime.now();
+    if (_lastSoundReport != null &&
+        now.difference(_lastSoundReport!) < kSoundReportCooldown) {
+      return;
+    }
+    _lastSoundReport = now;
+    _reportSound(amp.current);
+  }
+
+  Future<void> _reportSound(double levelDb) async {
+    try {
+      await http.post(
+        Uri.parse('$_currentIp/api/monitor/sound'),
+        headers: {
+          'x-api-token': _currentToken,
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'level': levelDb}),
+      );
+    } catch (e) {
+      debugPrint('Failed to report sound: $e');
+    }
+  }
+
+  Future<void> _stopSoundWatch() async {
+    await _soundSub?.cancel();
+    _soundSub = null;
+    await _pcmSub?.cancel();
+    _pcmSub = null;
+    try {
+      await _soundRecorder.stop();
+    } catch (_) {}
+    _lastSoundReport = null;
   }
 
   /// A viewer toggled night mode: torch + exposure lift on the camera,
@@ -243,6 +315,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
     _streamTimer = null;
     _statusTimer?.cancel();
     _statusTimer = null;
+    _stopSoundWatch();
 
     setState(() {
       _isStreaming = false;
@@ -327,6 +400,8 @@ class _MonitorScreenState extends State<MonitorScreen> {
     _streamTimer?.cancel();
     _statusTimer?.cancel();
     _reconnectTimer?.cancel();
+    _stopSoundWatch();
+    _soundRecorder.dispose();
     _controller.dispose();
     _callPlayer.dispose();
     _socket?.sink.close();

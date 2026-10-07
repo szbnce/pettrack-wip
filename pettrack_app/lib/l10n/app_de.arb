@@ -359,6 +359,9 @@
   "tooltipNightMode": "Nachtmodus",
   "nightModeOn": "Nachtmodus aktiviert",
   "nightModeOff": "Nachtmodus deaktiviert",
+  "alertsSound": "Geräuschalarme (Bellen / Miauen)",
+  "soundDetectedTitle": "Geräusch erkannt",
+  "soundDetectedBody": "Lautes Geräusch in der Nähe der Kamera.",
   "@timelapseError": {
     "placeholders": {
       "code": {

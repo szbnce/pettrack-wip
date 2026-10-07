@@ -751,4 +751,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get nightModeOff => 'ナイトモードをオフにしました';
+
+  @override
+  String get alertsSound => '音の通知（鳴き声）';
+
+  @override
+  String get soundDetectedTitle => '音を検出しました';
+
+  @override
+  String get soundDetectedBody => 'カメラの近くで大きな音がしました。';
 }
