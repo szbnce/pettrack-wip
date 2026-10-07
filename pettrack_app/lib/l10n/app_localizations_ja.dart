@@ -724,6 +724,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tooltipPlaySound => '音を鳴らす';
 
   @override
+  String get cameraGridLabel => 'すべてのカメラ';
+
+  @override
   String get tooltipSnapshot => 'スナップショットを撮る';
 
   @override

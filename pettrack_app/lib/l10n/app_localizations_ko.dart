@@ -722,6 +722,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tooltipPlaySound => '소리 재생';
 
   @override
+  String get cameraGridLabel => '모든 카메라';
+
+  @override
   String get tooltipSnapshot => '스냅샷 찍기';
 
   @override

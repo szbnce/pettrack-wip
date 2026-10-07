@@ -350,6 +350,7 @@
   "whatsNewTitle": "What's new",
   "changelogBody": "1.0.0\n• Today's recap on the dashboard\n• Quiet hours for alerts\n• Home Assistant integration\n• Material 3 redesign",
   "tooltipPlaySound": "Play a sound",
+  "cameraGridLabel": "All cameras",
   "tooltipSnapshot": "Take a snapshot",
   "playSoundSent": "Sound sent to the monitor",
   "tooltipTimelapse": "Day timelapse",

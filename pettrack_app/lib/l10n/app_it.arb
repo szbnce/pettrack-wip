@@ -350,6 +350,7 @@
   "whatsNewTitle": "Novità",
   "changelogBody": "1.0.0\n• \"Riepilogo di oggi\" sulla dashboard\n• Ore di silenzio per gli avvisi\n• Integrazione con Home Assistant\n• Design Material 3",
   "tooltipPlaySound": "Riproduci un suono",
+  "cameraGridLabel": "Tutte le camere",
   "tooltipSnapshot": "Scatta una foto",
   "playSoundSent": "Suono inviato al monitor",
   "tooltipTimelapse": "Timelapse del giorno",

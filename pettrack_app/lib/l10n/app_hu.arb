@@ -250,6 +250,7 @@
   "whatsNewTitle": "Újdonságok",
   "changelogBody": "1.0.0\n• „Mai összefoglaló” a kezdőképernyőn\n• Csendes órák a riasztásokhoz\n• Home Assistant integráció\n• Material 3 arculat",
   "tooltipPlaySound": "Hang lejátszása",
+  "cameraGridLabel": "Összes kamera",
   "tooltipSnapshot": "Pillanatkép készítése",
   "playSoundSent": "Hang elküldve a monitorra",
   "tooltipTimelapse": "Napi timelapse",

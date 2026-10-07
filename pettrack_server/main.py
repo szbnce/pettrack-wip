@@ -11,7 +11,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from manager import manager, client_manager, client_command_to_monitor
-from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, SECRET_TOKEN, fernet, set_key, token_valid
+from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, touch_monitor, mark_monitor_offline, SECRET_TOKEN, fernet, set_key, token_valid
 from tasks import cleanup_old_images
 from vision import process_and_save_frame
 from database import init_db, get_zones
@@ -109,10 +109,9 @@ async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: 
         return
 
     monitor_id = client_id
-    await manager.connect(websocket)
-    monitor_state["online"] = True
+    await manager.connect(websocket, key=monitor_id)
+    touch_monitor(monitor_id, frame_count=0)
     monitor_state["frame_count"] = 0
-    monitor_state["id"] = monitor_id
     mqtt_bridge.bridge.publish_monitor(True)
     print(f"Monitor {monitor_id} connected!", flush=True)
 
@@ -122,11 +121,11 @@ async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: 
     try:
         while True:
             data = await websocket.receive_bytes()
-            monitor_state["frame_count"] += 1
-            update_latest_frame(data)
+            mid = update_latest_frame(data, monitor_id)
 
-            asyncio.create_task(client_manager.broadcast_bytes(data))
-            
+            # Only viewers watching this camera (or all of them) get the frame.
+            asyncio.create_task(client_manager.broadcast_bytes(data, source_id=mid))
+
             if monitor_state["frame_count"] % 10 == 0:
                 print(f"Received frame #{monitor_state['frame_count']} from {monitor_id}: {len(data)} bytes", flush=True)
 
@@ -134,22 +133,22 @@ async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: 
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        monitor_state["online"] = False
-        mqtt_bridge.bridge.publish_monitor(False)
+        mark_monitor_offline(monitor_id)
         print(f"Monitor {monitor_id} disconnected normally.", flush=True)
     except Exception as e:
         manager.disconnect(websocket)
-        monitor_state["online"] = False
-        mqtt_bridge.bridge.publish_monitor(False)
+        mark_monitor_offline(monitor_id)
         print(f"Error: {e}", flush=True)
 
 @app.websocket("/ws/client")
-async def client_websocket(websocket: WebSocket, token: str = None):
+async def client_websocket(websocket: WebSocket, token: str = None, monitor: str = None):
     if not token_valid(token):
         await websocket.close(code=1008)
         return
-    await client_manager.connect(websocket)
-    asyncio.create_task(manager.broadcast_text(json.dumps({"action": "set_fps", "fps": 5})))
+    # monitor=<id> narrows the stream to one camera; no param keeps the old
+    # "every camera" behaviour for the web dashboard.
+    await client_manager.connect(websocket, key=monitor or None)
+    asyncio.create_task(manager.broadcast_text(json.dumps({"action": "set_fps", "fps": 5}), source_id=monitor or None))
     try:
         while True:
             message = await websocket.receive()
@@ -158,7 +157,7 @@ async def client_websocket(websocket: WebSocket, token: str = None):
             if text:
                 forwarded = client_command_to_monitor(text)
                 if forwarded:
-                    await manager.broadcast_text(forwarded)
+                    await manager.broadcast_text(forwarded, source_id=monitor or None)
     except Exception:
         client_manager.disconnect(websocket)
         if len(client_manager.active.connections) == 0:

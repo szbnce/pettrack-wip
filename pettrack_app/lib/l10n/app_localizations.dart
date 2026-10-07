@@ -1446,6 +1446,12 @@ abstract class AppLocalizations {
   /// **'Play a sound'**
   String get tooltipPlaySound;
 
+  /// No description provided for @cameraGridLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'All cameras'**
+  String get cameraGridLabel;
+
   /// No description provided for @tooltipSnapshot.
   ///
   /// In en, this message translates to:

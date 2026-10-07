@@ -339,7 +339,12 @@ class _MonitorScreenState extends State<MonitorScreen> {
           'x-api-token': _currentToken,
           'Content-Type': 'application/json',
         },
-        body: json.encode({'battery_level': level, 'is_charging': isCharging}),
+        body: json.encode({
+          'battery_level': level,
+          'is_charging': isCharging,
+          // Lets the dashboard keep per-camera battery chips.
+          'monitor_id': _currentClientId,
+        }),
       );
     } catch (e) {
       debugPrint("Failed to send battery Status: $e");

@@ -13,6 +13,8 @@ class ZoneConfig(BaseModel):
 class MonitorUpdate(BaseModel):
     battery_level: int
     is_charging: bool
+    # Which camera phone this battery report belongs to (multi-camera setups).
+    monitor_id: str | None = None
 
 class SoundEvent(BaseModel):
     # Loudness in dBFS as measured on the monitor; kept for the event details.

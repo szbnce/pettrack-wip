@@ -720,6 +720,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tooltipPlaySound => '播放声音';
 
   @override
+  String get cameraGridLabel => '全部摄像头';
+
+  @override
   String get tooltipSnapshot => '截取快照';
 
   @override

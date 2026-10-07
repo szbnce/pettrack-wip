@@ -731,6 +731,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get tooltipPlaySound => 'Hang lejátszása';
 
   @override
+  String get cameraGridLabel => 'Összes kamera';
+
+  @override
   String get tooltipSnapshot => 'Pillanatkép készítése';
 
   @override

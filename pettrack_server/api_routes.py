@@ -96,16 +96,89 @@ monitor_state = {
 }
 active_zones: Dict[str, List[Point]] = {}
 
+# One entry per camera phone. monitor_state above is only a mirror of the
+# freshest camera so single-camera clients (/api/status, the Wear app) keep
+# working unchanged once a second monitor joins.
+monitor_registry: Dict[str, Dict] = {}
+monitor_frames: Dict[str, Dict] = {}
+ONLINE_TIMEOUT = 5.0
+
 latest_frame_info = {
     "data": None,
     "timestamp": 0.0,
 }
 
-def update_latest_frame(data: bytes):
+def _fresh_monitors(now: float | None = None):
+    now = now or time.time()
+    return [
+        e
+        for e in monitor_registry.values()
+        if e.get("online") and now - e.get("last_seen", now) <= ONLINE_TIMEOUT
+    ]
+
+def _mirror_active_monitor() -> None:
+    """Point the legacy single-camera state at the freshest camera."""
+    entries = _fresh_monitors()
+    if not entries:
+        monitor_state["online"] = False
+        return
+    entry = max(entries, key=lambda e: e.get("last_seen", 0.0))
+    monitor_state.update(
+        {
+            "id": entry["id"],
+            "online": True,
+            "last_seen": entry["last_seen"],
+            "frame_count": entry.get("frame_count", 0),
+            "battery_level": entry.get("battery_level", 100),
+            "is_charging": entry.get("is_charging", False),
+        }
+    )
+
+def touch_monitor(monitor_id: str | None = None, **fields) -> str:
+    """Register or refresh one camera and re-mirror the active-camera state."""
+    mid = monitor_id or "unnamed_monitor"
+    entry = _ensure_monitor(mid)
+    entry.update(fields)
+    entry["last_seen"] = time.time()
+    entry["online"] = True
+    _mirror_active_monitor()
+    return mid
+
+def _ensure_monitor(mid: str) -> Dict:
+    return monitor_registry.setdefault(
+        mid,
+        {
+            "id": mid,
+            "online": True,
+            "frame_count": 0,
+            "battery_level": 100,
+            "is_charging": False,
+            "last_seen": 0.0,
+        },
+    )
+
+def mark_monitor_offline(monitor_id: str | None = None) -> None:
+    mid = monitor_id or "unnamed_monitor"
+    entry = monitor_registry.get(mid)
+    if entry:
+        entry["online"] = False
+    was_online = monitor_state.get("online", False)
+    _mirror_active_monitor()
+    if was_online and not monitor_state.get("online"):
+        mqtt_bridge.bridge.publish_monitor(False)
+
+def update_latest_frame(data: bytes, monitor_id: str | None = None):
+    now = time.time()
     latest_frame_info["data"] = data
-    latest_frame_info["timestamp"] = time.time()
+    latest_frame_info["timestamp"] = now
+    mid = monitor_id or "unnamed_monitor"
+    entry = _ensure_monitor(mid)
+    entry["frame_count"] = entry.get("frame_count", 0) + 1
+    monitor_frames[mid] = {"data": data, "timestamp": now}
+    touch_monitor(mid)
     mqtt_bridge.bridge.publish_frame(data)
     timelapse.maybe_sample(data)
+    return mid
 
 def frame_media_type(data: bytes) -> str:
     """JPEG or PNG, whichever the monitor actually sent."""
@@ -117,13 +190,32 @@ class PinRequest(BaseModel):
 failed_login_attempts = {}
 
 
+def _monitor_list() -> List[Dict]:
+    """Snapshot of every camera that has checked in, freshest status first."""
+    now = time.time()
+    out = []
+    for mid, entry in monitor_registry.items():
+        online = entry.get("online", False) and now - entry.get("last_seen", now) <= ONLINE_TIMEOUT
+        out.append(
+            {
+                "id": entry["id"],
+                "online": online,
+                "frame_count": entry.get("frame_count", 0),
+                "battery_level": entry.get("battery_level", 100),
+                "is_charging": entry.get("is_charging", False),
+                "last_seen": entry.get("last_seen", 0.0),
+            }
+        )
+    out.sort(key=lambda e: e["id"])
+    return out
+
+
 @router.get("/api/status")
 async def get_status():
     is_online = monitor_state.get("online", False)
-    if is_online and time.time() - monitor_state.get("last_seen", time.time()) > 5:
-        monitor_state["online"] = False
+    if is_online and time.time() - monitor_state.get("last_seen", time.time()) > ONLINE_TIMEOUT:
+        mark_monitor_offline(monitor_state.get("id"))
         is_online = False
-        mqtt_bridge.bridge.publish_monitor(False)
 
     return {
         "monitor_online": is_online,
@@ -131,7 +223,26 @@ async def get_status():
         "monitor_id": monitor_state.get("id", "unnamed_monitor"),
         "battery_level": monitor_state.get("battery_level", 100),
         "is_charging": monitor_state.get("is_charging", False),
+        "monitors": _monitor_list(),
     }
+
+@router.get("/api/monitors")
+async def list_monitors():
+    """Every camera that has checked in, for the multi-camera dashboard."""
+    return _monitor_list()
+
+@router.get("/api/monitors/{monitor_id}/frame")
+async def get_monitor_frame(monitor_id: str):
+    """Latest still from one camera — used by the grid thumbnails."""
+    info = monitor_frames.get(monitor_id)
+    if info and info["data"]:
+        headers = {"Last-Modified": formatdate(info["timestamp"], usegmt=True)}
+        return Response(
+            content=info["data"],
+            media_type=frame_media_type(info["data"]),
+            headers=headers,
+        )
+    raise HTTPException(status_code=404, detail="No frame from this monitor yet")
 
 @auth_router.get("/api/health")
 async def health():
@@ -148,24 +259,20 @@ async def get_version():
     return {"version": SERVER_VERSION, "name": socket.gethostname() or "pettrack"}
 
 @router.post("/api/frame/web")
-async def receive_web_frame(request: Request, token: str = ""):
+async def receive_web_frame(request: Request, token: str = "", monitor_id: str = ""):
     if not token_valid(token):
         return {"error": "Invalid token"}
     data = await request.body()
-    update_latest_frame(data)
-    
-    # Broadcast to WebSocket clients
-    asyncio.create_task(client_manager.broadcast_bytes(data))
+    mid = update_latest_frame(data, monitor_id or None)
 
-    monitor_state["online"] = True
-    monitor_state["last_seen"] = time.time()
-    monitor_state["frame_count"] = monitor_state.get("frame_count", 0) + 1
-    
+    # Broadcast to WebSocket clients watching this camera
+    asyncio.create_task(client_manager.broadcast_bytes(data, source_id=mid))
+
     # Run vision every 30 frames
-    if monitor_state["frame_count"] % 30 == 0:
+    if monitor_registry[mid]["frame_count"] % 30 == 0:
         from vision import process_and_save_frame
         asyncio.create_task(process_and_save_frame(data))
-        
+
     return {"status": "ok"}
 
 @auth_router.post("/api/auth/login")
@@ -225,10 +332,11 @@ async def update_pet_profile(pet: PetProfile):
 
 @router.post("/api/monitor/update")
 async def update_monitor_status(update: MonitorUpdate):
-    monitor_state["battery_level"] = update.battery_level
-    monitor_state["is_charging"] = update.is_charging
-    monitor_state["online"] = True
-    monitor_state["last_seen"] = time.time()
+    touch_monitor(
+        update.monitor_id,
+        battery_level=update.battery_level,
+        is_charging=update.is_charging,
+    )
     mqtt_bridge.bridge.publish_battery(update.battery_level, update.is_charging)
     mqtt_bridge.bridge.publish_monitor(True)
     return {"status": "ok"}

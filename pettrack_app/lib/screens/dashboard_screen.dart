@@ -60,6 +60,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // Mirrors the monitor's low-light mode (toggled remotely from here).
   bool _nightMode = false;
   DateTime? _frameTimestamp;
+  // Multi-camera: every monitor that has checked in, and the one in focus.
+  List<dynamic> _monitors = [];
+  String? _selectedMonitorId;
+  bool _showCameraGrid = false;
+  Timer? _gridTimer;
+  int _gridRefresh = 0;
+  int _socketGen = 0;
+  String? _socketMonitorId;
 
   String get _displayPetName {
     if (widget.serverIp.contains('demo_ip')) return "Tapsi Hapsi";
@@ -173,20 +181,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return;
     }
 
+    final gen = ++_socketGen;
+    final monitorParam = _selectedMonitorId == null
+        ? ''
+        : '&monitor=${Uri.encodeComponent(_selectedMonitorId!)}';
+    _socketMonitorId = _selectedMonitorId;
     try {
       final wsUrl =
-          '${widget.serverIp.replaceAll("http", "ws")}/ws/client?token=${widget.token}';
+          '${widget.serverIp.replaceAll("http", "ws")}/ws/client?token=${widget.token}$monitorParam';
       _clientChannel = WebSocketChannel.connect(Uri.parse(wsUrl));
       _clientChannel!.stream.listen(
         (data) {
-          if (!mounted || _secretToken == null) return;
+          if (!mounted || _secretToken == null || gen != _socketGen) return;
           try {
             if (data is String) return;
             final newBytes = data is Uint8List
                 ? data
                 : Uint8List.fromList(data as List<int>);
             ui.decodeImageFromList(newBytes, (ui.Image img) {
-              if (mounted) {
+              if (mounted && gen == _socketGen) {
                 setState(() {
                   _currentUiImage?.dispose();
                   _currentUiImage = img;
@@ -206,24 +219,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
         },
         onDone: () {
-          if (mounted) {
-            setState(() => _isServerOnline = false);
-            Future.delayed(const Duration(seconds: 3), _connectClientSocket);
-          }
+          if (!mounted || gen != _socketGen) return;
+          setState(() => _isServerOnline = false);
+          Future.delayed(const Duration(seconds: 3), _connectClientSocket);
         },
         onError: (e) {
-          if (mounted) {
-            setState(() => _isServerOnline = false);
-            Future.delayed(const Duration(seconds: 3), _connectClientSocket);
-          }
+          if (!mounted || gen != _socketGen) return;
+          setState(() => _isServerOnline = false);
+          Future.delayed(const Duration(seconds: 3), _connectClientSocket);
         },
       );
     } catch (e) {
-      if (mounted) {
-        setState(() => _isServerOnline = false);
-        Future.delayed(const Duration(seconds: 3), _connectClientSocket);
-      }
+      if (!mounted || gen != _socketGen) return;
+      setState(() => _isServerOnline = false);
+      Future.delayed(const Duration(seconds: 3), _connectClientSocket);
     }
+  }
+
+  /// Swap the live stream over to another camera (or back to "all" with null).
+  void _selectMonitor(String? monitorId) {
+    if (monitorId == _selectedMonitorId) return;
+    _socketGen++; // kill the old listener before closing, so it cannot reconnect
+    setState(() {
+      _selectedMonitorId = monitorId;
+      _showCameraGrid = false;
+      _currentUiImage?.dispose();
+      _currentUiImage = null;
+      _frameTimestamp = null;
+    });
+    _gridTimer?.cancel();
+    _clientChannel?.sink.close();
+    _clientChannel = null;
+    _connectClientSocket();
+  }
+
+  /// Polls each camera's still so the grid tiles stay fresh without websockets.
+  void _startGridRefresh() {
+    _gridTimer?.cancel();
+    _gridTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+      if (mounted && _showCameraGrid) setState(() => _gridRefresh++);
+    });
   }
 
   Future<void> _loadAlertSettings() async {
@@ -399,11 +434,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
       if (response.statusCode == 200 && mounted) {
         final data = jsonDecode(response.body);
         var lowBatteryAlert = false;
+        // Decided after setState: switching cameras rebuilds the socket.
+        String? selectAfter;
+        var reconnectAfter = false;
         setState(() {
           _isServerOnline = true;
           _statusFailures = 0;
           if (data['monitor_id'] != null) {
             _monitorId = data['monitor_id'];
+          }
+          final monitors = data['monitors'];
+          if (monitors is List) {
+            _monitors = monitors;
+            // Keep the focus on a camera that still exists; when exactly one
+            // is left, focus it so the stream is never a mix of two feeds.
+            if (_selectedMonitorId != null &&
+                !_monitors.any((m) => m['id'] == _selectedMonitorId)) {
+              _selectedMonitorId = null;
+              reconnectAfter = true;
+            } else if (_selectedMonitorId == null &&
+                _monitors.length == 1 &&
+                _monitors.first['id'] != _socketMonitorId) {
+              selectAfter = _monitors.first['id'] as String?;
+            }
           }
           if (data['battery_level'] != null) {
             int newBat = data['battery_level'];
@@ -422,6 +475,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _isCharging = data['is_charging'] ?? false;
           }
         });
+        if (selectAfter != null) _selectMonitor(selectAfter);
+        if (reconnectAfter) _connectClientSocket();
         if (lowBatteryAlert && mounted) {
           final l10n = AppLocalizations.of(context)!;
           NotificationService().showNotification(
@@ -438,6 +493,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  /// Battery of the camera in focus (falls back to the active-camera mirror).
+  (int, bool) get _focusedBattery {
+    if (_selectedMonitorId != null) {
+      for (final m in _monitors) {
+        if (m['id'] == _selectedMonitorId) {
+          return (
+            (m['battery_level'] as num?)?.toInt() ?? _batteryLevel,
+            m['is_charging'] == true,
+          );
+        }
+      }
+    }
+    return (_batteryLevel, _isCharging);
+  }
+
   /// Two consecutive failed status polls -> show the unreachable overlay.
   /// One blip should not flash the screen.
   void _noteStatusFailure() {
@@ -450,6 +520,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    _gridTimer?.cancel();
     _clientChannel?.sink.close();
     _currentUiImage?.dispose();
     super.dispose();
@@ -497,7 +568,117 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  /// Camera picker + "all cameras" grid toggle, shown only with 2+ monitors.
+  Widget _buildCameraPicker(AppLocalizations l10n) {
+    if (_monitors.length < 2) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final m in _monitors)
+            ChoiceChip(
+              label: Text(m['id'] as String),
+              selected: !_showCameraGrid && _selectedMonitorId == m['id'],
+              onSelected: (_) => _selectMonitor(m['id'] as String),
+            ),
+          ChoiceChip(
+            avatar: const Icon(Icons.grid_view, size: 18),
+            label: Text(l10n.cameraGridLabel),
+            selected: _showCameraGrid,
+            onSelected: (selected) {
+              setState(() => _showCameraGrid = selected);
+              if (selected) {
+                _startGridRefresh();
+              } else {
+                _gridTimer?.cancel();
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Live-ish tiles for every camera; tap one to bring it into focus.
+  Widget _buildCameraGrid(AppLocalizations l10n) {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 12,
+      crossAxisSpacing: 12,
+      childAspectRatio: 16 / 10,
+      children: [
+        for (final m in _monitors)
+          _buildCameraTile(m as Map<String, dynamic>, l10n),
+      ],
+    );
+  }
+
+  Widget _buildCameraTile(Map<String, dynamic> monitor, AppLocalizations l10n) {
+    final id = monitor['id'] as String;
+    final online = monitor['online'] == true;
+    final url =
+        '${widget.serverIp}/api/monitors/${Uri.encodeComponent(id)}/frame?v=$_gridRefresh';
+    return GestureDetector(
+      onTap: online ? () => _selectMonitor(id) : null,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF15181E),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: _selectedMonitorId == id
+                ? AppColors.primary
+                : AppColors.outline.withValues(alpha: 0.1),
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: online
+            ? Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(
+                    url,
+                    headers: {'x-api-token': widget.token},
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, _, _) => Center(
+                      child: Icon(
+                        Icons.videocam_off,
+                        color: Colors.white.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 8,
+                    bottom: 8,
+                    child: _buildChip(
+                      Icons.wifi,
+                      "$id · ${monitor['battery_level'] ?? 0}%",
+                    ),
+                  ),
+                ],
+              )
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.cloud_off, color: Colors.redAccent),
+                    const SizedBox(height: 4),
+                    Text(
+                      "$id · ${l10n.offlineStatus}",
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+
   Widget _buildCameraCard(AppLocalizations l10n, bool isDesktop) {
+    final battery = _focusedBattery;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -519,6 +700,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: 16),
         ],
+        _buildCameraPicker(l10n),
+        if (_showCameraGrid)
+          _buildCameraGrid(l10n)
+        else
         ConstrainedBox(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.65,
@@ -610,15 +795,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   const SizedBox(width: 8),
                                 ],
                                 _buildChip(
-                                  _isCharging
+                                  battery.$2
                                       ? Icons.battery_charging_full
                                       : Icons.battery_full,
-                                  "$_batteryLevel%",
+                                  "${battery.$1}%",
                                 ),
                                 const SizedBox(width: 8),
                                 _buildChip(
                                   Icons.wifi,
-                                  _monitorId ?? l10n.searchingStatus,
+                                  _selectedMonitorId ??
+                                      _monitorId ??
+                                      l10n.searchingStatus,
                                 ),
                               ],
                             ),

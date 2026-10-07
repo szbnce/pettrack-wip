@@ -350,6 +350,7 @@
   "whatsNewTitle": "新機能",
   "changelogBody": "1.0.0\n• ダッシュボードに「今日のまとめ」\n• アラートのサイレント時間\n• Home Assistant 連携\n• Material 3 デザイン",
   "tooltipPlaySound": "音を鳴らす",
+  "cameraGridLabel": "すべてのカメラ",
   "tooltipSnapshot": "スナップショットを撮る",
   "playSoundSent": "モニターに音を送信しました",
   "tooltipTimelapse": "1日のタイムラプス",
