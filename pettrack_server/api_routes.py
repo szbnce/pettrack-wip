@@ -20,6 +20,7 @@ import notify
 import timelapse
 import health
 import settings as app_settings
+import arming
 
 # Token, session and lockout machinery lives in auth.py; the names are
 # re-exported here because main.py and the tests import them from this module.
@@ -204,6 +205,11 @@ async def get_status():
         "battery_level": monitor_state.get("battery_level", 100),
         "is_charging": monitor_state.get("is_charging", False),
         "monitors": _monitor_list(),
+        # Riding the existing poll: is the camera actually watching right now?
+        "arming": {
+            "mode": app_settings.get_arming_mode(),
+            "armed": app_settings.is_armed_now(),
+        },
     }
 
 @router.get("/api/monitors")
@@ -371,6 +377,10 @@ _last_sound_event = 0.0
 @router.post("/api/monitor/sound")
 async def report_sound_event(event: SoundEvent):
     global _last_sound_event
+    if not app_settings.is_armed_now():
+        # Disarmed keeps no evidence — sounds are dropped before the
+        # cooldown is consumed, so re-arming is not punished for the wait.
+        return {"status": "ok", "logged": False}
     now = time.time()
     if now - _last_sound_event < SOUND_EVENT_COOLDOWN:
         return {"status": "ok", "logged": False}
@@ -624,6 +634,47 @@ async def update_server_settings(req: SettingsUpdate):
         out["quiet_hours_from"] = quiet_from
         out["quiet_hours_to"] = quiet_to
     return out
+
+
+class ArmingWindow(BaseModel):
+    days: List[int]
+    from_min: int = Field(ge=0, le=1439)
+    to_min: int = Field(ge=0, le=1439)
+
+
+class ArmingUpdate(BaseModel):
+    mode: str | None = None
+    schedule: List[ArmingWindow] | None = None
+
+
+def _arming_state() -> dict:
+    mode = app_settings.get_arming_mode()
+    schedule = app_settings.get_arming_schedule()
+    return {
+        "mode": mode,
+        "schedule": schedule,
+        "armed": arming.is_armed(mode, schedule, datetime.now()),
+    }
+
+
+@router.get("/api/arming")
+async def get_arming():
+    return _arming_state()
+
+
+@router.post("/api/arming")
+async def update_arming(req: ArmingUpdate, x_api_token: str = Header(None)):
+    # Security-adjacent: arming decides what gets recorded. Monitor and
+    # media tokens must never be able to disarm the camera.
+    await require_full_token(x_api_token)
+    if req.mode is not None:
+        try:
+            app_settings.set_arming_mode(req.mode)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="invalid arming mode")
+    if req.schedule is not None:
+        app_settings.set_arming_schedule([w.model_dump() for w in req.schedule])
+    return _arming_state()
 
 @router.post("/api/notify/test")
 async def send_test_notification():

@@ -448,5 +448,18 @@
   "feedFilterZones": "ゾーン",
   "feedFilterSounds": "音",
   "feedFilterSystem": "システム",
-  "feedNoMatch": "一致するイベントがありません"
+  "feedNoMatch": "一致するイベントがありません",
+  "armingTitle": "見守り",
+  "armingModeOn": "常時オン",
+  "armingModeSchedule": "スケジュール",
+  "armingModeOff": "オフ",
+  "armingStatusArmed": "監視中",
+  "armingStatusDisarmed": "停止中",
+  "armingAddWindow": "時間帯を追加",
+  "armingRemoveWindow": "時間帯を削除",
+  "armingFrom": "開始",
+  "armingTo": "終了",
+  "armingDays": "曜日",
+  "armingHelp": "監視中は動きを録画して通知します。停止中は映像を保存しません。ライブビューは常に利用できます。",
+  "armingWindowRequired": "少なくとも1つの時間帯を追加してください"
 }

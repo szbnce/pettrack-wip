@@ -1997,6 +1997,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No matching events'**
   String get feedNoMatch;
+
+  /// No description provided for @armingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Watching'**
+  String get armingTitle;
+
+  /// No description provided for @armingModeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Always on'**
+  String get armingModeOn;
+
+  /// No description provided for @armingModeSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'On a schedule'**
+  String get armingModeSchedule;
+
+  /// No description provided for @armingModeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get armingModeOff;
+
+  /// No description provided for @armingStatusArmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Armed'**
+  String get armingStatusArmed;
+
+  /// No description provided for @armingStatusDisarmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Disarmed'**
+  String get armingStatusDisarmed;
+
+  /// No description provided for @armingAddWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Add window'**
+  String get armingAddWindow;
+
+  /// No description provided for @armingRemoveWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove window'**
+  String get armingRemoveWindow;
+
+  /// No description provided for @armingFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get armingFrom;
+
+  /// No description provided for @armingTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get armingTo;
+
+  /// No description provided for @armingDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get armingDays;
+
+  /// No description provided for @armingHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Armed records motion and raises alerts; disarmed keeps no footage. Live view always works.'**
+  String get armingHelp;
+
+  /// No description provided for @armingWindowRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one window'**
+  String get armingWindowRequired;
 }
 
 class _AppLocalizationsDelegate

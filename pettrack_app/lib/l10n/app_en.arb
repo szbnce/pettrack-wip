@@ -541,5 +541,18 @@
   "feedFilterZones": "Zones",
   "feedFilterSounds": "Sounds",
   "feedFilterSystem": "System",
-  "feedNoMatch": "No matching events"
+  "feedNoMatch": "No matching events",
+  "armingTitle": "Watching",
+  "armingModeOn": "Always on",
+  "armingModeSchedule": "On a schedule",
+  "armingModeOff": "Off",
+  "armingStatusArmed": "Armed",
+  "armingStatusDisarmed": "Disarmed",
+  "armingAddWindow": "Add window",
+  "armingRemoveWindow": "Remove window",
+  "armingFrom": "From",
+  "armingTo": "To",
+  "armingDays": "Days",
+  "armingHelp": "Armed records motion and raises alerts; disarmed keeps no footage. Live view always works.",
+  "armingWindowRequired": "Add at least one window"
 }

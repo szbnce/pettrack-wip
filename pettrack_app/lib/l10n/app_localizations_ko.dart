@@ -1022,4 +1022,44 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get feedNoMatch => '일치하는 이벤트가 없습니다';
+
+  @override
+  String get armingTitle => '감시';
+
+  @override
+  String get armingModeOn => '항상 켜기';
+
+  @override
+  String get armingModeSchedule => '예약 시간에만';
+
+  @override
+  String get armingModeOff => '꺼짐';
+
+  @override
+  String get armingStatusArmed => '감시 중';
+
+  @override
+  String get armingStatusDisarmed => '중지됨';
+
+  @override
+  String get armingAddWindow => '시간대 추가';
+
+  @override
+  String get armingRemoveWindow => '시간대 삭제';
+
+  @override
+  String get armingFrom => '시작';
+
+  @override
+  String get armingTo => '종료';
+
+  @override
+  String get armingDays => '요일';
+
+  @override
+  String get armingHelp =>
+      '감시 중에는 움직임이 녹화되고 알림이 전송됩니다. 중지되면 영상이 저장되지 않습니다. 라이브 화면은 항상 작동합니다.';
+
+  @override
+  String get armingWindowRequired => '시간대를 하나 이상 추가하세요';
 }

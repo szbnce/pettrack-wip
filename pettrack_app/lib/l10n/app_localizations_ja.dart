@@ -1025,4 +1025,43 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get feedNoMatch => '一致するイベントがありません';
+
+  @override
+  String get armingTitle => '見守り';
+
+  @override
+  String get armingModeOn => '常時オン';
+
+  @override
+  String get armingModeSchedule => 'スケジュール';
+
+  @override
+  String get armingModeOff => 'オフ';
+
+  @override
+  String get armingStatusArmed => '監視中';
+
+  @override
+  String get armingStatusDisarmed => '停止中';
+
+  @override
+  String get armingAddWindow => '時間帯を追加';
+
+  @override
+  String get armingRemoveWindow => '時間帯を削除';
+
+  @override
+  String get armingFrom => '開始';
+
+  @override
+  String get armingTo => '終了';
+
+  @override
+  String get armingDays => '曜日';
+
+  @override
+  String get armingHelp => '監視中は動きを録画して通知します。停止中は映像を保存しません。ライブビューは常に利用できます。';
+
+  @override
+  String get armingWindowRequired => '少なくとも1つの時間帯を追加してください';
 }

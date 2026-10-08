@@ -1038,4 +1038,44 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get feedNoMatch => 'Nincs találat';
+
+  @override
+  String get armingTitle => 'Megfigyelés';
+
+  @override
+  String get armingModeOn => 'Mindig bekapcsolva';
+
+  @override
+  String get armingModeSchedule => 'Időzítés szerint';
+
+  @override
+  String get armingModeOff => 'Kikapcsolva';
+
+  @override
+  String get armingStatusArmed => 'Élesítve';
+
+  @override
+  String get armingStatusDisarmed => 'Szünetel';
+
+  @override
+  String get armingAddWindow => 'Időablak hozzáadása';
+
+  @override
+  String get armingRemoveWindow => 'Időablak törlése';
+
+  @override
+  String get armingFrom => 'Kezdete';
+
+  @override
+  String get armingTo => 'Vége';
+
+  @override
+  String get armingDays => 'Napok';
+
+  @override
+  String get armingHelp =>
+      'Élesítve rögzül a mozgás és riasztás érkezik; szüneteléskor nem készül felvétel. Az élő kép mindig működik.';
+
+  @override
+  String get armingWindowRequired => 'Legalább egy időablak szükséges';
 }

@@ -448,5 +448,18 @@
   "feedFilterZones": "区域",
   "feedFilterSounds": "声音",
   "feedFilterSystem": "系统",
-  "feedNoMatch": "没有匹配的事件"
+  "feedNoMatch": "没有匹配的事件",
+  "armingTitle": "监控",
+  "armingModeOn": "始终开启",
+  "armingModeSchedule": "按计划",
+  "armingModeOff": "关闭",
+  "armingStatusArmed": "监控中",
+  "armingStatusDisarmed": "已停止",
+  "armingAddWindow": "添加时段",
+  "armingRemoveWindow": "删除时段",
+  "armingFrom": "开始",
+  "armingTo": "结束",
+  "armingDays": "星期",
+  "armingHelp": "监控中会记录动态并发送提醒；已停止则不保存任何录像。实时画面始终可用。",
+  "armingWindowRequired": "请至少添加一个时段"
 }

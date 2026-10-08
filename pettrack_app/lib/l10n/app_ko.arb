@@ -448,5 +448,18 @@
   "feedFilterZones": "구역",
   "feedFilterSounds": "소리",
   "feedFilterSystem": "시스템",
-  "feedNoMatch": "일치하는 이벤트가 없습니다"
+  "feedNoMatch": "일치하는 이벤트가 없습니다",
+  "armingTitle": "감시",
+  "armingModeOn": "항상 켜기",
+  "armingModeSchedule": "예약 시간에만",
+  "armingModeOff": "꺼짐",
+  "armingStatusArmed": "감시 중",
+  "armingStatusDisarmed": "중지됨",
+  "armingAddWindow": "시간대 추가",
+  "armingRemoveWindow": "시간대 삭제",
+  "armingFrom": "시작",
+  "armingTo": "종료",
+  "armingDays": "요일",
+  "armingHelp": "감시 중에는 움직임이 녹화되고 알림이 전송됩니다. 중지되면 영상이 저장되지 않습니다. 라이브 화면은 항상 작동합니다.",
+  "armingWindowRequired": "시간대를 하나 이상 추가하세요"
 }

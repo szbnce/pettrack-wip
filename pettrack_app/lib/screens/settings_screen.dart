@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../app_info.dart';
 import '../theme/colors.dart';
+import '../utils/arming.dart';
 import '../utils/format_helpers.dart';
 import '../utils/server_url.dart';
 import '../main.dart';
@@ -51,6 +52,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _ntfyUrlController = TextEditingController();
   final _ntfyTokenController = TextEditingController();
   bool _testingNtfy = false;
+
+  // Arming: when the camera actually watches (on / schedule / off).
+  String _armingMode = armingModeOn;
+  List<ArmingWindow> _armingSchedule = [];
+  bool _savingArming = false;
 
   String _getLocalizedPetType(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
@@ -141,6 +147,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (ip.isNotEmpty) {
       _checkServerVersion();
       _fetchSystemHealth();
+      _fetchArming();
     }
 
     if (mounted) {
@@ -757,6 +764,228 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _quietHoursTo = minutes;
       }
     });
+  }
+
+  /// Pull the server's arming state (mode + schedule) into the editor.
+  Future<void> _fetchArming() async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse(
+              '${normalizeServerUrl(_ipController.text.trim())}/api/arming',
+            ),
+            headers: AuthService.headers,
+          )
+          .timeout(const Duration(seconds: 4));
+      if (!mounted || response.statusCode != 200) return;
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      setState(() {
+        _armingMode = (body['mode'] ?? armingModeOn) as String;
+        _armingSchedule = parseArmingSchedule(body['schedule']);
+      });
+    } catch (_) {
+      // The health card already reports an unreachable server.
+    }
+  }
+
+  /// Push a mode and/or schedule change. The server echoes the full
+  /// state back; a failure reverts the editor to the previous state.
+  Future<void> _saveArming({String? mode, List<ArmingWindow>? schedule}) async {
+    final l10n = AppLocalizations.of(context)!;
+    final previousMode = _armingMode;
+    final previousSchedule = _armingSchedule;
+    setState(() {
+      _savingArming = true;
+      if (mode != null) _armingMode = mode;
+      if (schedule != null) _armingSchedule = schedule;
+    });
+    try {
+      final response = await http
+          .post(
+            Uri.parse(
+              '${normalizeServerUrl(_ipController.text.trim())}/api/arming',
+            ),
+            headers: {
+              'x-api-token': AuthService.token,
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              'mode': ?mode,
+              'schedule': ?schedule?.map((w) => w.toJson()).toList(),
+            }),
+          )
+          .timeout(const Duration(seconds: 4));
+      if (!mounted) return;
+      if (response.statusCode != 200) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      setState(() {
+        _armingMode = (body['mode'] ?? _armingMode) as String;
+        _armingSchedule = parseArmingSchedule(body['schedule']);
+        _savingArming = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _armingMode = previousMode;
+        _armingSchedule = previousSchedule;
+        _savingArming = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.settingsSaveError)),
+      );
+    }
+  }
+
+  void _setArmingMode(String mode) {
+    if (mode == _armingMode) return;
+    if (mode == armingModeSchedule && _armingSchedule.isEmpty) {
+      // A schedule with no windows would never record anything — open
+      // with the workweek so the editor shows what "away" looks like.
+      _saveArming(mode: mode, schedule: [ArmingWindow.workweek()]);
+      return;
+    }
+    _saveArming(mode: mode);
+  }
+
+  void _addArmingWindow() {
+    _saveArming(schedule: [..._armingSchedule, ArmingWindow.workweek()]);
+  }
+
+  void _removeArmingWindow(int index, AppLocalizations l10n) {
+    if (_armingSchedule.length <= 1) {
+      // Watching nothing is what Off is for; an empty schedule is a trap.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.armingWindowRequired)),
+      );
+      return;
+    }
+    final next = [..._armingSchedule]..removeAt(index);
+    _saveArming(schedule: next);
+  }
+
+  void _toggleArmingDay(int index, int day) {
+    final next = [..._armingSchedule];
+    next[index] = next[index].togglingDay(day);
+    _saveArming(schedule: next);
+  }
+
+  Future<void> _pickArmingTime(int index, {required bool isFrom}) async {
+    final window = _armingSchedule[index];
+    final current = isFrom ? window.fromMin : window.toMin;
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: current ~/ 60, minute: current % 60),
+    );
+    if (picked == null || !mounted) return;
+    final minutes = picked.hour * 60 + picked.minute;
+    final next = [..._armingSchedule];
+    next[index] = isFrom
+        ? window.copyWith(fromMin: minutes)
+        : window.copyWith(toMin: minutes);
+    _saveArming(schedule: next);
+  }
+
+  Widget _buildArmingCard(AppLocalizations l10n) {
+    // narrowWeekdays is Sunday-first; ISO days are Monday-first.
+    final narrow = MaterialLocalizations.of(context).narrowWeekdays;
+    return _buildCard(l10n.armingTitle, [
+      Text(l10n.armingHelp, style: Theme.of(context).textTheme.bodySmall),
+      const SizedBox(height: 12),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          ChoiceChip(
+            label: Text(l10n.armingModeOn),
+            selected: _armingMode == armingModeOn,
+            onSelected: (_) => _setArmingMode(armingModeOn),
+          ),
+          ChoiceChip(
+            label: Text(l10n.armingModeSchedule),
+            selected: _armingMode == armingModeSchedule,
+            onSelected: (_) => _setArmingMode(armingModeSchedule),
+          ),
+          ChoiceChip(
+            label: Text(l10n.armingModeOff),
+            selected: _armingMode == armingModeOff,
+            onSelected: (_) => _setArmingMode(armingModeOff),
+          ),
+        ],
+      ),
+      if (_armingMode == armingModeSchedule) ...[
+        for (var i = 0; i < _armingSchedule.length; i++) ...[
+          const Divider(height: 24),
+          _buildArmingWindow(i, l10n, narrow),
+        ],
+        const SizedBox(height: 8),
+        Center(
+          child: OutlinedButton.icon(
+            onPressed: _savingArming ? null : _addArmingWindow,
+            icon: const Icon(Icons.add),
+            label: Text(l10n.armingAddWindow),
+          ),
+        ),
+      ],
+    ]);
+  }
+
+  Widget _buildArmingWindow(
+    int index,
+    AppLocalizations l10n,
+    List<String> narrow,
+  ) {
+    final window = _armingSchedule[index];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(l10n.armingDays, style: Theme.of(context).textTheme.labelLarge),
+            const Spacer(),
+            IconButton(
+              tooltip: l10n.armingRemoveWindow,
+              icon: const Icon(Icons.delete_outline),
+              onPressed: _savingArming
+                  ? null
+                  : () => _removeArmingWindow(index, l10n),
+            ),
+          ],
+        ),
+        Wrap(
+          spacing: 4,
+          children: [
+            for (final day in const [1, 2, 3, 4, 5, 6, 7])
+              FilterChip(
+                label: Text(narrow[day % 7]),
+                selected: window.days.contains(day),
+                onSelected: (_) => _toggleArmingDay(index, day),
+              ),
+          ],
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.login),
+          title: Text(l10n.armingFrom),
+          trailing: Text(
+            _formatMinutes(window.fromMin),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          onTap: () => _pickArmingTime(index, isFrom: true),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.logout),
+          title: Text(l10n.armingTo),
+          trailing: Text(
+            _formatMinutes(window.toMin),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          onTap: () => _pickArmingTime(index, isFrom: false),
+        ),
+      ],
+    );
   }
 
   /// Push the remote-alert settings to the server, then ask it to send one
@@ -1399,6 +1628,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildMonitorCard(l10n),
+                              _buildArmingCard(l10n),
                               _buildHealthCard(l10n),
                               _buildAboutCard(l10n),
                               _buildSaveButton(l10n),
@@ -1435,6 +1665,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _buildProfileCard(l10n),
                     _buildAlertsCard(l10n),
                     _buildMonitorCard(l10n),
+                    _buildArmingCard(l10n),
                     _buildHealthCard(l10n),
                     _buildAboutCard(l10n),
                     const SizedBox(height: 16),

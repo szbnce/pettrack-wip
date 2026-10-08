@@ -448,5 +448,18 @@
   "feedFilterZones": "Zone",
   "feedFilterSounds": "Suoni",
   "feedFilterSystem": "Sistema",
-  "feedNoMatch": "Nessun evento corrispondente"
+  "feedNoMatch": "Nessun evento corrispondente",
+  "armingTitle": "Sorveglianza",
+  "armingModeOn": "Sempre acceso",
+  "armingModeSchedule": "A programma",
+  "armingModeOff": "Spento",
+  "armingStatusArmed": "Attivo",
+  "armingStatusDisarmed": "Inattivo",
+  "armingAddWindow": "Aggiungi fascia",
+  "armingRemoveWindow": "Rimuovi fascia",
+  "armingFrom": "Dalle",
+  "armingTo": "Alle",
+  "armingDays": "Giorni",
+  "armingHelp": "Attivo registra i movimenti e invia avvisi; inattivo non conserva alcun filmato. La visione dal vivo funziona sempre.",
+  "armingWindowRequired": "Aggiungi almeno una fascia"
 }

@@ -1043,4 +1043,44 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get feedNoMatch => 'Nessun evento corrispondente';
+
+  @override
+  String get armingTitle => 'Sorveglianza';
+
+  @override
+  String get armingModeOn => 'Sempre acceso';
+
+  @override
+  String get armingModeSchedule => 'A programma';
+
+  @override
+  String get armingModeOff => 'Spento';
+
+  @override
+  String get armingStatusArmed => 'Attivo';
+
+  @override
+  String get armingStatusDisarmed => 'Inattivo';
+
+  @override
+  String get armingAddWindow => 'Aggiungi fascia';
+
+  @override
+  String get armingRemoveWindow => 'Rimuovi fascia';
+
+  @override
+  String get armingFrom => 'Dalle';
+
+  @override
+  String get armingTo => 'Alle';
+
+  @override
+  String get armingDays => 'Giorni';
+
+  @override
+  String get armingHelp =>
+      'Attivo registra i movimenti e invia avvisi; inattivo non conserva alcun filmato. La visione dal vivo funziona sempre.';
+
+  @override
+  String get armingWindowRequired => 'Aggiungi almeno una fascia';
 }

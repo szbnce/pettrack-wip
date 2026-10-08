@@ -348,5 +348,18 @@
   "feedFilterZones": "Zónák",
   "feedFilterSounds": "Hangok",
   "feedFilterSystem": "Rendszer",
-  "feedNoMatch": "Nincs találat"
+  "feedNoMatch": "Nincs találat",
+  "armingTitle": "Megfigyelés",
+  "armingModeOn": "Mindig bekapcsolva",
+  "armingModeSchedule": "Időzítés szerint",
+  "armingModeOff": "Kikapcsolva",
+  "armingStatusArmed": "Élesítve",
+  "armingStatusDisarmed": "Szünetel",
+  "armingAddWindow": "Időablak hozzáadása",
+  "armingRemoveWindow": "Időablak törlése",
+  "armingFrom": "Kezdete",
+  "armingTo": "Vége",
+  "armingDays": "Napok",
+  "armingHelp": "Élesítve rögzül a mozgás és riasztás érkezik; szüneteléskor nem készül felvétel. Az élő kép mindig működik.",
+  "armingWindowRequired": "Legalább egy időablak szükséges"
 }

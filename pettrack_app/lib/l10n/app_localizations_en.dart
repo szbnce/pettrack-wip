@@ -1034,4 +1034,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get feedNoMatch => 'No matching events';
+
+  @override
+  String get armingTitle => 'Watching';
+
+  @override
+  String get armingModeOn => 'Always on';
+
+  @override
+  String get armingModeSchedule => 'On a schedule';
+
+  @override
+  String get armingModeOff => 'Off';
+
+  @override
+  String get armingStatusArmed => 'Armed';
+
+  @override
+  String get armingStatusDisarmed => 'Disarmed';
+
+  @override
+  String get armingAddWindow => 'Add window';
+
+  @override
+  String get armingRemoveWindow => 'Remove window';
+
+  @override
+  String get armingFrom => 'From';
+
+  @override
+  String get armingTo => 'To';
+
+  @override
+  String get armingDays => 'Days';
+
+  @override
+  String get armingHelp =>
+      'Armed records motion and raises alerts; disarmed keeps no footage. Live view always works.';
+
+  @override
+  String get armingWindowRequired => 'Add at least one window';
 }

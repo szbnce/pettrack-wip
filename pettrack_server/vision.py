@@ -7,6 +7,7 @@ import subprocess
 from api_routes import active_zones
 from database import log_event
 import mqtt_bridge
+import settings as app_settings
 from motion import decode_small, detect_motion, mean_brightness, point_in_polygon
 
 os.makedirs("captured_images", exist_ok=True)
@@ -104,6 +105,15 @@ async def process_and_save_frame(image_bytes: bytes):
             print(f"Started FFmpeg conversion for {_current_video_path}", flush=True)
 
     if VISION_MODE == "off":
+        return
+
+    if not app_settings.is_armed_now():
+        # Disarmed: in-flight clips are finished above, but nothing new is
+        # recorded and no events are raised. Drop the motion baseline so
+        # re-arming starts clean — no phantom zone events from stale state.
+        _last_zones = set()
+        _prev_small = None
+        _last_pet_center = None
         return
 
     small = decode_small(image_bytes, SMALL_WIDTH)

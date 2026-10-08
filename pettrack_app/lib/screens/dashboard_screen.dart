@@ -15,6 +15,7 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../services/notification_service.dart';
 import '../services/home_widget_service.dart';
+import '../utils/arming.dart';
 import '../utils/evidence.dart';
 import '../utils/feed_filter.dart';
 import '../widgets/empty_state.dart';
@@ -63,6 +64,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String? _monitorId;
   int _batteryLevel = 100;
   bool _isCharging = false;
+  // Arming: is the camera watching right now (rides the status poll).
+  String _armingMode = armingModeOn;
+  bool _armingArmed = true;
   bool _alertsZoneEnabled = true;
   bool _alertsBatteryEnabled = true;
   bool _alertsSoundEnabled = true;
@@ -763,6 +767,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _batteryLevel = newBat;
             _isCharging = data['is_charging'] ?? false;
           }
+          final arming = data['arming'];
+          if (arming is Map) {
+            _armingMode = (arming['mode'] ?? armingModeOn) as String;
+            _armingArmed = arming['armed'] == true;
+          }
         });
         if (selectAfter != null) _selectMonitor(selectAfter);
         if (reconnectAfter) _connectClientSocket();
@@ -1125,6 +1134,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       _monitorId ??
                                       l10n.searchingStatus,
                                 ),
+                                const SizedBox(width: 8),
+                                _buildArmingChip(l10n),
                               ],
                             ),
                           ),
@@ -1853,7 +1864,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildChip(IconData icon, String label) {
+  Widget _buildChip(IconData icon, String label, {Color iconColor = Colors.white}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
@@ -1862,7 +1873,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white, size: 14),
+          Icon(icon, color: iconColor, size: 14),
           const SizedBox(width: 4),
           Text(
             label,
@@ -1875,6 +1886,97 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
     );
+  }
+
+  /// The watching-state chip; a tap opens the quick mode switch.
+  Widget _buildArmingChip(AppLocalizations l10n) {
+    return GestureDetector(
+      onTap: () => _showArmingDialog(l10n),
+      child: Tooltip(
+        message: l10n.armingTitle,
+        child: _buildChip(
+          _armingArmed ? Icons.visibility : Icons.visibility_off,
+          _armingArmed ? l10n.armingStatusArmed : l10n.armingStatusDisarmed,
+          iconColor: _armingArmed ? Colors.white : Colors.amber,
+        ),
+      ),
+    );
+  }
+
+  /// Quick mode switch from the camera card — the schedule itself is
+  /// edited in Settings; this only flips the mode.
+  Future<void> _showArmingDialog(AppLocalizations l10n) async {
+    final options = [
+      (armingModeOn, l10n.armingModeOn),
+      (armingModeSchedule, l10n.armingModeSchedule),
+      (armingModeOff, l10n.armingModeOff),
+    ];
+    final picked = await showDialog<String>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(l10n.armingTitle),
+        children: [
+          for (final (value, label) in options)
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(context, value),
+              child: Row(
+                children: [
+                  Icon(
+                    _armingMode == value
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(label),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+    if (picked == null || picked == _armingMode || !mounted) return;
+    await _setQuickArming(picked);
+  }
+
+  Future<void> _setQuickArming(String mode) async {
+    final previousMode = _armingMode;
+    final previousArmed = _armingArmed;
+    setState(() {
+      _armingMode = mode;
+      // Optimistic: only "on" is certainly watching this very second.
+      _armingArmed = mode == armingModeOn;
+    });
+    try {
+      final response = await http
+          .post(
+            Uri.parse('${widget.serverIp}/api/arming'),
+            headers: {
+              'x-api-token': AuthService.token,
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({'mode': mode}),
+          )
+          .timeout(const Duration(seconds: 4));
+      if (!mounted) return;
+      if (response.statusCode != 200) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      setState(() {
+        _armingMode = (body['mode'] ?? mode) as String;
+        _armingArmed = body['armed'] == true;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _armingMode = previousMode;
+        _armingArmed = previousArmed;
+      });
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.settingsSaveError)),
+      );
+    }
   }
 
   // ignore: unused_element

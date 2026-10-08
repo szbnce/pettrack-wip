@@ -448,5 +448,18 @@
   "feedFilterZones": "Zonen",
   "feedFilterSounds": "Geräusche",
   "feedFilterSystem": "System",
-  "feedNoMatch": "Keine passenden Ereignisse"
+  "feedNoMatch": "Keine passenden Ereignisse",
+  "armingTitle": "Überwachung",
+  "armingModeOn": "Immer an",
+  "armingModeSchedule": "Nach Zeitplan",
+  "armingModeOff": "Aus",
+  "armingStatusArmed": "Aktiv",
+  "armingStatusDisarmed": "Inaktiv",
+  "armingAddWindow": "Zeitfenster hinzufügen",
+  "armingRemoveWindow": "Zeitfenster entfernen",
+  "armingFrom": "Von",
+  "armingTo": "Bis",
+  "armingDays": "Tage",
+  "armingHelp": "Aktiv zeichnet Bewegungen auf und löst Alarme aus; inaktiv speichert kein Material. Die Live-Ansicht funktioniert immer.",
+  "armingWindowRequired": "Mindestens ein Zeitfenster hinzufügen"
 }

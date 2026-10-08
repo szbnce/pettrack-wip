@@ -1019,4 +1019,43 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get feedNoMatch => '没有匹配的事件';
+
+  @override
+  String get armingTitle => '监控';
+
+  @override
+  String get armingModeOn => '始终开启';
+
+  @override
+  String get armingModeSchedule => '按计划';
+
+  @override
+  String get armingModeOff => '关闭';
+
+  @override
+  String get armingStatusArmed => '监控中';
+
+  @override
+  String get armingStatusDisarmed => '已停止';
+
+  @override
+  String get armingAddWindow => '添加时段';
+
+  @override
+  String get armingRemoveWindow => '删除时段';
+
+  @override
+  String get armingFrom => '开始';
+
+  @override
+  String get armingTo => '结束';
+
+  @override
+  String get armingDays => '星期';
+
+  @override
+  String get armingHelp => '监控中会记录动态并发送提醒；已停止则不保存任何录像。实时画面始终可用。';
+
+  @override
+  String get armingWindowRequired => '请至少添加一个时段';
 }

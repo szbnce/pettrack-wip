@@ -2,11 +2,14 @@
 
 Only operational knobs live here — the kind a self-hosters' maintenance
 card exposes, not app preferences."""
+import json
 import os
 from datetime import datetime
 from urllib.parse import urlparse
 
 from dotenv import set_key
+
+import arming
 
 # How long replays stay on disk before pruning drops them. 14 days is long
 # enough to scroll back through a fortnight of activity and short enough
@@ -139,3 +142,47 @@ def is_quiet_now(now: datetime | None = None) -> bool:
     if start < end:
         return start <= minutes < end
     return minutes >= start or minutes < end  # wraps midnight
+
+
+# --- arming: only watch when it should ---------------------------------------
+# "On" is the historical behaviour — always recording. "Schedule" arms the
+# camera for the weekly windows in PETTRACK_ARMING_SCHEDULE (JSON list of
+# {days, from_min, to_min}); "off" never records motion or sound. Live
+# viewing keeps working either way — arming is about evidence, not access.
+
+DEFAULT_ARMING_MODE = "on"
+
+
+def get_arming_mode() -> str:
+    mode = os.getenv("PETTRACK_ARMING_MODE", DEFAULT_ARMING_MODE).strip().lower()
+    return mode if mode in arming.ARMING_MODES else DEFAULT_ARMING_MODE
+
+
+def set_arming_mode(mode: str) -> str:
+    mode = mode.strip().lower()
+    if mode not in arming.ARMING_MODES:
+        raise ValueError(f"unknown arming mode: {mode!r}")
+    _set_env("PETTRACK_ARMING_MODE", mode)
+    return mode
+
+
+def get_arming_schedule() -> list[dict]:
+    raw = os.getenv("PETTRACK_ARMING_SCHEDULE", "").strip()
+    if not raw:
+        return []
+    try:
+        return arming.normalize_schedule(json.loads(raw))
+    except ValueError:
+        return []
+
+
+def set_arming_schedule(schedule: list) -> list[dict]:
+    clean = arming.normalize_schedule(schedule)
+    _set_env("PETTRACK_ARMING_SCHEDULE", json.dumps(clean, separators=(",", ":")))
+    return clean
+
+
+def is_armed_now(now: datetime | None = None) -> bool:
+    """The gate the recording pipeline asks on every frame."""
+    now = now or datetime.now()
+    return arming.is_armed(get_arming_mode(), get_arming_schedule(), now)

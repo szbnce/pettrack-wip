@@ -1045,4 +1045,44 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get feedNoMatch => 'Keine passenden Ereignisse';
+
+  @override
+  String get armingTitle => 'Überwachung';
+
+  @override
+  String get armingModeOn => 'Immer an';
+
+  @override
+  String get armingModeSchedule => 'Nach Zeitplan';
+
+  @override
+  String get armingModeOff => 'Aus';
+
+  @override
+  String get armingStatusArmed => 'Aktiv';
+
+  @override
+  String get armingStatusDisarmed => 'Inaktiv';
+
+  @override
+  String get armingAddWindow => 'Zeitfenster hinzufügen';
+
+  @override
+  String get armingRemoveWindow => 'Zeitfenster entfernen';
+
+  @override
+  String get armingFrom => 'Von';
+
+  @override
+  String get armingTo => 'Bis';
+
+  @override
+  String get armingDays => 'Tage';
+
+  @override
+  String get armingHelp =>
+      'Aktiv zeichnet Bewegungen auf und löst Alarme aus; inaktiv speichert kein Material. Die Live-Ansicht funktioniert immer.';
+
+  @override
+  String get armingWindowRequired => 'Mindestens ein Zeitfenster hinzufügen';
 }
