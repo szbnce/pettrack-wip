@@ -533,5 +533,6 @@
   "medicalCachedNotice": "The server is unreachable — showing your saved copy",
   "tooltipPlayPause": "Play / pause",
   "settingsSaveError": "Could not save the change",
-  "shareFailed": "Could not share"
+  "shareFailed": "Could not share",
+  "evidenceNoClip": "No clip recorded near that moment"
 }

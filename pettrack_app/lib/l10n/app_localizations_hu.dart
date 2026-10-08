@@ -1014,4 +1014,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get shareFailed => 'A megosztás nem sikerült';
+
+  @override
+  String get evidenceNoClip => 'Nincs felvétel ehhez a pillanathoz';
 }

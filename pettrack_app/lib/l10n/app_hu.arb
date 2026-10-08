@@ -340,5 +340,6 @@
   "medicalCachedNotice": "A szerver nem elérhető — a mentett másolat látható",
   "tooltipPlayPause": "Lejátszás / szünet",
   "settingsSaveError": "A módosítás mentése nem sikerült",
-  "shareFailed": "A megosztás nem sikerült"
+  "shareFailed": "A megosztás nem sikerült",
+  "evidenceNoClip": "Nincs felvétel ehhez a pillanathoz"
 }

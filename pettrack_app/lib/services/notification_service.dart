@@ -29,6 +29,31 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  /// Set by the UI once a navigator is around: what to do when the user taps
+  /// an alert notification. Payloads carrying evidence start with
+  /// `evidence:` (see `utils/evidence.dart`).
+  void Function(String payload)? onNotificationOpened;
+
+  String? _pendingPayload;
+
+  /// A tap that arrived before [onNotificationOpened] was registered —
+  /// typically the cold-start case. Handled once, then forgotten.
+  String? takePendingPayload() {
+    final payload = _pendingPayload;
+    _pendingPayload = null;
+    return payload;
+  }
+
+  void _handlePayload(String? payload) {
+    if (payload == null) return;
+    final handler = onNotificationOpened;
+    if (handler != null) {
+      handler(payload);
+    } else {
+      _pendingPayload = payload;
+    }
+  }
+
   Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -48,7 +73,17 @@ class NotificationService {
 
     await _flutterLocalNotificationsPlugin.initialize(
       settings: initializationSettings,
+      onDidReceiveNotificationResponse: (response) =>
+          _handlePayload(response.payload),
     );
+
+    // The app may have been launched by tapping an alert — that tap deserves
+    // the same navigation as a tap on a running app.
+    final launch = await _flutterLocalNotificationsPlugin
+        .getNotificationAppLaunchDetails();
+    if (launch?.didNotificationLaunchApp ?? false) {
+      _handlePayload(launch!.notificationResponse?.payload);
+    }
   }
 
   Future<bool> _inQuietHours() async {
@@ -84,11 +119,14 @@ class NotificationService {
   ///
   /// Zone and battery alerts honour quiet hours; deliberate actions (the
   /// settings "test notification" button) pass [respectQuietHours]: false.
+  /// A [payload] comes back through [onNotificationOpened] when the user
+  /// taps the notification.
   Future<void> showNotification({
     required int id,
     required String title,
     required String body,
     bool respectQuietHours = true,
+    String? payload,
   }) async {
     if (respectQuietHours && await _inQuietHours()) {
       debugPrint('Notification suppressed by quiet hours: $title');
@@ -116,6 +154,7 @@ class NotificationService {
       title: title,
       body: body,
       notificationDetails: platformChannelSpecifics,
+      payload: payload,
     );
   }
 

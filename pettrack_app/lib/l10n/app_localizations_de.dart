@@ -1020,4 +1020,8 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get shareFailed => 'Teilen nicht möglich';
+
+  @override
+  String get evidenceNoClip =>
+      'Kein Clip in der Nähe dieses Moments aufgezeichnet';
 }

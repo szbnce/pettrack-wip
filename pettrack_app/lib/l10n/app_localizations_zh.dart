@@ -995,4 +995,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get shareFailed => '无法分享';
+
+  @override
+  String get evidenceNoClip => '该时刻附近没有录像片段';
 }

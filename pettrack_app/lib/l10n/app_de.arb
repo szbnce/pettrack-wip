@@ -440,5 +440,6 @@
   "medicalCachedNotice": "Server nicht erreichbar — gespeicherte Kopie wird angezeigt",
   "tooltipPlayPause": "Wiedergabe / Pause",
   "settingsSaveError": "Die Änderung konnte nicht gespeichert werden",
-  "shareFailed": "Teilen nicht möglich"
+  "shareFailed": "Teilen nicht möglich",
+  "evidenceNoClip": "Kein Clip in der Nähe dieses Moments aufgezeichnet"
 }

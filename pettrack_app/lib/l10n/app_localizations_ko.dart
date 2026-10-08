@@ -998,4 +998,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get shareFailed => '공유할 수 없습니다';
+
+  @override
+  String get evidenceNoClip => '그 순간 근처에 녹화된 클립이 없습니다';
 }

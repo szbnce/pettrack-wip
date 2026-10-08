@@ -440,5 +440,6 @@
   "medicalCachedNotice": "无法连接服务器 — 显示已保存的副本",
   "tooltipPlayPause": "播放 / 暂停",
   "settingsSaveError": "无法保存更改",
-  "shareFailed": "无法分享"
+  "shareFailed": "无法分享",
+  "evidenceNoClip": "该时刻附近没有录像片段"
 }

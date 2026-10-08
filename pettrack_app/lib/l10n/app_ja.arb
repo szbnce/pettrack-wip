@@ -440,5 +440,6 @@
   "medicalCachedNotice": "サーバーに接続できません — 保存されたコピーを表示中",
   "tooltipPlayPause": "再生 / 一時停止",
   "settingsSaveError": "変更を保存できませんでした",
-  "shareFailed": "共有できませんでした"
+  "shareFailed": "共有できませんでした",
+  "evidenceNoClip": "その時刻の近くに録画クリップがありません"
 }

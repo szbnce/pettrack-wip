@@ -1019,4 +1019,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get shareFailed => 'Impossibile condividere';
+
+  @override
+  String get evidenceNoClip => 'Nessun clip registrato vicino a quel momento';
 }

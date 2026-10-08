@@ -440,5 +440,6 @@
   "medicalCachedNotice": "서버에 연결할 수 없음 — 저장된 사본 표시 중",
   "tooltipPlayPause": "재생 / 일시정지",
   "settingsSaveError": "변경 사항을 저장할 수 없습니다",
-  "shareFailed": "공유할 수 없습니다"
+  "shareFailed": "공유할 수 없습니다",
+  "evidenceNoClip": "그 순간 근처에 녹화된 클립이 없습니다"
 }

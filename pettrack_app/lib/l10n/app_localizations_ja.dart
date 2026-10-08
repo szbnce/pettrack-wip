@@ -1001,4 +1001,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get shareFailed => '共有できませんでした';
+
+  @override
+  String get evidenceNoClip => 'その時刻の近くに録画クリップがありません';
 }

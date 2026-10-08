@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
+import '../utils/evidence.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/skeleton_box.dart';
 import '../widgets/video_player_widget.dart';
@@ -18,7 +19,20 @@ class ReplaysScreen extends StatefulWidget {
   final String serverIp;
   final String token;
 
-  const ReplaysScreen({super.key, required this.serverIp, required this.token});
+  /// Event → evidence: preselect the day an event happened on.
+  final DateTime? initialDay;
+
+  /// The event's unix seconds — with this set, the screen jumps to the
+  /// nearest clip to the moment once the grid has loaded.
+  final int? initialTimestamp;
+
+  const ReplaysScreen({
+    super.key,
+    required this.serverIp,
+    required this.token,
+    this.initialDay,
+    this.initialTimestamp,
+  });
 
   @override
   State<ReplaysScreen> createState() => _ReplaysScreenState();
@@ -38,9 +52,13 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
   /// Day picked in the strip (local midnight), or null for "all days".
   DateTime? _selectedDay;
 
+  /// The moment jump happens once per screen, not on every refresh.
+  bool _jumpedToMoment = false;
+
   @override
   void initState() {
     super.initState();
+    _selectedDay = widget.initialDay;
     _fetchReplays();
   }
 
@@ -95,6 +113,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
           _isLoading = false;
         });
         if (haptic) HapticFeedback.lightImpact();
+        _jumpToMoment();
       } else {
         setState(() {
           _errorStatus = response.statusCode;
@@ -159,6 +178,26 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(AppLocalizations.of(context)!.demoNoPlayback)),
     );
+  }
+
+  /// Event → evidence: when a moment was handed in (feed row, alert tap),
+  /// play the clip nearest to it. Half an hour is the reach — further away
+  /// and the clip is not evidence of that moment; the day's grid is right
+  /// there either way.
+  void _jumpToMoment() {
+    final moment = widget.initialTimestamp;
+    if (moment == null || _jumpedToMoment || _isDemo) return;
+    _jumpedToMoment = true;
+    if (_replays.isEmpty) return;
+    final nearest = nearestClipTo(_replays, moment);
+    if (nearest == null) {
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.evidenceNoClip)));
+      return;
+    }
+    _playVideo(nearest);
   }
 
   /// The strip always covers the last two weeks, quiet days included, so

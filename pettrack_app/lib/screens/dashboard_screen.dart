@@ -15,9 +15,11 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../services/notification_service.dart';
 import '../services/home_widget_service.dart';
+import '../utils/evidence.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/highlight_card.dart';
 import 'insights_screen.dart';
+import 'replays_screen.dart';
 import '../services/auth_service.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -151,7 +153,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final rand = Random();
     _greetingIndex = rand.nextInt(10);
     _subGreetingIndex = rand.nextInt(10);
+    NotificationService().onNotificationOpened = _openEvidenceFromNotification;
     NotificationService().init();
+    // A tap that launched the app arrives before the first frame — handle
+    // it once the dashboard is up.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final pending = NotificationService().takePendingPayload();
+      if (pending != null) _openEvidenceFromNotification(pending);
+    });
     NotificationService().requestPermissions();
     _loadAlertSettings();
     _loadProfilePic();
@@ -168,6 +177,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _startPolling();
       _connectClientSocket();
     }
+  }
+
+  /// Tap on an alert → the evidence for that moment: the replays screen
+  /// opens on the event's day and plays the nearest clip to it.
+  void _openEvidenceFromNotification(String payload) {
+    final ts = parseEvidencePayload(payload);
+    if (ts == null) return;
+    // The tap can land mid-build (cold start) — navigate after the frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _openEvidenceAt(ts);
+    });
+  }
+
+  /// Feed rows and alert taps meet here: jump to the footage of a moment.
+  void _openEvidenceAt(int timestampSeconds) {
+    final moment = DateTime.fromMillisecondsSinceEpoch(
+      timestampSeconds * 1000,
+    );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ReplaysScreen(
+          serverIp: widget.serverIp,
+          token: widget.token,
+          initialDay: DateTime(moment.year, moment.month, moment.day),
+          initialTimestamp: timestampSeconds,
+        ),
+      ),
+    );
   }
 
   /// Demo mode's toy feed — zone names come from l10n like everywhere else.
@@ -459,6 +497,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 id: 3000,
                 title: l10n.soundDetectedTitle,
                 body: l10n.soundDetectedBody,
+                payload: evidencePayload((ev['timestamp'] as num).toInt()),
               );
             } else if (eventType == 'camera_offline') {
               // Watchdog alarms always notify — "is my pet being watched?"
@@ -495,6 +534,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ? l10n.zoneEntered(_displayPetName, zoneName)
                       : l10n.zoneLeft(_displayPetName, zoneName),
                   body: '',
+                  payload: evidencePayload((ev['timestamp'] as num).toInt()),
                 );
               }
             }
@@ -612,6 +652,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _gridTimer?.cancel();
     _clientChannel?.sink.close();
     _currentUiImage?.dispose();
+    NotificationService().onNotificationOpened = null;
     super.dispose();
   }
 
@@ -1349,29 +1390,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     "${date.hour}:${date.minute.toString().padLeft(2, '0')}";
                 final title = _eventDisplay(ev, l10n).$3;
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        timeString,
-                        style: const TextStyle(
-                          color: Colors.white54,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                return Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () =>
+                        _openEvidenceAt((ev['timestamp'] as num).toInt()),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            timeString,
+                            style: const TextStyle(
+                              color: Colors.white54,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 );
               },
@@ -1656,6 +1705,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         subtitle,
                         timeString,
                         isLast: index == _activities.length - 1,
+                        onTap: () =>
+                            _openEvidenceAt((ev['timestamp'] as num).toInt()),
                       );
                     },
                   ),
@@ -1788,6 +1839,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     String subtitle,
     String time, {
     bool isLast = false,
+    VoidCallback? onTap,
   }) {
     return IntrinsicHeight(
       child: Row(
@@ -1815,48 +1867,59 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: onTap,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Ink(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: 16,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                subtitle,
+                                style: const TextStyle(
+                                  color: AppColors.outline,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 4),
                         Text(
-                          subtitle,
+                          time,
                           style: const TextStyle(
                             color: AppColors.outline,
-                            fontSize: 14,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Text(
-                    time,
-                    style: const TextStyle(
-                      color: AppColors.outline,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

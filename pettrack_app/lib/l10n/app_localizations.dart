@@ -1949,6 +1949,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not share'**
   String get shareFailed;
+
+  /// No description provided for @evidenceNoClip.
+  ///
+  /// In en, this message translates to:
+  /// **'No clip recorded near that moment'**
+  String get evidenceNoClip;
 }
 
 class _AppLocalizationsDelegate
