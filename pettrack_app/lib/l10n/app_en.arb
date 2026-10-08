@@ -554,5 +554,15 @@
   "armingTo": "To",
   "armingDays": "Days",
   "armingHelp": "Armed records motion and raises alerts; disarmed keeps no footage. Live view always works.",
-  "armingWindowRequired": "Add at least one window"
+  "armingWindowRequired": "Add at least one window",
+  "semanticCameraView": "Camera view",
+  "semanticChangePhoto": "Change profile picture",
+  "semanticZoneCanvas": "Zone editor — tap to place a point",
+  "semanticWakeMonitor": "Double tap to wake the monitor",
+  "colorTeal": "Teal",
+  "colorRed": "Red",
+  "colorBlue": "Blue",
+  "colorOrange": "Orange",
+  "colorPurple": "Purple",
+  "tooltipConfirm": "Confirm"
 }

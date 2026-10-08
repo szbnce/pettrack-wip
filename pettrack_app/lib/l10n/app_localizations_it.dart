@@ -1083,4 +1083,35 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get armingWindowRequired => 'Aggiungi almeno una fascia';
+
+  @override
+  String get semanticCameraView => 'Vista telecamera';
+
+  @override
+  String get semanticChangePhoto => 'Cambia immagine del profilo';
+
+  @override
+  String get semanticZoneCanvas =>
+      'Editor di zone — tocca per posizionare un punto';
+
+  @override
+  String get semanticWakeMonitor => 'Tocca due volte per svegliare il monitor';
+
+  @override
+  String get colorTeal => 'Turchese';
+
+  @override
+  String get colorRed => 'Rosso';
+
+  @override
+  String get colorBlue => 'Blu';
+
+  @override
+  String get colorOrange => 'Arancione';
+
+  @override
+  String get colorPurple => 'Viola';
+
+  @override
+  String get tooltipConfirm => 'Conferma';
 }

@@ -1085,4 +1085,35 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get armingWindowRequired => 'Mindestens ein Zeitfenster hinzufügen';
+
+  @override
+  String get semanticCameraView => 'Kamerabild';
+
+  @override
+  String get semanticChangePhoto => 'Profilbild ändern';
+
+  @override
+  String get semanticZoneCanvas =>
+      'Zonen-Editor — tippen, um einen Punkt zu setzen';
+
+  @override
+  String get semanticWakeMonitor => 'Doppeltippen, um den Monitor zu wecken';
+
+  @override
+  String get colorTeal => 'Türkis';
+
+  @override
+  String get colorRed => 'Rot';
+
+  @override
+  String get colorBlue => 'Blau';
+
+  @override
+  String get colorOrange => 'Orange';
+
+  @override
+  String get colorPurple => 'Lila';
+
+  @override
+  String get tooltipConfirm => 'Bestätigen';
 }

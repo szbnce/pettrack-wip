@@ -268,6 +268,7 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                       }
                     },
                     icon: const Icon(Icons.check, color: Colors.green),
+                    tooltip: l10n.tooltipConfirm,
                     style: IconButton.styleFrom(
                       backgroundColor: Colors.grey[900],
                     ),

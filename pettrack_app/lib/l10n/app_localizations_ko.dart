@@ -1062,4 +1062,34 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get armingWindowRequired => '시간대를 하나 이상 추가하세요';
+
+  @override
+  String get semanticCameraView => '카메라 화면';
+
+  @override
+  String get semanticChangePhoto => '프로필 사진 변경';
+
+  @override
+  String get semanticZoneCanvas => '구역 편집 — 탭하여 점 배치';
+
+  @override
+  String get semanticWakeMonitor => '더블 탭하여 모니터 깨우기';
+
+  @override
+  String get colorTeal => '청록';
+
+  @override
+  String get colorRed => '빨강';
+
+  @override
+  String get colorBlue => '파랑';
+
+  @override
+  String get colorOrange => '주황';
+
+  @override
+  String get colorPurple => '보라';
+
+  @override
+  String get tooltipConfirm => '확인';
 }

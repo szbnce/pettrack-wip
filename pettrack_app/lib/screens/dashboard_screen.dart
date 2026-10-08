@@ -922,57 +922,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final online = monitor['online'] == true;
     final url =
         '${widget.serverIp}/api/monitors/${Uri.encodeComponent(id)}/frame?v=$_gridRefresh';
-    return GestureDetector(
-      onTap: online ? () => _selectMonitor(id) : null,
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF15181E),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: _selectedMonitorId == id
-                ? AppColors.primary
-                : AppColors.outline.withValues(alpha: 0.1),
+    return Semantics(
+      button: online,
+      selected: _selectedMonitorId == id,
+      child: GestureDetector(
+        onTap: online ? () => _selectMonitor(id) : null,
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF15181E),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: _selectedMonitorId == id
+                  ? AppColors.primary
+                  : AppColors.outline.withValues(alpha: 0.1),
+            ),
           ),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: online
-            ? Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    url,
-                    headers: AuthService.headers,
-                    fit: BoxFit.contain,
-                    errorBuilder: (_, _, _) => Center(
-                      child: Icon(
-                        Icons.videocam_off,
-                        color: Colors.white.withValues(alpha: 0.5),
+          clipBehavior: Clip.antiAlias,
+          child: online
+              ? Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      url,
+                      headers: AuthService.headers,
+                      fit: BoxFit.contain,
+                      semanticLabel: l10n.semanticCameraView,
+                      errorBuilder: (_, _, _) => Center(
+                        child: Icon(
+                          Icons.videocam_off,
+                          color: Colors.white.withValues(alpha: 0.5),
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    left: 8,
-                    bottom: 8,
-                    child: _buildChip(
-                      Icons.wifi,
-                      "$id · ${monitor['battery_level'] ?? 0}%",
-                    ),
-                  ),
-                ],
-              )
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.cloud_off, color: Colors.redAccent),
-                    const SizedBox(height: 4),
-                    Text(
-                      "$id · ${l10n.offlineStatus}",
-                      style: const TextStyle(color: Colors.white70),
+                    Positioned(
+                      left: 8,
+                      bottom: 8,
+                      child: _buildChip(
+                        Icons.wifi,
+                        "$id · ${monitor['battery_level'] ?? 0}%",
+                      ),
                     ),
                   ],
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.cloud_off, color: Colors.redAccent),
+                      const SizedBox(height: 4),
+                      Text(
+                        "$id · ${l10n.offlineStatus}",
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }
@@ -1031,6 +1036,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Image.asset(
                             'assets/demo_frame.jpg',
                             fit: BoxFit.cover,
+                            semanticLabel: l10n.semanticCameraView,
                           ),
                           Positioned(
                             top: 8,
@@ -1099,9 +1105,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             InteractiveViewer(
                               minScale: 1.0,
                               maxScale: 4.0,
-                              child: RawImage(
-                                image: _currentUiImage!,
-                                fit: BoxFit.contain,
+                              child: Semantics(
+                                image: true,
+                                label: l10n.semanticCameraView,
+                                child: RawImage(
+                                  image: _currentUiImage!,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             )
                           else
@@ -1890,14 +1900,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   /// The watching-state chip; a tap opens the quick mode switch.
   Widget _buildArmingChip(AppLocalizations l10n) {
-    return GestureDetector(
-      onTap: () => _showArmingDialog(l10n),
-      child: Tooltip(
-        message: l10n.armingTitle,
-        child: _buildChip(
-          _armingArmed ? Icons.visibility : Icons.visibility_off,
-          _armingArmed ? l10n.armingStatusArmed : l10n.armingStatusDisarmed,
-          iconColor: _armingArmed ? Colors.white : Colors.amber,
+    final statusText = _armingArmed
+        ? l10n.armingStatusArmed
+        : l10n.armingStatusDisarmed;
+    return Semantics(
+      button: true,
+      label: '${l10n.armingTitle}: $statusText',
+      child: GestureDetector(
+        onTap: () => _showArmingDialog(l10n),
+        child: ExcludeSemantics(
+          child: Tooltip(
+            message: l10n.armingTitle,
+            child: _buildChip(
+              _armingArmed ? Icons.visibility : Icons.visibility_off,
+              statusText,
+              iconColor: _armingArmed ? Colors.white : Colors.amber,
+            ),
+          ),
         ),
       ),
     );

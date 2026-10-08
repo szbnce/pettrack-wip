@@ -2075,6 +2075,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add at least one window'**
   String get armingWindowRequired;
+
+  /// No description provided for @semanticCameraView.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera view'**
+  String get semanticCameraView;
+
+  /// No description provided for @semanticChangePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change profile picture'**
+  String get semanticChangePhoto;
+
+  /// No description provided for @semanticZoneCanvas.
+  ///
+  /// In en, this message translates to:
+  /// **'Zone editor — tap to place a point'**
+  String get semanticZoneCanvas;
+
+  /// No description provided for @semanticWakeMonitor.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to wake the monitor'**
+  String get semanticWakeMonitor;
+
+  /// No description provided for @colorTeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Teal'**
+  String get colorTeal;
+
+  /// No description provided for @colorRed.
+  ///
+  /// In en, this message translates to:
+  /// **'Red'**
+  String get colorRed;
+
+  /// No description provided for @colorBlue.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get colorBlue;
+
+  /// No description provided for @colorOrange.
+  ///
+  /// In en, this message translates to:
+  /// **'Orange'**
+  String get colorOrange;
+
+  /// No description provided for @colorPurple.
+  ///
+  /// In en, this message translates to:
+  /// **'Purple'**
+  String get colorPurple;
+
+  /// No description provided for @tooltipConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get tooltipConfirm;
 }
 
 class _AppLocalizationsDelegate

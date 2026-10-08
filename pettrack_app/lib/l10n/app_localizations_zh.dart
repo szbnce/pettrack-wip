@@ -1058,4 +1058,34 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get armingWindowRequired => '请至少添加一个时段';
+
+  @override
+  String get semanticCameraView => '摄像头画面';
+
+  @override
+  String get semanticChangePhoto => '更换头像';
+
+  @override
+  String get semanticZoneCanvas => '区域编辑 — 点按以放置点';
+
+  @override
+  String get semanticWakeMonitor => '双击以唤醒监视器';
+
+  @override
+  String get colorTeal => '青绿色';
+
+  @override
+  String get colorRed => '红色';
+
+  @override
+  String get colorBlue => '蓝色';
+
+  @override
+  String get colorOrange => '橙色';
+
+  @override
+  String get colorPurple => '紫色';
+
+  @override
+  String get tooltipConfirm => '确认';
 }

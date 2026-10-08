@@ -461,5 +461,15 @@
   "armingTo": "结束",
   "armingDays": "星期",
   "armingHelp": "监控中会记录动态并发送提醒；已停止则不保存任何录像。实时画面始终可用。",
-  "armingWindowRequired": "请至少添加一个时段"
+  "armingWindowRequired": "请至少添加一个时段",
+  "semanticCameraView": "摄像头画面",
+  "semanticChangePhoto": "更换头像",
+  "semanticZoneCanvas": "区域编辑 — 点按以放置点",
+  "semanticWakeMonitor": "双击以唤醒监视器",
+  "colorTeal": "青绿色",
+  "colorRed": "红色",
+  "colorBlue": "蓝色",
+  "colorOrange": "橙色",
+  "colorPurple": "紫色",
+  "tooltipConfirm": "确认"
 }

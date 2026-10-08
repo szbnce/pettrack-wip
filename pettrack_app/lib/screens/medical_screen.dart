@@ -33,6 +33,16 @@ class _MedicalScreenState extends State<MedicalScreen>
     const Color(0xFFBA68C8), // Purple
   ];
 
+  /// Names for the swatches' semantics — a swatch is only a choice if a
+  /// screen reader can name it.
+  String _colorName(AppLocalizations l10n, Color c) {
+    if (c == const Color(0xFF4DB6AC)) return l10n.colorTeal;
+    if (c == const Color(0xFFE57373)) return l10n.colorRed;
+    if (c == const Color(0xFF64B5F6)) return l10n.colorBlue;
+    if (c == const Color(0xFFFFB74D)) return l10n.colorOrange;
+    return l10n.colorPurple;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -133,19 +143,24 @@ class _MedicalScreenState extends State<MedicalScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: _colorOptions.map((c) {
-                    return GestureDetector(
-                      onTap: () => setDialogState(() => selectedColor = c),
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: c,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: selectedColor == c
-                                ? Colors.white
-                                : Colors.transparent,
-                            width: 3,
+                    return Semantics(
+                      button: true,
+                      selected: selectedColor == c,
+                      label: _colorName(l10n, c),
+                      child: GestureDetector(
+                        onTap: () => setDialogState(() => selectedColor = c),
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: c,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: selectedColor == c
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              width: 3,
+                            ),
                           ),
                         ),
                       ),
@@ -243,19 +258,24 @@ class _MedicalScreenState extends State<MedicalScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: _colorOptions.map((c) {
-                    return GestureDetector(
-                      onTap: () => setDialogState(() => selectedColor = c),
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: c,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: selectedColor == c
-                                ? Colors.white
-                                : Colors.transparent,
-                            width: 3,
+                    return Semantics(
+                      button: true,
+                      selected: selectedColor == c,
+                      label: _colorName(l10n, c),
+                      child: GestureDetector(
+                        onTap: () => setDialogState(() => selectedColor = c),
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: c,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: selectedColor == c
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              width: 3,
+                            ),
                           ),
                         ),
                       ),

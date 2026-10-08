@@ -461,5 +461,15 @@
   "armingTo": "終了",
   "armingDays": "曜日",
   "armingHelp": "監視中は動きを録画して通知します。停止中は映像を保存しません。ライブビューは常に利用できます。",
-  "armingWindowRequired": "少なくとも1つの時間帯を追加してください"
+  "armingWindowRequired": "少なくとも1つの時間帯を追加してください",
+  "semanticCameraView": "カメラ映像",
+  "semanticChangePhoto": "プロフィール画像を変更",
+  "semanticZoneCanvas": "ゾーン編集 — タップして点を配置",
+  "semanticWakeMonitor": "ダブルタップでモニターを起こす",
+  "colorTeal": "ティール",
+  "colorRed": "赤",
+  "colorBlue": "青",
+  "colorOrange": "オレンジ",
+  "colorPurple": "紫",
+  "tooltipConfirm": "確認"
 }

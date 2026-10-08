@@ -1064,4 +1064,34 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get armingWindowRequired => '少なくとも1つの時間帯を追加してください';
+
+  @override
+  String get semanticCameraView => 'カメラ映像';
+
+  @override
+  String get semanticChangePhoto => 'プロフィール画像を変更';
+
+  @override
+  String get semanticZoneCanvas => 'ゾーン編集 — タップして点を配置';
+
+  @override
+  String get semanticWakeMonitor => 'ダブルタップでモニターを起こす';
+
+  @override
+  String get colorTeal => 'ティール';
+
+  @override
+  String get colorRed => '赤';
+
+  @override
+  String get colorBlue => '青';
+
+  @override
+  String get colorOrange => 'オレンジ';
+
+  @override
+  String get colorPurple => '紫';
+
+  @override
+  String get tooltipConfirm => '確認';
 }

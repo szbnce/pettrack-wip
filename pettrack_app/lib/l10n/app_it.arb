@@ -461,5 +461,15 @@
   "armingTo": "Alle",
   "armingDays": "Giorni",
   "armingHelp": "Attivo registra i movimenti e invia avvisi; inattivo non conserva alcun filmato. La visione dal vivo funziona sempre.",
-  "armingWindowRequired": "Aggiungi almeno una fascia"
+  "armingWindowRequired": "Aggiungi almeno una fascia",
+  "semanticCameraView": "Vista telecamera",
+  "semanticChangePhoto": "Cambia immagine del profilo",
+  "semanticZoneCanvas": "Editor di zone — tocca per posizionare un punto",
+  "semanticWakeMonitor": "Tocca due volte per svegliare il monitor",
+  "colorTeal": "Turchese",
+  "colorRed": "Rosso",
+  "colorBlue": "Blu",
+  "colorOrange": "Arancione",
+  "colorPurple": "Viola",
+  "tooltipConfirm": "Conferma"
 }

@@ -1074,4 +1074,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get armingWindowRequired => 'Add at least one window';
+
+  @override
+  String get semanticCameraView => 'Camera view';
+
+  @override
+  String get semanticChangePhoto => 'Change profile picture';
+
+  @override
+  String get semanticZoneCanvas => 'Zone editor — tap to place a point';
+
+  @override
+  String get semanticWakeMonitor => 'Double tap to wake the monitor';
+
+  @override
+  String get colorTeal => 'Teal';
+
+  @override
+  String get colorRed => 'Red';
+
+  @override
+  String get colorBlue => 'Blue';
+
+  @override
+  String get colorOrange => 'Orange';
+
+  @override
+  String get colorPurple => 'Purple';
+
+  @override
+  String get tooltipConfirm => 'Confirm';
 }

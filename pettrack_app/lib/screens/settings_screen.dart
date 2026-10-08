@@ -397,53 +397,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildProfilePicture(AppLocalizations l10n) {
     return Column(
       children: [
-        GestureDetector(
-          onTap: _pickImage,
-          onLongPress: () {
-            setState(() {
-              _profilePicBase64 = null;
-            });
-          },
-          child: Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.surface,
-                    width: 4,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.outline.withValues(alpha: 0.15),
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
+        Semantics(
+          button: true,
+          label: l10n.semanticChangePhoto,
+          child: GestureDetector(
+            onTap: _pickImage,
+            onLongPress: () {
+              setState(() {
+                _profilePicBase64 = null;
+              });
+            },
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.surface,
+                      width: 4,
                     ),
-                  ],
-                  color: AppColors.surfaceVariant,
-                  image: _profilePicBase64 != null
-                      ? DecorationImage(
-                          image: MemoryImage(base64Decode(_profilePicBase64!)),
-                          fit: BoxFit.cover,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.outline.withValues(alpha: 0.15),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                    color: AppColors.surfaceVariant,
+                    image: _profilePicBase64 != null
+                        ? DecorationImage(
+                            image: MemoryImage(
+                              base64Decode(_profilePicBase64!),
+                            ),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                  child: _profilePicBase64 == null
+                      ? const Icon(
+                          Icons.pets,
+                          size: 60,
+                          color: AppColors.primary,
                         )
                       : null,
                 ),
-                child: _profilePicBase64 == null
-                    ? const Icon(Icons.pets, size: 60, color: AppColors.primary)
-                    : null,
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.edit, color: Colors.white, size: 18),
                 ),
-                child: const Icon(Icons.edit, color: Colors.white, size: 18),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 16),

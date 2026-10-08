@@ -461,5 +461,15 @@
   "armingTo": "종료",
   "armingDays": "요일",
   "armingHelp": "감시 중에는 움직임이 녹화되고 알림이 전송됩니다. 중지되면 영상이 저장되지 않습니다. 라이브 화면은 항상 작동합니다.",
-  "armingWindowRequired": "시간대를 하나 이상 추가하세요"
+  "armingWindowRequired": "시간대를 하나 이상 추가하세요",
+  "semanticCameraView": "카메라 화면",
+  "semanticChangePhoto": "프로필 사진 변경",
+  "semanticZoneCanvas": "구역 편집 — 탭하여 점 배치",
+  "semanticWakeMonitor": "더블 탭하여 모니터 깨우기",
+  "colorTeal": "청록",
+  "colorRed": "빨강",
+  "colorBlue": "파랑",
+  "colorOrange": "주황",
+  "colorPurple": "보라",
+  "tooltipConfirm": "확인"
 }

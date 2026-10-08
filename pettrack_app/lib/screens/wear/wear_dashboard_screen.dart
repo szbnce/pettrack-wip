@@ -196,9 +196,13 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
                           scaleEnabled: true,
                           minScale: 1.0,
                           maxScale: 4.0,
-                          child: RawImage(
-                            image: _currentUiImage!,
-                            fit: BoxFit.cover,
+                          child: Semantics(
+                            image: true,
+                            label: l10n.semanticCameraView,
+                            child: RawImage(
+                              image: _currentUiImage!,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

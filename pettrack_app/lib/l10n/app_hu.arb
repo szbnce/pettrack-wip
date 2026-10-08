@@ -361,5 +361,15 @@
   "armingTo": "Vége",
   "armingDays": "Napok",
   "armingHelp": "Élesítve rögzül a mozgás és riasztás érkezik; szüneteléskor nem készül felvétel. Az élő kép mindig működik.",
-  "armingWindowRequired": "Legalább egy időablak szükséges"
+  "armingWindowRequired": "Legalább egy időablak szükséges",
+  "semanticCameraView": "Kamerakép",
+  "semanticChangePhoto": "Profilkép módosítása",
+  "semanticZoneCanvas": "Zónaszerkesztés — koppintás pont elhelyezéséhez",
+  "semanticWakeMonitor": "Dupla koppintás a monitor ébresztéséhez",
+  "colorTeal": "Türkiz",
+  "colorRed": "Piros",
+  "colorBlue": "Kék",
+  "colorOrange": "Narancs",
+  "colorPurple": "Lila",
+  "tooltipConfirm": "Megerősítés"
 }

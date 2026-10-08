@@ -687,16 +687,23 @@ class _MonitorScreenState extends State<MonitorScreen> {
     return Stack(
       children: [
         mainScreen,
-        GestureDetector(
-          onDoubleTap: () => setState(() => _isSleeping = false),
-          child: Container(
-            color: Colors.black,
-            width: double.infinity,
-            height: double.infinity,
-            child: Center(
-              child: DefaultTextStyle(
-                style: TextStyle(color: Colors.white24, fontSize: 12),
-                child: Text(l10n.monitorSleeping),
+        Semantics(
+          button: true,
+          label: l10n.semanticWakeMonitor,
+          // Screen readers fire a semantic tap, not a double tap — without
+          // this the sleep overlay would be a trap.
+          onTap: () => setState(() => _isSleeping = false),
+          child: GestureDetector(
+            onDoubleTap: () => setState(() => _isSleeping = false),
+            child: Container(
+              color: Colors.black,
+              width: double.infinity,
+              height: double.infinity,
+              child: Center(
+                child: DefaultTextStyle(
+                  style: TextStyle(color: Colors.white24, fontSize: 12),
+                  child: Text(l10n.monitorSleeping),
+                ),
               ),
             ),
           ),

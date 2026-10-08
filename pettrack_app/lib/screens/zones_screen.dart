@@ -280,7 +280,14 @@ class _ZonesScreenState extends State<ZonesScreen> {
                 fit: StackFit.expand,
                 children: [
                   if (_currentUiImage != null)
-                    RawImage(image: _currentUiImage!, fit: BoxFit.contain)
+                    Semantics(
+                      image: true,
+                      label: l10n.semanticCameraView,
+                      child: RawImage(
+                        image: _currentUiImage!,
+                        fit: BoxFit.contain,
+                      ),
+                    )
                   else if (_frameFailures >= 3)
                     EmptyState(
                       icon: Icons.videocam_off_outlined,
@@ -297,18 +304,22 @@ class _ZonesScreenState extends State<ZonesScreen> {
                       ),
                     ),
                   if (_isDrawing)
-                    GestureDetector(
-                      onTapDown: (details) {
-                        setState(() {
-                          _currentPolygon.add(details.localPosition);
-                        });
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: CustomPaint(
-                          painter: PolygonPainter(_currentPolygon),
+                    Semantics(
+                      button: true,
+                      label: l10n.semanticZoneCanvas,
+                      child: GestureDetector(
+                        onTapDown: (details) {
+                          setState(() {
+                            _currentPolygon.add(details.localPosition);
+                          });
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: CustomPaint(
+                            painter: PolygonPainter(_currentPolygon),
+                          ),
                         ),
                       ),
                     ),

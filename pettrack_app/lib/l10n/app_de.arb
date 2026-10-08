@@ -461,5 +461,15 @@
   "armingTo": "Bis",
   "armingDays": "Tage",
   "armingHelp": "Aktiv zeichnet Bewegungen auf und löst Alarme aus; inaktiv speichert kein Material. Die Live-Ansicht funktioniert immer.",
-  "armingWindowRequired": "Mindestens ein Zeitfenster hinzufügen"
+  "armingWindowRequired": "Mindestens ein Zeitfenster hinzufügen",
+  "semanticCameraView": "Kamerabild",
+  "semanticChangePhoto": "Profilbild ändern",
+  "semanticZoneCanvas": "Zonen-Editor — tippen, um einen Punkt zu setzen",
+  "semanticWakeMonitor": "Doppeltippen, um den Monitor zu wecken",
+  "colorTeal": "Türkis",
+  "colorRed": "Rot",
+  "colorBlue": "Blau",
+  "colorOrange": "Orange",
+  "colorPurple": "Lila",
+  "tooltipConfirm": "Bestätigen"
 }

@@ -1078,4 +1078,35 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get armingWindowRequired => 'Legalább egy időablak szükséges';
+
+  @override
+  String get semanticCameraView => 'Kamerakép';
+
+  @override
+  String get semanticChangePhoto => 'Profilkép módosítása';
+
+  @override
+  String get semanticZoneCanvas =>
+      'Zónaszerkesztés — koppintás pont elhelyezéséhez';
+
+  @override
+  String get semanticWakeMonitor => 'Dupla koppintás a monitor ébresztéséhez';
+
+  @override
+  String get colorTeal => 'Türkiz';
+
+  @override
+  String get colorRed => 'Piros';
+
+  @override
+  String get colorBlue => 'Kék';
+
+  @override
+  String get colorOrange => 'Narancs';
+
+  @override
+  String get colorPurple => 'Lila';
+
+  @override
+  String get tooltipConfirm => 'Megerősítés';
 }
