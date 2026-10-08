@@ -2135,6 +2135,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm'**
   String get tooltipConfirm;
+
+  /// No description provided for @backupCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & restore'**
+  String get backupCardTitle;
+
+  /// No description provided for @backupHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your setup in one file — restore it on a new phone or after a reinstall. The file contains your pairing secret, so anyone holding it can reach your cameras.'**
+  String get backupHelp;
+
+  /// No description provided for @backupExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export backup'**
+  String get backupExport;
+
+  /// No description provided for @backupRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup'**
+  String get backupRestore;
+
+  /// No description provided for @backupExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export backup?'**
+  String get backupExportTitle;
+
+  /// No description provided for @backupExportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The backup file contains your pairing secret. Share it only with yourself — anyone with this file can access your cameras.'**
+  String get backupExportBody;
+
+  /// No description provided for @backupRestoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore backup?'**
+  String get backupRestoreTitle;
+
+  /// No description provided for @backupRestoreBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This replaces the settings on this phone and, when the server is reachable, on the server too.'**
+  String get backupRestoreBody;
+
+  /// No description provided for @backupInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That file is not a PetTrack backup'**
+  String get backupInvalid;
+
+  /// No description provided for @backupRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored'**
+  String get backupRestored;
+
+  /// No description provided for @backupRestoredOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored on this phone. Open Settings and save to sync with the server.'**
+  String get backupRestoredOffline;
+
+  /// No description provided for @backupRestoreError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not restore the backup'**
+  String get backupRestoreError;
 }
 
 class _AppLocalizationsDelegate

@@ -371,5 +371,17 @@
   "colorBlue": "Kék",
   "colorOrange": "Narancs",
   "colorPurple": "Lila",
-  "tooltipConfirm": "Megerősítés"
+  "tooltipConfirm": "Megerősítés",
+  "backupCardTitle": "Backup és visszaállítás",
+  "backupHelp": "Mentsd a beállításaidat egy fájlba — állítsd vissza új telefont vagy újratelepítés után. A fájl a párosítási titkot is tartalmazza, bárki elérheti vele a kameráidat.",
+  "backupExport": "Backup mentése",
+  "backupRestore": "Visszaállítás backupból",
+  "backupExportTitle": "Mentjük a backupot?",
+  "backupExportBody": "A backup fájl a párosítási titkot is tartalmazza. Csak magaddal oszd meg — bárki, akié ez a fájl, eléri a kameráidat.",
+  "backupRestoreTitle": "Visszaállítjuk a backupot?",
+  "backupRestoreBody": "Ez lecseréli a telefon beállításait, és ha a szerver elérhető, a szerveren lévőket is.",
+  "backupInvalid": "Ez a fájl nem PetTrack backup",
+  "backupRestored": "Backup visszaállítva",
+  "backupRestoredOffline": "A backup visszaállítva ezen a telefonon. Nyisd meg a Beállításokat és mentsd, hogy szinkronizálj a szerverrel.",
+  "backupRestoreError": "A backupot nem sikerült visszaállítani"
 }

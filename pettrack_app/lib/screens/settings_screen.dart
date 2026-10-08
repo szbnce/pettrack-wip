@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../app_info.dart';
@@ -15,6 +19,7 @@ import '../services/notification_service.dart';
 import '../services/wear_sync_service.dart';
 import 'package:http/http.dart' as http;
 import '../services/auth_service.dart';
+import '../services/backup_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   final bool isSetup;
@@ -57,6 +62,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _armingMode = armingModeOn;
   List<ArmingWindow> _armingSchedule = [];
   bool _savingArming = false;
+
+  // Backup & restore: one file carrying the whole setup.
+  bool _workingBackup = false;
 
   String _getLocalizedPetType(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
@@ -1000,6 +1008,138 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   /// Push the remote-alert settings to the server, then ask it to send one
   /// test notification — proving the topic end to end before trusting it.
+  Future<bool> _confirmBackup(String title, String body, String action) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return AlertDialog(
+          title: Text(title),
+          content: Text(body),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(action),
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
+  }
+
+  Future<void> _exportBackup(AppLocalizations l10n) async {
+    final confirmed = await _confirmBackup(
+      l10n.backupExportTitle,
+      l10n.backupExportBody,
+      l10n.backupExport,
+    );
+    if (!confirmed || !mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _workingBackup = true);
+    try {
+      final doc = await BackupService.buildDocument();
+      final stamp = DateTime.now();
+      String two(int n) => n.toString().padLeft(2, '0');
+      final name =
+          'pettrack-backup-${stamp.year}${two(stamp.month)}${two(stamp.day)}'
+          '-${two(stamp.hour)}${two(stamp.minute)}.json';
+      final dir = await getTemporaryDirectory();
+      final file = File('${dir.path}/$name');
+      await file.writeAsString(
+        const JsonEncoder.withIndent('  ').convert(doc),
+        flush: true,
+      );
+      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
+    } catch (e) {
+      debugPrint('backup export failed: $e');
+      messenger.showSnackBar(SnackBar(content: Text(l10n.settingsSaveError)));
+    } finally {
+      if (mounted) setState(() => _workingBackup = false);
+    }
+  }
+
+  Future<void> _restoreBackup(AppLocalizations l10n) async {
+    final confirmed = await _confirmBackup(
+      l10n.backupRestoreTitle,
+      l10n.backupRestoreBody,
+      l10n.backupRestore,
+    );
+    if (!confirmed || !mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _workingBackup = true);
+    try {
+      final file = await FilePicker.pickFile();
+      if (file == null) return; // cancelled — nothing to say
+      final bytes = await file.readAsBytes();
+      final outcome = await BackupService.restore(
+        utf8.decode(bytes, allowMalformed: true),
+      );
+      if (outcome == BackupRestoreOutcome.invalid) {
+        messenger.showSnackBar(SnackBar(content: Text(l10n.backupInvalid)));
+        return;
+      }
+      // Bring the screen (and the app's locale/theme) in line with what
+      // just landed, exactly as a save would.
+      final prefs = await SharedPreferences.getInstance();
+      if (!mounted) return;
+      PetTrackApp.setLocale(
+        context,
+        Locale(prefs.getString('language_code') ?? _languageCode),
+      );
+      final theme = prefs.getString('theme_mode') ?? 'system';
+      final mode = switch (theme) {
+        'light' => ThemeMode.light,
+        'dark' => ThemeMode.dark,
+        _ => ThemeMode.system,
+      };
+      PetTrackApp.setThemeMode(context, mode);
+      await _loadSettings();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            outcome == BackupRestoreOutcome.restored
+                ? l10n.backupRestored
+                : l10n.backupRestoredOffline,
+          ),
+        ),
+      );
+    } catch (e) {
+      debugPrint('backup restore failed: $e');
+      messenger.showSnackBar(SnackBar(content: Text(l10n.backupRestoreError)));
+    } finally {
+      if (mounted) setState(() => _workingBackup = false);
+    }
+  }
+
+  Widget _buildBackupCard(AppLocalizations l10n) {
+    return _buildCard(l10n.backupCardTitle, [
+      Text(l10n.backupHelp, style: Theme.of(context).textTheme.bodySmall),
+      const SizedBox(height: 12),
+      SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: _workingBackup ? null : () => _exportBackup(l10n),
+          icon: const Icon(Icons.save_alt),
+          label: Text(l10n.backupExport),
+        ),
+      ),
+      const SizedBox(height: 8),
+      SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: _workingBackup ? null : () => _restoreBackup(l10n),
+          icon: const Icon(Icons.settings_backup_restore),
+          label: Text(l10n.backupRestore),
+        ),
+      ),
+    ]);
+  }
+
   Future<void> _testRemoteAlert(AppLocalizations l10n) async {
     final url = _ntfyUrlController.text.trim();
     if (url.isNotEmpty && !isValidNtfyUrl(url)) {
@@ -1639,6 +1779,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             children: [
                               _buildMonitorCard(l10n),
                               _buildArmingCard(l10n),
+                              _buildBackupCard(l10n),
                               _buildHealthCard(l10n),
                               _buildAboutCard(l10n),
                               _buildSaveButton(l10n),
@@ -1676,6 +1817,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _buildAlertsCard(l10n),
                     _buildMonitorCard(l10n),
                     _buildArmingCard(l10n),
+                    _buildBackupCard(l10n),
                     _buildHealthCard(l10n),
                     _buildAboutCard(l10n),
                     const SizedBox(height: 16),

@@ -1094,4 +1094,43 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tooltipConfirm => '確認';
+
+  @override
+  String get backupCardTitle => 'バックアップと復元';
+
+  @override
+  String get backupHelp =>
+      '設定をひとつのファイルに保存し、新しい端末や再インストール後に復元できます。このファイルにはペアリング用シークレットが含まれるため、このファイルを持つ人は誰でもカメラにアクセスできます。';
+
+  @override
+  String get backupExport => 'バックアップを書き出す';
+
+  @override
+  String get backupRestore => 'バックアップから復元';
+
+  @override
+  String get backupExportTitle => 'バックアップを書き出しますか？';
+
+  @override
+  String get backupExportBody =>
+      'バックアップファイルにはペアリング用シークレットが含まれます。自分以外とは共有しないでください — このファイルを持つ人は誰でもカメラにアクセスできます。';
+
+  @override
+  String get backupRestoreTitle => 'バックアップを復元しますか？';
+
+  @override
+  String get backupRestoreBody => 'この端末の設定を置き換え、サーバーに接続できる場合はサーバー側の設定も置き換えます。';
+
+  @override
+  String get backupInvalid => 'このファイルは PetTrack のバックアップではありません';
+
+  @override
+  String get backupRestored => 'バックアップを復元しました';
+
+  @override
+  String get backupRestoredOffline =>
+      'この端末にバックアップを復元しました。設定を開いて保存するとサーバーと同期します。';
+
+  @override
+  String get backupRestoreError => 'バックアップを復元できませんでした';
 }

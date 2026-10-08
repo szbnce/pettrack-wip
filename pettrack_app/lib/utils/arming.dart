@@ -68,9 +68,12 @@ class ArmingWindow {
 /// The schedule list off the wire; junk entries are dropped, not crashed on.
 List<ArmingWindow> parseArmingSchedule(Object? raw) {
   if (raw is! List) return [];
-  return [
-    ...raw.whereType<Map>().map(
-      (w) => ArmingWindow.fromJson(Map<String, dynamic>.from(w)),
-    ),
-  ];
+  final windows = <ArmingWindow>[];
+  for (final entry in raw.whereType<Map>()) {
+    final window = ArmingWindow.fromJson(Map<String, dynamic>.from(entry));
+    // A window with no usable day is not a window — the server drops these
+    // too, so the app must never invent a day for one.
+    if (window.days.isNotEmpty) windows.add(window);
+  }
+  return windows;
 }

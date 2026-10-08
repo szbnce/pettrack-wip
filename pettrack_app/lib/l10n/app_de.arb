@@ -471,5 +471,17 @@
   "colorBlue": "Blau",
   "colorOrange": "Orange",
   "colorPurple": "Lila",
-  "tooltipConfirm": "Bestätigen"
+  "tooltipConfirm": "Bestätigen",
+  "backupCardTitle": "Backup & Wiederherstellung",
+  "backupHelp": "Bewahre deine Einstellungen in einer Datei auf — stelle sie auf einem neuen Handy oder nach einer Neuinstallation wieder her. Die Datei enthält deinen Kopplungs-Secret; alle mit dieser Datei können auf deine Kameras zugreifen.",
+  "backupExport": "Backup exportieren",
+  "backupRestore": "Backup wiederherstellen",
+  "backupExportTitle": "Backup exportieren?",
+  "backupExportBody": "Die Backup-Datei enthält deinen Kopplungs-Secret. Teile sie nur mit dir selbst — alle mit dieser Datei können auf deine Kameras zugreifen.",
+  "backupRestoreTitle": "Backup wiederherstellen?",
+  "backupRestoreBody": "Damit werden die Einstellungen auf diesem Handy ersetzt und, wenn der Server erreichbar ist, auch die auf dem Server.",
+  "backupInvalid": "Diese Datei ist kein PetTrack-Backup",
+  "backupRestored": "Backup wiederhergestellt",
+  "backupRestoredOffline": "Backup auf diesem Handy wiederhergestellt. Öffne die Einstellungen und speichere, um mit dem Server zu synchronisieren.",
+  "backupRestoreError": "Das Backup konnte nicht wiederhergestellt werden"
 }

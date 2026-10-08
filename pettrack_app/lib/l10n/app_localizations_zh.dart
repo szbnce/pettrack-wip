@@ -1088,4 +1088,41 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tooltipConfirm => '确认';
+
+  @override
+  String get backupCardTitle => '备份与恢复';
+
+  @override
+  String get backupHelp =>
+      '将设置保存为一个文件——可在新手机或重装后恢复。该文件包含配对密钥，任何拿到它的人都能访问你的摄像头。';
+
+  @override
+  String get backupExport => '导出备份';
+
+  @override
+  String get backupRestore => '从备份恢复';
+
+  @override
+  String get backupExportTitle => '导出备份？';
+
+  @override
+  String get backupExportBody => '备份文件包含你的配对密钥。请只留给自己——任何拿到该文件的人都能访问你的摄像头。';
+
+  @override
+  String get backupRestoreTitle => '恢复备份？';
+
+  @override
+  String get backupRestoreBody => '这会替换本机设置；若服务器可达，也会替换服务器上的设置。';
+
+  @override
+  String get backupInvalid => '该文件不是 PetTrack 备份';
+
+  @override
+  String get backupRestored => '备份已恢复';
+
+  @override
+  String get backupRestoredOffline => '备份已在本机恢复。打开设置并保存以与服务器同步。';
+
+  @override
+  String get backupRestoreError => '无法恢复备份';
 }

@@ -471,5 +471,17 @@
   "colorBlue": "蓝色",
   "colorOrange": "橙色",
   "colorPurple": "紫色",
-  "tooltipConfirm": "确认"
+  "tooltipConfirm": "确认",
+  "backupCardTitle": "备份与恢复",
+  "backupHelp": "将设置保存为一个文件——可在新手机或重装后恢复。该文件包含配对密钥，任何拿到它的人都能访问你的摄像头。",
+  "backupExport": "导出备份",
+  "backupRestore": "从备份恢复",
+  "backupExportTitle": "导出备份？",
+  "backupExportBody": "备份文件包含你的配对密钥。请只留给自己——任何拿到该文件的人都能访问你的摄像头。",
+  "backupRestoreTitle": "恢复备份？",
+  "backupRestoreBody": "这会替换本机设置；若服务器可达，也会替换服务器上的设置。",
+  "backupInvalid": "该文件不是 PetTrack 备份",
+  "backupRestored": "备份已恢复",
+  "backupRestoredOffline": "备份已在本机恢复。打开设置并保存以与服务器同步。",
+  "backupRestoreError": "无法恢复备份"
 }

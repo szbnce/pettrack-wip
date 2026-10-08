@@ -1104,4 +1104,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tooltipConfirm => 'Confirm';
+
+  @override
+  String get backupCardTitle => 'Backup & restore';
+
+  @override
+  String get backupHelp =>
+      'Keep your setup in one file — restore it on a new phone or after a reinstall. The file contains your pairing secret, so anyone holding it can reach your cameras.';
+
+  @override
+  String get backupExport => 'Export backup';
+
+  @override
+  String get backupRestore => 'Restore from backup';
+
+  @override
+  String get backupExportTitle => 'Export backup?';
+
+  @override
+  String get backupExportBody =>
+      'The backup file contains your pairing secret. Share it only with yourself — anyone with this file can access your cameras.';
+
+  @override
+  String get backupRestoreTitle => 'Restore backup?';
+
+  @override
+  String get backupRestoreBody =>
+      'This replaces the settings on this phone and, when the server is reachable, on the server too.';
+
+  @override
+  String get backupInvalid => 'That file is not a PetTrack backup';
+
+  @override
+  String get backupRestored => 'Backup restored';
+
+  @override
+  String get backupRestoredOffline =>
+      'Backup restored on this phone. Open Settings and save to sync with the server.';
+
+  @override
+  String get backupRestoreError => 'Could not restore the backup';
 }

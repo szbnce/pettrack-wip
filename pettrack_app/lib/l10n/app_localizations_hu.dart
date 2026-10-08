@@ -1109,4 +1109,44 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get tooltipConfirm => 'Megerősítés';
+
+  @override
+  String get backupCardTitle => 'Backup és visszaállítás';
+
+  @override
+  String get backupHelp =>
+      'Mentsd a beállításaidat egy fájlba — állítsd vissza új telefont vagy újratelepítés után. A fájl a párosítási titkot is tartalmazza, bárki elérheti vele a kameráidat.';
+
+  @override
+  String get backupExport => 'Backup mentése';
+
+  @override
+  String get backupRestore => 'Visszaállítás backupból';
+
+  @override
+  String get backupExportTitle => 'Mentjük a backupot?';
+
+  @override
+  String get backupExportBody =>
+      'A backup fájl a párosítási titkot is tartalmazza. Csak magaddal oszd meg — bárki, akié ez a fájl, eléri a kameráidat.';
+
+  @override
+  String get backupRestoreTitle => 'Visszaállítjuk a backupot?';
+
+  @override
+  String get backupRestoreBody =>
+      'Ez lecseréli a telefon beállításait, és ha a szerver elérhető, a szerveren lévőket is.';
+
+  @override
+  String get backupInvalid => 'Ez a fájl nem PetTrack backup';
+
+  @override
+  String get backupRestored => 'Backup visszaállítva';
+
+  @override
+  String get backupRestoredOffline =>
+      'A backup visszaállítva ezen a telefonon. Nyisd meg a Beállításokat és mentsd, hogy szinkronizálj a szerverrel.';
+
+  @override
+  String get backupRestoreError => 'A backupot nem sikerült visszaállítani';
 }

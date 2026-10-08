@@ -471,5 +471,17 @@
   "colorBlue": "Blu",
   "colorOrange": "Arancione",
   "colorPurple": "Viola",
-  "tooltipConfirm": "Conferma"
+  "tooltipConfirm": "Conferma",
+  "backupCardTitle": "Backup e ripristino",
+  "backupHelp": "Conserva le tue impostazioni in un file — ripristinale su un telefono nuovo o dopo una reinstallazione. Il file contiene il tuo segreto di accoppiamento: chi lo possiede può accedere alle tue telecamere.",
+  "backupExport": "Esporta backup",
+  "backupRestore": "Ripristina da backup",
+  "backupExportTitle": "Esportare il backup?",
+  "backupExportBody": "Il file di backup contiene il tuo segreto di accoppiamento. Condividilo solo con te stesso — chi possiede questo file può accedere alle tue telecamere.",
+  "backupRestoreTitle": "Ripristinare il backup?",
+  "backupRestoreBody": "Questo sostituisce le impostazioni su questo telefono e, se il server è raggiungibile, anche quelle sul server.",
+  "backupInvalid": "Questo file non è un backup di PetTrack",
+  "backupRestored": "Backup ripristinato",
+  "backupRestoredOffline": "Backup ripristinato su questo telefono. Apri Impostazioni e salva per sincronizzare con il server.",
+  "backupRestoreError": "Impossibile ripristinare il backup"
 }

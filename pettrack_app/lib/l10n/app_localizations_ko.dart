@@ -1092,4 +1092,44 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get tooltipConfirm => '확인';
+
+  @override
+  String get backupCardTitle => '백업 및 복원';
+
+  @override
+  String get backupHelp =>
+      '설정을 하나의 파일로 보관했다가 새 휴대폰이나 재설치 후 복원하세요. 이 파일에는 페어링 시크릿이 들어 있어, 파일을 가진 사람은 누구나 카메라에 접근할 수 있습니다.';
+
+  @override
+  String get backupExport => '백업 내보내기';
+
+  @override
+  String get backupRestore => '백업에서 복원';
+
+  @override
+  String get backupExportTitle => '백업을 내보낼까요?';
+
+  @override
+  String get backupExportBody =>
+      '백업 파일에는 페어링 시크릿이 들어 있습니다. 본인만 보관하세요 — 이 파일을 가진 사람은 누구나 카메라에 접근할 수 있습니다.';
+
+  @override
+  String get backupRestoreTitle => '백업을 복원할까요?';
+
+  @override
+  String get backupRestoreBody =>
+      '이 휴대폰의 설정을 대체하고, 서버에 연결할 수 있으면 서버의 설정도 대체합니다.';
+
+  @override
+  String get backupInvalid => '이 파일은 PetTrack 백업이 아닙니다';
+
+  @override
+  String get backupRestored => '백업이 복원되었습니다';
+
+  @override
+  String get backupRestoredOffline =>
+      '이 휴대폰에 백업이 복원되었습니다. 설정을 열어 저장하면 서버와 동기화됩니다.';
+
+  @override
+  String get backupRestoreError => '백업을 복원하지 못했습니다';
 }

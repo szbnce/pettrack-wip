@@ -1114,4 +1114,44 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get tooltipConfirm => 'Conferma';
+
+  @override
+  String get backupCardTitle => 'Backup e ripristino';
+
+  @override
+  String get backupHelp =>
+      'Conserva le tue impostazioni in un file — ripristinale su un telefono nuovo o dopo una reinstallazione. Il file contiene il tuo segreto di accoppiamento: chi lo possiede può accedere alle tue telecamere.';
+
+  @override
+  String get backupExport => 'Esporta backup';
+
+  @override
+  String get backupRestore => 'Ripristina da backup';
+
+  @override
+  String get backupExportTitle => 'Esportare il backup?';
+
+  @override
+  String get backupExportBody =>
+      'Il file di backup contiene il tuo segreto di accoppiamento. Condividilo solo con te stesso — chi possiede questo file può accedere alle tue telecamere.';
+
+  @override
+  String get backupRestoreTitle => 'Ripristinare il backup?';
+
+  @override
+  String get backupRestoreBody =>
+      'Questo sostituisce le impostazioni su questo telefono e, se il server è raggiungibile, anche quelle sul server.';
+
+  @override
+  String get backupInvalid => 'Questo file non è un backup di PetTrack';
+
+  @override
+  String get backupRestored => 'Backup ripristinato';
+
+  @override
+  String get backupRestoredOffline =>
+      'Backup ripristinato su questo telefono. Apri Impostazioni e salva per sincronizzare con il server.';
+
+  @override
+  String get backupRestoreError => 'Impossibile ripristinare il backup';
 }

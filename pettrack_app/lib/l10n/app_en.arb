@@ -564,5 +564,17 @@
   "colorBlue": "Blue",
   "colorOrange": "Orange",
   "colorPurple": "Purple",
-  "tooltipConfirm": "Confirm"
+  "tooltipConfirm": "Confirm",
+  "backupCardTitle": "Backup & restore",
+  "backupHelp": "Keep your setup in one file — restore it on a new phone or after a reinstall. The file contains your pairing secret, so anyone holding it can reach your cameras.",
+  "backupExport": "Export backup",
+  "backupRestore": "Restore from backup",
+  "backupExportTitle": "Export backup?",
+  "backupExportBody": "The backup file contains your pairing secret. Share it only with yourself — anyone with this file can access your cameras.",
+  "backupRestoreTitle": "Restore backup?",
+  "backupRestoreBody": "This replaces the settings on this phone and, when the server is reachable, on the server too.",
+  "backupInvalid": "That file is not a PetTrack backup",
+  "backupRestored": "Backup restored",
+  "backupRestoredOffline": "Backup restored on this phone. Open Settings and save to sync with the server.",
+  "backupRestoreError": "Could not restore the backup"
 }

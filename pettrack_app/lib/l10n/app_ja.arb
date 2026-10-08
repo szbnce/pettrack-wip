@@ -471,5 +471,17 @@
   "colorBlue": "青",
   "colorOrange": "オレンジ",
   "colorPurple": "紫",
-  "tooltipConfirm": "確認"
+  "tooltipConfirm": "確認",
+  "backupCardTitle": "バックアップと復元",
+  "backupHelp": "設定をひとつのファイルに保存し、新しい端末や再インストール後に復元できます。このファイルにはペアリング用シークレットが含まれるため、このファイルを持つ人は誰でもカメラにアクセスできます。",
+  "backupExport": "バックアップを書き出す",
+  "backupRestore": "バックアップから復元",
+  "backupExportTitle": "バックアップを書き出しますか？",
+  "backupExportBody": "バックアップファイルにはペアリング用シークレットが含まれます。自分以外とは共有しないでください — このファイルを持つ人は誰でもカメラにアクセスできます。",
+  "backupRestoreTitle": "バックアップを復元しますか？",
+  "backupRestoreBody": "この端末の設定を置き換え、サーバーに接続できる場合はサーバー側の設定も置き換えます。",
+  "backupInvalid": "このファイルは PetTrack のバックアップではありません",
+  "backupRestored": "バックアップを復元しました",
+  "backupRestoredOffline": "この端末にバックアップを復元しました。設定を開いて保存するとサーバーと同期します。",
+  "backupRestoreError": "バックアップを復元できませんでした"
 }

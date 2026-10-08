@@ -1116,4 +1116,45 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tooltipConfirm => 'Bestätigen';
+
+  @override
+  String get backupCardTitle => 'Backup & Wiederherstellung';
+
+  @override
+  String get backupHelp =>
+      'Bewahre deine Einstellungen in einer Datei auf — stelle sie auf einem neuen Handy oder nach einer Neuinstallation wieder her. Die Datei enthält deinen Kopplungs-Secret; alle mit dieser Datei können auf deine Kameras zugreifen.';
+
+  @override
+  String get backupExport => 'Backup exportieren';
+
+  @override
+  String get backupRestore => 'Backup wiederherstellen';
+
+  @override
+  String get backupExportTitle => 'Backup exportieren?';
+
+  @override
+  String get backupExportBody =>
+      'Die Backup-Datei enthält deinen Kopplungs-Secret. Teile sie nur mit dir selbst — alle mit dieser Datei können auf deine Kameras zugreifen.';
+
+  @override
+  String get backupRestoreTitle => 'Backup wiederherstellen?';
+
+  @override
+  String get backupRestoreBody =>
+      'Damit werden die Einstellungen auf diesem Handy ersetzt und, wenn der Server erreichbar ist, auch die auf dem Server.';
+
+  @override
+  String get backupInvalid => 'Diese Datei ist kein PetTrack-Backup';
+
+  @override
+  String get backupRestored => 'Backup wiederhergestellt';
+
+  @override
+  String get backupRestoredOffline =>
+      'Backup auf diesem Handy wiederhergestellt. Öffne die Einstellungen und speichere, um mit dem Server zu synchronisieren.';
+
+  @override
+  String get backupRestoreError =>
+      'Das Backup konnte nicht wiederhergestellt werden';
 }
