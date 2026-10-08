@@ -265,7 +265,9 @@ WearOS:
 
 ### Security basics
 
-PetTrack is built for your own homelab — a bit of care keeps it that way:
+PetTrack is built for your own homelab — a bit of care keeps it that way.
+The full security model (sessions, token scopes, transport, threat notes)
+lives in [SECURITY.md](SECURITY.md).
 
 * The **4-digit PIN** and the **secret token** in `pettrack_server/.env` unlock your
   camera feed. Treat them like passwords; don't commit or share that file.
