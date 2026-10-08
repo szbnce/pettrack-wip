@@ -633,6 +633,16 @@ class AppLocalizationsIt extends AppLocalizations {
       'Le vecchie registrazioni vengono eliminate per liberare spazio';
 
   @override
+  String get settingsSignOut => 'Esci';
+
+  @override
+  String get settingsSignOutTitle => 'Disconnettersi da questo server?';
+
+  @override
+  String get settingsSignOutMessage =>
+      'Questo dispositivo dimentica i token e la sessione sul server viene revocata. Accedi di nuovo con il PIN di associazione.';
+
+  @override
   String get orSeparator => 'OPPURE';
 
   @override

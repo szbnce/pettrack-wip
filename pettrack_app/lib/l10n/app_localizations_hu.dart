@@ -631,6 +631,16 @@ class AppLocalizationsHu extends AppLocalizations {
       'A régi visszajátszások törlésre kerülnek, hogy hely szabaduljon fel';
 
   @override
+  String get settingsSignOut => 'Kijelentkezés';
+
+  @override
+  String get settingsSignOutTitle => 'Kijelentkezés erről a szerverről?';
+
+  @override
+  String get settingsSignOutMessage =>
+      'Ez az eszköz elfelejti a tokenjeit, és a munkamenet a szerveren visszavonásra kerül. A párosító PIN-kóddal újra bejelentkezhetsz.';
+
+  @override
   String get orSeparator => 'VAGY';
 
   @override

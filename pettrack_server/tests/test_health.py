@@ -122,7 +122,7 @@ def test_prune_replays_clears_room_under_disk_pressure(client):
 # --- /api/system-health and /api/settings ------------------------------------------
 
 def test_health_reports_camera_disk_and_replays(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     api_routes.touch_monitor("cam-health", frame_count=5)
     try:
         resp = client.get("/api/system-health", headers={"x-api-token": tok})
@@ -141,7 +141,7 @@ def test_health_reports_camera_disk_and_replays(client):
 
 
 def test_health_flags_a_camera_that_went_quiet(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     entry = api_routes._ensure_monitor("cam-quiet")
     entry["frame_count"] = 3
     entry["last_seen"] = time.time() - health.CAMERA_OFFLINE_ALERT_SECONDS
@@ -156,7 +156,7 @@ def test_health_flags_a_camera_that_went_quiet(client):
 
 
 def test_settings_round_trip(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     headers = {"x-api-token": tok}
     before = client.get("/api/settings", headers=headers).json()
     try:
@@ -179,7 +179,7 @@ def test_settings_round_trip(client):
 
 
 def test_settings_rejects_impossible_retention(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     resp = client.post(
         "/api/settings",
         json={"replay_retention_days": 0},

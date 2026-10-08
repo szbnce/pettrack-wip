@@ -10,6 +10,7 @@ import '../l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import 'skeleton_box.dart';
 import 'video_player_widget.dart';
+import '../services/auth_service.dart';
 
 /// "Today's recap" card.
 ///
@@ -64,7 +65,7 @@ class _HighlightCardState extends State<HighlightCard> {
     final response = await http
         .get(
           Uri.parse('${widget.serverIp}/api/highlight'),
-          headers: {'x-api-token': widget.token},
+          headers: AuthService.headers,
         )
         .timeout(const Duration(seconds: 8));
     if (response.statusCode != 200) return null;

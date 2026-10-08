@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
+import '../../services/auth_service.dart';
 
 class WearDashboardScreen extends StatefulWidget {
   final String serverIp;
@@ -85,7 +86,7 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/pet'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 3));
 
@@ -99,7 +100,7 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
       final statusResp = await http
           .get(
             Uri.parse('${widget.serverIp}/api/status'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 3));
 
@@ -113,7 +114,7 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
       final actResp = await http
           .get(
             Uri.parse('${widget.serverIp}/api/activity?limit=1'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 3));
 

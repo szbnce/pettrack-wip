@@ -39,6 +39,24 @@ async def init_db():
                 vaccines TEXT DEFAULT '[]'
                 )
         """)
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS auth_sessions (
+                id TEXT PRIMARY KEY,
+                family TEXT NOT NULL,
+                scope TEXT NOT NULL DEFAULT 'full',
+                refresh_hash TEXT NOT NULL UNIQUE,
+                created_at REAL NOT NULL,
+                expires_at REAL NOT NULL,
+                revoked_at REAL
+                )
+        """)
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS auth_failures (
+                ip TEXT PRIMARY KEY,
+                attempts INTEGER NOT NULL,
+                last_attempt REAL NOT NULL
+                )
+        """)
         try:
             await db.execute("ALTER TABLE zones ADD COLUMN type TEXT DEFAULT 'safe'")
         except Exception:

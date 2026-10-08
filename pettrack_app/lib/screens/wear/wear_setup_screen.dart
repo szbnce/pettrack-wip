@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
+import '../../services/auth_service.dart';
 import '../../services/wear_sync_service.dart';
 import 'wear_dashboard_screen.dart';
 
@@ -63,10 +64,7 @@ class _WearSetupScreenState extends State<WearSetupScreen> {
               Text(
                 _isSyncing ? l10n.wearSynced : l10n.wearOpenAppOnPhone,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                ),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
               ),
               const SizedBox(height: 16),
               if (!_isSyncing)
@@ -79,14 +77,21 @@ class _WearSetupScreenState extends State<WearSetupScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const WearManualSetupScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const WearManualSetupScreen(),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey[800],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
-                  child: Text(l10n.wearManual, style: const TextStyle(color: Colors.white, fontSize: 12)),
+                  child: Text(
+                    l10n.wearManual,
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  ),
                 ),
               ],
             ],
@@ -121,7 +126,11 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
             children: [
               Text(
                 l10n.wearSetupTitle,
-                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 16),
               TextField(
@@ -132,8 +141,14 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                   hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
                   fillColor: Colors.grey[900],
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
                 keyboardType: TextInputType.url,
               ),
@@ -149,8 +164,14 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                   hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
                   fillColor: Colors.grey[900],
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -161,22 +182,34 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                     onPressed: () => Navigator.pop(context),
                     tooltip: l10n.close,
                     icon: const Icon(Icons.close, color: Colors.red),
-                    style: IconButton.styleFrom(backgroundColor: Colors.grey[900]),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.grey[900],
+                    ),
                   ),
                   IconButton(
                     onPressed: () async {
-                      if (_ipController.text.isEmpty || _tokenController.text.isEmpty) return;
-                      
+                      if (_ipController.text.isEmpty ||
+                          _tokenController.text.isEmpty) {
+                        return;
+                      }
+
                       String targetIp = _ipController.text.trim();
-                      if (!targetIp.startsWith('http://') && !targetIp.startsWith('https://')) {
+                      if (!targetIp.startsWith('http://') &&
+                          !targetIp.startsWith('https://')) {
                         targetIp = 'http://$targetIp';
                       }
 
                       final uri = Uri.tryParse(targetIp);
                       if (uri != null && !uri.hasPort) {
                         final host = uri.host;
-                        final isIpOrLocal = RegExp(r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$').hasMatch(host) || host == 'localhost';
-                        if (isIpOrLocal && uri.scheme != 'https' && !targetIp.contains(':$host')) {
+                        final isIpOrLocal =
+                            RegExp(
+                              r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$',
+                            ).hasMatch(host) ||
+                            host == 'localhost';
+                        if (isIpOrLocal &&
+                            uri.scheme != 'https' &&
+                            !targetIp.contains(':$host')) {
                           targetIp = '${uri.scheme}://$host:8000${uri.path}';
                         }
                       }
@@ -186,7 +219,9 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                             .post(
                               Uri.parse('$targetIp/api/auth/login_pin'),
                               headers: {'Content-Type': 'application/json'},
-                              body: jsonEncode({'pin': _tokenController.text.trim()}),
+                              body: jsonEncode({
+                                'pin': _tokenController.text.trim(),
+                              }),
                             )
                             .timeout(const Duration(seconds: 3));
 
@@ -194,6 +229,13 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                           final data = jsonDecode(response.body);
                           final token = data['secret']; // JWT token
                           if (token != null) {
+                            await AuthService.saveSession(
+                              accessToken: token,
+                              refreshToken: data['refresh_token'] ?? '',
+                              expiresInSeconds:
+                                  (data['expires_in'] as num?)?.toInt() ?? 3600,
+                              role: 'viewer',
+                            );
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString('server_ip', targetIp);
                             await prefs.setString('api_token', token);
@@ -226,7 +268,9 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                       }
                     },
                     icon: const Icon(Icons.check, color: Colors.green),
-                    style: IconButton.styleFrom(backgroundColor: Colors.grey[900]),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.grey[900],
+                    ),
                   ),
                 ],
               ),

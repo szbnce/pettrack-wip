@@ -48,11 +48,9 @@ class _MedicalScreenState extends State<MedicalScreen>
   Future<void> _loadData() async {
     final meds = await MedicalDataManager.loadMedications(
       widget.serverIp,
-      widget.token,
     );
     final vacs = await MedicalDataManager.loadVaccines(
       widget.serverIp,
-      widget.token,
     );
     setState(() {
       _medications = meds;
@@ -163,7 +161,6 @@ class _MedicalScreenState extends State<MedicalScreen>
                 await MedicalDataManager.saveMedications(
                   _medications,
                   widget.serverIp,
-                  widget.token,
                 );
                 setState(() {});
                 if (ctx.mounted) Navigator.pop(ctx);
@@ -253,7 +250,6 @@ class _MedicalScreenState extends State<MedicalScreen>
                 await MedicalDataManager.saveVaccines(
                   _vaccines,
                   widget.serverIp,
-                  widget.token,
                 );
                 setState(() {});
                 if (ctx.mounted) Navigator.pop(ctx);
@@ -460,7 +456,6 @@ class _MedicalScreenState extends State<MedicalScreen>
             await MedicalDataManager.saveMedications(
               _medications,
               widget.serverIp,
-              widget.token,
             );
           },
           child: Container(
@@ -576,7 +571,6 @@ class _MedicalScreenState extends State<MedicalScreen>
             await MedicalDataManager.saveVaccines(
               _vaccines,
               widget.serverIp,
-              widget.token,
             );
           },
           child: Container(

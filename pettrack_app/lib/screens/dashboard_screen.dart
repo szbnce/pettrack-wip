@@ -17,6 +17,7 @@ import '../services/notification_service.dart';
 import '../services/home_widget_service.dart';
 import '../widgets/highlight_card.dart';
 import 'insights_screen.dart';
+import '../services/auth_service.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String serverIp;
@@ -342,7 +343,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/pet'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 3));
 
@@ -373,7 +374,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/zones'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 3));
 
@@ -415,7 +416,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/activity?limit=50'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 2));
 
@@ -491,7 +492,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/status'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 2));
 
@@ -705,7 +706,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   Image.network(
                     url,
-                    headers: {'x-api-token': widget.token},
+                    headers: AuthService.headers,
                     fit: BoxFit.contain,
                     errorBuilder: (_, _, _) => Center(
                       child: Icon(

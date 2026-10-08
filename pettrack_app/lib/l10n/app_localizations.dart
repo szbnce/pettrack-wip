@@ -1230,6 +1230,24 @@ abstract class AppLocalizations {
   /// **'Old replays are being pruned to free up space'**
   String get diskLowBody;
 
+  /// No description provided for @settingsSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get settingsSignOut;
+
+  /// No description provided for @settingsSignOutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of this server?'**
+  String get settingsSignOutTitle;
+
+  /// No description provided for @settingsSignOutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This device forgets its tokens and its session on the server is revoked. Sign in again with the pairing PIN.'**
+  String get settingsSignOutMessage;
+
   /// No description provided for @orSeparator.
   ///
   /// In en, this message translates to:

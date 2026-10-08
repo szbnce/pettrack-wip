@@ -623,6 +623,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get diskLowBody => '空きを確保するため古いリプレイを削除しています';
 
   @override
+  String get settingsSignOut => 'サインアウト';
+
+  @override
+  String get settingsSignOutTitle => 'このサーバーからサインアウトしますか？';
+
+  @override
+  String get settingsSignOutMessage =>
+      'このデバイスのトークンは削除され、サーバー上のセッションは無効になります。ペアリングPINでもう一度サインインしてください。';
+
+  @override
   String get orSeparator => 'または';
 
   @override

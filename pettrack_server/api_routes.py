@@ -11,12 +11,8 @@ from database import get_events, get_event_counts_since, get_events_since, get_z
 from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, MedicalDataSync, SoundEvent
 from email.utils import formatdate
 import jwt
-from cryptography.fernet import Fernet
-import base64
-import hashlib
 import hmac
-import secrets
-from dotenv import load_dotenv, set_key
+from dotenv import set_key
 from pydantic import BaseModel, Field
 from manager import client_manager
 import mqtt_bridge
@@ -24,70 +20,44 @@ import timelapse
 import health
 import settings as app_settings
 
-load_dotenv()
-
-SECRET_TOKEN = os.getenv("PETTRACK_SECRET")
-if not SECRET_TOKEN:
-    print("No secret found! Generating a new ultra-secure 64-char token...")
-    new_secret = secrets.token_urlsafe(48)
-    try:
-        set_key(".env", "PETTRACK_SECRET", new_secret)
-    except OSError:
-        # Fallback for Docker bind mounts where os.replace fails
-        with open(".env", "a") as f:
-            f.write(f"\nPETTRACK_SECRET='{new_secret}'\n")
-    SECRET_TOKEN = new_secret
-
-def get_fernet_key(secret: str) -> bytes:
-    digest = hashlib.sha256(secret.encode()).digest()
-    return base64.urlsafe_b64encode(digest)
-
-fernet = Fernet(get_fernet_key(SECRET_TOKEN))
-
-JWT_TTL_SECONDS = 86400 * 3650
-MEDIA_TOKEN_TTL_SECONDS = 3600
+# Token, session and lockout machinery lives in auth.py; the names are
+# re-exported here because main.py and the tests import them from this module.
+from auth import (
+    SECRET_TOKEN,
+    fernet,
+    get_fernet_key,
+    token_valid,
+    token_payload,
+    scope_allows,
+    mint_access_token,
+    mint_media_token,
+    create_session,
+    rotate_session,
+    revoke_session,
+    session_active,
+    is_locked_out,
+    record_failure,
+    clear_failures,
+    failure_count,
+    ACCESS_TOKEN_TTL_SECONDS,
+    MEDIA_TOKEN_TTL_SECONDS,
+)
 
 # Reported by /api/version so the apps can show "Server vX" and warn when the
 # two sides are out of step. Keep in sync with the app's kAppVersion.
 SERVER_VERSION = "1.0.0"
 
-def mint_token() -> str:
-    return jwt.encode(
-        {"auth": "ok", "exp": time.time() + JWT_TTL_SECONDS},
-        SECRET_TOKEN,
-        algorithm="HS256",
-    )
-
-def mint_media_token(filename: str) -> str:
-    """Short-lived token scoped to a single replay file, safe for URLs."""
-    return jwt.encode(
-        {"auth": "media", "file": filename, "exp": time.time() + MEDIA_TOKEN_TTL_SECONDS},
-        SECRET_TOKEN,
-        algorithm="HS256",
-    )
-
-def token_valid(req_token: str) -> bool:
-    """Accepts a signed JWT or the raw secret (constant-time compare)."""
-    if not req_token:
-        return False
-    try:
-        jwt.decode(req_token, SECRET_TOKEN, algorithms=["HS256"])
-        return True
-    except jwt.PyJWTError:
-        return hmac.compare_digest(req_token, SECRET_TOKEN)
-
 async def verify_token(request: Request, token: str = Query(None), x_api_token: str = Header(None)):
     req_token = token or x_api_token
     if not token_valid(req_token):
         raise HTTPException(status_code=401, detail="Invalid token")
-
-    # A media token only unlocks the replay file it was minted for.
-    try:
-        payload = jwt.decode(req_token, SECRET_TOKEN, algorithms=["HS256"])
-    except jwt.PyJWTError:
-        return  # raw secret: full access
-    if "file" in payload and not request.url.path.startswith("/api/replays/"):
-        raise HTTPException(status_code=403, detail="Media token not valid here")
+    payload = token_payload(req_token)
+    # Media and monitor tokens stay fenced into the paths they were minted for.
+    if not scope_allows(payload, request.url.path):
+        raise HTTPException(status_code=403, detail="Token not valid here")
+    sid = payload.get("sid") if payload else None
+    if sid and not await session_active(sid):
+        raise HTTPException(status_code=401, detail="Session revoked")
 
 router = APIRouter(dependencies=[Depends(verify_token)])
 auth_router = APIRouter()
@@ -188,8 +158,15 @@ def frame_media_type(data: bytes) -> str:
 
 class PinRequest(BaseModel):
     pin: str
+    scope: str = "full"
 
-failed_login_attempts = {}
+
+class RefreshRequest(BaseModel):
+    refresh_token: str
+
+
+class LogoutRequest(BaseModel):
+    refresh_token: str | None = None
 
 
 def _monitor_list() -> List[Dict]:
@@ -278,17 +255,71 @@ async def receive_web_frame(request: Request, token: str = "", monitor_id: str =
 
     return {"status": "ok"}
 
-@auth_router.post("/api/auth/login")
-async def login(req: LoginRequest):
-    if not hmac.compare_digest(req.secret, SECRET_TOKEN or ""):
-        raise HTTPException(status_code=401, detail="Invalid secret")
+def _session_response(session: dict) -> dict:
+    # The "secret" key is kept for existing clients; it carries the same
+    # short-lived access JWT as "token".
+    return {
+        "token": session["token"],
+        "secret": session["token"],
+        "refresh_token": session["refresh_token"],
+        "expires_in": session["expires_in"],
+    }
 
-    return {"token": mint_token()}
+
+async def _client_locked_out(request: Request) -> None:
+    if await is_locked_out(request.client.host):
+        raise HTTPException(
+            status_code=429, detail="Too many failed attempts. Try again in 5 minutes."
+        )
+
+
+async def require_full_token(req_token: str | None) -> None:
+    """Full access only — a monitor or media token must never reach here."""
+    if not token_valid(req_token):
+        raise HTTPException(status_code=401, detail="Unauthorized to set PIN")
+    payload = token_payload(req_token) if req_token else None
+    if payload is not None:
+        if payload.get("auth") != "ok":
+            raise HTTPException(status_code=403, detail="Scoped token not valid here")
+        sid = payload.get("sid")
+        if sid and not await session_active(sid):
+            raise HTTPException(status_code=401, detail="Session revoked")
+
+
+@auth_router.post("/api/auth/login")
+async def login(req: LoginRequest, request: Request):
+    await _client_locked_out(request)
+    if not hmac.compare_digest(req.secret, SECRET_TOKEN or ""):
+        await record_failure(request.client.host)
+        raise HTTPException(status_code=401, detail="Invalid secret")
+    await clear_failures(request.client.host)
+    return _session_response(await create_session(req.scope))
+
+
+@auth_router.post("/api/auth/refresh")
+async def refresh(req: RefreshRequest):
+    session = await rotate_session(req.refresh_token)
+    if session is None:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+    return _session_response(session)
+
+
+@auth_router.post("/api/auth/logout")
+async def logout(req: LogoutRequest, x_api_token: str = Header(None)):
+    """Revoke the session family behind the refresh token and/or the access
+    token — its access tokens die with it. Idempotent."""
+    if req.refresh_token:
+        await revoke_session(refresh_token=req.refresh_token)
+    payload = token_payload(x_api_token) if x_api_token else None
+    sid = payload.get("sid") if payload else None
+    if sid:
+        await revoke_session(session_id=sid)
+    return {"status": "ok"}
+
 
 @auth_router.post("/api/auth/set_pin")
 async def set_pin(req: PinRequest, x_api_token: str = Header(None)):
-    if not token_valid(x_api_token):
-        raise HTTPException(status_code=401, detail="Unauthorized to set PIN")
+    await require_full_token(x_api_token)
     if not re.fullmatch(r"\d{4,8}", req.pin):
         raise HTTPException(status_code=422, detail="PIN must be 4-8 digits")
 
@@ -296,31 +327,17 @@ async def set_pin(req: PinRequest, x_api_token: str = Header(None)):
     os.environ["PETTRACK_WEB_PIN"] = req.pin
     return {"status": "success"}
 
+
 @auth_router.post("/api/auth/login_pin")
 async def login_pin(req: PinRequest, request: Request):
-    ip = request.client.host
-    now = time.time()
-
-    if ip in failed_login_attempts:
-        attempts, last_time = failed_login_attempts[ip]
-        if now - last_time > 300:
-            failed_login_attempts[ip] = (0, now)
-        elif attempts >= 5:
-            raise HTTPException(status_code=429, detail="Too many failed attempts. Try again in 5 minutes.")
-
+    await _client_locked_out(request)
     if not hmac.compare_digest(req.pin, os.getenv("PETTRACK_WEB_PIN") or ""):
-        attempts, _ = failed_login_attempts.get(ip, (0, now))
-        failed_login_attempts[ip] = (attempts + 1, now)
+        await record_failure(request.client.host)
         raise HTTPException(status_code=401, detail="Invalid PIN")
-
-    if ip in failed_login_attempts:
-        del failed_login_attempts[ip]
-
-    # Mint a scoped token instead of handing out the raw master secret.
-    # The "secret" key is kept for existing clients; it now carries a JWT,
-    # which every auth path (header, query, WebSocket) accepts.
-    token = mint_token()
-    return {"token": token, "secret": token}
+    await clear_failures(request.client.host)
+    # Scoped minting: a monitor PIN login gets only the frame and status
+    # paths, never the settings and pet data.
+    return _session_response(await create_session(req.scope))
 
 
 @router.get("/api/pet")

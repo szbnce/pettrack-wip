@@ -11,7 +11,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from manager import manager, client_manager, client_command_to_monitor
-from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, touch_monitor, mark_monitor_offline, SECRET_TOKEN, fernet, set_key, token_valid
+from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, touch_monitor, mark_monitor_offline, SECRET_TOKEN, fernet, set_key, token_valid, token_payload, session_active
 from tasks import cleanup_old_images, watchdog_loop
 from vision import process_and_save_frame
 from database import init_db, get_zones
@@ -104,7 +104,8 @@ from fastapi.staticfiles import StaticFiles
 
 @app.websocket("/ws")
 async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: str = "unknown"):
-    if not token_valid(token):
+    # Cameras upload here (full or monitor scope); viewers watch on /ws/client.
+    if not await ws_token_ok(token, ("ok", "monitor")):
         print("Connection rejected: Invalid Token", flush=True)
         await websocket.close(code=1008)
         return
@@ -143,7 +144,8 @@ async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: 
 
 @app.websocket("/ws/client")
 async def client_websocket(websocket: WebSocket, token: str = None, monitor: str = None):
-    if not token_valid(token):
+    # Full access only: viewers can also send commands to the cameras.
+    if not await ws_token_ok(token, ("ok",)):
         await websocket.close(code=1008)
         return
     # monitor=<id> narrows the stream to one camera; no param keeps the old
@@ -172,6 +174,20 @@ else:
     def read_root():
         return {"message": "PetTrack server is running (Web Dashboard not built)"}
 
+async def ws_token_ok(token: str | None, allowed: tuple) -> bool:
+    """WebSocket flavour of the API token rules: same scopes, same session
+    revocation. The raw master secret keeps full access."""
+    if not token_valid(token):
+        return False
+    payload = token_payload(token)
+    if payload is not None:
+        if payload.get("auth") not in allowed:
+            return False
+        sid = payload.get("sid")
+        if sid and not await session_active(sid):
+            return False
+    return True
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the PetTrack Server")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose logging")
@@ -179,4 +195,12 @@ if __name__ == "__main__":
 
     log_level = "debug" if args.verbose else "info"
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level=log_level)
+    # HTTPS when a certificate is configured (PETTRACK_TLS_CERT/KEY); plain
+    # HTTP on the LAN otherwise. See README "HTTPS" for how to get a cert.
+    ssl_cert = os.getenv("PETTRACK_TLS_CERT")
+    ssl_key = os.getenv("PETTRACK_TLS_KEY")
+    ssl_kwargs = {}
+    if ssl_cert and ssl_key:
+        ssl_kwargs = {"ssl_certfile": ssl_cert, "ssl_keyfile": ssl_key}
+
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level=log_level, **ssl_kwargs)

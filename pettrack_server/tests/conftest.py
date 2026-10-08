@@ -14,6 +14,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 import api_routes
+import auth
 from api_routes import auth_router, router
 from database import init_db
 
@@ -32,6 +33,8 @@ def client(tmp_path_factory):
 
 @pytest.fixture(autouse=True)
 def _clear_lockout():
-    api_routes.failed_login_attempts.clear()
+    # The lockout counters live in the DB (persistent across restarts), so
+    # every test starts and ends with a clean slate.
+    asyncio.run(auth.clear_all_failures())
     yield
-    api_routes.failed_login_attempts.clear()
+    asyncio.run(auth.clear_all_failures())

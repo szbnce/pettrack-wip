@@ -1,5 +1,7 @@
 """Auth and endpoint-security tests for the PetTrack server API."""
-import api_routes
+import asyncio
+
+import auth
 from api_routes import SECRET_TOKEN
 
 PIN = "4242"
@@ -32,7 +34,7 @@ def test_login_pin_lockout_after_five_failures(client):
 def test_login_pin_clears_lockout_on_success(client):
     client.post("/api/auth/login_pin", json={"pin": "0000"})
     assert client.post("/api/auth/login_pin", json={"pin": PIN}).status_code == 200
-    assert not api_routes.failed_login_attempts
+    assert asyncio.run(auth.failure_count("testclient")) == 0
 
 
 # --- token acceptance --------------------------------------------------------

@@ -620,6 +620,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get diskLowBody => '正在清理旧回放以释放空间';
 
   @override
+  String get settingsSignOut => '退出登录';
+
+  @override
+  String get settingsSignOutTitle => '从此服务器退出登录？';
+
+  @override
+  String get settingsSignOutMessage => '此设备将忘记令牌，服务器上的会话会被吊销。可用配对 PIN 重新登录。';
+
+  @override
   String get orSeparator => '或';
 
   @override

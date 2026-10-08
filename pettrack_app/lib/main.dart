@@ -10,6 +10,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'theme/app_theme.dart';
+import 'services/auth_service.dart';
 import 'screens/language_screen.dart';
 import 'screens/main_navigation.dart';
 import 'screens/setup_wizard_screen.dart';
@@ -17,7 +18,6 @@ import 'screens/monitor_setup_screen.dart';
 import 'screens/monitor_screen.dart';
 import 'screens/wear/wear_setup_screen.dart';
 import 'screens/wear/wear_dashboard_screen.dart';
-
 
 late List<CameraDescription> _cameras;
 List<CameraDescription> get cameras => _cameras;
@@ -43,6 +43,15 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final savedLocale = prefs.getString('language_code') ?? 'hu';
   final themeModeString = prefs.getString('theme_mode') ?? 'system';
+
+  // The access token is short-lived; keep it fresh in the background so
+  // screens can read it live at request time (see AuthService).
+  await AuthService.init();
+  unawaited(AuthService.refreshIfNeeded());
+  Timer.periodic(
+    const Duration(minutes: 5),
+    (_) => AuthService.refreshIfNeeded(),
+  );
 
   ThemeMode initialThemeMode;
   switch (themeModeString) {
@@ -110,17 +119,33 @@ class PetTrackApp extends StatefulWidget {
   State<PetTrackApp> createState() => _PetTrackAppState();
 }
 
-class _PetTrackAppState extends State<PetTrackApp> {
+class _PetTrackAppState extends State<PetTrackApp> with WidgetsBindingObserver {
   Locale? _locale;
   late ThemeMode _themeMode;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _themeMode = widget.initialThemeMode;
     PetTrackApp.themeNotifier.value = _themeMode;
     if (widget.initialLocale != null) {
       _locale = Locale(widget.initialLocale!);
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Coming back from the background may mean the short-lived access token
+    // expired while we were away — swap it before the next screen fetches.
+    if (state == AppLifecycleState.resumed) {
+      AuthService.refreshIfNeeded();
     }
   }
 

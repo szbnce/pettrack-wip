@@ -27,6 +27,7 @@ class PetProfile(BaseModel):
 
 class LoginRequest(BaseModel):
     secret: str
+    scope: str = "full"
 
 class MedicalDataSync(BaseModel):
     medications: list[dict]

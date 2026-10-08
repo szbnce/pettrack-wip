@@ -21,7 +21,7 @@ def _today():
 
 
 def test_timeline_buckets_events_by_day(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     before = _timeline(client, tok, days=2).get(_today(), {}).get("events", {})
 
     asyncio.run(log_event("sound_detected", details="timeline-test"))
@@ -31,7 +31,7 @@ def test_timeline_buckets_events_by_day(client):
 
 
 def test_timeline_counts_motion_clips_per_day(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     before = _timeline(client, tok, days=2).get(_today(), {}).get("clips", 0)
 
     epoch = int(time.time())
@@ -51,7 +51,7 @@ def test_timeline_counts_motion_clips_per_day(client):
 
 
 def test_timeline_leaves_out_days_outside_the_window(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     old_ts = int(time.time()) - 40 * 86400
     old_day = datetime.fromtimestamp(old_ts).strftime("%Y-%m-%d")
     os.makedirs("replays", exist_ok=True)
@@ -67,7 +67,7 @@ def test_timeline_leaves_out_days_outside_the_window(client):
 
 
 def test_timeline_reports_event_types_separately(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     asyncio.run(log_event("zone_enter", zone_name="timeline-zone"))
 
     today = _timeline(client, tok, days=2).get(_today(), {})

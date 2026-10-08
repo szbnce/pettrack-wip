@@ -68,7 +68,7 @@ buy for how much work. Nothing here is scheduled — this is the wish list.
     it a real landing page (problem → photos → 3-step install → screenshots)
     and a "demo mode" with synthetic data so visitors can click around
     without a camera.
-17. **Security leftovers (keep shipping these quietly).** Short-lived JWTs
+17. **Security leftovers** *(done)*. Short-lived JWTs
     with refresh, revocation on logout, scoped monitor tokens, persistent PIN
     lockout, HTTPS everywhere — mostly invisible work that keeps the project
     safe to recommend.

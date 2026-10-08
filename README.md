@@ -220,6 +220,14 @@ with automatic TLS:
 Then connect the app with `https://pettrack.home.arpa` — it switches the live
 stream to `wss://` automatically.
 
+Already have a TLS certificate (from a reverse proxy, Let's Encrypt, or a
+private CA)? The server can terminate HTTPS itself — no Caddy needed. Point
+the two environment variables at your PEM files before starting it:
+
+```sh
+PETTRACK_TLS_CERT=/path/to/fullchain.pem PETTRACK_TLS_KEY=/path/to/privkey.pem ./run_linux_and_macos.sh
+```
+
 #### First steps (both options)
 
 On phones, you can either use the web interface (add a home-screen shortcut) or sideload the native app.

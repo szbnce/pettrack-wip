@@ -44,7 +44,7 @@ def _monitors(client, token):
 
 def test_monitors_endpoint_lists_each_camera(client):
     _reset()
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     client.post(
         "/api/frame/web?token=" + tok + "&monitor_id=cam_a", content=JPEG
     )
@@ -60,7 +60,7 @@ def test_monitors_endpoint_lists_each_camera(client):
 
 def test_each_camera_keeps_its_own_frame(client):
     _reset()
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     frame_a = b"\xff\xd8" + b"A" * 16
     frame_b = b"\xff\xd8" + b"B" * 16
     client.post("/api/frame/web?token=" + tok + "&monitor_id=cam_a", content=frame_a)
@@ -74,14 +74,14 @@ def test_each_camera_keeps_its_own_frame(client):
 
 def test_unknown_camera_frame_is_404(client):
     _reset()
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     resp = client.get("/api/monitors/nobody/frame", headers={"x-api-token": tok})
     assert resp.status_code == 404
 
 
 def test_status_mirrors_the_freshest_camera(client):
     _reset()
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     client.post(
         "/api/monitor/update",
         json={"battery_level": 80, "is_charging": False, "monitor_id": "cam_a"},
@@ -106,7 +106,7 @@ def test_status_mirrors_the_freshest_camera(client):
 
 def test_battery_reports_land_on_the_right_camera(client):
     _reset()
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     client.post(
         "/api/monitor/update",
         json={"battery_level": 12, "is_charging": True, "monitor_id": "cam_a"},
@@ -119,7 +119,7 @@ def test_battery_reports_land_on_the_right_camera(client):
 
 def test_offline_camera_is_flagged_after_timeout(client):
     _reset()
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     api_routes.touch_monitor("cam_a")
     api_routes.monitor_registry["cam_a"]["last_seen"] = time.time() - 60
 

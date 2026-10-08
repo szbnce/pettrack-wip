@@ -621,6 +621,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get diskLowBody => '공간을 확보하기 위해 오래된 다시보기를 삭제합니다';
 
   @override
+  String get settingsSignOut => '로그아웃';
+
+  @override
+  String get settingsSignOutTitle => '이 서버에서 로그아웃할까요?';
+
+  @override
+  String get settingsSignOutMessage =>
+      '이 기기의 토큰이 삭제되고 서버의 세션이 무효화됩니다. 페어링 PIN으로 다시 로그인하세요.';
+
+  @override
   String get orSeparator => '또는';
 
   @override

@@ -632,6 +632,16 @@ class AppLocalizationsDe extends AppLocalizations {
       'Alte Aufnahmen werden gelöscht, um Speicher freizugeben';
 
   @override
+  String get settingsSignOut => 'Abmelden';
+
+  @override
+  String get settingsSignOutTitle => 'Von diesem Server abmelden?';
+
+  @override
+  String get settingsSignOutMessage =>
+      'Dieses Gerät vergisst seine Token und die Sitzung auf dem Server wird widerrufen. Mit der Anmelde-PIN wieder anmelden.';
+
+  @override
   String get orSeparator => 'ODER';
 
   @override

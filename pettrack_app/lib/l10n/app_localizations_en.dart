@@ -627,6 +627,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diskLowBody => 'Old replays are being pruned to free up space';
 
   @override
+  String get settingsSignOut => 'Sign out';
+
+  @override
+  String get settingsSignOutTitle => 'Sign out of this server?';
+
+  @override
+  String get settingsSignOutMessage =>
+      'This device forgets its tokens and its session on the server is revoked. Sign in again with the pairing PIN.';
+
+  @override
   String get orSeparator => 'OR';
 
   @override

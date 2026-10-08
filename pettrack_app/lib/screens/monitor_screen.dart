@@ -20,6 +20,7 @@ import 'package:pettrack_app/utils/night_vision.dart';
 import 'package:pettrack_app/utils/sound_detect.dart';
 import 'package:pettrack_app/main.dart';
 import 'package:pettrack_app/screens/welcome_screen.dart';
+import '../services/auth_service.dart';
 
 class MonitorScreen extends StatefulWidget {
   final String serverIp;
@@ -120,7 +121,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
     try {
       debugPrint("Connecting to ws://$_currentIp/ws");
       final wsUrl =
-          '${_currentIp.replaceAll("http", "ws")}/ws?token=$_currentToken&client_id=$_currentClientId';
+          '${_currentIp.replaceAll("http", "ws")}/ws?token=${AuthService.token}&client_id=$_currentClientId';
       _socket = WebSocketChannel.connect(Uri.parse(wsUrl));
 
       debugPrint("Connected successfully!");
@@ -253,7 +254,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
       await http.post(
         Uri.parse('$_currentIp/api/monitor/sound'),
         headers: {
-          'x-api-token': _currentToken,
+          'x-api-token': AuthService.token,
           'Content-Type': 'application/json',
         },
         body: json.encode({'level': levelDb}),
@@ -336,7 +337,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
       await http.post(
         Uri.parse('$_currentIp/api/monitor/update'),
         headers: {
-          'x-api-token': _currentToken,
+          'x-api-token': AuthService.token,
           'Content-Type': 'application/json',
         },
         body: json.encode({

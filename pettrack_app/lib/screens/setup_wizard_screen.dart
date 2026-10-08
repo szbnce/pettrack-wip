@@ -8,6 +8,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/utils/server_url.dart';
 import 'package:pettrack_app/widgets/server_discovery_dialog.dart';
+import '../services/auth_service.dart';
 import 'qr_scanner_screen.dart';
 import 'main_navigation.dart';
 
@@ -135,6 +136,13 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        // Register the session so the short-lived access token can rotate.
+        await AuthService.saveSession(
+          accessToken: data['token'],
+          refreshToken: data['refresh_token'] ?? '',
+          expiresInSeconds: (data['expires_in'] as num?)?.toInt() ?? 3600,
+          role: 'viewer',
+        );
 
         // Try to fetch existing pet data to avoid re-entering
         try {
@@ -237,6 +245,13 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        // Register the session so the short-lived access token can rotate.
+        await AuthService.saveSession(
+          accessToken: data['token'],
+          refreshToken: data['refresh_token'] ?? '',
+          expiresInSeconds: (data['expires_in'] as num?)?.toInt() ?? 3600,
+          role: 'viewer',
+        );
 
         // Try to fetch existing pet data to avoid re-entering
         try {

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/colors.dart';
+import '../services/auth_service.dart';
 
 class ZonesScreen extends StatefulWidget {
   final String serverIp;
@@ -58,7 +59,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/zones'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 3));
 
@@ -86,7 +87,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/frame/latest'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 2));
 
@@ -117,7 +118,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
           .post(
             Uri.parse('${widget.serverIp}/api/zones'),
             headers: {
-              'x-api-token': widget.token,
+              'x-api-token': AuthService.token,
               'Content-Type': 'application/json',
             },
             body: jsonEncode(

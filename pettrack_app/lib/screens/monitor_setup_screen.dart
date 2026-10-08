@@ -8,6 +8,7 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/screens/monitor_screen.dart';
 import 'package:pettrack_app/utils/server_url.dart';
 import 'package:pettrack_app/widgets/server_discovery_dialog.dart';
+import '../services/auth_service.dart';
 
 class MonitorSetupScreen extends StatefulWidget {
   const MonitorSetupScreen({super.key});
@@ -120,12 +121,19 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
           .post(
             Uri.parse('$targetIp/api/auth/login_pin'),
             headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({'pin': pin}),
+            body: jsonEncode({'pin': pin, 'scope': 'monitor'}),
           )
           .timeout(const Duration(seconds: 3));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        // Monitor scope: this token can only upload frames and status.
+        await AuthService.saveSession(
+          accessToken: data['token'],
+          refreshToken: data['refresh_token'] ?? '',
+          expiresInSeconds: (data['expires_in'] as num?)?.toInt() ?? 3600,
+          role: 'monitor',
+        );
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('server_ip', targetIp);
@@ -156,9 +164,9 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
       setState(() => _isProcessing = false);
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.setupErrPin)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.setupErrPin)));
       }
     }
   }
@@ -230,8 +238,9 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
                             const SizedBox(height: 10),
                             ServerDiscoveryButton(
                               onSelected: (address) {
-                                _ipController.text =
-                                    normalizeServerUrl(address);
+                                _ipController.text = normalizeServerUrl(
+                                  address,
+                                );
                               },
                             ),
                             const SizedBox(height: 10),

@@ -12,6 +12,7 @@ import '../theme/colors.dart';
 import '../utils/format_helpers.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/skeleton_box.dart';
+import '../services/auth_service.dart';
 
 /// Activity insights: how much the pet moves, where it spends its time,
 /// and how much of the day is rest — over a selectable window.
@@ -78,7 +79,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/insights?days=$_rangeDays'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 5));
       if (!mounted) return;

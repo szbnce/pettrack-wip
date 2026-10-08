@@ -13,6 +13,7 @@ import 'main_navigation.dart';
 import '../services/notification_service.dart';
 import '../services/wear_sync_service.dart';
 import 'package:http/http.dart' as http;
+import '../services/auth_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   final bool isSetup;
@@ -40,7 +41,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String? _serverVersion;
   bool _checkingVersion = false;
   bool _isLoading = true;
-  String _jwtToken = '';
 
   // System health card (server watchdog: camera, disk, replay retention).
   Map<String, dynamic>? _health;
@@ -88,13 +88,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _quietHoursEnabled = prefs.getBool('quiet_hours_enabled') ?? false;
       _quietHoursFrom = prefs.getInt('quiet_hours_from') ?? 23 * 60;
       _quietHoursTo = prefs.getInt('quiet_hours_to') ?? 7 * 60;
-      _jwtToken = token;
     });
 
     if (ip.isNotEmpty && token.isNotEmpty && !ip.contains('demo_ip')) {
       try {
         final response = await http
-            .get(Uri.parse('$ip/api/pet'), headers: {'x-api-token': token})
+            .get(Uri.parse('$ip/api/pet'), headers: AuthService.headers)
             .timeout(const Duration(seconds: 3));
 
         if (response.statusCode == 200 && mounted) {
@@ -203,7 +202,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         if (loginRes.statusCode != 200) {
           throw Exception("Login Failed");
         }
-        jwtToken = jsonDecode(loginRes.body)['token'];
+        final loginBody = jsonDecode(loginRes.body) as Map<String, dynamic>;
+        jwtToken = loginBody['token'];
+        await AuthService.saveSession(
+          accessToken: loginBody['token'] as String,
+          refreshToken: loginBody['refresh_token'] as String? ?? '',
+          expiresInSeconds: (loginBody['expires_in'] as num?)?.toInt() ?? 3600,
+          role: 'viewer',
+        );
       } catch (_) {
         if (!mounted) return;
         setState(() => _isLoading = false);
@@ -694,20 +700,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// The server's watchdog view plus its retention setting.
   Future<void> _fetchSystemHealth() async {
     final raw = _ipController.text.trim();
-    if (raw.isEmpty || _jwtToken.isEmpty) return;
+    if (raw.isEmpty || AuthService.token.isEmpty) return;
     final base = normalizeServerUrl(raw);
     try {
       final responses = await Future.wait([
         http
             .get(
               Uri.parse('$base/api/system-health'),
-              headers: {'x-api-token': _jwtToken},
+              headers: AuthService.headers,
             )
             .timeout(const Duration(seconds: 4)),
         http
             .get(
               Uri.parse('$base/api/settings'),
-              headers: {'x-api-token': _jwtToken},
+              headers: AuthService.headers,
             )
             .timeout(const Duration(seconds: 4)),
       ]);
@@ -744,7 +750,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               '${normalizeServerUrl(_ipController.text.trim())}/api/settings',
             ),
             headers: {
-              'x-api-token': _jwtToken,
+              'x-api-token': AuthService.token,
               'Content-Type': 'application/json',
             },
             body: jsonEncode({'replay_retention_days': days}),
@@ -1032,6 +1038,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
           },
           icon: const Icon(Icons.qr_code),
           label: Text(l10n.settingsShowQrBtn),
+        ),
+      ),
+      const SizedBox(height: 16),
+      SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: () async {
+            final confirm = await showDialog<bool>(
+              context: context,
+              builder: (BuildContext ctx) {
+                return AlertDialog(
+                  title: Text(l10n.settingsSignOutTitle),
+                  content: Text(l10n.settingsSignOutMessage),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(ctx).pop(false),
+                      child: Text(l10n.cancel),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(ctx).pop(true),
+                      child: Text(l10n.settingsSignOut),
+                    ),
+                  ],
+                );
+              },
+            );
+
+            if (confirm == true) {
+              // Revoke the session on the server, forget it on this device.
+              await AuthService.logout();
+              if (mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const BootScreen()),
+                  (route) => false,
+                );
+              }
+            }
+          },
+          icon: const Icon(Icons.logout),
+          label: Text(l10n.settingsSignOut),
         ),
       ),
       const SizedBox(height: 16),

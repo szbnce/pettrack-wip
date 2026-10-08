@@ -9,6 +9,7 @@ import '../theme/colors.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/skeleton_box.dart';
 import '../widgets/video_player_widget.dart';
+import '../services/auth_service.dart';
 
 class ReplaysScreen extends StatefulWidget {
   final String serverIp;
@@ -62,13 +63,13 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
         http
             .get(
               Uri.parse('${widget.serverIp}/api/replays'),
-              headers: {'x-api-token': widget.token},
+              headers: AuthService.headers,
             )
             .timeout(const Duration(seconds: 5)),
         http
             .get(
               Uri.parse('${widget.serverIp}/api/timeline?days=14'),
-              headers: {'x-api-token': widget.token},
+              headers: AuthService.headers,
             )
             .timeout(const Duration(seconds: 5)),
       ]);
@@ -252,7 +253,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/timelapse$query'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 60));
 
@@ -298,7 +299,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
       final response = await http
           .get(
             Uri.parse('${widget.serverIp}/api/highlight$query'),
-            headers: {'x-api-token': widget.token},
+            headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 60));
 

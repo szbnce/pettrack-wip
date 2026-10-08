@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../services/auth_service.dart';
 
 class Medication {
   final String id;
@@ -74,16 +75,13 @@ class MedicalDataManager {
   static const String _medKey = 'saved_medications';
   static const String _vacKey = 'saved_vaccines';
 
-  static Future<List<Medication>> loadMedications(
-    String serverIp,
-    String token,
-  ) async {
+  static Future<List<Medication>> loadMedications(String serverIp) async {
     final prefs = await SharedPreferences.getInstance();
 
     try {
       final response = await http.get(
         Uri.parse('$serverIp/api/medical'),
-        headers: {'x-api-token': token},
+        headers: AuthService.headers,
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -109,24 +107,20 @@ class MedicalDataManager {
   static Future<void> saveMedications(
     List<Medication> meds,
     String serverIp,
-    String token,
   ) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = jsonEncode(meds.map((e) => e.toJson()).toList());
     await prefs.setString(_medKey, jsonStr);
-    await _syncToServer(serverIp, token);
+    await _syncToServer(serverIp);
   }
 
-  static Future<List<Vaccine>> loadVaccines(
-    String serverIp,
-    String token,
-  ) async {
+  static Future<List<Vaccine>> loadVaccines(String serverIp) async {
     final prefs = await SharedPreferences.getInstance();
 
     try {
       final response = await http.get(
         Uri.parse('$serverIp/api/medical'),
-        headers: {'x-api-token': token},
+        headers: AuthService.headers,
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -148,18 +142,14 @@ class MedicalDataManager {
     return list.map((e) => Vaccine.fromJson(e)).toList();
   }
 
-  static Future<void> saveVaccines(
-    List<Vaccine> vacs,
-    String serverIp,
-    String token,
-  ) async {
+  static Future<void> saveVaccines(List<Vaccine> vacs, String serverIp) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = jsonEncode(vacs.map((e) => e.toJson()).toList());
     await prefs.setString(_vacKey, jsonStr);
-    await _syncToServer(serverIp, token);
+    await _syncToServer(serverIp);
   }
 
-  static Future<void> _syncToServer(String serverIp, String token) async {
+  static Future<void> _syncToServer(String serverIp) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final medStr = prefs.getString(_medKey) ?? '[]';
@@ -169,7 +159,7 @@ class MedicalDataManager {
         Uri.parse('$serverIp/api/medical'),
         headers: {
           'Content-Type': 'application/json',
-          'x-api-token': token,
+          'x-api-token': AuthService.token,
         },
         body: jsonEncode({
           'medications': jsonDecode(medStr),

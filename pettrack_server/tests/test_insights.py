@@ -73,7 +73,7 @@ def test_zone_stays_keeps_zones_apart():
 # --- /api/insights ----------------------------------------------------------
 
 def test_insights_turns_clips_into_active_time(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     before, _ = _insights(client, tok, days=2)
 
     epoch = int(time.time())
@@ -96,7 +96,7 @@ def test_insights_turns_clips_into_active_time(client):
 
 
 def test_insights_counts_sounds_on_the_right_day(client):
-    tok = api_routes.mint_token()
+    tok = client.post("/api/auth/login", json={"secret": api_routes.SECRET_TOKEN}).json()["token"]
     before, _ = _insights(client, tok, days=2)
 
     asyncio.run(log_event("sound_detected", details="insights-test"))
