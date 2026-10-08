@@ -3,6 +3,40 @@
 Ideas collected while building the vision pipeline. Grouped by how much they
 buy for how much work. Nothing here is scheduled — this is the wish list.
 
+## The $1M bar (adopted 2026-10-08 — the active directive)
+
+The project is treated as being worth $0 today. Work continues autonomously,
+gate by gate, until the product is at the quality someone would pay a premium
+for. Valuation is the market's to set — these gates are the testable proxy:
+when every one is green, the product side is done.
+
+1. **Flawless first run.** Download to "I can see my pet" in under 10
+   minutes: no IP typing, no dead ends, every failure recoverable in plain
+   language. *(mostly done — wizard, mDNS/QR pairing, demo mode; audit the
+   edges)*
+2. **Never miss a moment.** Alerts always arrive (local + ntfy), the stream
+   reconnects by itself, the watchdog surfaces failures before the user
+   notices them. *(mostly done — quiet hours, ntfy bridge, watchdog; needs
+   self-healing stream reconnection)*
+3. **Worth sharing.** One-tap share for replays, the daily highlight and the
+   week's insights — the kind of screenshots people post.
+4. **Daily-use depth.** Event → evidence tap-through (snapshot + jump to the
+   replay moment), feed search/filter, arming schedule ("only watch when
+   I'm away").
+5. **Craft.** No broken-looking state anywhere (error + retry, empty states,
+   skeletons on every data screen), accessibility AA (semantics, scaling,
+   contrast), full 7-locale parity, performance targets (cold start < 2 s,
+   stream latency < 1 s).
+6. **Ships like a product.** Semantic versioning + CHANGELOG + tagged release
+   notes, one-tap in-app update on Android, backup/restore of settings,
+   documented security posture.
+7. **Distribution ready** *(the user ships, we arm)*. Store-ready assets:
+   screenshots, listing copy, signing/release checklist.
+
+Work order: the Gate 5 error/empty-state pass first (it is what makes every
+later feature look premium), then 3 → 4 → 6 → 2's self-healing stream →
+1's edge audit → 7. Each item lands green (analyzer + tests + i10n parity).
+
 ## Quick wins (hours each, big first-impression impact)
 
 1. **Plain-language settings + Advanced drawer.** Today the app speaks

@@ -374,6 +374,11 @@ opt-in: without a topic URL nothing is ever sent.
 
 * `flutter analyze` / `flutter test` — app static analysis and widget tests
 * `python3 tools/check_i18n.py` — translation parity across all 7 locales
+* Releases version app and server together: bump `pettrack_app/lib/app_info.dart`
+  (`kAppVersion`), `pettrack_app/pubspec.yaml` (`version: X.Y.Z+N`) and
+  `SERVER_VERSION` in `pettrack_server/api_routes.py` in one commit, fill in
+  `CHANGELOG.md`, then `git tag vX.Y.Z && git push --tags` — CI publishes the
+  APK release with notes from the changelog
 * `pip install -r requirements.txt -r requirements-dev.txt && pytest tests` — server API + vision tests
 * All of the above run in CI (GitHub Actions) on every push to `main`.
 

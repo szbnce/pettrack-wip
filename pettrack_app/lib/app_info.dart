@@ -6,7 +6,7 @@
 library;
 
 /// App version, kept in sync with `pubspec.yaml`'s `version:`.
-const String kAppVersion = '1.0.0';
+const String kAppVersion = '2.0.0';
 
 /// Compares two dotted versions ("1.2.0") like [Comparable.compareTo]:
 /// negative when [a] is older than [b], 0 when equal, positive when newer.
