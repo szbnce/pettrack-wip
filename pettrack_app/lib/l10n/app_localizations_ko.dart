@@ -1001,4 +1001,25 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get evidenceNoClip => '그 순간 근처에 녹화된 클립이 없습니다';
+
+  @override
+  String get feedSearchHint => '이벤트 검색';
+
+  @override
+  String get feedSearchClear => '지우기';
+
+  @override
+  String get feedFilterAll => '전체';
+
+  @override
+  String get feedFilterZones => '구역';
+
+  @override
+  String get feedFilterSounds => '소리';
+
+  @override
+  String get feedFilterSystem => '시스템';
+
+  @override
+  String get feedNoMatch => '일치하는 이벤트가 없습니다';
 }

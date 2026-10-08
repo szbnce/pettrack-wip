@@ -534,5 +534,12 @@
   "tooltipPlayPause": "Play / pause",
   "settingsSaveError": "Could not save the change",
   "shareFailed": "Could not share",
-  "evidenceNoClip": "No clip recorded near that moment"
+  "evidenceNoClip": "No clip recorded near that moment",
+  "feedSearchHint": "Search events",
+  "feedSearchClear": "Clear",
+  "feedFilterAll": "All",
+  "feedFilterZones": "Zones",
+  "feedFilterSounds": "Sounds",
+  "feedFilterSystem": "System",
+  "feedNoMatch": "No matching events"
 }

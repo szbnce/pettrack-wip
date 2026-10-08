@@ -1017,4 +1017,25 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get evidenceNoClip => 'Nincs felvétel ehhez a pillanathoz';
+
+  @override
+  String get feedSearchHint => 'Események keresése';
+
+  @override
+  String get feedSearchClear => 'Törlés';
+
+  @override
+  String get feedFilterAll => 'Összes';
+
+  @override
+  String get feedFilterZones => 'Zónák';
+
+  @override
+  String get feedFilterSounds => 'Hangok';
+
+  @override
+  String get feedFilterSystem => 'Rendszer';
+
+  @override
+  String get feedNoMatch => 'Nincs találat';
 }

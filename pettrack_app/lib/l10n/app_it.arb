@@ -441,5 +441,12 @@
   "tooltipPlayPause": "Riproduci / pausa",
   "settingsSaveError": "Impossibile salvare la modifica",
   "shareFailed": "Impossibile condividere",
-  "evidenceNoClip": "Nessun clip registrato vicino a quel momento"
+  "evidenceNoClip": "Nessun clip registrato vicino a quel momento",
+  "feedSearchHint": "Cerca eventi",
+  "feedSearchClear": "Cancella",
+  "feedFilterAll": "Tutti",
+  "feedFilterZones": "Zone",
+  "feedFilterSounds": "Suoni",
+  "feedFilterSystem": "Sistema",
+  "feedNoMatch": "Nessun evento corrispondente"
 }

@@ -1013,4 +1013,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get evidenceNoClip => 'No clip recorded near that moment';
+
+  @override
+  String get feedSearchHint => 'Search events';
+
+  @override
+  String get feedSearchClear => 'Clear';
+
+  @override
+  String get feedFilterAll => 'All';
+
+  @override
+  String get feedFilterZones => 'Zones';
+
+  @override
+  String get feedFilterSounds => 'Sounds';
+
+  @override
+  String get feedFilterSystem => 'System';
+
+  @override
+  String get feedNoMatch => 'No matching events';
 }

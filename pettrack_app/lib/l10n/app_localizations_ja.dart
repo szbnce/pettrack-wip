@@ -1004,4 +1004,25 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get evidenceNoClip => 'その時刻の近くに録画クリップがありません';
+
+  @override
+  String get feedSearchHint => 'イベントを検索';
+
+  @override
+  String get feedSearchClear => 'クリア';
+
+  @override
+  String get feedFilterAll => 'すべて';
+
+  @override
+  String get feedFilterZones => 'ゾーン';
+
+  @override
+  String get feedFilterSounds => '音';
+
+  @override
+  String get feedFilterSystem => 'システム';
+
+  @override
+  String get feedNoMatch => '一致するイベントがありません';
 }

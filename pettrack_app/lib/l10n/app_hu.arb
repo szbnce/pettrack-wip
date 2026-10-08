@@ -341,5 +341,12 @@
   "tooltipPlayPause": "Lejátszás / szünet",
   "settingsSaveError": "A módosítás mentése nem sikerült",
   "shareFailed": "A megosztás nem sikerült",
-  "evidenceNoClip": "Nincs felvétel ehhez a pillanathoz"
+  "evidenceNoClip": "Nincs felvétel ehhez a pillanathoz",
+  "feedSearchHint": "Események keresése",
+  "feedSearchClear": "Törlés",
+  "feedFilterAll": "Összes",
+  "feedFilterZones": "Zónák",
+  "feedFilterSounds": "Hangok",
+  "feedFilterSystem": "Rendszer",
+  "feedNoMatch": "Nincs találat"
 }

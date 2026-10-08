@@ -441,5 +441,12 @@
   "tooltipPlayPause": "Wiedergabe / Pause",
   "settingsSaveError": "Die Änderung konnte nicht gespeichert werden",
   "shareFailed": "Teilen nicht möglich",
-  "evidenceNoClip": "Kein Clip in der Nähe dieses Moments aufgezeichnet"
+  "evidenceNoClip": "Kein Clip in der Nähe dieses Moments aufgezeichnet",
+  "feedSearchHint": "Ereignisse suchen",
+  "feedSearchClear": "Löschen",
+  "feedFilterAll": "Alle",
+  "feedFilterZones": "Zonen",
+  "feedFilterSounds": "Geräusche",
+  "feedFilterSystem": "System",
+  "feedNoMatch": "Keine passenden Ereignisse"
 }

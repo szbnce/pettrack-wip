@@ -1955,6 +1955,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No clip recorded near that moment'**
   String get evidenceNoClip;
+
+  /// No description provided for @feedSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search events'**
+  String get feedSearchHint;
+
+  /// No description provided for @feedSearchClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get feedSearchClear;
+
+  /// No description provided for @feedFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get feedFilterAll;
+
+  /// No description provided for @feedFilterZones.
+  ///
+  /// In en, this message translates to:
+  /// **'Zones'**
+  String get feedFilterZones;
+
+  /// No description provided for @feedFilterSounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Sounds'**
+  String get feedFilterSounds;
+
+  /// No description provided for @feedFilterSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get feedFilterSystem;
+
+  /// No description provided for @feedNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching events'**
+  String get feedNoMatch;
 }
 
 class _AppLocalizationsDelegate

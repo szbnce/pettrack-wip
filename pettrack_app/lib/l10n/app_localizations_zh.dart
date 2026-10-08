@@ -998,4 +998,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get evidenceNoClip => '该时刻附近没有录像片段';
+
+  @override
+  String get feedSearchHint => '搜索事件';
+
+  @override
+  String get feedSearchClear => '清除';
+
+  @override
+  String get feedFilterAll => '全部';
+
+  @override
+  String get feedFilterZones => '区域';
+
+  @override
+  String get feedFilterSounds => '声音';
+
+  @override
+  String get feedFilterSystem => '系统';
+
+  @override
+  String get feedNoMatch => '没有匹配的事件';
 }

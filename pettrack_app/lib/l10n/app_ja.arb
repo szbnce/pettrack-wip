@@ -441,5 +441,12 @@
   "tooltipPlayPause": "再生 / 一時停止",
   "settingsSaveError": "変更を保存できませんでした",
   "shareFailed": "共有できませんでした",
-  "evidenceNoClip": "その時刻の近くに録画クリップがありません"
+  "evidenceNoClip": "その時刻の近くに録画クリップがありません",
+  "feedSearchHint": "イベントを検索",
+  "feedSearchClear": "クリア",
+  "feedFilterAll": "すべて",
+  "feedFilterZones": "ゾーン",
+  "feedFilterSounds": "音",
+  "feedFilterSystem": "システム",
+  "feedNoMatch": "一致するイベントがありません"
 }

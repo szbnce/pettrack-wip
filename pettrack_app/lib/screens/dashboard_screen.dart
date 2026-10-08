@@ -16,6 +16,7 @@ import '../theme/colors.dart';
 import '../services/notification_service.dart';
 import '../services/home_widget_service.dart';
 import '../utils/evidence.dart';
+import '../utils/feed_filter.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/highlight_card.dart';
 import 'insights_screen.dart';
@@ -48,6 +49,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _statusFailures = 0;
   List<dynamic> _activities = [];
   bool _activityError = false;
+  // Feed search/filter: the query box and the category chips above the feed.
+  final TextEditingController _feedSearchController = TextEditingController();
+  String _feedQuery = '';
+  String _feedCategory = feedCategoryAll;
   final Map<String, DateTime> _lastZoneAlerts = {};
   final Map<String, int> _zoneAlertIds = {};
   int _nextAlertId = 1000;
@@ -124,6 +129,161 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ? l10n.zoneEntered(_displayPetName, zone)
           : l10n.zoneLeft(_displayPetName, zone),
       isEnter ? l10n.cameraDetectedMovement : l10n.leftTheZone,
+    );
+  }
+
+  /// The feed after the search box and the category chips have had their say.
+  List<dynamic> _filteredActivities(AppLocalizations l10n) {
+    final events = <dynamic>[];
+    for (final ev in _activities) {
+      final display = _eventDisplay(ev, l10n);
+      final texts = [display.$3, display.$4];
+      final zone = ev['zone_name'];
+      if (zone != null) texts.add('$zone');
+      if (matchesFeedFilters(
+        eventType: ev['event_type'] as String?,
+        texts: texts,
+        query: _feedQuery,
+        category: _feedCategory,
+      )) {
+        events.add(ev);
+      }
+    }
+    return events;
+  }
+
+  /// The mobile feed: filter row on top, then the timeline of matching
+  /// events — every row a door to the footage of that moment.
+  Widget _buildMobileFeed(AppLocalizations l10n) {
+    final events = _filteredActivities(l10n);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildFeedFilter(l10n, dark: false),
+        const SizedBox(height: 16),
+        if (_activities.isEmpty)
+          EmptyState(
+            icon: _activityError ? Icons.cloud_off : Icons.history,
+            title: _activityError
+                ? l10n.activityLoadError
+                : l10n.noRecentEvents,
+            actionLabel: _activityError ? l10n.retry : null,
+            onAction: _activityError ? _fetchActivity : null,
+          )
+        else if (events.isEmpty)
+          EmptyState(icon: Icons.search_off, title: l10n.feedNoMatch)
+        else
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: events.length,
+            itemBuilder: (context, index) {
+              final ev = events[index];
+              final date = DateTime.fromMillisecondsSinceEpoch(
+                (ev['timestamp'] * 1000).toInt(),
+              );
+              final timeString =
+                  "${date.hour}:${date.minute.toString().padLeft(2, '0')}";
+              final (icon, color, title, subtitle) = _eventDisplay(ev, l10n);
+
+              return _buildTimelineItem(
+                icon,
+                color,
+                title,
+                subtitle,
+                timeString,
+                isLast: index == events.length - 1,
+                onTap: () => _openEvidenceAt((ev['timestamp'] as num).toInt()),
+              );
+            },
+          ),
+      ],
+    );
+  }
+
+  /// Search + category chips for the activity feed, in both feed styles.
+  Widget _buildFeedFilter(AppLocalizations l10n, {required bool dark}) {
+    final theme = Theme.of(context);
+    final ink = dark ? Colors.white : theme.colorScheme.onSurface;
+    final edge = dark ? Colors.white : theme.colorScheme.outline;
+    final categories = [
+      (feedCategoryAll, l10n.feedFilterAll),
+      (feedCategoryZone, l10n.feedFilterZones),
+      (feedCategorySound, l10n.feedFilterSounds),
+      (feedCategorySystem, l10n.feedFilterSystem),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextField(
+          controller: _feedSearchController,
+          onChanged: (value) => setState(() => _feedQuery = value),
+          style: TextStyle(color: ink, fontSize: 14),
+          decoration: InputDecoration(
+            hintText: l10n.feedSearchHint,
+            hintStyle: TextStyle(
+              color: ink.withValues(alpha: 0.5),
+              fontSize: 14,
+            ),
+            prefixIcon: Icon(
+              Icons.search,
+              size: 20,
+              color: ink.withValues(alpha: 0.5),
+            ),
+            suffixIcon: _feedQuery.isEmpty
+                ? null
+                : IconButton(
+                    tooltip: l10n.feedSearchClear,
+                    icon: Icon(Icons.clear, size: 18, color: ink),
+                    onPressed: () {
+                      _feedSearchController.clear();
+                      setState(() => _feedQuery = '');
+                    },
+                  ),
+            isDense: true,
+            filled: true,
+            fillColor: dark
+                ? Colors.white.withValues(alpha: 0.06)
+                : theme.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.4,
+                  ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 10,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: edge.withValues(alpha: 0.2),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final (value, label) in categories)
+              ChoiceChip(
+                label: Text(label),
+                labelStyle: TextStyle(
+                  fontSize: 12,
+                  color: _feedCategory == value
+                      ? Colors.white
+                      : ink.withValues(alpha: 0.8),
+                ),
+                selected: _feedCategory == value,
+                selectedColor: AppColors.primary,
+                backgroundColor: dark
+                    ? Colors.white.withValues(alpha: 0.06)
+                    : null,
+                side: BorderSide(color: edge.withValues(alpha: 0.2)),
+                onSelected: (_) => setState(() => _feedCategory = value),
+              ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -652,6 +812,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _gridTimer?.cancel();
     _clientChannel?.sink.close();
     _currentUiImage?.dispose();
+    _feedSearchController.dispose();
     NotificationService().onNotificationOpened = null;
     super.dispose();
   }
@@ -1338,6 +1499,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildEventLog(AppLocalizations l10n) {
+    final events = _filteredActivities(l10n);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -1362,7 +1524,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const Icon(Icons.access_time, size: 18, color: Colors.white54),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+          _buildFeedFilter(l10n, dark: true),
+          const SizedBox(height: 12),
           if (_activities.isEmpty)
             EmptyState(
               icon: _activityError ? Icons.cloud_off : Icons.history,
@@ -1374,15 +1538,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
               actionLabel: _activityError ? l10n.retry : null,
               onAction: _activityError ? _fetchActivity : null,
             )
+          else if (events.isEmpty)
+            EmptyState(
+              icon: Icons.search_off,
+              title: l10n.feedNoMatch,
+              textColor: Colors.white54,
+              iconColor: Colors.white38,
+            )
           else
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: _activities.length > 5 ? 5 : _activities.length,
+              itemCount: events.length > 5 ? 5 : events.length,
               separatorBuilder: (context, _) =>
                   Divider(color: Colors.white.withValues(alpha: 0.1)),
               itemBuilder: (context, index) {
-                final ev = _activities[index];
+                final ev = events[index];
                 final date = DateTime.fromMillisecondsSinceEpoch(
                   (ev['timestamp'] * 1000).toInt(),
                 );
@@ -1671,45 +1842,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 16),
-
-                if (_activities.isEmpty)
-                  EmptyState(
-                    icon: _activityError ? Icons.cloud_off : Icons.history,
-                    title: _activityError
-                        ? l10n.activityLoadError
-                        : l10n.noRecentEvents,
-                    actionLabel: _activityError ? l10n.retry : null,
-                    onAction: _activityError ? _fetchActivity : null,
-                  )
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _activities.length,
-                    itemBuilder: (context, index) {
-                      final ev = _activities[index];
-                      final date = DateTime.fromMillisecondsSinceEpoch(
-                        (ev['timestamp'] * 1000).toInt(),
-                      );
-                      final timeString =
-                          "${date.hour}:${date.minute.toString().padLeft(2, '0')}";
-                      final (icon, color, title, subtitle) = _eventDisplay(
-                        ev,
-                        l10n,
-                      );
-
-                      return _buildTimelineItem(
-                        icon,
-                        color,
-                        title,
-                        subtitle,
-                        timeString,
-                        isLast: index == _activities.length - 1,
-                        onTap: () =>
-                            _openEvidenceAt((ev['timestamp'] as num).toInt()),
-                      );
-                    },
-                  ),
+                _buildMobileFeed(l10n),
                 const SizedBox(height: 32),
               ],
             ),
