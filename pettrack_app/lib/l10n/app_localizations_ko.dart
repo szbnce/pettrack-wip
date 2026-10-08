@@ -833,7 +833,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get highlightShare => '공유';
+  String get tooltipShare => '공유';
 
   @override
   String get quietHoursTitle => '무음 시간';

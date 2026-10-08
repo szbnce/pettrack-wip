@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:share_plus/share_plus.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../models/insights_data.dart';
 import '../theme/colors.dart';
 import '../utils/format_helpers.dart';
+import '../utils/insights_share.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/skeleton_box.dart';
 import '../services/auth_service.dart';
@@ -110,6 +112,25 @@ class _InsightsScreenState extends State<InsightsScreen> {
   String _duration(double seconds, AppLocalizations l10n) =>
       formatDurationSeconds(l10n, seconds);
 
+  /// A text card of the range's headline numbers — the share sheet decides
+  /// where it goes.
+  Future<void> _shareSummary() async {
+    final data = _data;
+    if (data == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      await SharePlus.instance.share(
+        ShareParams(text: buildInsightsShareText(l10n, data, _rangeDays)),
+      );
+    } catch (e) {
+      debugPrint('insights share failed: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.shareFailed)));
+    }
+  }
+
   String _dayLabel(BuildContext context, String date) =>
       MaterialLocalizations.of(context).formatMediumDate(DateTime.parse(date));
 
@@ -125,7 +146,16 @@ class _InsightsScreenState extends State<InsightsScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.insightsTitle)),
+      appBar: AppBar(
+        title: Text(l10n.insightsTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share),
+            tooltip: l10n.tooltipShare,
+            onPressed: _data == null || _isLoading ? null : _shareSummary,
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () => _fetch(),
         child: SingleChildScrollView(

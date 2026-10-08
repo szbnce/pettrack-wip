@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
@@ -328,6 +331,33 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     }
   }
 
+  /// One-tap share from the player: hand the actual clip file to the system
+  /// share sheet. The URL is signed and short-lived, so the bytes are fetched
+  /// right away.
+  Future<void> _shareVideo(String url) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 30));
+      if (response.statusCode != 200) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+      final dir = await getTemporaryDirectory();
+      final segments = Uri.parse(url).pathSegments;
+      final name = segments.isNotEmpty ? segments.last : 'pettrack_clip.mp4';
+      final file = File('${dir.path}/$name');
+      await file.writeAsBytes(response.bodyBytes, flush: true);
+      await SharePlus.instance.share(
+        ShareParams(files: [XFile(file.path)], text: l10n.shareInviteText),
+      );
+    } catch (e) {
+      debugPrint('clip share failed: $e');
+      messenger.showSnackBar(SnackBar(content: Text(l10n.shareFailed)));
+    }
+  }
+
   void _showVideoDialog({required String url, String? heroTag}) {
     final l10n = AppLocalizations.of(context)!;
     Widget player = Container(
@@ -356,6 +386,11 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.close),
                       label: Text(l10n.close),
+                    ),
+                    TextButton.icon(
+                      onPressed: () => _shareVideo(url),
+                      icon: const Icon(Icons.share),
+                      label: Text(l10n.tooltipShare),
                     ),
                     TextButton.icon(
                       onPressed: () async {

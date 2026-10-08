@@ -381,7 +381,7 @@
   "highlightTitle": "Zusammenfassung von heute",
   "highlightSubtitle": "Jeder Moment von heute in einem Clip",
   "highlightMoments": "{count} Momente",
-  "highlightShare": "Teilen",
+  "tooltipShare": "Teilen",
   "quietHoursTitle": "Ruhezeiten",
   "quietHoursSubtitle": "Keine Zonen- oder Akku-Warnungen in dieser Zeit",
   "quietHoursFrom": "Von",

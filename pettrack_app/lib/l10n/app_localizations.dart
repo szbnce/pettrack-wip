@@ -1632,11 +1632,11 @@ abstract class AppLocalizations {
   /// **'{count} moments'**
   String highlightMoments(Object count);
 
-  /// No description provided for @highlightShare.
+  /// No description provided for @tooltipShare.
   ///
   /// In en, this message translates to:
   /// **'Share'**
-  String get highlightShare;
+  String get tooltipShare;
 
   /// No description provided for @quietHoursTitle.
   ///

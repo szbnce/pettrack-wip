@@ -107,7 +107,7 @@ class _HighlightCardState extends State<HighlightCard> {
                     TextButton.icon(
                       onPressed: _share,
                       icon: const Icon(Icons.share),
-                      label: Text(l10n.highlightShare),
+                      label: Text(l10n.tooltipShare),
                     ),
                   ],
                 ),
@@ -128,7 +128,9 @@ class _HighlightCardState extends State<HighlightCard> {
         '${dir.path}/pettrack_recap_${_highlight!['date']}.mp4',
       );
       await file.writeAsBytes(response.bodyBytes, flush: true);
-      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
+      await SharePlus.instance.share(
+        ShareParams(files: [XFile(file.path)], text: l10n.shareInviteText),
+      );
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(

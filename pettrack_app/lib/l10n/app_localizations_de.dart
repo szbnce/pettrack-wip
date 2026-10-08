@@ -850,7 +850,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get highlightShare => 'Teilen';
+  String get tooltipShare => 'Teilen';
 
   @override
   String get quietHoursTitle => 'Ruhezeiten';

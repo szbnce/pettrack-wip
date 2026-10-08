@@ -836,7 +836,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get highlightShare => '共有';
+  String get tooltipShare => '共有';
 
   @override
   String get quietHoursTitle => '消音時間';
