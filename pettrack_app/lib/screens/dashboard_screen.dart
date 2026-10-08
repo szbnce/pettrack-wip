@@ -16,6 +16,7 @@ import '../theme/colors.dart';
 import '../services/notification_service.dart';
 import '../services/home_widget_service.dart';
 import '../widgets/highlight_card.dart';
+import 'insights_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String serverIp;
@@ -1027,6 +1028,76 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  /// Entry point to the activity insights screen (the tab bar is full,
+  /// so the deep dive lives behind a card).
+  Widget _buildInsightsEntry(AppLocalizations l10n) {
+    final theme = Theme.of(context);
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      child: Material(
+        color: AppColors.primary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => InsightsScreen(
+                  serverIp: widget.serverIp,
+                  token: widget.token,
+                ),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.insights,
+                    color: AppColors.primary,
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.insightsTitle,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        l10n.insightsEntrySubtitle,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildActivityGraph(AppLocalizations l10n) {
     if (_activities.isEmpty) return const SizedBox.shrink();
 
@@ -1393,6 +1464,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               _buildProfileCard(l10n),
                               const SizedBox(height: 24),
+                              _buildInsightsEntry(l10n),
                               _buildActivityGraph(l10n),
                               _buildEventLog(l10n),
                             ],
@@ -1488,6 +1560,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _buildCameraCard(l10n, false),
                 const SizedBox(height: 24),
 
+                _buildInsightsEntry(l10n),
                 _buildActivityGraph(l10n),
 
                 // Activities Timeline

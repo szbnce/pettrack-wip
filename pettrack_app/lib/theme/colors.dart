@@ -29,4 +29,17 @@ class AppColors {
   static const Color darkOnSurface = Color(0xFFE0E0E0);
   static const Color darkOnSurfaceVariant = Color(0xFFBFC9C8);
   static const Color darkSurfaceVariant = Color(0xFF2C3635);
+
+  // Chart marks only. The brand teals fail the data-viz palette gates
+  // (light: chroma too low; dark: too light for the dark band), so series
+  // use the nearest passing steps — validated against the app's surfaces.
+  // UI chrome keeps the brand colours above.
+  static const Color chartSeries = Color(0xFF00897B);
+  static const Color chartSeriesDark = Color(0xFF2AA198);
+
+  /// The validated series step for the current brightness.
+  static Color chartSeriesOf(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+      ? chartSeriesDark
+      : chartSeries;
 }

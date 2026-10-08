@@ -481,6 +481,98 @@ class AppLocalizationsKo extends AppLocalizations {
   String get demoNoPlayback => '데모 모드 — 동영상 재생을 사용할 수 없습니다';
 
   @override
+  String get insightsTitle => '활동 분석';
+
+  @override
+  String get insightsEntrySubtitle => '활동, 구역, 휴식을 한눈에';
+
+  @override
+  String insightsRangeDays(int n) {
+    return '$n일';
+  }
+
+  @override
+  String get insightsActiveToday => '오늘의 활동';
+
+  @override
+  String get insightsAvgPerDay => '하루 평균';
+
+  @override
+  String get insightsMostActiveZone => '가장 활발한 구역';
+
+  @override
+  String get insightsActivityChart => '하루 활동 시간(분)';
+
+  @override
+  String get insightsZoneChart => '구역별 시간';
+
+  @override
+  String get insightsZoneEmpty => '이 기간에는 구역 체류 기록이 없습니다';
+
+  @override
+  String get insightsActiveVsRest => '활동 대 휴식(평균 하루)';
+
+  @override
+  String get insightsWordActive => '활동';
+
+  @override
+  String get insightsWordRest => '휴식';
+
+  @override
+  String get insightsTableDay => '날짜';
+
+  @override
+  String get tooltipInsightsList => '표로 보기';
+
+  @override
+  String get tooltipInsightsChart => '차트로 보기';
+
+  @override
+  String insightsDurationH(int n) {
+    return '$n시간';
+  }
+
+  @override
+  String insightsDurationHm(int hours, int minutes) {
+    return '$hours시간 $minutes분';
+  }
+
+  @override
+  String insightsDurationM(int minutes) {
+    return '$minutes분';
+  }
+
+  @override
+  String insightsDurationS(int seconds) {
+    return '$seconds초';
+  }
+
+  @override
+  String insightsClips(int n) {
+    return '모션 클립 $n개';
+  }
+
+  @override
+  String insightsSounds(int n) {
+    return '소리 이벤트 $n개';
+  }
+
+  @override
+  String get insightsLoadError => '분석을 불러올 수 없습니다';
+
+  @override
+  String get demoZoneKitchen => '주방';
+
+  @override
+  String get demoZoneSofa => '소파';
+
+  @override
+  String get demoZoneBed => '침대';
+
+  @override
+  String get demoZoneGarden => '정원';
+
+  @override
   String get orSeparator => '또는';
 
   @override

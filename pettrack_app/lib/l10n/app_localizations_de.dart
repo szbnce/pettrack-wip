@@ -489,6 +489,99 @@ class AppLocalizationsDe extends AppLocalizations {
       'Demo-Modus — Videowiedergabe ist nicht verfügbar';
 
   @override
+  String get insightsTitle => 'Aktivitäts-Insights';
+
+  @override
+  String get insightsEntrySubtitle =>
+      'Aktivität, Zonen und Ruhe auf einen Blick';
+
+  @override
+  String insightsRangeDays(int n) {
+    return '$n Tage';
+  }
+
+  @override
+  String get insightsActiveToday => 'Heute aktiv';
+
+  @override
+  String get insightsAvgPerDay => 'Pro Tag (Durchschnitt)';
+
+  @override
+  String get insightsMostActiveZone => 'Meistgenutzte Zone';
+
+  @override
+  String get insightsActivityChart => 'Aktive Minuten pro Tag';
+
+  @override
+  String get insightsZoneChart => 'Zeit pro Zone';
+
+  @override
+  String get insightsZoneEmpty => 'In diesem Zeitraum keine Zonenaufenthalte';
+
+  @override
+  String get insightsActiveVsRest => 'Aktiv vs. Ruhe (Durchschnittstag)';
+
+  @override
+  String get insightsWordActive => 'Aktiv';
+
+  @override
+  String get insightsWordRest => 'Ruhe';
+
+  @override
+  String get insightsTableDay => 'Tag';
+
+  @override
+  String get tooltipInsightsList => 'Als Tabelle anzeigen';
+
+  @override
+  String get tooltipInsightsChart => 'Als Diagramm anzeigen';
+
+  @override
+  String insightsDurationH(int n) {
+    return '$n Std.';
+  }
+
+  @override
+  String insightsDurationHm(int hours, int minutes) {
+    return '$hours Std. $minutes Min.';
+  }
+
+  @override
+  String insightsDurationM(int minutes) {
+    return '$minutes Min.';
+  }
+
+  @override
+  String insightsDurationS(int seconds) {
+    return '$seconds Sek.';
+  }
+
+  @override
+  String insightsClips(int n) {
+    return '$n Bewegungsclips';
+  }
+
+  @override
+  String insightsSounds(int n) {
+    return '$n Geräuschereignisse';
+  }
+
+  @override
+  String get insightsLoadError => 'Insights konnten nicht geladen werden';
+
+  @override
+  String get demoZoneKitchen => 'Küche';
+
+  @override
+  String get demoZoneSofa => 'Sofa';
+
+  @override
+  String get demoZoneBed => 'Bett';
+
+  @override
+  String get demoZoneGarden => 'Garten';
+
+  @override
   String get orSeparator => 'ODER';
 
   @override

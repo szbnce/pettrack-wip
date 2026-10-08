@@ -54,19 +54,20 @@ buy for how much work. Nothing here is scheduled — this is the wish list.
 
 ## Larger / longer term
 
-13. **Multi-pet profiles & per-pet events.** When the tier-3 classifier (or a
+13. **Multi-pet profiles & per-pet events** *(deferred — needs a
+    pet-reidentification classifier)*. When the tier-3 classifier (or a
     small custom model) can tell pets apart: "Berci vs. guest cat" event
     streams, per-pet activity stats ("Berci was active 3h 12m today").
-14. **Activity insights.** A simple daily/weekly chart of zone time, rest
-    vs. active — the kind of screenshot people post on social media. Great
-    for "show a general audience" marketing.
+14. **Activity insights** *(done)*. A simple daily/weekly chart of zone time,
+    rest vs. active — the kind of screenshot people post on social media.
+    Great for "show a general audience" marketing.
 15. **Health & watchdog.** Server-side: "camera offline for 10 minutes" alert,
     disk-space warnings for replays, auto-pruning old replays with a retention
     setting. Self-hosters trust a tool that tells them when *it* is broken.
-16. **Public landing page + demo mode.** The demo site exists; give it a real
-    landing page (problem → photos → 3-step install → screenshots) and a
-    "demo mode" with synthetic data so visitors can click around without a
-    camera.
+16. **Public landing page + demo mode** *(done)*. The demo site exists; give
+    it a real landing page (problem → photos → 3-step install → screenshots)
+    and a "demo mode" with synthetic data so visitors can click around
+    without a camera.
 17. **Security leftovers (keep shipping these quietly).** Short-lived JWTs
     with refresh, revocation on logout, scoped monitor tokens, persistent PIN
     lockout, HTTPS everywhere — mostly invisible work that keeps the project

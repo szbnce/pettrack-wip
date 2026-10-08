@@ -7,7 +7,7 @@ from typing import List, Dict
 import time
 import asyncio
 from datetime import datetime
-from database import get_events, get_event_counts_since, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event
+from database import get_events, get_event_counts_since, get_events_since, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event
 from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, MedicalDataSync, SoundEvent
 from email.utils import formatdate
 import jwt
@@ -405,6 +405,112 @@ async def get_timeline(days: int = Query(default=14, ge=1, le=90)):
             "clips": clips_by_day.get(day, 0),
         })
     return {"days": out}
+
+# One motion recording is started with a 30-second window (see vision.py),
+# which is close enough to count activity time without probing every file.
+MOTION_CLIP_SECONDS = 30.0
+# A stay longer than this is a lost zone_exit, not a real visit.
+MAX_ZONE_STAY_SECONDS = 8 * 3600
+
+
+def zone_stays(events: List[Dict]):
+    """Seconds spent per zone, pairing each zone_enter with its matching exit.
+
+    Returns (totals_by_zone, per_day_by_zone); an interval is attributed to
+    the day it started on. A stay with no exit is dropped (it would be a
+    guess), and a stay longer than MAX_ZONE_STAY_SECONDS is clipped to it.
+    """
+    totals: Dict[str, float] = {}
+    per_day: Dict[str, Dict[str, float]] = {}
+    open_since: Dict[str, float] = {}
+    for ev in sorted(events, key=lambda e: e.get("timestamp", 0.0)):
+        zone = ev.get("zone_name") or ""
+        ts = float(ev.get("timestamp", 0.0))
+        if ev.get("event_type") == "zone_enter":
+            open_since[zone] = ts
+        elif ev.get("event_type") == "zone_exit":
+            start = open_since.pop(zone, None)
+            if start is None:
+                continue
+            seconds = min(ts - start, MAX_ZONE_STAY_SECONDS)
+            day = datetime.fromtimestamp(start).strftime("%Y-%m-%d")
+            totals[zone] = totals.get(zone, 0.0) + seconds
+            bucket = per_day.setdefault(day, {})
+            bucket[zone] = bucket.get(zone, 0.0) + seconds
+    return totals, per_day
+
+
+@router.get("/api/insights")
+async def get_insights(days: int = Query(default=14, ge=1, le=90)):
+    """Activity insights for the charts.
+
+    Per calendar day (server-local, same bucketing as /api/timeline):
+    estimated active seconds (one motion clip ≈ 30 s of recording), the
+    motion clips and sound events behind it, and time spent per zone.
+    """
+    since = time.time() - days * 86400
+
+    events = await get_events_since(since)
+    zone_totals, zone_per_day = zone_stays(events)
+
+    sounds_by_day: Dict[str, int] = {}
+    events_by_day: Dict[str, int] = {}
+    for ev in events:
+        day = datetime.fromtimestamp(ev["timestamp"]).strftime("%Y-%m-%d")
+        events_by_day[day] = events_by_day.get(day, 0) + 1
+        if ev.get("event_type") == "sound_detected":
+            sounds_by_day[day] = sounds_by_day.get(day, 0) + 1
+
+    clips_by_day: Dict[str, int] = {}
+    folder = "replays"
+    if os.path.isdir(folder):
+        for filename in os.listdir(folder):
+            if not (
+                filename.startswith("replay_")
+                and filename.endswith(".mp4")
+                and not filename.endswith("_raw.mp4")
+            ):
+                continue
+            mtime = os.path.getmtime(os.path.join(folder, filename))
+            if mtime < since:
+                continue
+            day = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
+            clips_by_day[day] = clips_by_day.get(day, 0) + 1
+
+    out = []
+    totals = {
+        "active_seconds": 0.0,
+        "clips": 0,
+        "sounds": 0,
+        "events": 0,
+        "zone_seconds": {},
+    }
+    for day in sorted(
+        set(clips_by_day) | set(sounds_by_day)
+        | set(events_by_day) | set(zone_per_day)
+    ):
+        clips = clips_by_day.get(day, 0)
+        sounds = sounds_by_day.get(day, 0)
+        zone_seconds = zone_per_day.get(day, {})
+        active = clips * MOTION_CLIP_SECONDS
+        out.append({
+            "date": day,
+            "clips": clips,
+            "sounds": sounds,
+            "events": events_by_day.get(day, 0),
+            "active_seconds": active,
+            "zone_seconds": zone_seconds,
+        })
+        totals["active_seconds"] += active
+        totals["clips"] += clips
+        totals["sounds"] += sounds
+        totals["events"] += events_by_day.get(day, 0)
+        for zone, seconds in zone_seconds.items():
+            totals["zone_seconds"][zone] = (
+                totals["zone_seconds"].get(zone, 0.0) + seconds
+            )
+
+    return {"days": out, "totals": totals, "zone_totals": zone_totals}
 
 @router.get("/api/zones")
 async def get_zones_list():

@@ -253,6 +253,32 @@
   "submitPin": "Submit PIN",
   "demoModeBtn": "Demo Mode",
   "demoNoPlayback": "Demo mode — video playback is not available",
+  "insightsTitle": "Activity insights",
+  "insightsEntrySubtitle": "Activity, zones and rest at a glance",
+  "insightsRangeDays": "{n} days",
+  "insightsActiveToday": "Active today",
+  "insightsAvgPerDay": "Per day (average)",
+  "insightsMostActiveZone": "Top zone",
+  "insightsActivityChart": "Active minutes per day",
+  "insightsZoneChart": "Time per zone",
+  "insightsZoneEmpty": "No zone stays recorded in this range",
+  "insightsActiveVsRest": "Active vs rest (average day)",
+  "insightsWordActive": "Active",
+  "insightsWordRest": "Rest",
+  "insightsTableDay": "Day",
+  "tooltipInsightsList": "Show as a table",
+  "tooltipInsightsChart": "Show as a chart",
+  "insightsDurationH": "{n} h",
+  "insightsDurationHm": "{hours} h {minutes} min",
+  "insightsDurationM": "{minutes} min",
+  "insightsDurationS": "{seconds} s",
+  "insightsClips": "{n} motion clips",
+  "insightsSounds": "{n} sound events",
+  "insightsLoadError": "Could not load insights",
+  "demoZoneKitchen": "Kitchen",
+  "demoZoneSofa": "Sofa",
+  "demoZoneBed": "Bed",
+  "demoZoneGarden": "Garden",
   "orSeparator": "OR",
   "setupErrPin": "Failed to connect or invalid PIN!",
   "saveSuccess": "Settings saved!",
@@ -388,6 +414,58 @@
   "@batteryLowBody": {
     "placeholders": {
       "level": {
+        "type": "int"
+      }
+    }
+  },
+  "@insightsRangeDays": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@insightsDurationH": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@insightsDurationHm": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@insightsDurationM": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@insightsDurationS": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "@insightsClips": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "@insightsSounds": {
+    "placeholders": {
+      "n": {
         "type": "int"
       }
     }

@@ -64,6 +64,18 @@ async def get_events(limit: int = 50):
         rows = await cursor.fetchall()
         return [dict(row) for row in rows]
 
+async def get_events_since(since_ts: float):
+    """Every event from [since_ts] on, oldest first — the raw material for
+    the activity insights (zone stays are computed by pairing enter/exit)."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute(
+            "SELECT * FROM events WHERE timestamp >= ? ORDER BY timestamp",
+            (since_ts,)
+        )
+        rows = await cursor.fetchall()
+        return [dict(row) for row in rows]
+
 async def get_event_counts_since(since_ts: float):
     """Per-day, per-type event counts for the replay timeline strip.
 

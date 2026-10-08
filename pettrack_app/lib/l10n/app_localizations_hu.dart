@@ -487,6 +487,100 @@ class AppLocalizationsHu extends AppLocalizations {
   String get demoNoPlayback => 'Demó mód — a videólejátszás nem elérhető';
 
   @override
+  String get insightsTitle => 'Aktivitási elemzés';
+
+  @override
+  String get insightsEntrySubtitle =>
+      'Tevékenység, zónák és pihenés egy pillantásra';
+
+  @override
+  String insightsRangeDays(int n) {
+    return '$n nap';
+  }
+
+  @override
+  String get insightsActiveToday => 'Mai aktivitás';
+
+  @override
+  String get insightsAvgPerDay => 'Naponta (átlag)';
+
+  @override
+  String get insightsMostActiveZone => 'Legaktívabb zóna';
+
+  @override
+  String get insightsActivityChart => 'Aktív percek naponta';
+
+  @override
+  String get insightsZoneChart => 'Zónánkénti idő';
+
+  @override
+  String get insightsZoneEmpty =>
+      'Ebben az időszakban nincs zónában töltött idő';
+
+  @override
+  String get insightsActiveVsRest => 'Aktivitás vs. pihenés (átlagos nap)';
+
+  @override
+  String get insightsWordActive => 'Aktív';
+
+  @override
+  String get insightsWordRest => 'Pihenés';
+
+  @override
+  String get insightsTableDay => 'Nap';
+
+  @override
+  String get tooltipInsightsList => 'Megjelenítés táblázatként';
+
+  @override
+  String get tooltipInsightsChart => 'Megjelenítés grafikonként';
+
+  @override
+  String insightsDurationH(int n) {
+    return '$n ó';
+  }
+
+  @override
+  String insightsDurationHm(int hours, int minutes) {
+    return '$hours ó $minutes perc';
+  }
+
+  @override
+  String insightsDurationM(int minutes) {
+    return '$minutes perc';
+  }
+
+  @override
+  String insightsDurationS(int seconds) {
+    return '$seconds mp';
+  }
+
+  @override
+  String insightsClips(int n) {
+    return '$n mozgásfelvétel';
+  }
+
+  @override
+  String insightsSounds(int n) {
+    return '$n hangesemény';
+  }
+
+  @override
+  String get insightsLoadError => 'Nem sikerült betölteni az elemzést';
+
+  @override
+  String get demoZoneKitchen => 'Konyha';
+
+  @override
+  String get demoZoneSofa => 'Kanapé';
+
+  @override
+  String get demoZoneBed => 'Ágy';
+
+  @override
+  String get demoZoneGarden => 'Kert';
+
+  @override
   String get orSeparator => 'VAGY';
 
   @override

@@ -990,6 +990,162 @@ abstract class AppLocalizations {
   /// **'Demo mode — video playback is not available'**
   String get demoNoPlayback;
 
+  /// No description provided for @insightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity insights'**
+  String get insightsTitle;
+
+  /// No description provided for @insightsEntrySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity, zones and rest at a glance'**
+  String get insightsEntrySubtitle;
+
+  /// No description provided for @insightsRangeDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} days'**
+  String insightsRangeDays(int n);
+
+  /// No description provided for @insightsActiveToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Active today'**
+  String get insightsActiveToday;
+
+  /// No description provided for @insightsAvgPerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Per day (average)'**
+  String get insightsAvgPerDay;
+
+  /// No description provided for @insightsMostActiveZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Top zone'**
+  String get insightsMostActiveZone;
+
+  /// No description provided for @insightsActivityChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Active minutes per day'**
+  String get insightsActivityChart;
+
+  /// No description provided for @insightsZoneChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Time per zone'**
+  String get insightsZoneChart;
+
+  /// No description provided for @insightsZoneEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No zone stays recorded in this range'**
+  String get insightsZoneEmpty;
+
+  /// No description provided for @insightsActiveVsRest.
+  ///
+  /// In en, this message translates to:
+  /// **'Active vs rest (average day)'**
+  String get insightsActiveVsRest;
+
+  /// No description provided for @insightsWordActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get insightsWordActive;
+
+  /// No description provided for @insightsWordRest.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get insightsWordRest;
+
+  /// No description provided for @insightsTableDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get insightsTableDay;
+
+  /// No description provided for @tooltipInsightsList.
+  ///
+  /// In en, this message translates to:
+  /// **'Show as a table'**
+  String get tooltipInsightsList;
+
+  /// No description provided for @tooltipInsightsChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Show as a chart'**
+  String get tooltipInsightsChart;
+
+  /// No description provided for @insightsDurationH.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} h'**
+  String insightsDurationH(int n);
+
+  /// No description provided for @insightsDurationHm.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h {minutes} min'**
+  String insightsDurationHm(int hours, int minutes);
+
+  /// No description provided for @insightsDurationM.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String insightsDurationM(int minutes);
+
+  /// No description provided for @insightsDurationS.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds} s'**
+  String insightsDurationS(int seconds);
+
+  /// No description provided for @insightsClips.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} motion clips'**
+  String insightsClips(int n);
+
+  /// No description provided for @insightsSounds.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} sound events'**
+  String insightsSounds(int n);
+
+  /// No description provided for @insightsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load insights'**
+  String get insightsLoadError;
+
+  /// No description provided for @demoZoneKitchen.
+  ///
+  /// In en, this message translates to:
+  /// **'Kitchen'**
+  String get demoZoneKitchen;
+
+  /// No description provided for @demoZoneSofa.
+  ///
+  /// In en, this message translates to:
+  /// **'Sofa'**
+  String get demoZoneSofa;
+
+  /// No description provided for @demoZoneBed.
+  ///
+  /// In en, this message translates to:
+  /// **'Bed'**
+  String get demoZoneBed;
+
+  /// No description provided for @demoZoneGarden.
+  ///
+  /// In en, this message translates to:
+  /// **'Garden'**
+  String get demoZoneGarden;
+
   /// No description provided for @orSeparator.
   ///
   /// In en, this message translates to:

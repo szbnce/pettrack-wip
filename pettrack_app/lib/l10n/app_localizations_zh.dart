@@ -480,6 +480,98 @@ class AppLocalizationsZh extends AppLocalizations {
   String get demoNoPlayback => '演示模式 — 无法播放视频';
 
   @override
+  String get insightsTitle => '活动洞察';
+
+  @override
+  String get insightsEntrySubtitle => '活动、区域与休息一目了然';
+
+  @override
+  String insightsRangeDays(int n) {
+    return '$n 天';
+  }
+
+  @override
+  String get insightsActiveToday => '今日活动';
+
+  @override
+  String get insightsAvgPerDay => '每天（平均）';
+
+  @override
+  String get insightsMostActiveZone => '最活跃区域';
+
+  @override
+  String get insightsActivityChart => '每日活动分钟数';
+
+  @override
+  String get insightsZoneChart => '各区域停留时间';
+
+  @override
+  String get insightsZoneEmpty => '此时间段内没有区域停留记录';
+
+  @override
+  String get insightsActiveVsRest => '活动与休息（日均）';
+
+  @override
+  String get insightsWordActive => '活动';
+
+  @override
+  String get insightsWordRest => '休息';
+
+  @override
+  String get insightsTableDay => '日期';
+
+  @override
+  String get tooltipInsightsList => '以表格显示';
+
+  @override
+  String get tooltipInsightsChart => '以图表显示';
+
+  @override
+  String insightsDurationH(int n) {
+    return '$n 小时';
+  }
+
+  @override
+  String insightsDurationHm(int hours, int minutes) {
+    return '$hours 小时 $minutes 分钟';
+  }
+
+  @override
+  String insightsDurationM(int minutes) {
+    return '$minutes 分钟';
+  }
+
+  @override
+  String insightsDurationS(int seconds) {
+    return '$seconds 秒';
+  }
+
+  @override
+  String insightsClips(int n) {
+    return '$n 个动作片段';
+  }
+
+  @override
+  String insightsSounds(int n) {
+    return '$n 个声音事件';
+  }
+
+  @override
+  String get insightsLoadError => '无法加载洞察数据';
+
+  @override
+  String get demoZoneKitchen => '厨房';
+
+  @override
+  String get demoZoneSofa => '沙发';
+
+  @override
+  String get demoZoneBed => '床';
+
+  @override
+  String get demoZoneGarden => '花园';
+
+  @override
   String get orSeparator => '或';
 
   @override

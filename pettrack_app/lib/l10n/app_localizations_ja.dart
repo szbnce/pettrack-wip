@@ -483,6 +483,98 @@ class AppLocalizationsJa extends AppLocalizations {
   String get demoNoPlayback => 'デモモード — 動画の再生はできません';
 
   @override
+  String get insightsTitle => 'アクティビティ分析';
+
+  @override
+  String get insightsEntrySubtitle => '活動・ゾーン・休息をひと目で';
+
+  @override
+  String insightsRangeDays(int n) {
+    return '$n日';
+  }
+
+  @override
+  String get insightsActiveToday => '今日の活動';
+
+  @override
+  String get insightsAvgPerDay => '1日あたり（平均）';
+
+  @override
+  String get insightsMostActiveZone => '最も活発なゾーン';
+
+  @override
+  String get insightsActivityChart => '1日あたりの活動分数';
+
+  @override
+  String get insightsZoneChart => 'ゾーンごとの時間';
+
+  @override
+  String get insightsZoneEmpty => 'この期間のゾーン滞在記録はありません';
+
+  @override
+  String get insightsActiveVsRest => '活動と休息（1日の平均）';
+
+  @override
+  String get insightsWordActive => '活動';
+
+  @override
+  String get insightsWordRest => '休息';
+
+  @override
+  String get insightsTableDay => '日';
+
+  @override
+  String get tooltipInsightsList => '表として表示';
+
+  @override
+  String get tooltipInsightsChart => 'グラフとして表示';
+
+  @override
+  String insightsDurationH(int n) {
+    return '$n 時間';
+  }
+
+  @override
+  String insightsDurationHm(int hours, int minutes) {
+    return '$hours 時間 $minutes 分';
+  }
+
+  @override
+  String insightsDurationM(int minutes) {
+    return '$minutes 分';
+  }
+
+  @override
+  String insightsDurationS(int seconds) {
+    return '$seconds 秒';
+  }
+
+  @override
+  String insightsClips(int n) {
+    return '$n 件のモーションクリップ';
+  }
+
+  @override
+  String insightsSounds(int n) {
+    return '$n 件の音イベント';
+  }
+
+  @override
+  String get insightsLoadError => '分析を読み込めませんでした';
+
+  @override
+  String get demoZoneKitchen => 'キッチン';
+
+  @override
+  String get demoZoneSofa => 'ソファ';
+
+  @override
+  String get demoZoneBed => 'ベッド';
+
+  @override
+  String get demoZoneGarden => '庭';
+
+  @override
   String get orSeparator => 'または';
 
   @override
