@@ -579,6 +579,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoZoneGarden => 'Garden';
 
   @override
+  String get healthCardTitle => 'System health';
+
+  @override
+  String get healthCameraOnline => 'Camera online';
+
+  @override
+  String get healthCameraOffline => 'Camera offline';
+
+  @override
+  String healthLastSeen(String duration) {
+    return 'Last seen: $duration';
+  }
+
+  @override
+  String healthDiskFreeOf(String free, String total) {
+    return '$free free of $total';
+  }
+
+  @override
+  String get healthDiskLow => 'Disk space is low — old replays will be pruned';
+
+  @override
+  String healthReplaysStored(int count, String size) {
+    return '$count replays · $size';
+  }
+
+  @override
+  String get healthKeepReplays => 'Keep replays for';
+
+  @override
+  String get healthRetentionSaved => 'Replay retention updated';
+
+  @override
+  String get healthLoadError => 'Could not load system health';
+
+  @override
+  String get cameraOfflineTitle => 'Camera offline';
+
+  @override
+  String get cameraOfflineBody => 'No video from the camera for 10 minutes';
+
+  @override
+  String get diskLowTitle => 'Disk space low';
+
+  @override
+  String get diskLowBody => 'Old replays are being pruned to free up space';
+
+  @override
   String get orSeparator => 'OR';
 
   @override

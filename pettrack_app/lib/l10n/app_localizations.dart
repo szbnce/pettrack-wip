@@ -1146,6 +1146,90 @@ abstract class AppLocalizations {
   /// **'Garden'**
   String get demoZoneGarden;
 
+  /// No description provided for @healthCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'System health'**
+  String get healthCardTitle;
+
+  /// No description provided for @healthCameraOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera online'**
+  String get healthCameraOnline;
+
+  /// No description provided for @healthCameraOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera offline'**
+  String get healthCameraOffline;
+
+  /// No description provided for @healthLastSeen.
+  ///
+  /// In en, this message translates to:
+  /// **'Last seen: {duration}'**
+  String healthLastSeen(String duration);
+
+  /// No description provided for @healthDiskFreeOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{free} free of {total}'**
+  String healthDiskFreeOf(String free, String total);
+
+  /// No description provided for @healthDiskLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Disk space is low — old replays will be pruned'**
+  String get healthDiskLow;
+
+  /// No description provided for @healthReplaysStored.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} replays · {size}'**
+  String healthReplaysStored(int count, String size);
+
+  /// No description provided for @healthKeepReplays.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep replays for'**
+  String get healthKeepReplays;
+
+  /// No description provided for @healthRetentionSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay retention updated'**
+  String get healthRetentionSaved;
+
+  /// No description provided for @healthLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load system health'**
+  String get healthLoadError;
+
+  /// No description provided for @cameraOfflineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera offline'**
+  String get cameraOfflineTitle;
+
+  /// No description provided for @cameraOfflineBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No video from the camera for 10 minutes'**
+  String get cameraOfflineBody;
+
+  /// No description provided for @diskLowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Disk space low'**
+  String get diskLowTitle;
+
+  /// No description provided for @diskLowBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Old replays are being pruned to free up space'**
+  String get diskLowBody;
+
   /// No description provided for @orSeparator.
   ///
   /// In en, this message translates to:

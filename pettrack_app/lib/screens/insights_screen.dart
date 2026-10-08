@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../models/insights_data.dart';
 import '../theme/colors.dart';
+import '../utils/format_helpers.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/skeleton_box.dart';
 
@@ -105,17 +106,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
   }
 
   /// "2 h 15 min" / "45 min" / "20 s" — always in whole units.
-  String _duration(double seconds, AppLocalizations l10n) {
-    final total = seconds.round();
-    if (total < 60) return l10n.insightsDurationS(total);
-    final minutes = total ~/ 60;
-    if (minutes < 60) return l10n.insightsDurationM(minutes);
-    final hours = minutes ~/ 60;
-    final rest = minutes % 60;
-    return rest == 0
-        ? l10n.insightsDurationH(hours)
-        : l10n.insightsDurationHm(hours, rest);
-  }
+  String _duration(double seconds, AppLocalizations l10n) =>
+      formatDurationSeconds(l10n, seconds);
 
   String _dayLabel(BuildContext context, String date) =>
       MaterialLocalizations.of(context).formatMediumDate(DateTime.parse(date));

@@ -583,6 +583,56 @@ class AppLocalizationsIt extends AppLocalizations {
   String get demoZoneGarden => 'Giardino';
 
   @override
+  String get healthCardTitle => 'Stato del sistema';
+
+  @override
+  String get healthCameraOnline => 'Telecamera online';
+
+  @override
+  String get healthCameraOffline => 'Telecamera offline';
+
+  @override
+  String healthLastSeen(String duration) {
+    return 'Ultimo rilevamento: $duration';
+  }
+
+  @override
+  String healthDiskFreeOf(String free, String total) {
+    return '$free liberi su $total';
+  }
+
+  @override
+  String get healthDiskLow =>
+      'Spazio su disco insufficiente — le vecchie registrazioni verranno eliminate';
+
+  @override
+  String healthReplaysStored(int count, String size) {
+    return '$count registrazioni · $size';
+  }
+
+  @override
+  String get healthKeepReplays => 'Conserva le registrazioni per';
+
+  @override
+  String get healthRetentionSaved => 'Periodo di conservazione aggiornato';
+
+  @override
+  String get healthLoadError => 'Impossibile caricare lo stato del sistema';
+
+  @override
+  String get cameraOfflineTitle => 'Telecamera offline';
+
+  @override
+  String get cameraOfflineBody => 'Nessun video dalla telecamera da 10 minuti';
+
+  @override
+  String get diskLowTitle => 'Spazio su disco insufficiente';
+
+  @override
+  String get diskLowBody =>
+      'Le vecchie registrazioni vengono eliminate per liberare spazio';
+
+  @override
   String get orSeparator => 'OPPURE';
 
   @override

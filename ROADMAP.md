@@ -61,7 +61,7 @@ buy for how much work. Nothing here is scheduled — this is the wish list.
 14. **Activity insights** *(done)*. A simple daily/weekly chart of zone time,
     rest vs. active — the kind of screenshot people post on social media.
     Great for "show a general audience" marketing.
-15. **Health & watchdog.** Server-side: "camera offline for 10 minutes" alert,
+15. **Health & watchdog** *(done)*. Server-side: "camera offline for 10 minutes" alert,
     disk-space warnings for replays, auto-pruning old replays with a retention
     setting. Self-hosters trust a tool that tells them when *it* is broken.
 16. **Public landing page + demo mode** *(done)*. The demo site exists; give

@@ -17,10 +17,12 @@ import hashlib
 import hmac
 import secrets
 from dotenv import load_dotenv, set_key
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from manager import client_manager
 import mqtt_bridge
 import timelapse
+import health
+import settings as app_settings
 
 load_dotenv()
 
@@ -245,11 +247,12 @@ async def get_monitor_frame(monitor_id: str):
     raise HTTPException(status_code=404, detail="No frame from this monitor yet")
 
 @auth_router.get("/api/health")
-async def health():
+async def health_probe():
     """Unauthenticated liveness probe for the apps' connection-status chip.
 
     Deliberately minimal: it must work even with a missing/expired token so
-    the UI can say "server unreachable" vs "wrong token".
+    the UI can say "server unreachable" vs "wrong token". The full watchdog
+    view lives at /api/system-health (authenticated).
     """
     return {"ok": True, "name": socket.gethostname() or "pettrack"}
 
@@ -511,6 +514,57 @@ async def get_insights(days: int = Query(default=14, ge=1, le=90)):
             )
 
     return {"days": out, "totals": totals, "zone_totals": zone_totals}
+
+@router.get("/api/system-health")
+async def get_system_health():
+    """Watchdog view for the app's system-health card.
+
+    Is the camera still streaming, is the disk running out of room, and
+    how much history is kept — the things a self-hoster wants to know
+    before trusting the setup to run unattended. (Not to be confused with
+    the unauthenticated /api/health liveness probe.)"""
+    now = time.time()
+    monitors = _monitor_list()
+    disk = health.disk_snapshot("replays" if os.path.isdir("replays") else ".")
+
+    alerts = []
+    if health.offline_cameras(monitor_registry, now):
+        alerts.append("camera_offline")
+    if disk["low"]:
+        alerts.append("disk_low")
+
+    freshest = max((m["last_seen"] for m in monitors), default=0.0)
+    return {
+        "camera_online": any(m["online"] for m in monitors),
+        "camera_quiet_seconds": (now - freshest) if freshest else None,
+        "monitors": monitors,
+        "alerts": alerts,
+        "disk": disk,
+        "replays": {
+            **health.replay_stats(),
+            "retention_days": app_settings.get_replay_retention_days(),
+        },
+    }
+
+class SettingsUpdate(BaseModel):
+    replay_retention_days: int | None = Field(
+        default=None,
+        ge=app_settings.MIN_REPLAY_RETENTION_DAYS,
+        le=app_settings.MAX_REPLAY_RETENTION_DAYS,
+    )
+
+@router.get("/api/settings")
+async def get_server_settings():
+    return {"replay_retention_days": app_settings.get_replay_retention_days()}
+
+@router.post("/api/settings")
+async def update_server_settings(req: SettingsUpdate):
+    out = {}
+    if req.replay_retention_days is not None:
+        out["replay_retention_days"] = app_settings.set_replay_retention_days(
+            req.replay_retention_days
+        )
+    return out
 
 @router.get("/api/zones")
 async def get_zones_list():

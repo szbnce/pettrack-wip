@@ -582,6 +582,56 @@ class AppLocalizationsDe extends AppLocalizations {
   String get demoZoneGarden => 'Garten';
 
   @override
+  String get healthCardTitle => 'Systemzustand';
+
+  @override
+  String get healthCameraOnline => 'Kamera online';
+
+  @override
+  String get healthCameraOffline => 'Kamera offline';
+
+  @override
+  String healthLastSeen(String duration) {
+    return 'Zuletzt gesehen: $duration';
+  }
+
+  @override
+  String healthDiskFreeOf(String free, String total) {
+    return '$free frei von $total';
+  }
+
+  @override
+  String get healthDiskLow =>
+      'Wenig Speicherplatz — alte Aufnahmen werden gelöscht';
+
+  @override
+  String healthReplaysStored(int count, String size) {
+    return '$count Aufnahmen · $size';
+  }
+
+  @override
+  String get healthKeepReplays => 'Aufnahmen behalten für';
+
+  @override
+  String get healthRetentionSaved => 'Aufbewahrungszeitraum aktualisiert';
+
+  @override
+  String get healthLoadError => 'Systemzustand konnte nicht geladen werden';
+
+  @override
+  String get cameraOfflineTitle => 'Kamera offline';
+
+  @override
+  String get cameraOfflineBody => 'Seit 10 Minuten kein Bild von der Kamera';
+
+  @override
+  String get diskLowTitle => 'Wenig Speicherplatz';
+
+  @override
+  String get diskLowBody =>
+      'Alte Aufnahmen werden gelöscht, um Speicher freizugeben';
+
+  @override
   String get orSeparator => 'ODER';
 
   @override

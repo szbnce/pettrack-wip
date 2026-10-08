@@ -581,6 +581,56 @@ class AppLocalizationsHu extends AppLocalizations {
   String get demoZoneGarden => 'Kert';
 
   @override
+  String get healthCardTitle => 'Rendszerállapot';
+
+  @override
+  String get healthCameraOnline => 'Kamera online';
+
+  @override
+  String get healthCameraOffline => 'Kamera offline';
+
+  @override
+  String healthLastSeen(String duration) {
+    return 'Utoljára látva: $duration';
+  }
+
+  @override
+  String healthDiskFreeOf(String free, String total) {
+    return '$free szabad / $total';
+  }
+
+  @override
+  String get healthDiskLow =>
+      'Kevés a lemezterület — a régi visszajátszások törölve lesznek';
+
+  @override
+  String healthReplaysStored(int count, String size) {
+    return '$count visszajátszás · $size';
+  }
+
+  @override
+  String get healthKeepReplays => 'Visszajátszások megőrzése';
+
+  @override
+  String get healthRetentionSaved => 'Megőrzési idő frissítve';
+
+  @override
+  String get healthLoadError => 'A rendszerállapot nem tölthető be';
+
+  @override
+  String get cameraOfflineTitle => 'Kamera offline';
+
+  @override
+  String get cameraOfflineBody => '10 perce nincs videó a kameráról';
+
+  @override
+  String get diskLowTitle => 'Kevés a lemezterület';
+
+  @override
+  String get diskLowBody =>
+      'A régi visszajátszások törlésre kerülnek, hogy hely szabaduljon fel';
+
+  @override
   String get orSeparator => 'VAGY';
 
   @override

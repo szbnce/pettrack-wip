@@ -572,6 +572,54 @@ class AppLocalizationsZh extends AppLocalizations {
   String get demoZoneGarden => '花园';
 
   @override
+  String get healthCardTitle => '系统状态';
+
+  @override
+  String get healthCameraOnline => '摄像头在线';
+
+  @override
+  String get healthCameraOffline => '摄像头离线';
+
+  @override
+  String healthLastSeen(String duration) {
+    return '最后画面：$duration';
+  }
+
+  @override
+  String healthDiskFreeOf(String free, String total) {
+    return '$total 中剩余 $free';
+  }
+
+  @override
+  String get healthDiskLow => '磁盘空间不足 — 将清理旧回放';
+
+  @override
+  String healthReplaysStored(int count, String size) {
+    return '$count 个回放 · $size';
+  }
+
+  @override
+  String get healthKeepReplays => '回放保留时长';
+
+  @override
+  String get healthRetentionSaved => '回放保留设置已更新';
+
+  @override
+  String get healthLoadError => '无法加载系统状态';
+
+  @override
+  String get cameraOfflineTitle => '摄像头离线';
+
+  @override
+  String get cameraOfflineBody => '摄像头已有 10 分钟没有画面';
+
+  @override
+  String get diskLowTitle => '磁盘空间不足';
+
+  @override
+  String get diskLowBody => '正在清理旧回放以释放空间';
+
+  @override
   String get orSeparator => '或';
 
   @override

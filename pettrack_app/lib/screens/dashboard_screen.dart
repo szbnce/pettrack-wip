@@ -94,6 +94,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
         l10n.soundDetectedBody,
       );
     }
+    if (type == 'camera_offline') {
+      return (
+        Icons.videocam_off,
+        AppColors.warning,
+        l10n.cameraOfflineTitle,
+        l10n.cameraOfflineBody,
+      );
+    }
+    if (type == 'disk_low') {
+      return (
+        Icons.sd_storage_outlined,
+        AppColors.warning,
+        l10n.diskLowTitle,
+        l10n.diskLowBody,
+      );
+    }
     final isEnter = type == 'zone_enter';
     final zone = ev['zone_name'] ?? l10n.unknown;
     return (
@@ -425,7 +441,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 title: l10n.soundDetectedTitle,
                 body: l10n.soundDetectedBody,
               );
-            } else if (eventType != 'sound_detected' && _alertsZoneEnabled) {
+            } else if (eventType == 'camera_offline') {
+              // Watchdog alarms always notify — "is my pet being watched?"
+              // should never be a silent event in the feed.
+              NotificationService().showNotification(
+                id: 4000,
+                title: l10n.cameraOfflineTitle,
+                body: l10n.cameraOfflineBody,
+              );
+            } else if (eventType == 'disk_low') {
+              NotificationService().showNotification(
+                id: 4001,
+                title: l10n.diskLowTitle,
+                body: l10n.diskLowBody,
+              );
+            } else if ((eventType == 'zone_enter' ||
+                    eventType == 'zone_exit' ||
+                    eventType == 'zone_left') &&
+                _alertsZoneEnabled) {
               final isEnter = eventType == 'zone_enter';
               final zoneName = ev['zone_name'] ?? l10n.unknown;
               final now = DateTime.now();

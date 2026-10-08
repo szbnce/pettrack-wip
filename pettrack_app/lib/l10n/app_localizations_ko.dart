@@ -573,6 +573,54 @@ class AppLocalizationsKo extends AppLocalizations {
   String get demoZoneGarden => '정원';
 
   @override
+  String get healthCardTitle => '시스템 상태';
+
+  @override
+  String get healthCameraOnline => '카메라 온라인';
+
+  @override
+  String get healthCameraOffline => '카메라 오프라인';
+
+  @override
+  String healthLastSeen(String duration) {
+    return '마지막 영상: $duration';
+  }
+
+  @override
+  String healthDiskFreeOf(String free, String total) {
+    return '$total 중 $free 사용 가능';
+  }
+
+  @override
+  String get healthDiskLow => '디스크 공간이 부족합니다 — 오래된 다시보기를 삭제합니다';
+
+  @override
+  String healthReplaysStored(int count, String size) {
+    return '다시보기 $count개 · $size';
+  }
+
+  @override
+  String get healthKeepReplays => '다시보기 보관 기간';
+
+  @override
+  String get healthRetentionSaved => '보관 기간이 업데이트되었습니다';
+
+  @override
+  String get healthLoadError => '시스템 상태를 불러오지 못했습니다';
+
+  @override
+  String get cameraOfflineTitle => '카메라 오프라인';
+
+  @override
+  String get cameraOfflineBody => '10분 동안 카메라 영상이 없습니다';
+
+  @override
+  String get diskLowTitle => '디스크 공간 부족';
+
+  @override
+  String get diskLowBody => '공간을 확보하기 위해 오래된 다시보기를 삭제합니다';
+
+  @override
   String get orSeparator => '또는';
 
   @override

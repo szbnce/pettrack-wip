@@ -279,6 +279,20 @@
   "demoZoneSofa": "Sofa",
   "demoZoneBed": "Bed",
   "demoZoneGarden": "Garden",
+  "healthCardTitle": "System health",
+  "healthCameraOnline": "Camera online",
+  "healthCameraOffline": "Camera offline",
+  "healthLastSeen": "Last seen: {duration}",
+  "healthDiskFreeOf": "{free} free of {total}",
+  "healthDiskLow": "Disk space is low — old replays will be pruned",
+  "healthReplaysStored": "{count} replays · {size}",
+  "healthKeepReplays": "Keep replays for",
+  "healthRetentionSaved": "Replay retention updated",
+  "healthLoadError": "Could not load system health",
+  "cameraOfflineTitle": "Camera offline",
+  "cameraOfflineBody": "No video from the camera for 10 minutes",
+  "diskLowTitle": "Disk space low",
+  "diskLowBody": "Old replays are being pruned to free up space",
   "orSeparator": "OR",
   "setupErrPin": "Failed to connect or invalid PIN!",
   "saveSuccess": "Settings saved!",
@@ -467,6 +481,33 @@
     "placeholders": {
       "n": {
         "type": "int"
+      }
+    }
+  },
+  "@healthLastSeen": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "@healthDiskFreeOf": {
+    "placeholders": {
+      "free": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@healthReplaysStored": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
       }
     }
   }

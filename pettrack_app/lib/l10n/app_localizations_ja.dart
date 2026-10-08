@@ -575,6 +575,54 @@ class AppLocalizationsJa extends AppLocalizations {
   String get demoZoneGarden => '庭';
 
   @override
+  String get healthCardTitle => 'システムの状態';
+
+  @override
+  String get healthCameraOnline => 'カメラオンライン';
+
+  @override
+  String get healthCameraOffline => 'カメラオフライン';
+
+  @override
+  String healthLastSeen(String duration) {
+    return '最終映像: $duration';
+  }
+
+  @override
+  String healthDiskFreeOf(String free, String total) {
+    return '$total 中 $free 空き';
+  }
+
+  @override
+  String get healthDiskLow => 'ディスクの空き容量が不足 — 古いリプレイを削除します';
+
+  @override
+  String healthReplaysStored(int count, String size) {
+    return 'リプレイ $count 件 · $size';
+  }
+
+  @override
+  String get healthKeepReplays => 'リプレイの保存期間';
+
+  @override
+  String get healthRetentionSaved => '保存期間を更新しました';
+
+  @override
+  String get healthLoadError => 'システムの状態を読み込めませんでした';
+
+  @override
+  String get cameraOfflineTitle => 'カメラオフライン';
+
+  @override
+  String get cameraOfflineBody => '10分間カメラからの映像がありません';
+
+  @override
+  String get diskLowTitle => 'ディスクの空き容量不足';
+
+  @override
+  String get diskLowBody => '空きを確保するため古いリプレイを削除しています';
+
+  @override
   String get orSeparator => 'または';
 
   @override

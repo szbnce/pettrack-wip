@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../app_info.dart';
 import '../theme/colors.dart';
+import '../utils/format_helpers.dart';
 import '../utils/server_url.dart';
 import '../main.dart';
 import 'main_navigation.dart';
@@ -39,6 +40,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String? _serverVersion;
   bool _checkingVersion = false;
   bool _isLoading = true;
+  String _jwtToken = '';
+
+  // System health card (server watchdog: camera, disk, replay retention).
+  Map<String, dynamic>? _health;
+  bool _healthFailed = false;
+  int _retentionDays = 14;
 
   String _getLocalizedPetType(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
@@ -81,6 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _quietHoursEnabled = prefs.getBool('quiet_hours_enabled') ?? false;
       _quietHoursFrom = prefs.getInt('quiet_hours_from') ?? 23 * 60;
       _quietHoursTo = prefs.getInt('quiet_hours_to') ?? 7 * 60;
+      _jwtToken = token;
     });
 
     if (ip.isNotEmpty && token.isNotEmpty && !ip.contains('demo_ip')) {
@@ -118,6 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (ip.isNotEmpty) {
       _checkServerVersion();
+      _fetchSystemHealth();
     }
 
     if (mounted) {
@@ -682,6 +691,78 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  /// The server's watchdog view plus its retention setting.
+  Future<void> _fetchSystemHealth() async {
+    final raw = _ipController.text.trim();
+    if (raw.isEmpty || _jwtToken.isEmpty) return;
+    final base = normalizeServerUrl(raw);
+    try {
+      final responses = await Future.wait([
+        http
+            .get(
+              Uri.parse('$base/api/system-health'),
+              headers: {'x-api-token': _jwtToken},
+            )
+            .timeout(const Duration(seconds: 4)),
+        http
+            .get(
+              Uri.parse('$base/api/settings'),
+              headers: {'x-api-token': _jwtToken},
+            )
+            .timeout(const Duration(seconds: 4)),
+      ]);
+      if (!mounted) return;
+      final healthResponse = responses[0];
+      final settingsResponse = responses[1];
+      if (healthResponse.statusCode != 200) {
+        setState(() => _healthFailed = true);
+        return;
+      }
+      setState(() {
+        _health = jsonDecode(healthResponse.body) as Map<String, dynamic>;
+        _healthFailed = false;
+        if (settingsResponse.statusCode == 200) {
+          final days =
+              jsonDecode(settingsResponse.body)['replay_retention_days'];
+          if (days is int) _retentionDays = days;
+        }
+      });
+    } catch (_) {
+      if (mounted) setState(() => _healthFailed = true);
+    }
+  }
+
+  /// Change the replay retention on the server (it prunes accordingly).
+  Future<void> _saveRetention(int days) async {
+    final l10n = AppLocalizations.of(context)!;
+    final previous = _retentionDays;
+    setState(() => _retentionDays = days);
+    try {
+      final response = await http
+          .post(
+            Uri.parse(
+              '${normalizeServerUrl(_ipController.text.trim())}/api/settings',
+            ),
+            headers: {
+              'x-api-token': _jwtToken,
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({'replay_retention_days': days}),
+          )
+          .timeout(const Duration(seconds: 4));
+      if (!mounted) return;
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.healthRetentionSaved)),
+        );
+      } else {
+        setState(() => _retentionDays = previous);
+      }
+    } catch (_) {
+      if (mounted) setState(() => _retentionDays = previous);
+    }
+  }
+
   String _versionStatus(AppLocalizations l10n) {
     final server = _serverVersion;
     if (server == null) return l10n.versionUnknown;
@@ -764,6 +845,135 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     ]);
+  }
+
+  /// The server's watchdog: camera alive, disk fine, replays under control.
+  Widget _buildHealthCard(AppLocalizations l10n) {
+    final theme = Theme.of(context);
+    final data = _health;
+    final disk = data?['disk'] as Map<String, dynamic>? ?? const {};
+    final diskLow = disk['low'] == true;
+    final online = data?['camera_online'] == true;
+    final quietSeconds = (data?['camera_quiet_seconds'] as num?)?.toDouble();
+    final replays = data?['replays'] as Map<String, dynamic>? ?? const {};
+    // The server's value may not be one of the pickable presets.
+    final retentionChoices = {7, 14, 30, 90, _retentionDays}.toList()..sort();
+
+    return _buildCard(l10n.healthCardTitle, [
+      if (data == null && _healthFailed)
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.healthLoadError,
+                style: theme.textTheme.bodyMedium,
+              ),
+            ),
+            TextButton(
+              onPressed: _fetchSystemHealth,
+              child: Text(l10n.retry),
+            ),
+          ],
+        )
+      else if (data == null)
+        const Center(
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: CircularProgressIndicator(),
+          ),
+        )
+      else ...[
+        _healthRow(
+          icon: online ? Icons.videocam : Icons.videocam_off,
+          iconColor: online ? AppColors.success : AppColors.warning,
+          title: online ? l10n.healthCameraOnline : l10n.healthCameraOffline,
+          caption: quietSeconds == null
+              ? null
+              : l10n.healthLastSeen(formatDurationSeconds(l10n, quietSeconds)),
+        ),
+        const SizedBox(height: 16),
+        _healthRow(
+          icon: diskLow ? Icons.warning_amber : Icons.storage_outlined,
+          iconColor: diskLow
+              ? AppColors.warning
+              : theme.colorScheme.onSurfaceVariant,
+          title: l10n.healthDiskFreeOf(
+            formatBytes((disk['free_bytes'] as num? ?? 0).toInt()),
+            formatBytes((disk['total_bytes'] as num? ?? 0).toInt()),
+          ),
+          caption: diskLow ? l10n.healthDiskLow : null,
+          captionColor: AppColors.warning,
+        ),
+        const SizedBox(height: 16),
+        _healthRow(
+          icon: Icons.movie_outlined,
+          iconColor: theme.colorScheme.onSurfaceVariant,
+          title: l10n.healthReplaysStored(
+            (replays['count'] as num? ?? 0).toInt(),
+            formatBytes((replays['bytes'] as num? ?? 0).toInt()),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.healthKeepReplays,
+                style: theme.textTheme.bodyLarge,
+              ),
+            ),
+            DropdownButton<int>(
+              value: _retentionDays,
+              underline: const SizedBox.shrink(),
+              items: [
+                for (final days in retentionChoices)
+                  DropdownMenuItem(
+                    value: days,
+                    child: Text(l10n.insightsRangeDays(days)),
+                  ),
+              ],
+              onChanged: (days) {
+                if (days != null && days != _retentionDays) {
+                  _saveRetention(days);
+                }
+              },
+            ),
+          ],
+        ),
+      ],
+    ]);
+  }
+
+  Widget _healthRow({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    String? caption,
+    Color? captionColor,
+  }) {
+    final theme = Theme.of(context);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 20, color: iconColor),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: theme.textTheme.bodyLarge),
+              if (caption != null)
+                Text(
+                  caption,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: captionColor ?? theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildMonitorCard(AppLocalizations l10n) {
@@ -998,6 +1208,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildMonitorCard(l10n),
+                              _buildHealthCard(l10n),
                               _buildAboutCard(l10n),
                               _buildSaveButton(l10n),
                               _buildSyncToWatchButton(context),
@@ -1033,6 +1244,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _buildProfileCard(l10n),
                     _buildAlertsCard(l10n),
                     _buildMonitorCard(l10n),
+                    _buildHealthCard(l10n),
                     _buildAboutCard(l10n),
                     const SizedBox(height: 16),
                     _buildSaveButton(l10n),
