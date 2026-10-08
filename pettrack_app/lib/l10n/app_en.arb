@@ -96,6 +96,15 @@
   "testNotification": "Test Notification",
   "testNotifTitle": "Test Notification",
   "testNotifBody": "You have successfully set up notifications!",
+  "alertsRemoteTitle": "Alerts when I'm away",
+  "alertsRemoteDesc": "Forwards alerts to an ntfy topic so they reach you anywhere — in the ntfy app or any browser. Pick a topic name that is hard to guess; anyone with the link can subscribe.",
+  "alertsRemoteUrlLabel": "ntfy topic URL",
+  "alertsRemoteUrlHint": "https://ntfy.sh/your-secret-topic",
+  "alertsRemoteTokenLabel": "Access token (optional)",
+  "alertsRemoteTest": "Send test notification",
+  "alertsRemoteTestSent": "Test notification sent — check your phone.",
+  "alertsRemoteTestFailed": "Could not send the test notification. Check the topic URL and the server.",
+  "alertsRemoteUrlInvalid": "That does not look like a valid ntfy URL.",
   "secondsAgo": "{seconds} seconds ago",
   "@secondsAgo": {
     "placeholders": {

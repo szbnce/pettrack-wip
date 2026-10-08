@@ -3,6 +3,8 @@ import aiosqlite
 import json
 import time
 
+import notify
+
 DB_PATH = "pettrack.db"
 
 async def init_db():
@@ -71,6 +73,12 @@ async def log_event(event_type: str, zone_name: str = None, details: str = None)
             (time.time(), event_type, zone_name, details)
         )
         await db.commit()
+    # Remote alerts ride the same funnel. A missing or slow ntfy topic
+    # must never cost us the event row written above.
+    try:
+        await notify.push_event(event_type, zone_name=zone_name, details=details)
+    except Exception as e:
+        print(f"ntfy bridge: push failed: {e}", flush=True)
 
 async def get_events(limit: int = 50):
     async with aiosqlite.connect(DB_PATH) as db:

@@ -170,6 +170,36 @@ class AppLocalizationsHu extends AppLocalizations {
   String get testNotifBody => 'Sikeresen beállítottad az értesítéseket!';
 
   @override
+  String get alertsRemoteTitle => 'Riasztások, amikor távol vagyok';
+
+  @override
+  String get alertsRemoteDesc =>
+      'Továbbítja a riasztásokat egy ntfy témára, hogy bárhova elérjenek — az ntfy appban vagy akár böngészőben. Válassz nehezen kitalálható témanevet; a link birtokában bárki feliratkozhat.';
+
+  @override
+  String get alertsRemoteUrlLabel => 'ntfy téma URL';
+
+  @override
+  String get alertsRemoteUrlHint => 'https://ntfy.sh/a-titkos-temad';
+
+  @override
+  String get alertsRemoteTokenLabel => 'Hozzáférési token (opcionális)';
+
+  @override
+  String get alertsRemoteTest => 'Teszt értesítés küldése';
+
+  @override
+  String get alertsRemoteTestSent =>
+      'Teszt értesítés elküldve — nézd meg a telefonod.';
+
+  @override
+  String get alertsRemoteTestFailed =>
+      'A teszt értesítést nem sikerült elküldeni. Ellenőrizd a téma URL-t és a szervert.';
+
+  @override
+  String get alertsRemoteUrlInvalid => 'Ez nem tűnik érvényes ntfy URL-nek.';
+
+  @override
   String secondsAgo(int seconds) {
     return '$seconds másodperce';
   }

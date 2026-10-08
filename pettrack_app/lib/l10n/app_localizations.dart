@@ -402,6 +402,60 @@ abstract class AppLocalizations {
   /// **'You have successfully set up notifications!'**
   String get testNotifBody;
 
+  /// No description provided for @alertsRemoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts when I\'m away'**
+  String get alertsRemoteTitle;
+
+  /// No description provided for @alertsRemoteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Forwards alerts to an ntfy topic so they reach you anywhere — in the ntfy app or any browser. Pick a topic name that is hard to guess; anyone with the link can subscribe.'**
+  String get alertsRemoteDesc;
+
+  /// No description provided for @alertsRemoteUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ntfy topic URL'**
+  String get alertsRemoteUrlLabel;
+
+  /// No description provided for @alertsRemoteUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'https://ntfy.sh/your-secret-topic'**
+  String get alertsRemoteUrlHint;
+
+  /// No description provided for @alertsRemoteTokenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Access token (optional)'**
+  String get alertsRemoteTokenLabel;
+
+  /// No description provided for @alertsRemoteTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Send test notification'**
+  String get alertsRemoteTest;
+
+  /// No description provided for @alertsRemoteTestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Test notification sent — check your phone.'**
+  String get alertsRemoteTestSent;
+
+  /// No description provided for @alertsRemoteTestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not send the test notification. Check the topic URL and the server.'**
+  String get alertsRemoteTestFailed;
+
+  /// No description provided for @alertsRemoteUrlInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That does not look like a valid ntfy URL.'**
+  String get alertsRemoteUrlInvalid;
+
   /// No description provided for @secondsAgo.
   ///
   /// In en, this message translates to:

@@ -42,7 +42,7 @@ buy for how much work. Nothing here is scheduled — this is the wish list.
 9. **Multi-camera.** Several monitor phones → one dashboard with camera
    picker (and "which camera saw the event" on replays). The server
    fan-out already supports multiple `/ws` monitors; the app UI is the work.
-10. **Push notifications that work outside the LAN.** ntfy.sh / Gotify /
+10. **Push notifications that work outside the LAN** *(done)*. ntfy.sh / Gotify /
     WebPush bridge so events reach you at school/work without exposing the
     server — opt-in, with a "test notification" button.
 11. **Live talk / treat-cam basics (stretch).** Two-way audio is hard on old

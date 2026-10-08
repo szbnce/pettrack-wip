@@ -16,6 +16,7 @@ from dotenv import set_key
 from pydantic import BaseModel, Field
 from manager import client_manager
 import mqtt_bridge
+import notify
 import timelapse
 import health
 import settings as app_settings
@@ -569,10 +570,26 @@ class SettingsUpdate(BaseModel):
         ge=app_settings.MIN_REPLAY_RETENTION_DAYS,
         le=app_settings.MAX_REPLAY_RETENTION_DAYS,
     )
+    # Remote alerts (ntfy bridge) + the quiet-hours window it honours.
+    ntfy_url: str | None = None
+    ntfy_token: str | None = None
+    ntfy_lang: str | None = None
+    quiet_hours_enabled: bool | None = None
+    quiet_hours_from: int | None = Field(default=None, ge=0, le=1439)
+    quiet_hours_to: int | None = Field(default=None, ge=0, le=1439)
 
 @router.get("/api/settings")
 async def get_server_settings():
-    return {"replay_retention_days": app_settings.get_replay_retention_days()}
+    quiet_enabled, quiet_from, quiet_to = app_settings.get_quiet_hours()
+    return {
+        "replay_retention_days": app_settings.get_replay_retention_days(),
+        "ntfy_url": app_settings.get_ntfy_url(),
+        "ntfy_token": app_settings.get_ntfy_token(),
+        "ntfy_lang": app_settings.get_ntfy_lang(),
+        "quiet_hours_enabled": quiet_enabled,
+        "quiet_hours_from": quiet_from,
+        "quiet_hours_to": quiet_to,
+    }
 
 @router.post("/api/settings")
 async def update_server_settings(req: SettingsUpdate):
@@ -581,7 +598,44 @@ async def update_server_settings(req: SettingsUpdate):
         out["replay_retention_days"] = app_settings.set_replay_retention_days(
             req.replay_retention_days
         )
+    if req.ntfy_url is not None:
+        try:
+            out["ntfy_url"] = app_settings.set_ntfy_url(req.ntfy_url)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="invalid ntfy topic URL")
+    if req.ntfy_token is not None:
+        out["ntfy_token"] = app_settings.set_ntfy_token(req.ntfy_token)
+    if req.ntfy_lang is not None:
+        if req.ntfy_lang not in app_settings.SUPPORTED_NTFY_LANGS:
+            raise HTTPException(status_code=400, detail="unsupported language")
+        out["ntfy_lang"] = app_settings.set_ntfy_lang(req.ntfy_lang)
+    if (
+        req.quiet_hours_enabled is not None
+        or req.quiet_hours_from is not None
+        or req.quiet_hours_to is not None
+    ):
+        quiet_enabled, quiet_from, quiet_to = app_settings.get_quiet_hours()
+        quiet_enabled, quiet_from, quiet_to = app_settings.set_quiet_hours(
+            req.quiet_hours_enabled if req.quiet_hours_enabled is not None else quiet_enabled,
+            req.quiet_hours_from if req.quiet_hours_from is not None else quiet_from,
+            req.quiet_hours_to if req.quiet_hours_to is not None else quiet_to,
+        )
+        out["quiet_hours_enabled"] = quiet_enabled
+        out["quiet_hours_from"] = quiet_from
+        out["quiet_hours_to"] = quiet_to
     return out
+
+@router.post("/api/notify/test")
+async def send_test_notification():
+    """One-tap setup check from the app: proves the topic actually works.
+
+    A deliberate test ignores quiet hours — the same courtesy the in-app
+    test-notification button gets."""
+    if not app_settings.get_ntfy_url():
+        raise HTTPException(status_code=400, detail="remote alerts are not configured")
+    if not await notify.push_test():
+        raise HTTPException(status_code=502, detail="could not deliver to the ntfy topic")
+    return {"status": "ok", "sent": True}
 
 @router.get("/api/zones")
 async def get_zones_list():

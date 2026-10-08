@@ -170,6 +170,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get testNotifBody => 'You have successfully set up notifications!';
 
   @override
+  String get alertsRemoteTitle => 'Alerts when I\'m away';
+
+  @override
+  String get alertsRemoteDesc =>
+      'Forwards alerts to an ntfy topic so they reach you anywhere — in the ntfy app or any browser. Pick a topic name that is hard to guess; anyone with the link can subscribe.';
+
+  @override
+  String get alertsRemoteUrlLabel => 'ntfy topic URL';
+
+  @override
+  String get alertsRemoteUrlHint => 'https://ntfy.sh/your-secret-topic';
+
+  @override
+  String get alertsRemoteTokenLabel => 'Access token (optional)';
+
+  @override
+  String get alertsRemoteTest => 'Send test notification';
+
+  @override
+  String get alertsRemoteTestSent =>
+      'Test notification sent — check your phone.';
+
+  @override
+  String get alertsRemoteTestFailed =>
+      'Could not send the test notification. Check the topic URL and the server.';
+
+  @override
+  String get alertsRemoteUrlInvalid =>
+      'That does not look like a valid ntfy URL.';
+
+  @override
   String secondsAgo(int seconds) {
     return '$seconds seconds ago';
   }

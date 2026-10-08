@@ -47,6 +47,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _healthFailed = false;
   int _retentionDays = 14;
 
+  // Remote alerts (ntfy bridge): topic URL + optional access token.
+  final _ntfyUrlController = TextEditingController();
+  final _ntfyTokenController = TextEditingController();
+  bool _testingNtfy = false;
+
   String _getLocalizedPetType(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
     switch (type) {
@@ -69,6 +74,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     _loadSettings();
+  }
+
+  @override
+  void dispose() {
+    _ipController.dispose();
+    _tokenController.dispose();
+    _petNameController.dispose();
+    _ntfyUrlController.dispose();
+    _ntfyTokenController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadSettings() async {
@@ -163,6 +178,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
+    final ntfyUrl = _ntfyUrlController.text.trim();
+    if (ntfyUrl.isNotEmpty && !isValidNtfyUrl(ntfyUrl)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.alertsRemoteUrlInvalid)),
+      );
+      return;
+    }
     final prefs = await SharedPreferences.getInstance();
     String ip = _ipController.text.trim();
     if (!ip.startsWith('http://') && !ip.startsWith('https://')) {
@@ -241,6 +263,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
         debugPrint(l10n.decodingError(e.toString()));
       }
     }
+
+    // Remote alerts (ntfy) and the quiet-hours window the bridge honours.
+    // Best effort: a briefly unreachable server must not lose the local save.
+    try {
+      await http
+          .post(
+            Uri.parse('$ip/api/settings'),
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-token': jwtToken,
+            },
+            body: jsonEncode({
+              'ntfy_url': ntfyUrl,
+              'ntfy_token': _ntfyTokenController.text.trim(),
+              'ntfy_lang': _languageCode,
+              'quiet_hours_enabled': _quietHoursEnabled,
+              'quiet_hours_from': _quietHoursFrom,
+              'quiet_hours_to': _quietHoursTo,
+            }),
+          )
+          .timeout(const Duration(seconds: 3));
+    } catch (_) {}
 
     await prefs.setString('server_ip', ip);
     await prefs.setString('jwt_token', jwtToken);
@@ -646,6 +690,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
           label: Text(l10n.testNotification),
         ),
       ),
+      const Divider(height: 32),
+      Text(
+        l10n.alertsRemoteTitle,
+        style: Theme.of(
+          context,
+        ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 4),
+      Text(l10n.alertsRemoteDesc, style: Theme.of(context).textTheme.bodySmall),
+      const SizedBox(height: 12),
+      Text(l10n.alertsRemoteUrlLabel, style: Theme.of(context).textTheme.labelLarge),
+      const SizedBox(height: 8),
+      TextField(
+        controller: _ntfyUrlController,
+        keyboardType: TextInputType.url,
+        decoration: InputDecoration(hintText: l10n.alertsRemoteUrlHint),
+      ),
+      const SizedBox(height: 12),
+      Text(
+        l10n.alertsRemoteTokenLabel,
+        style: Theme.of(context).textTheme.labelLarge,
+      ),
+      const SizedBox(height: 8),
+      TextField(controller: _ntfyTokenController, obscureText: true),
+      const SizedBox(height: 12),
+      Center(
+        child: OutlinedButton.icon(
+          onPressed: _testingNtfy ? null : () => _testRemoteAlert(l10n),
+          icon: _testingNtfy
+              ? const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.cloud_upload_outlined),
+          label: Text(l10n.alertsRemoteTest),
+        ),
+      ),
     ]);
   }
 
@@ -671,6 +753,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _quietHoursTo = minutes;
       }
     });
+  }
+
+  /// Push the remote-alert settings to the server, then ask it to send one
+  /// test notification — proving the topic end to end before trusting it.
+  Future<void> _testRemoteAlert(AppLocalizations l10n) async {
+    final url = _ntfyUrlController.text.trim();
+    if (url.isNotEmpty && !isValidNtfyUrl(url)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.alertsRemoteUrlInvalid)),
+      );
+      return;
+    }
+    setState(() => _testingNtfy = true);
+    final base = normalizeServerUrl(_ipController.text.trim());
+    bool sent = false;
+    try {
+      final saveResponse = await http
+          .post(
+            Uri.parse('$base/api/settings'),
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-token': AuthService.token,
+            },
+            body: jsonEncode({
+              'ntfy_url': url,
+              'ntfy_token': _ntfyTokenController.text.trim(),
+            }),
+          )
+          .timeout(const Duration(seconds: 4));
+      if (saveResponse.statusCode == 200) {
+        final testResponse = await http
+            .post(
+              Uri.parse('$base/api/notify/test'),
+              headers: AuthService.headers,
+            )
+            .timeout(const Duration(seconds: 6));
+        sent = testResponse.statusCode == 200;
+      }
+    } catch (_) {}
+    if (!mounted) return;
+    setState(() => _testingNtfy = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          sent ? l10n.alertsRemoteTestSent : l10n.alertsRemoteTestFailed,
+        ),
+      ),
+    );
   }
 
   /// Fetches /api/version from the configured server and keeps the result
@@ -728,9 +858,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _health = jsonDecode(healthResponse.body) as Map<String, dynamic>;
         _healthFailed = false;
         if (settingsResponse.statusCode == 200) {
-          final days =
-              jsonDecode(settingsResponse.body)['replay_retention_days'];
+          final settings =
+              jsonDecode(settingsResponse.body) as Map<String, dynamic>;
+          final days = settings['replay_retention_days'];
           if (days is int) _retentionDays = days;
+          _ntfyUrlController.text = settings['ntfy_url'] as String? ?? '';
+          _ntfyTokenController.text = settings['ntfy_token'] as String? ?? '';
         }
       });
     } catch (_) {

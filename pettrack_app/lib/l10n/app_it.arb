@@ -96,6 +96,15 @@
   "testNotification": "Notifica di prova",
   "testNotifTitle": "Notifica di prova",
   "testNotifBody": "Le notifiche sono state configurate con successo!",
+  "alertsRemoteTitle": "Avvisi quando sono fuori",
+  "alertsRemoteDesc": "Inoltra gli avvisi a un topic ntfy così arrivano ovunque — nell'app ntfy o in qualsiasi browser. Scegli un nome di topic difficile da indovinare: chiunque abbia il link può iscriversi.",
+  "alertsRemoteUrlLabel": "URL del topic ntfy",
+  "alertsRemoteUrlHint": "https://ntfy.sh/il-tuo-topic-segreto",
+  "alertsRemoteTokenLabel": "Token di accesso (facoltativo)",
+  "alertsRemoteTest": "Invia notifica di prova",
+  "alertsRemoteTestSent": "Notifica di prova inviata — controlla il telefono.",
+  "alertsRemoteTestFailed": "Impossibile inviare la notifica di prova. Controlla l'URL del topic e il server.",
+  "alertsRemoteUrlInvalid": "Non sembra un URL ntfy valido.",
   "secondsAgo": "{seconds} secondi fa",
   "@secondsAgo": {
     "placeholders": {

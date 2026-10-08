@@ -96,6 +96,15 @@
   "testNotification": "テスト通知",
   "testNotifTitle": "テスト通知",
   "testNotifBody": "通知の設定が完了しました！",
+  "alertsRemoteTitle": "離れているときのアラート",
+  "alertsRemoteDesc": "アラートを ntfy トピックに転送し、どこにいても届くようにします（ntfy アプリやブラウザで受信）。推測されにくいトピック名にしてください。リンクを知っている人は誰でも購読できます。",
+  "alertsRemoteUrlLabel": "ntfy トピックの URL",
+  "alertsRemoteUrlHint": "https://ntfy.sh/あなたの秘密トピック",
+  "alertsRemoteTokenLabel": "アクセストークン（任意）",
+  "alertsRemoteTest": "テスト通知を送信",
+  "alertsRemoteTestSent": "テスト通知を送信しました — スマートフォンを確認してください。",
+  "alertsRemoteTestFailed": "テスト通知を送信できませんでした。トピックの URL とサーバーを確認してください。",
+  "alertsRemoteUrlInvalid": "有効な ntfy URL ではないようです。",
   "secondsAgo": "{seconds}秒前",
   "@secondsAgo": {
     "placeholders": {

@@ -170,6 +170,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String get testNotifBody => '通知设置成功！';
 
   @override
+  String get alertsRemoteTitle => '外出时的警报';
+
+  @override
+  String get alertsRemoteDesc =>
+      '将警报转发到 ntfy 主题，让你在任何地方都能收到——ntfy 应用或任意浏览器。请取一个难以猜到的主题名；任何有链接的人都能订阅。';
+
+  @override
+  String get alertsRemoteUrlLabel => 'ntfy 主题 URL';
+
+  @override
+  String get alertsRemoteUrlHint => 'https://ntfy.sh/你的秘密主题';
+
+  @override
+  String get alertsRemoteTokenLabel => '访问令牌（可选）';
+
+  @override
+  String get alertsRemoteTest => '发送测试通知';
+
+  @override
+  String get alertsRemoteTestSent => '测试通知已发送 — 请查看手机。';
+
+  @override
+  String get alertsRemoteTestFailed => '无法发送测试通知。请检查主题 URL 和服务器。';
+
+  @override
+  String get alertsRemoteUrlInvalid => '这看起来不是有效的 ntfy URL。';
+
+  @override
   String secondsAgo(int seconds) {
     return '$seconds秒前';
   }

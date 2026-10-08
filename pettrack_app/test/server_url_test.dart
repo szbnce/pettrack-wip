@@ -8,7 +8,10 @@ void main() {
     });
 
     test('IP with port keeps the port', () {
-      expect(normalizeServerUrl('192.168.1.100:9000'), 'http://192.168.1.100:9000');
+      expect(
+        normalizeServerUrl('192.168.1.100:9000'),
+        'http://192.168.1.100:9000',
+      );
     });
 
     test('full URL is untouched', () {
@@ -43,6 +46,34 @@ void main() {
 
     test('empty string stays empty', () {
       expect(normalizeServerUrl(''), '');
+    });
+  });
+
+  group('isValidNtfyUrl', () {
+    test('a public ntfy topic is publishable', () {
+      expect(isValidNtfyUrl('https://ntfy.sh/my-secret-topic'), isTrue);
+    });
+
+    test('a self-hosted ntfy on the LAN is publishable', () {
+      expect(isValidNtfyUrl('http://192.168.1.50:8080/pets'), isTrue);
+    });
+
+    test('surrounding whitespace is forgiven', () {
+      expect(isValidNtfyUrl('  https://ntfy.sh/pets  '), isTrue);
+    });
+
+    test('bare text is not a URL', () {
+      expect(isValidNtfyUrl('not a url'), isFalse);
+    });
+
+    test('non-http schemes are rejected', () {
+      expect(isValidNtfyUrl('ftp://example.com/pets'), isFalse);
+      expect(isValidNtfyUrl('mailto:me@example.com'), isFalse);
+    });
+
+    test('a host is required', () {
+      expect(isValidNtfyUrl('https://'), isFalse);
+      expect(isValidNtfyUrl(''), isFalse);
     });
   });
 }

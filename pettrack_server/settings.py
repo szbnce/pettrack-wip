@@ -3,6 +3,8 @@
 Only operational knobs live here — the kind a self-hosters' maintenance
 card exposes, not app preferences."""
 import os
+from datetime import datetime
+from urllib.parse import urlparse
 
 from dotenv import set_key
 
@@ -12,6 +14,32 @@ from dotenv import set_key
 DEFAULT_REPLAY_RETENTION_DAYS = 14
 MIN_REPLAY_RETENTION_DAYS = 1
 MAX_REPLAY_RETENTION_DAYS = 365
+
+# Languages the remote-alert bridge can phrase its messages in. The app
+# saves its interface language here so pushes read like the app does.
+SUPPORTED_NTFY_LANGS = ("en", "de", "hu", "it", "ja", "ko", "zh")
+
+# The "don't tell me between 23:00 and 7:00" window, mirrored from the
+# app so remote alerts obey the same rule. Minutes after midnight;
+# from == to is an empty window and the window may wrap midnight.
+DEFAULT_QUIET_FROM = 23 * 60
+DEFAULT_QUIET_TO = 7 * 60
+
+
+class NtfyUrlError(ValueError):
+    """The topic URL is not something we can publish to."""
+
+
+def _set_env(key: str, value: str) -> None:
+    """Persist to .env and the live process environment.
+
+    The append fallback covers Docker bind mounts where os.replace fails."""
+    try:
+        set_key(".env", key, value)
+    except OSError:
+        with open(".env", "a") as f:
+            f.write(f"\n{key}={value}\n")
+    os.environ[key] = value
 
 
 def get_replay_retention_days() -> int:
@@ -25,11 +53,89 @@ def get_replay_retention_days() -> int:
 
 def set_replay_retention_days(days: int) -> int:
     days = max(MIN_REPLAY_RETENTION_DAYS, min(MAX_REPLAY_RETENTION_DAYS, int(days)))
-    try:
-        set_key(".env", "PETTRACK_REPLAY_RETENTION_DAYS", str(days))
-    except OSError:
-        # Fallback for Docker bind mounts where os.replace fails.
-        with open(".env", "a") as f:
-            f.write(f"\nPETTRACK_REPLAY_RETENTION_DAYS={days}\n")
-    os.environ["PETTRACK_REPLAY_RETENTION_DAYS"] = str(days)
+    _set_env("PETTRACK_REPLAY_RETENTION_DAYS", str(days))
     return days
+
+
+# --- remote alerts (ntfy bridge) --------------------------------------------
+
+
+def get_ntfy_url() -> str:
+    return os.getenv("PETTRACK_NTFY_URL", "").strip()
+
+
+def set_ntfy_url(url: str) -> str:
+    """Store the ntfy topic URL; an empty string turns remote alerts off.
+
+    Publishing is a plain HTTP POST to the topic URL, so anything
+    ntfy-shaped works: ntfy.sh, a self-hosted ntfy, even a webhook that
+    accepts POSTs. Raises NtfyUrlError for anything unpublishable."""
+    url = url.strip()
+    if url:
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise NtfyUrlError(url)
+    _set_env("PETTRACK_NTFY_URL", url)
+    return url
+
+
+def get_ntfy_token() -> str:
+    return os.getenv("PETTRACK_NTFY_TOKEN", "").strip()
+
+
+def set_ntfy_token(token: str) -> str:
+    """Access token for protected ntfy topics (optional)."""
+    token = token.strip()
+    _set_env("PETTRACK_NTFY_TOKEN", token)
+    return token
+
+
+def get_ntfy_lang() -> str:
+    lang = os.getenv("PETTRACK_NTFY_LANG", "en").strip()
+    return lang if lang in SUPPORTED_NTFY_LANGS else "en"
+
+
+def set_ntfy_lang(lang: str) -> str:
+    if lang not in SUPPORTED_NTFY_LANGS:
+        raise ValueError(lang)
+    _set_env("PETTRACK_NTFY_LANG", lang)
+    return lang
+
+
+def get_quiet_hours() -> tuple[bool, int, int]:
+    def minutes(name: str, default: int) -> int:
+        try:
+            value = int(os.getenv(name, ""))
+        except ValueError:
+            return default
+        return max(0, min(1439, value))
+
+    enabled = os.getenv("PETTRACK_QUIET_ENABLED", "").strip() in ("1", "true", "True")
+    return (
+        enabled,
+        minutes("PETTRACK_QUIET_FROM", DEFAULT_QUIET_FROM),
+        minutes("PETTRACK_QUIET_TO", DEFAULT_QUIET_TO),
+    )
+
+
+def set_quiet_hours(enabled: bool, from_minutes: int, to_minutes: int) -> tuple[bool, int, int]:
+    from_minutes = max(0, min(1439, int(from_minutes)))
+    to_minutes = max(0, min(1439, int(to_minutes)))
+    _set_env("PETTRACK_QUIET_ENABLED", "1" if enabled else "0")
+    _set_env("PETTRACK_QUIET_FROM", str(from_minutes))
+    _set_env("PETTRACK_QUIET_TO", str(to_minutes))
+    return enabled, from_minutes, to_minutes
+
+
+def is_quiet_now(now: datetime | None = None) -> bool:
+    """Same window maths as the app's isWithinQuietHours()."""
+    enabled, start, end = get_quiet_hours()
+    if not enabled:
+        return False
+    now = now or datetime.now()
+    minutes = now.hour * 60 + now.minute
+    if start == end:
+        return False  # empty window
+    if start < end:
+        return start <= minutes < end
+    return minutes >= start or minutes < end  # wraps midnight

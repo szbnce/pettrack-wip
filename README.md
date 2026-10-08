@@ -109,6 +109,7 @@ PetTrack is a lightweight Pet monitor that upcycles old phones, and uses them as
 * Movement recordings that are replayable instantly and shareable
 * Activity log
 * Vaccine and Medication tracking
+* Alerts anywhere via [ntfy](https://ntfy.sh) (outside the LAN)
 * Android / iOS / Web / WearOS Support
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -350,6 +351,24 @@ entity. Without `PETTRACK_MQTT_HOST` the bridge stays completely off.
 | `PETTRACK_MQTT_DISCOVERY_PREFIX` | `homeassistant` | Home Assistant discovery prefix |
 | `PETTRACK_MQTT_BASE` | `pettrack` | State topic prefix |
 | `PETTRACK_MQTT_CAMERA_INTERVAL` | `30` | Seconds between camera snapshots (`0` = no camera entity) |
+
+### Alerts outside the LAN (ntfy)
+
+The in-app notifications only reach a phone on the same network. To hear
+about a barking dog or a zone crossing at work, forward the events to an
+[ntfy](https://ntfy.sh) topic and subscribe to it from the ntfy app, a
+browser, or a self-hosted ntfy — the server never needs to be exposed.
+
+1. Pick a topic name that is hard to guess (anything with the link can
+   subscribe), e.g. `https://ntfy.sh/berci-7f3k9x`
+2. In the app: **Settings → Alerts → "Alerts when I'm away"** — paste the
+   topic URL (and an access token if the topic is protected), save
+3. Tap **Send test notification** — if your phone rings, you are done
+
+Zone crossings, sound events and watchdog warnings (camera offline, low
+disk) are pushed in the app's language and with the pet's name; quiet
+hours are honoured the same way local alerts honour them. Everything is
+opt-in: without a topic URL nothing is ever sent.
 
 ### Development & testing
 

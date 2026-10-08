@@ -96,6 +96,15 @@
   "testNotification": "Testbenachrichtigung",
   "testNotifTitle": "Testbenachrichtigung",
   "testNotifBody": "Benachrichtigungen wurden erfolgreich eingerichtet!",
+  "alertsRemoteTitle": "Warnungen, wenn ich weg bin",
+  "alertsRemoteDesc": "Leitet Warnungen an ein ntfy-Thema weiter, damit sie überall ankommen — in der ntfy-App oder im Browser. Wähle einen schwer zu erratenden Themennamen; jeder mit dem Link kann abonnieren.",
+  "alertsRemoteUrlLabel": "ntfy-Themen-URL",
+  "alertsRemoteUrlHint": "https://ntfy.sh/dein-geheimes-thema",
+  "alertsRemoteTokenLabel": "Zugriffstoken (optional)",
+  "alertsRemoteTest": "Testbenachrichtigung senden",
+  "alertsRemoteTestSent": "Testbenachrichtigung gesendet — schau auf dein Handy.",
+  "alertsRemoteTestFailed": "Die Testbenachrichtigung konnte nicht gesendet werden. Prüfe die Themen-URL und den Server.",
+  "alertsRemoteUrlInvalid": "Das sieht nicht nach einer gültigen ntfy-URL aus.",
   "secondsAgo": "vor {seconds} Sek.",
   "@secondsAgo": {
     "placeholders": {

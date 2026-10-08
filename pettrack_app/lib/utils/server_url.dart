@@ -25,3 +25,16 @@ String normalizeServerUrl(String input) {
   }
   return target;
 }
+
+/// Whether [url] is something the ntfy bridge can publish to.
+///
+/// The server validates for real (see settings.set_ntfy_url); this is the
+/// same rule in the app so bad input is caught before a save round-trip.
+/// An empty string is not checked here — it simply means "remote alerts
+/// off" and never reaches this function.
+bool isValidNtfyUrl(String url) {
+  final uri = Uri.tryParse(url.trim());
+  return uri != null &&
+      (uri.scheme == 'http' || uri.scheme == 'https') &&
+      uri.host.isNotEmpty;
+}

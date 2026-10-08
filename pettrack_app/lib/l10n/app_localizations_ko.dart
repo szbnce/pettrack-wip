@@ -170,6 +170,34 @@ class AppLocalizationsKo extends AppLocalizations {
   String get testNotifBody => '알림이 성공적으로 설정되었습니다!';
 
   @override
+  String get alertsRemoteTitle => '부재 중 알림';
+
+  @override
+  String get alertsRemoteDesc =>
+      '알림을 ntfy 토픽으로 전달해 어디서든 받을 수 있게 합니다 (ntfy 앱이나 브라우저에서 수신). 추측하기 어려운 토픽 이름을 쓰세요. 링크를 아는 누구나 구독할 수 있습니다.';
+
+  @override
+  String get alertsRemoteUrlLabel => 'ntfy 토픽 URL';
+
+  @override
+  String get alertsRemoteUrlHint => 'https://ntfy.sh/비밀-토픽';
+
+  @override
+  String get alertsRemoteTokenLabel => '액세스 토큰 (선택)';
+
+  @override
+  String get alertsRemoteTest => '테스트 알림 보내기';
+
+  @override
+  String get alertsRemoteTestSent => '테스트 알림을 보냈습니다 — 휴대폰을 확인하세요.';
+
+  @override
+  String get alertsRemoteTestFailed => '테스트 알림을 보내지 못했습니다. 토픽 URL과 서버를 확인하세요.';
+
+  @override
+  String get alertsRemoteUrlInvalid => '올바른 ntfy URL이 아닌 것 같습니다.';
+
+  @override
   String secondsAgo(int seconds) {
     return '$seconds초 전';
   }

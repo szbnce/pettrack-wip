@@ -96,6 +96,15 @@
   "testNotification": "测试通知",
   "testNotifTitle": "测试通知",
   "testNotifBody": "通知设置成功！",
+  "alertsRemoteTitle": "外出时的警报",
+  "alertsRemoteDesc": "将警报转发到 ntfy 主题，让你在任何地方都能收到——ntfy 应用或任意浏览器。请取一个难以猜到的主题名；任何有链接的人都能订阅。",
+  "alertsRemoteUrlLabel": "ntfy 主题 URL",
+  "alertsRemoteUrlHint": "https://ntfy.sh/你的秘密主题",
+  "alertsRemoteTokenLabel": "访问令牌（可选）",
+  "alertsRemoteTest": "发送测试通知",
+  "alertsRemoteTestSent": "测试通知已发送 — 请查看手机。",
+  "alertsRemoteTestFailed": "无法发送测试通知。请检查主题 URL 和服务器。",
+  "alertsRemoteUrlInvalid": "这看起来不是有效的 ntfy URL。",
   "secondsAgo": "{seconds}秒前",
   "@secondsAgo": {
     "placeholders": {

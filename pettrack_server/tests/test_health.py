@@ -167,9 +167,11 @@ def test_settings_round_trip(client):
         )
         assert resp.status_code == 200
         assert resp.json()["replay_retention_days"] == 30
-        assert client.get("/api/settings", headers=headers).json() == {
-            "replay_retention_days": 30
-        }
+        after = client.get("/api/settings", headers=headers).json()
+        assert after["replay_retention_days"] == 30
+        # The remote-alert knobs ride along in the same document.
+        assert after["ntfy_url"] == app_settings.get_ntfy_url()
+        assert after["quiet_hours_from"] == app_settings.get_quiet_hours()[1]
     finally:
         client.post(
             "/api/settings",
