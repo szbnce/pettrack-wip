@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
+import '../../utils/reconnect.dart';
 
 class WearDashboardScreen extends StatefulWidget {
   final String serverIp;
@@ -31,6 +32,9 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
   Timer? _timer;
 
   WebSocketChannel? _clientChannel;
+  final _reconnect = ReconnectPacer();
+  Timer? _reconnectTimer;
+  int _socketGen = 0;
   ui.Image? _currentUiImage;
   DateTime? _lastFrameTime;
 
@@ -43,43 +47,66 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
   }
 
   void _connectWebSocket() {
+    if (!mounted) return;
+    final gen = ++_socketGen;
     try {
       final wsUrl =
           '${widget.serverIp.replaceAll("http", "ws")}/ws/client?token=${widget.token}';
       _clientChannel = WebSocketChannel.connect(Uri.parse(wsUrl));
-      _clientChannel!.stream.listen((data) {
-        if (!mounted) return;
+      _clientChannel!.ready
+          .then((_) {
+            if (gen == _socketGen) _reconnect.opened();
+          })
+          .catchError((Object _) {});
+      _clientChannel!.stream.listen(
+        (data) {
+          if (!mounted || gen != _socketGen) return;
 
-        // Frissítés 5 másodpercenként (throttling)
-        final now = DateTime.now();
-        if (_lastFrameTime != null &&
-            now.difference(_lastFrameTime!).inSeconds < 5) {
-          return;
-        }
+          // Frissítés 5 másodpercenként (throttling)
+          final now = DateTime.now();
+          if (_lastFrameTime != null &&
+              now.difference(_lastFrameTime!).inSeconds < 5) {
+            return;
+          }
 
-        try {
-          if (data is String) return;
-          final newBytes = data is Uint8List
-              ? data
-              : Uint8List.fromList(data as List<int>);
-          ui.decodeImageFromList(newBytes, (ui.Image img) {
-            if (mounted) {
-              setState(() {
-                _currentUiImage?.dispose();
-                _currentUiImage = img;
-                _lastFrameTime = now;
-              });
-            } else {
-              img.dispose();
-            }
-          });
-        } catch (_) {}
-      });
-    } catch (_) {}
+          try {
+            if (data is String) return;
+            final newBytes = data is Uint8List
+                ? data
+                : Uint8List.fromList(data as List<int>);
+            ui.decodeImageFromList(newBytes, (ui.Image img) {
+              if (mounted && gen == _socketGen) {
+                setState(() {
+                  _currentUiImage?.dispose();
+                  _currentUiImage = img;
+                  _lastFrameTime = now;
+                });
+              } else {
+                img.dispose();
+              }
+            });
+          } catch (_) {}
+        },
+        onDone: () => _scheduleReconnect(gen),
+        onError: (_) => _scheduleReconnect(gen),
+      );
+    } catch (_) {
+      _scheduleReconnect(gen);
+    }
+  }
+
+  /// A dropped feed must heal itself — the watch never gets a second chance
+  /// to be restarted by hand mid-walk.
+  void _scheduleReconnect(int gen) {
+    if (!mounted || gen != _socketGen) return;
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(_reconnect.next(), _connectWebSocket);
   }
 
   @override
   void dispose() {
+    _socketGen++; // stale listeners must not resurrect the socket
+    _reconnectTimer?.cancel();
     _timer?.cancel();
     _clientChannel?.sink.close();
     _currentUiImage?.dispose();

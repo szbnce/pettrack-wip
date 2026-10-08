@@ -18,6 +18,7 @@ import '../services/home_widget_service.dart';
 import '../utils/arming.dart';
 import '../utils/evidence.dart';
 import '../utils/feed_filter.dart';
+import '../utils/reconnect.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/highlight_card.dart';
 import 'insights_screen.dart';
@@ -45,6 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double _cameraAspectRatio = 16 / 9;
   String? _secretToken;
   WebSocketChannel? _clientChannel;
+  final _reconnect = ReconnectPacer();
   Timer? _timer;
   bool _isServerOnline = true;
   int _statusFailures = 0;
@@ -411,6 +413,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _connectClientSocket() async {
+    if (!mounted) return;
     if (widget.serverIp.contains('demo_ip')) {
       debugPrint("Demo mode: skipping WebSocket connection");
       return;
@@ -425,6 +428,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final wsUrl =
           '${widget.serverIp.replaceAll("http", "ws")}/ws/client?token=${widget.token}$monitorParam';
       _clientChannel = WebSocketChannel.connect(Uri.parse(wsUrl));
+      _clientChannel!.ready
+          .then((_) => _reconnect.opened())
+          .catchError((Object _) {});
       _clientChannel!.stream.listen(
         (data) {
           if (!mounted || _secretToken == null || gen != _socketGen) return;
@@ -457,18 +463,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         onDone: () {
           if (!mounted || gen != _socketGen) return;
           setState(() => _isServerOnline = false);
-          Future.delayed(const Duration(seconds: 3), _connectClientSocket);
+          Future.delayed(_reconnect.next(), _connectClientSocket);
         },
         onError: (e) {
           if (!mounted || gen != _socketGen) return;
           setState(() => _isServerOnline = false);
-          Future.delayed(const Duration(seconds: 3), _connectClientSocket);
+          Future.delayed(_reconnect.next(), _connectClientSocket);
         },
       );
     } catch (e) {
       if (!mounted || gen != _socketGen) return;
       setState(() => _isServerOnline = false);
-      Future.delayed(const Duration(seconds: 3), _connectClientSocket);
+      Future.delayed(_reconnect.next(), _connectClientSocket);
     }
   }
 
@@ -476,6 +482,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _selectMonitor(String? monitorId) {
     if (monitorId == _selectedMonitorId) return;
     _socketGen++; // kill the old listener before closing, so it cannot reconnect
+    _reconnect.reset(); // a stream the user just asked for starts fast
     setState(() {
       _selectedMonitorId = monitorId;
       _showCameraGrid = false;

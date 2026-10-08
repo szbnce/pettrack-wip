@@ -17,6 +17,7 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/theme/colors.dart';
 import 'package:pettrack_app/screens/monitor_setup_screen.dart';
 import 'package:pettrack_app/utils/night_vision.dart';
+import 'package:pettrack_app/utils/reconnect.dart';
 import 'package:pettrack_app/utils/sound_detect.dart';
 import 'package:pettrack_app/main.dart';
 import 'package:pettrack_app/screens/welcome_screen.dart';
@@ -41,6 +42,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
   late CameraController _controller;
 
   WebSocketChannel? _socket;
+  final _reconnect = ReconnectPacer();
   final AudioPlayer _callPlayer = AudioPlayer();
   final AudioRecorder _soundRecorder = AudioRecorder();
   StreamSubscription<Amplitude>? _soundSub;
@@ -119,7 +121,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
     if (!mounted) return;
     setState(() => _isReconnecting = true);
     _reconnectTimer?.cancel();
-    _reconnectTimer = Timer(const Duration(seconds: 5), () {
+    _reconnectTimer = Timer(_reconnect.next(), () {
       debugPrint("Attempting to reconnect...");
       _connectWebSocket();
     });
@@ -138,6 +140,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
       final wsUrl =
           '${_currentIp.replaceAll("http", "ws")}/ws?token=${AuthService.token}&client_id=$_currentClientId';
       _socket = WebSocketChannel.connect(Uri.parse(wsUrl));
+      _socket!.ready.then((_) => _reconnect.opened()).catchError((Object _) {});
 
       debugPrint("Connected successfully!");
       _reconnectTimer?.cancel();
