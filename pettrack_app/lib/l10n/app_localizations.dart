@@ -1883,6 +1883,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loud noise near the camera.'**
   String get soundDetectedBody;
+
+  /// No description provided for @demoZoneLitter.
+  ///
+  /// In en, this message translates to:
+  /// **'Litter box'**
+  String get demoZoneLitter;
+
+  /// No description provided for @demoZonePlayground.
+  ///
+  /// In en, this message translates to:
+  /// **'Playground'**
+  String get demoZonePlayground;
+
+  /// No description provided for @demoZoneFeeder.
+  ///
+  /// In en, this message translates to:
+  /// **'Feeder'**
+  String get demoZoneFeeder;
+
+  /// No description provided for @activityLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load recent activity'**
+  String get activityLoadError;
+
+  /// No description provided for @zonesLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load zones'**
+  String get zonesLoadError;
+
+  /// No description provided for @cameraStartFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not start the camera'**
+  String get cameraStartFailed;
+
+  /// No description provided for @videoLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not play this clip'**
+  String get videoLoadError;
+
+  /// No description provided for @medicalCachedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is unreachable — showing your saved copy'**
+  String get medicalCachedNotice;
+
+  /// No description provided for @tooltipPlayPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Play / pause'**
+  String get tooltipPlayPause;
+
+  /// No description provided for @settingsSaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save the change'**
+  String get settingsSaveError;
+
+  /// No description provided for @shareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not share'**
+  String get shareFailed;
 }
 
 class _AppLocalizationsDelegate

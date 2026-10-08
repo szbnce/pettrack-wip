@@ -985,4 +985,38 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get soundDetectedBody => 'Rumore forte vicino alla telecamera.';
+
+  @override
+  String get demoZoneLitter => 'Lettiera';
+
+  @override
+  String get demoZonePlayground => 'Area gioco';
+
+  @override
+  String get demoZoneFeeder => 'Mangiatoia';
+
+  @override
+  String get activityLoadError => 'Impossibile caricare le attività';
+
+  @override
+  String get zonesLoadError => 'Impossibile caricare le zone';
+
+  @override
+  String get cameraStartFailed => 'Impossibile avviare la fotocamera';
+
+  @override
+  String get videoLoadError => 'Impossibile riprodurre il video';
+
+  @override
+  String get medicalCachedNotice =>
+      'Server non raggiungibile — mostra la copia salvata';
+
+  @override
+  String get tooltipPlayPause => 'Riproduci / pausa';
+
+  @override
+  String get settingsSaveError => 'Impossibile salvare la modifica';
+
+  @override
+  String get shareFailed => 'Impossibile condividere';
 }

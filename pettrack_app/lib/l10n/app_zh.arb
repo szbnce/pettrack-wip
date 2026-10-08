@@ -429,5 +429,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "demoZoneLitter": "猫砂盆",
+  "demoZonePlayground": "游乐区",
+  "demoZoneFeeder": "喂食区",
+  "activityLoadError": "无法加载活动记录",
+  "zonesLoadError": "无法加载区域",
+  "cameraStartFailed": "无法启动相机",
+  "videoLoadError": "无法播放视频",
+  "medicalCachedNotice": "无法连接服务器 — 显示已保存的副本",
+  "tooltipPlayPause": "播放 / 暂停",
+  "settingsSaveError": "无法保存更改",
+  "shareFailed": "无法分享"
 }

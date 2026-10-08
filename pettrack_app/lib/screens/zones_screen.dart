@@ -7,6 +7,8 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/colors.dart';
 import '../services/auth_service.dart';
+import '../widgets/empty_state.dart';
+import '../widgets/skeleton_box.dart';
 
 class ZonesScreen extends StatefulWidget {
   final String serverIp;
@@ -28,6 +30,9 @@ class _ZonesScreenState extends State<ZonesScreen> {
   final _zoneNameController = TextEditingController();
   String _selectedZoneType = 'toilet';
   List<dynamic> _existingZones = [];
+  bool _loadingZones = true;
+  bool _zonesFailed = false;
+  int _frameFailures = 0;
   Size _canvasSize = Size(1.0, 1.0);
 
   @override
@@ -68,6 +73,8 @@ class _ZonesScreenState extends State<ZonesScreen> {
         final fetchedZones = data['zones'] as List<dynamic>;
 
         setState(() {
+          _loadingZones = false;
+          _zonesFailed = false;
           // Add a dummy 'type' for UI colors since the API only returns name and polygon
           _existingZones = fetchedZones.map((z) {
             return {
@@ -77,8 +84,20 @@ class _ZonesScreenState extends State<ZonesScreen> {
             };
           }).toList();
         });
+      } else if (mounted) {
+        setState(() {
+          _loadingZones = false;
+          _zonesFailed = true;
+        });
       }
-    } catch (_) {}
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _loadingZones = false;
+          _zonesFailed = true;
+        });
+      }
+    }
   }
 
   Future<void> _fetchFrame() async {
@@ -92,6 +111,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
           .timeout(const Duration(seconds: 2));
 
       if (response.statusCode == 200 && mounted) {
+        _frameFailures = 0;
         final newBytes = response.bodyBytes;
         ui.decodeImageFromList(newBytes, (ui.Image img) {
           if (mounted) {
@@ -106,8 +126,14 @@ class _ZonesScreenState extends State<ZonesScreen> {
             img.dispose();
           }
         });
+      } else {
+        _frameFailures++;
+        if (mounted) setState(() {});
       }
-    } catch (_) {}
+    } catch (_) {
+      _frameFailures++;
+      if (mounted) setState(() {});
+    }
   }
 
   /// Saves the given zone list on the server. Returns null on success,
@@ -227,7 +253,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
     );
   }
 
-  Widget _buildCameraArea() {
+  Widget _buildCameraArea(AppLocalizations l10n) {
     return AspectRatio(
       aspectRatio: _cameraAspectRatio,
       child: Container(
@@ -255,6 +281,15 @@ class _ZonesScreenState extends State<ZonesScreen> {
                 children: [
                   if (_currentUiImage != null)
                     RawImage(image: _currentUiImage!, fit: BoxFit.contain)
+                  else if (_frameFailures >= 3)
+                    EmptyState(
+                      icon: Icons.videocam_off_outlined,
+                      title: l10n.healthCameraOffline,
+                      textColor: Colors.white54,
+                      iconColor: Colors.white38,
+                      actionLabel: l10n.retry,
+                      onAction: _fetchFrame,
+                    )
                   else
                     const Center(
                       child: CircularProgressIndicator(
@@ -486,19 +521,22 @@ class _ZonesScreenState extends State<ZonesScreen> {
           ),
         ),
         const SizedBox(height: 16),
-        if (_existingZones.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(
-                l10n.noZonesYet,
-                style: const TextStyle(color: Colors.white54, fontSize: 14),
-              ),
-            ),
+        if (_loadingZones)
+          const Column(
+            children: [
+              SkeletonBox.tile(height: 72),
+              SizedBox(height: 12),
+              SkeletonBox.tile(height: 72),
+            ],
+          )
+        else if (_existingZones.isEmpty)
+          EmptyState(
+            icon: _zonesFailed ? Icons.cloud_off : Icons.map_outlined,
+            title: _zonesFailed ? l10n.zonesLoadError : l10n.noZonesYet,
+            textColor: Colors.white54,
+            iconColor: Colors.white38,
+            actionLabel: _zonesFailed ? l10n.retry : null,
+            onAction: _zonesFailed ? _fetchZones : null,
           )
         else
           ..._existingZones.map((zone) {
@@ -607,7 +645,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Left Column (Camera)
-                      Expanded(flex: 2, child: _buildCameraArea()),
+                      Expanded(flex: 2, child: _buildCameraArea(l10n)),
                       const SizedBox(width: 24),
                       // Right Column (Controls & List)
                       Expanded(
@@ -648,7 +686,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _buildCameraArea(),
+                    child: _buildCameraArea(l10n),
                   ),
                   const SizedBox(height: 24),
                   Padding(

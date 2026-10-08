@@ -3,6 +3,8 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../models/medical_data.dart';
 import '../theme/colors.dart';
 import '../services/notification_service.dart';
+import '../widgets/empty_state.dart';
+import '../widgets/skeleton_box.dart';
 import 'dart:math';
 
 class MedicalScreen extends StatefulWidget {
@@ -19,6 +21,8 @@ class _MedicalScreenState extends State<MedicalScreen>
     with SingleTickerProviderStateMixin {
   List<Medication> _medications = [];
   List<Vaccine> _vaccines = [];
+  bool _loading = true;
+  bool _fromCache = false;
   late TabController _tabController;
 
   final List<Color> _colorOptions = [
@@ -46,16 +50,45 @@ class _MedicalScreenState extends State<MedicalScreen>
   }
 
   Future<void> _loadData() async {
-    final meds = await MedicalDataManager.loadMedications(
-      widget.serverIp,
-    );
-    final vacs = await MedicalDataManager.loadVaccines(
-      widget.serverIp,
-    );
+    final meds = await MedicalDataManager.loadMedications(widget.serverIp);
+    final vacs = await MedicalDataManager.loadVaccines(widget.serverIp);
+    if (!mounted) return;
     setState(() {
-      _medications = meds;
-      _vaccines = vacs;
+      _medications = meds.items;
+      _vaccines = vacs.items;
+      _fromCache = meds.fromCache || vacs.fromCache;
+      _loading = false;
     });
+  }
+
+  /// Slim banner shown when the lists are the local copy, not the server's.
+  Widget _buildCachedBanner(AppLocalizations l10n) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.orange.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.cloud_off, size: 18, color: Colors.orange),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              l10n.medicalCachedNotice,
+              style: const TextStyle(fontSize: 12, color: Colors.orange),
+            ),
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            tooltip: l10n.tooltipRefresh,
+            icon: const Icon(Icons.refresh, size: 18, color: Colors.orange),
+            onPressed: _loadData,
+          ),
+        ],
+      ),
+    );
   }
 
   void _showAddMedicationDialog(AppLocalizations l10n) {
@@ -413,6 +446,7 @@ class _MedicalScreenState extends State<MedicalScreen>
             floatingActionButton: FloatingActionButton(
               heroTag: 'medical_fab',
               backgroundColor: AppColors.primary,
+              tooltip: l10n.tooltipAdd,
               onPressed: () {
                 if (_tabController.index == 0) {
                   _showAddMedicationDialog(l10n);
@@ -429,222 +463,326 @@ class _MedicalScreenState extends State<MedicalScreen>
   }
 
   Widget _buildMedicationsTab(AppLocalizations l10n) {
-    if (_medications.isEmpty) {
-      return Center(
-        child: Text(
-          l10n.noMedications,
-          style: const TextStyle(color: Colors.grey),
-        ),
+    final Widget content;
+    if (_loading) {
+      content = ListView(
+        padding: const EdgeInsets.all(16),
+        children: const [
+          SkeletonBox.tile(height: 108),
+          SizedBox(height: 16),
+          SkeletonBox.tile(height: 108),
+        ],
+      );
+    } else {
+      content = RefreshIndicator(
+        onRefresh: _loadData,
+        child: _medications.isEmpty
+            ? ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  const SizedBox(height: 48),
+                  EmptyState(
+                    icon: Icons.medical_services_outlined,
+                    title: _fromCache
+                        ? l10n.medicalCachedNotice
+                        : l10n.noMedications,
+                    actionLabel: _fromCache ? l10n.retry : l10n.addMedication,
+                    onAction: _fromCache
+                        ? _loadData
+                        : () => _showAddMedicationDialog(l10n),
+                  ),
+                ],
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                  bottom: 80,
+                ),
+                itemCount: _medications.length,
+                itemBuilder: (ctx, i) {
+                  final med = _medications[i];
+                  final cardColor = Color(med.colorValue);
+
+                  return GestureDetector(
+                    onLongPress: () => _deleteMedication(i),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: cardColor.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: cardColor.withValues(alpha: 0.3),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.outline.withValues(alpha: 0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: cardColor.withValues(alpha: 0.3),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.medical_services,
+                                  color: cardColor,
+                                  size: 20,
+                                ),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  med.alertEnabled
+                                      ? const Icon(
+                                          Icons.notifications_active,
+                                          color: Colors.orange,
+                                          size: 20,
+                                        )
+                                      : const Icon(
+                                          Icons.notifications_off,
+                                          color: Colors.grey,
+                                          size: 20,
+                                        ),
+                                  IconButton(
+                                    tooltip: l10n.tooltipDelete,
+                                    visualDensity: VisualDensity.compact,
+                                    icon: const Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.redAccent,
+                                      size: 20,
+                                    ),
+                                    onPressed: () => _deleteMedication(i),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Text(
+                                  med.name,
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
+                                ),
+                                if (med.dose.isNotEmpty)
+                                  Text(
+                                    " ${med.dose}",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.outline,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            l10n.everyXHours(med.intervalHours),
+                            style: const TextStyle(
+                              color: AppColors.outline,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
       );
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 80),
-      itemCount: _medications.length,
-      itemBuilder: (ctx, i) {
-        final med = _medications[i];
-        final cardColor = Color(med.colorValue);
-
-        return GestureDetector(
-          onLongPress: () async {
-            if (med.alertEnabled) {
-              await NotificationService().cancelNotification(
-                int.tryParse(med.id) ?? 0,
-              );
-            }
-            setState(() => _medications.removeAt(i));
-            await MedicalDataManager.saveMedications(
-              _medications,
-              widget.serverIp,
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: cardColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: cardColor.withValues(alpha: 0.3)),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.outline.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: cardColor.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        Icons.medical_services,
-                        color: cardColor,
-                        size: 20,
-                      ),
-                    ),
-                    med.alertEnabled
-                        ? const Icon(
-                            Icons.notifications_active,
-                            color: Colors.orange,
-                            size: 20,
-                          )
-                        : const Icon(
-                            Icons.notifications_off,
-                            color: Colors.grey,
-                            size: 20,
-                          ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        med.name,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      if (med.dose.isNotEmpty)
-                        Text(
-                          " ${med.dose}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColors.outline,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.everyXHours(med.intervalHours),
-                  style: const TextStyle(
-                    color: AppColors.outline,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+    return Column(
+      children: [
+        if (!_loading && _fromCache) _buildCachedBanner(l10n),
+        Expanded(child: content),
+      ],
     );
   }
 
+  Future<void> _deleteMedication(int index) async {
+    final med = _medications[index];
+    if (med.alertEnabled) {
+      await NotificationService().cancelNotification(int.tryParse(med.id) ?? 0);
+    }
+    setState(() => _medications.removeAt(index));
+    await MedicalDataManager.saveMedications(_medications, widget.serverIp);
+  }
+
+  Future<void> _deleteVaccine(int index) async {
+    setState(() => _vaccines.removeAt(index));
+    await MedicalDataManager.saveVaccines(_vaccines, widget.serverIp);
+  }
+
   Widget _buildVaccinesTab(AppLocalizations l10n) {
-    if (_vaccines.isEmpty) {
-      return Center(
-        child: Text(
-          l10n.noVaccines,
-          style: const TextStyle(color: Colors.grey),
-        ),
+    final Widget content;
+    if (_loading) {
+      content = ListView(
+        padding: const EdgeInsets.all(16),
+        children: const [
+          SkeletonBox.tile(height: 108),
+          SizedBox(height: 16),
+          SkeletonBox.tile(height: 108),
+        ],
+      );
+    } else {
+      content = RefreshIndicator(
+        onRefresh: _loadData,
+        child: _vaccines.isEmpty
+            ? ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  const SizedBox(height: 48),
+                  EmptyState(
+                    icon: Icons.vaccines_outlined,
+                    title: _fromCache
+                        ? l10n.medicalCachedNotice
+                        : l10n.noVaccines,
+                    actionLabel: _fromCache ? l10n.retry : l10n.addVaccine,
+                    onAction: _fromCache
+                        ? _loadData
+                        : () => _showAddVaccineDialog(l10n),
+                  ),
+                ],
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                  bottom: 80,
+                ),
+                itemCount: _vaccines.length,
+                itemBuilder: (ctx, i) {
+                  final vac = _vaccines[i];
+                  final cardColor = Color(vac.colorValue);
+
+                  return GestureDetector(
+                    onLongPress: () => _deleteVaccine(i),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: cardColor.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: cardColor.withValues(alpha: 0.3),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.outline.withValues(alpha: 0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: cardColor.withValues(alpha: 0.3),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.vaccines,
+                                  color: cardColor,
+                                  size: 20,
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: l10n.tooltipDelete,
+                                visualDensity: VisualDensity.compact,
+                                icon: const Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.redAccent,
+                                  size: 20,
+                                ),
+                                onPressed: () => _deleteVaccine(i),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Text(
+                                  vac.name,
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
+                                ),
+                                if (vac.dateGiven.isNotEmpty)
+                                  Text(
+                                    " ${vac.dateGiven}",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.outline,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "${l10n.nextDue}: ${vac.nextDue}",
+                            style: const TextStyle(
+                              color: AppColors.outline,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
       );
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 80),
-      itemCount: _vaccines.length,
-      itemBuilder: (ctx, i) {
-        final vac = _vaccines[i];
-        final cardColor = Color(vac.colorValue);
-
-        return GestureDetector(
-          onLongPress: () async {
-            setState(() => _vaccines.removeAt(i));
-            await MedicalDataManager.saveVaccines(
-              _vaccines,
-              widget.serverIp,
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.only(bottom: 16),
-            decoration: BoxDecoration(
-              color: cardColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: cardColor.withValues(alpha: 0.3)),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.outline.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: cardColor.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(Icons.vaccines, color: cardColor, size: 20),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        vac.name,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      if (vac.dateGiven.isNotEmpty)
-                        Text(
-                          " ${vac.dateGiven}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColors.outline,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "${l10n.nextDue}: ${vac.nextDue}",
-                  style: const TextStyle(
-                    color: AppColors.outline,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+    return Column(
+      children: [
+        if (!_loading && _fromCache) _buildCachedBanner(l10n),
+        Expanded(child: content),
+      ],
     );
   }
 }

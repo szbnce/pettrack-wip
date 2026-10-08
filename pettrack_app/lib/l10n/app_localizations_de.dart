@@ -985,4 +985,39 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get soundDetectedBody => 'Lautes Geräusch in der Nähe der Kamera.';
+
+  @override
+  String get demoZoneLitter => 'Katzentoilette';
+
+  @override
+  String get demoZonePlayground => 'Spielplatz';
+
+  @override
+  String get demoZoneFeeder => 'Futternapf';
+
+  @override
+  String get activityLoadError => 'Aktivitäten konnten nicht geladen werden';
+
+  @override
+  String get zonesLoadError => 'Zonen konnten nicht geladen werden';
+
+  @override
+  String get cameraStartFailed => 'Die Kamera konnte nicht gestartet werden';
+
+  @override
+  String get videoLoadError => 'Das Video konnte nicht abgespielt werden';
+
+  @override
+  String get medicalCachedNotice =>
+      'Server nicht erreichbar — gespeicherte Kopie wird angezeigt';
+
+  @override
+  String get tooltipPlayPause => 'Wiedergabe / Pause';
+
+  @override
+  String get settingsSaveError =>
+      'Die Änderung konnte nicht gespeichert werden';
+
+  @override
+  String get shareFailed => 'Teilen nicht möglich';
 }

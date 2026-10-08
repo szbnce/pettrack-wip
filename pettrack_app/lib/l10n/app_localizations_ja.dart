@@ -968,4 +968,37 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get soundDetectedBody => 'カメラの近くで大きな音がしました。';
+
+  @override
+  String get demoZoneLitter => '猫のトイレ';
+
+  @override
+  String get demoZonePlayground => '遊び場';
+
+  @override
+  String get demoZoneFeeder => '給餌器';
+
+  @override
+  String get activityLoadError => 'アクティビティを読み込めませんでした';
+
+  @override
+  String get zonesLoadError => 'ゾーンを読み込めませんでした';
+
+  @override
+  String get cameraStartFailed => 'カメラを起動できませんでした';
+
+  @override
+  String get videoLoadError => '動画を再生できませんでした';
+
+  @override
+  String get medicalCachedNotice => 'サーバーに接続できません — 保存されたコピーを表示中';
+
+  @override
+  String get tooltipPlayPause => '再生 / 一時停止';
+
+  @override
+  String get settingsSaveError => '変更を保存できませんでした';
+
+  @override
+  String get shareFailed => '共有できませんでした';
 }

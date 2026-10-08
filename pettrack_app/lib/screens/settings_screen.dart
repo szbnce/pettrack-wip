@@ -242,6 +242,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
     }
 
+    var petSaveFailed = false;
     try {
       await http
           .post(
@@ -258,10 +259,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           )
           .timeout(const Duration(seconds: 3));
     } catch (e) {
-      if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
-        debugPrint(l10n.decodingError(e.toString()));
-      }
+      // The local save below still happens — just don't claim success.
+      petSaveFailed = true;
+      debugPrint('pet profile save failed: $e');
     }
 
     // Remote alerts (ntfy) and the quiet-hours window the bridge honours.
@@ -342,8 +342,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.saveSuccess),
-            backgroundColor: AppColors.primary,
+            content: Text(
+              petSaveFailed ? l10n.setupErrSave : l10n.saveSuccess,
+            ),
+            backgroundColor: petSaveFailed
+                ? Theme.of(context).colorScheme.error
+                : AppColors.primary,
           ),
         );
       }
@@ -819,7 +823,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         final data = jsonDecode(response.body);
         version = data['version'] as String?;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('version check failed: $e');
+    }
     if (!mounted) return;
     setState(() {
       _serverVersion = version;
@@ -896,9 +902,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
       } else {
         setState(() => _retentionDays = previous);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.settingsSaveError)),
+        );
       }
     } catch (_) {
-      if (mounted) setState(() => _retentionDays = previous);
+      if (!mounted) return;
+      setState(() => _retentionDays = previous);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.settingsSaveError)),
+      );
     }
   }
 
@@ -1269,10 +1282,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildSaveButton(AppLocalizations l10n) {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton.icon(
+      child: ElevatedButton(
         onPressed: _save,
-        icon: const Text(''), // Spacer
-        label: Row(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -1282,10 +1298,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(width: 8),
             const Icon(Icons.check, size: 20),
           ],
-        ),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
     );

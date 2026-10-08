@@ -976,4 +976,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get soundDetectedBody => 'Loud noise near the camera.';
+
+  @override
+  String get demoZoneLitter => 'Litter box';
+
+  @override
+  String get demoZonePlayground => 'Playground';
+
+  @override
+  String get demoZoneFeeder => 'Feeder';
+
+  @override
+  String get activityLoadError => 'Could not load recent activity';
+
+  @override
+  String get zonesLoadError => 'Could not load zones';
+
+  @override
+  String get cameraStartFailed => 'Could not start the camera';
+
+  @override
+  String get videoLoadError => 'Could not play this clip';
+
+  @override
+  String get medicalCachedNotice =>
+      'The server is unreachable — showing your saved copy';
+
+  @override
+  String get tooltipPlayPause => 'Play / pause';
+
+  @override
+  String get settingsSaveError => 'Could not save the change';
+
+  @override
+  String get shareFailed => 'Could not share';
 }

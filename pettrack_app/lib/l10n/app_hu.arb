@@ -329,5 +329,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "demoZoneLitter": "Alomtálca",
+  "demoZonePlayground": "Játszótér",
+  "demoZoneFeeder": "Etető",
+  "activityLoadError": "A tevékenységek betöltése nem sikerült",
+  "zonesLoadError": "A zónák betöltése nem sikerült",
+  "cameraStartFailed": "A kamera indítása nem sikerült",
+  "videoLoadError": "A videó lejátszása nem sikerült",
+  "medicalCachedNotice": "A szerver nem elérhető — a mentett másolat látható",
+  "tooltipPlayPause": "Lejátszás / szünet",
+  "settingsSaveError": "A módosítás mentése nem sikerült",
+  "shareFailed": "A megosztás nem sikerült"
 }

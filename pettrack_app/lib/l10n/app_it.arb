@@ -429,5 +429,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "demoZoneLitter": "Lettiera",
+  "demoZonePlayground": "Area gioco",
+  "demoZoneFeeder": "Mangiatoia",
+  "activityLoadError": "Impossibile caricare le attività",
+  "zonesLoadError": "Impossibile caricare le zone",
+  "cameraStartFailed": "Impossibile avviare la fotocamera",
+  "videoLoadError": "Impossibile riprodurre il video",
+  "medicalCachedNotice": "Server non raggiungibile — mostra la copia salvata",
+  "tooltipPlayPause": "Riproduci / pausa",
+  "settingsSaveError": "Impossibile salvare la modifica",
+  "shareFailed": "Impossibile condividere"
 }

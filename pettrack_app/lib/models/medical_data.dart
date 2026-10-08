@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../services/auth_service.dart';
@@ -71,11 +72,24 @@ class Vaccine {
   );
 }
 
+/// A load result that remembers where the items came from.
+///
+/// Screens use [fromCache] to say "the server is unreachable — this is your
+/// saved copy" instead of quietly pretending the fetch worked.
+class MedicalLoadResult<T> {
+  final List<T> items;
+  final bool fromCache;
+
+  const MedicalLoadResult(this.items, {this.fromCache = false});
+}
+
 class MedicalDataManager {
   static const String _medKey = 'saved_medications';
   static const String _vacKey = 'saved_vaccines';
 
-  static Future<List<Medication>> loadMedications(String serverIp) async {
+  static Future<MedicalLoadResult<Medication>> loadMedications(
+    String serverIp,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
 
     try {
@@ -93,15 +107,20 @@ class MedicalDataManager {
             _medKey,
             jsonEncode(meds.map((e) => e.toJson()).toList()),
           );
-          return meds;
+          return MedicalLoadResult(meds);
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('medical: falling back to the cached copy: $e');
+    }
 
     final jsonStr = prefs.getString(_medKey);
-    if (jsonStr == null) return [];
+    if (jsonStr == null) return const MedicalLoadResult([], fromCache: true);
     final List<dynamic> list = jsonDecode(jsonStr);
-    return list.map((e) => Medication.fromJson(e)).toList();
+    return MedicalLoadResult(
+      list.map((e) => Medication.fromJson(e)).toList(),
+      fromCache: true,
+    );
   }
 
   static Future<void> saveMedications(
@@ -114,7 +133,9 @@ class MedicalDataManager {
     await _syncToServer(serverIp);
   }
 
-  static Future<List<Vaccine>> loadVaccines(String serverIp) async {
+  static Future<MedicalLoadResult<Vaccine>> loadVaccines(
+    String serverIp,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
 
     try {
@@ -131,15 +152,20 @@ class MedicalDataManager {
             _vacKey,
             jsonEncode(vacs.map((e) => e.toJson()).toList()),
           );
-          return vacs;
+          return MedicalLoadResult(vacs);
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('medical: falling back to the cached copy: $e');
+    }
 
     final jsonStr = prefs.getString(_vacKey);
-    if (jsonStr == null) return [];
+    if (jsonStr == null) return const MedicalLoadResult([], fromCache: true);
     final List<dynamic> list = jsonDecode(jsonStr);
-    return list.map((e) => Vaccine.fromJson(e)).toList();
+    return MedicalLoadResult(
+      list.map((e) => Vaccine.fromJson(e)).toList(),
+      fromCache: true,
+    );
   }
 
   static Future<void> saveVaccines(List<Vaccine> vacs, String serverIp) async {
@@ -166,6 +192,8 @@ class MedicalDataManager {
           'vaccines': jsonDecode(vacStr),
         }),
       );
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('medical: sync to server failed: $e');
+    }
   }
 }

@@ -962,4 +962,37 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get soundDetectedBody => '摄像头附近有大声响。';
+
+  @override
+  String get demoZoneLitter => '猫砂盆';
+
+  @override
+  String get demoZonePlayground => '游乐区';
+
+  @override
+  String get demoZoneFeeder => '喂食区';
+
+  @override
+  String get activityLoadError => '无法加载活动记录';
+
+  @override
+  String get zonesLoadError => '无法加载区域';
+
+  @override
+  String get cameraStartFailed => '无法启动相机';
+
+  @override
+  String get videoLoadError => '无法播放视频';
+
+  @override
+  String get medicalCachedNotice => '无法连接服务器 — 显示已保存的副本';
+
+  @override
+  String get tooltipPlayPause => '播放 / 暂停';
+
+  @override
+  String get settingsSaveError => '无法保存更改';
+
+  @override
+  String get shareFailed => '无法分享';
 }

@@ -47,6 +47,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
   StreamSubscription<Uint8List>? _pcmSub;
   DateTime? _lastSoundReport;
   bool _isInitialized = false;
+  bool _cameraFailed = false;
   bool _isStreaming = false;
   bool _isSleeping = false;
   Timer? _streamTimer;
@@ -97,7 +98,21 @@ class _MonitorScreenState extends State<MonitorScreen> {
       setState(() => _isInitialized = true);
     } catch (e) {
       debugPrint('Camera initialization failed: $e');
+      if (mounted) setState(() => _cameraFailed = true);
     }
+  }
+
+  /// The camera can fail transiently (permission race, another app holding
+  /// it) — offer a retry instead of spinning forever.
+  Future<void> _retryCamera() async {
+    setState(() {
+      _cameraFailed = false;
+      _isInitialized = false;
+    });
+    try {
+      await _controller.dispose();
+    } catch (_) {}
+    await _initCamera();
   }
 
   void _scheduleReconnect() {
@@ -368,7 +383,9 @@ class _MonitorScreenState extends State<MonitorScreen> {
       final image = await boundary.toImage(pixelRatio: 1.0);
       final width = image.width;
       final height = image.height;
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      final byteData = await image.toByteData(
+        format: ui.ImageByteFormat.rawRgba,
+      );
 
       image.dispose(); // Prevent OOM memory leak
 
@@ -643,6 +660,22 @@ class _MonitorScreenState extends State<MonitorScreen> {
                   ),
                 ),
               ],
+            )
+          : _cameraFailed
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.no_photography, size: 48),
+                  const SizedBox(height: 12),
+                  Text(l10n.cameraStartFailed),
+                  const SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: _retryCamera,
+                    child: Text(l10n.retry),
+                  ),
+                ],
+              ),
             )
           : const Center(child: CircularProgressIndicator()),
     );

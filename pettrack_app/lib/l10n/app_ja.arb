@@ -429,5 +429,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "demoZoneLitter": "猫のトイレ",
+  "demoZonePlayground": "遊び場",
+  "demoZoneFeeder": "給餌器",
+  "activityLoadError": "アクティビティを読み込めませんでした",
+  "zonesLoadError": "ゾーンを読み込めませんでした",
+  "cameraStartFailed": "カメラを起動できませんでした",
+  "videoLoadError": "動画を再生できませんでした",
+  "medicalCachedNotice": "サーバーに接続できません — 保存されたコピーを表示中",
+  "tooltipPlayPause": "再生 / 一時停止",
+  "settingsSaveError": "変更を保存できませんでした",
+  "shareFailed": "共有できませんでした"
 }

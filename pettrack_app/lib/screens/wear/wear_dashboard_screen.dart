@@ -27,8 +27,9 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
   String _batteryLevel = '--';
   String _currentZone = '--';
   bool _isLoading = true;
+  bool _failed = false;
   Timer? _timer;
-  
+
   WebSocketChannel? _clientChannel;
   ui.Image? _currentUiImage;
   DateTime? _lastFrameTime;
@@ -43,20 +44,24 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
 
   void _connectWebSocket() {
     try {
-      final wsUrl = '${widget.serverIp.replaceAll("http", "ws")}/ws/client?token=${widget.token}';
+      final wsUrl =
+          '${widget.serverIp.replaceAll("http", "ws")}/ws/client?token=${widget.token}';
       _clientChannel = WebSocketChannel.connect(Uri.parse(wsUrl));
       _clientChannel!.stream.listen((data) {
         if (!mounted) return;
-        
+
         // Frissítés 5 másodpercenként (throttling)
         final now = DateTime.now();
-        if (_lastFrameTime != null && now.difference(_lastFrameTime!).inSeconds < 5) {
-            return;
+        if (_lastFrameTime != null &&
+            now.difference(_lastFrameTime!).inSeconds < 5) {
+          return;
         }
 
         try {
           if (data is String) return;
-          final newBytes = data is Uint8List ? data : Uint8List.fromList(data as List<int>);
+          final newBytes = data is Uint8List
+              ? data
+              : Uint8List.fromList(data as List<int>);
           ui.decodeImageFromList(newBytes, (ui.Image img) {
             if (mounted) {
               setState(() {
@@ -129,8 +134,9 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
           }
         }
       }
+      if (mounted) setState(() => _failed = false);
     } catch (_) {
-      // ignore
+      if (mounted) setState(() => _failed = true);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -159,6 +165,17 @@ class _WearDashboardScreenState extends State<WearDashboardScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
+                  if (_failed) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      l10n.offlineStatus,
+                      style: const TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 16),
 
                   // Live View

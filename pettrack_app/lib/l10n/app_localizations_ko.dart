@@ -965,4 +965,37 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get soundDetectedBody => '카메라 근처에서 큰 소리가 났습니다.';
+
+  @override
+  String get demoZoneLitter => '고양이 화장실';
+
+  @override
+  String get demoZonePlayground => '놀이터';
+
+  @override
+  String get demoZoneFeeder => '급식기';
+
+  @override
+  String get activityLoadError => '활동을 불러올 수 없습니다';
+
+  @override
+  String get zonesLoadError => '구역을 불러올 수 없습니다';
+
+  @override
+  String get cameraStartFailed => '카메라를 시작할 수 없습니다';
+
+  @override
+  String get videoLoadError => '영상을 재생할 수 없습니다';
+
+  @override
+  String get medicalCachedNotice => '서버에 연결할 수 없음 — 저장된 사본 표시 중';
+
+  @override
+  String get tooltipPlayPause => '재생 / 일시정지';
+
+  @override
+  String get settingsSaveError => '변경 사항을 저장할 수 없습니다';
+
+  @override
+  String get shareFailed => '공유할 수 없습니다';
 }

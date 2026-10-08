@@ -15,6 +15,7 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../services/notification_service.dart';
 import '../services/home_widget_service.dart';
+import '../widgets/empty_state.dart';
 import '../widgets/highlight_card.dart';
 import 'insights_screen.dart';
 import '../services/auth_service.dart';
@@ -44,6 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _isServerOnline = true;
   int _statusFailures = 0;
   List<dynamic> _activities = [];
+  bool _activityError = false;
   final Map<String, DateTime> _lastZoneAlerts = {};
   final Map<String, int> _zoneAlertIds = {};
   int _nextAlertId = 1000;
@@ -158,11 +160,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (widget.serverIp.contains('demo_ip')) {
       _isServerOnline = true;
+      // Demo data needs the localized zone names — fill it after the first
+      // frame, when context.l10n is available.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _loadDemoData());
+    } else {
+      _fetchZones();
+      _startPolling();
+      _connectClientSocket();
+    }
+  }
+
+  /// Demo mode's toy feed — zone names come from l10n like everywhere else.
+  void _loadDemoData() {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    setState(() {
       _activities = [
         {
           "event_type": "zone_enter",
           "timestamp": DateTime.now().millisecondsSinceEpoch ~/ 1000,
-          "zone_name": "Alomtálca",
+          "zone_name": l10n.demoZoneLitter,
         },
         {
           "event_type": "zone_left",
@@ -171,7 +188,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   .subtract(const Duration(minutes: 5))
                   .millisecondsSinceEpoch ~/
               1000,
-          "zone_name": "Játszótér",
+          "zone_name": l10n.demoZonePlayground,
         },
         {
           "event_type": "zone_enter",
@@ -180,19 +197,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   .subtract(const Duration(minutes: 15))
                   .millisecondsSinceEpoch ~/
               1000,
-          "zone_name": "Etető",
+          "zone_name": l10n.demoZoneFeeder,
         },
       ];
       _zonesCache = [
-        {"name": "Alomtálca", "type": "toilet"},
-        {"name": "Játszótér", "type": "play"},
-        {"name": "Etető", "type": "food"},
+        {"name": l10n.demoZoneLitter, "type": "toilet"},
+        {"name": l10n.demoZonePlayground, "type": "play"},
+        {"name": l10n.demoZoneFeeder, "type": "food"},
       ];
-    } else {
-      _fetchZones();
-      _startPolling();
-      _connectClientSocket();
-    }
+    });
   }
 
   void _connectClientSocket() async {
@@ -366,7 +379,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
         });
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('pet profile fetch failed: $e');
+    }
   }
 
   Future<void> _fetchZones() async {
@@ -384,7 +399,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _zonesCache = data['zones'] as List<dynamic>;
         });
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('zones fetch failed: $e');
+    }
   }
 
   void _startPolling() {
@@ -421,6 +438,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           .timeout(const Duration(seconds: 2));
 
       if (response.statusCode == 200 && mounted) {
+        if (_activityError) setState(() => _activityError = false);
         final data = jsonDecode(response.body);
         if (data['events'] == null) return;
         final newEvents = data['events'] as List<dynamic>;
@@ -483,8 +501,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
           setState(() => _activities = newEvents);
         }
+      } else if (mounted && !_activityError) {
+        setState(() => _activityError = true);
       }
-    } catch (_) {}
+    } catch (_) {
+      if (mounted && !_activityError) {
+        setState(() => _activityError = true);
+      }
+    }
   }
 
   Future<void> _fetchStatus() async {
@@ -1299,23 +1323,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: 16),
           if (_activities.isEmpty)
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.1),
-                  style: BorderStyle
-                      .none, // We don't have dashed border natively easily, using solid
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  l10n.noRecentEvents,
-                  style: const TextStyle(color: Colors.white54, fontSize: 14),
-                ),
-              ),
+            EmptyState(
+              icon: _activityError ? Icons.cloud_off : Icons.history,
+              title: _activityError
+                  ? l10n.activityLoadError
+                  : l10n.noRecentEvents,
+              textColor: Colors.white54,
+              iconColor: Colors.white38,
+              actionLabel: _activityError ? l10n.retry : null,
+              onAction: _activityError ? _fetchActivity : null,
             )
           else
             ListView.separated(
@@ -1442,12 +1458,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ).create();
       await file.writeAsBytes(buffer);
 
-      // ignore: deprecated_member_use
-      await Share.shareXFiles([
-        XFile(file.path),
-      ], text: l10n.shareInviteText);
+      await SharePlus.instance.share(
+        ShareParams(files: [XFile(file.path)], text: l10n.shareInviteText),
+      );
     } catch (e) {
       debugPrint('Snapshot error: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.shareFailed)));
     }
   }
 
@@ -1605,14 +1624,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: 16),
 
                 if (_activities.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Center(
-                      child: Text(
-                        l10n.noRecentEvents,
-                        style: const TextStyle(color: AppColors.outline),
-                      ),
-                    ),
+                  EmptyState(
+                    icon: _activityError ? Icons.cloud_off : Icons.history,
+                    title: _activityError
+                        ? l10n.activityLoadError
+                        : l10n.noRecentEvents,
+                    actionLabel: _activityError ? l10n.retry : null,
+                    onAction: _activityError ? _fetchActivity : null,
                   )
                 else
                   ListView.builder(

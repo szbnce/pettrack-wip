@@ -429,5 +429,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "demoZoneLitter": "Katzentoilette",
+  "demoZonePlayground": "Spielplatz",
+  "demoZoneFeeder": "Futternapf",
+  "activityLoadError": "Aktivitäten konnten nicht geladen werden",
+  "zonesLoadError": "Zonen konnten nicht geladen werden",
+  "cameraStartFailed": "Die Kamera konnte nicht gestartet werden",
+  "videoLoadError": "Das Video konnte nicht abgespielt werden",
+  "medicalCachedNotice": "Server nicht erreichbar — gespeicherte Kopie wird angezeigt",
+  "tooltipPlayPause": "Wiedergabe / Pause",
+  "settingsSaveError": "Die Änderung konnte nicht gespeichert werden",
+  "shareFailed": "Teilen nicht möglich"
 }

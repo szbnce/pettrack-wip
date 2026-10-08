@@ -980,4 +980,38 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get soundDetectedBody => 'Hangos zaj a kamera közelében.';
+
+  @override
+  String get demoZoneLitter => 'Alomtálca';
+
+  @override
+  String get demoZonePlayground => 'Játszótér';
+
+  @override
+  String get demoZoneFeeder => 'Etető';
+
+  @override
+  String get activityLoadError => 'A tevékenységek betöltése nem sikerült';
+
+  @override
+  String get zonesLoadError => 'A zónák betöltése nem sikerült';
+
+  @override
+  String get cameraStartFailed => 'A kamera indítása nem sikerült';
+
+  @override
+  String get videoLoadError => 'A videó lejátszása nem sikerült';
+
+  @override
+  String get medicalCachedNotice =>
+      'A szerver nem elérhető — a mentett másolat látható';
+
+  @override
+  String get tooltipPlayPause => 'Lejátszás / szünet';
+
+  @override
+  String get settingsSaveError => 'A módosítás mentése nem sikerült';
+
+  @override
+  String get shareFailed => 'A megosztás nem sikerült';
 }

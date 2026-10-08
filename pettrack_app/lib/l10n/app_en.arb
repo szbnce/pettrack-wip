@@ -522,5 +522,16 @@
         "type": "String"
       }
     }
-  }
+  },
+  "demoZoneLitter": "Litter box",
+  "demoZonePlayground": "Playground",
+  "demoZoneFeeder": "Feeder",
+  "activityLoadError": "Could not load recent activity",
+  "zonesLoadError": "Could not load zones",
+  "cameraStartFailed": "Could not start the camera",
+  "videoLoadError": "Could not play this clip",
+  "medicalCachedNotice": "The server is unreachable — showing your saved copy",
+  "tooltipPlayPause": "Play / pause",
+  "settingsSaveError": "Could not save the change",
+  "shareFailed": "Could not share"
 }

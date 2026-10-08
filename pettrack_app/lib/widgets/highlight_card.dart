@@ -72,8 +72,7 @@ class _HighlightCardState extends State<HighlightCard> {
     return Map<String, dynamic>.from(jsonDecode(response.body) as Map);
   }
 
-  String get _videoUrl =>
-      '${widget.serverIp}${_highlight!['url'] as String}';
+  String get _videoUrl => '${widget.serverIp}${_highlight!['url'] as String}';
 
   Future<void> _play() async {
     final l10n = AppLocalizations.of(context)!;
@@ -129,14 +128,12 @@ class _HighlightCardState extends State<HighlightCard> {
         '${dir.path}/pettrack_recap_${_highlight!['date']}.mp4',
       );
       await file.writeAsBytes(response.bodyBytes, flush: true);
-      await SharePlus.instance.share(
-        ShareParams(files: [XFile(file.path)]),
-      );
-    } catch (e) {
+      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
+    } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.decodingError(e.toString()))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.shareFailed)));
     }
   }
 
