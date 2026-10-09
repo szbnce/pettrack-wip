@@ -120,6 +120,15 @@ class AuthService {
     await p.remove(monitorAccessKey);
   }
 
+  /// The access token from a login response body. Current servers answer
+  /// with "token"; the oldest ones used "secret" for the same value —
+  /// accept either so an old server keeps every screen working.
+  static String? tokenFromLoginBody(dynamic body) {
+    if (body is! Map) return null;
+    final token = body['token'] ?? body['secret'];
+    return token is String && token.isNotEmpty ? token : null;
+  }
+
   /// Log in with the pairing secret — the recovery path for a phone that
   /// still knows its server and secret but has no live session (expired,
   /// revoked, or cleared). True when a fresh session was stored.
@@ -138,8 +147,8 @@ class AuthService {
           .timeout(const Duration(seconds: 4));
       if (response.statusCode != 200) return false;
       final body = jsonDecode(response.body);
-      final token = body is Map ? body['token'] : null;
-      if (token is! String || token.isEmpty) return false;
+      final token = tokenFromLoginBody(body);
+      if (token == null) return false;
       final refresh = body['refresh_token'];
       final expires = body['expires_in'];
       await saveSession(

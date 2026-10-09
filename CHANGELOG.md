@@ -24,6 +24,10 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- Backwards compatibility is a promise now (docs/COMPATIBILITY.md): the
+  2.1.0+3 APK upgrades older installs in place keeping login and settings,
+  new servers keep answering the old clients' token shapes, and an old
+  server simply lacks the new knobs instead of breaking the app
 - Live stream latency stays structural, not lucky: frames fan out per client
   (one slow phone no longer delays the others) and skip to the newest frame
   instead of replaying a stale backlog; vision analysis rides beside the

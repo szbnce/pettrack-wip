@@ -67,4 +67,26 @@ void main() {
       expect(prefs.getString('token_role'), isNull);
     });
   });
+
+  group('tokenFromLoginBody', () {
+    test('current servers answer with "token"', () {
+      expect(AuthService.tokenFromLoginBody({'token': 'abc'}), 'abc');
+    });
+
+    test('the oldest servers called the same value "secret"', () {
+      expect(AuthService.tokenFromLoginBody({'secret': 'legacy'}), 'legacy');
+      // Both present (the current shape): "token" wins.
+      expect(
+        AuthService.tokenFromLoginBody({'token': 'new', 'secret': 'old'}),
+        'new',
+      );
+    });
+
+    test('junk in, no token out', () {
+      expect(AuthService.tokenFromLoginBody(null), isNull);
+      expect(AuthService.tokenFromLoginBody('not a map'), isNull);
+      expect(AuthService.tokenFromLoginBody({}), isNull);
+      expect(AuthService.tokenFromLoginBody({'token': ''}), isNull);
+    });
+  });
 }

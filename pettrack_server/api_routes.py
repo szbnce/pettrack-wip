@@ -48,7 +48,7 @@ from auth import (
 
 # Reported by /api/version so the apps can show "Server vX" and warn when the
 # two sides are out of step. Keep in sync with the app's kAppVersion.
-SERVER_VERSION = "2.0.0"
+SERVER_VERSION = "2.1.0"
 
 async def verify_token(request: Request, token: str = Query(None), x_api_token: str = Header(None)):
     req_token = token or x_api_token
