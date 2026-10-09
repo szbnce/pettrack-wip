@@ -863,6 +863,35 @@ class AppLocalizationsHu extends AppLocalizations {
   String get quietHoursTo => 'Eddig';
 
   @override
+  String get snoozeTitle => 'Riasztások némítása';
+
+  @override
+  String get snoozeChip => 'Némítás';
+
+  @override
+  String get snoozeChipActive => 'Némítva';
+
+  @override
+  String get snooze30m => '30 percre';
+
+  @override
+  String get snooze1h => 'Egy órára';
+
+  @override
+  String get snoozeTonight => '23:00-ig';
+
+  @override
+  String get snoozeEnd => 'Némítás vége';
+
+  @override
+  String snoozeActive(String time) {
+    return 'A riasztások némítva ezen a telefonon eddig: $time';
+  }
+
+  @override
+  String get snoozeEnded => 'A riasztások újra szólnak ezen a telefonon.';
+
+  @override
   String get batteryLowTitle => 'Alacsony akkumulátor';
 
   @override

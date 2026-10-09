@@ -1662,6 +1662,60 @@ abstract class AppLocalizations {
   /// **'Until'**
   String get quietHoursTo;
 
+  /// No description provided for @snoozeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze alerts'**
+  String get snoozeTitle;
+
+  /// No description provided for @snoozeChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze'**
+  String get snoozeChip;
+
+  /// No description provided for @snoozeChipActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed'**
+  String get snoozeChipActive;
+
+  /// No description provided for @snooze30m.
+  ///
+  /// In en, this message translates to:
+  /// **'For 30 minutes'**
+  String get snooze30m;
+
+  /// No description provided for @snooze1h.
+  ///
+  /// In en, this message translates to:
+  /// **'For an hour'**
+  String get snooze1h;
+
+  /// No description provided for @snoozeTonight.
+  ///
+  /// In en, this message translates to:
+  /// **'Until 23:00'**
+  String get snoozeTonight;
+
+  /// No description provided for @snoozeEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End snooze'**
+  String get snoozeEnd;
+
+  /// No description provided for @snoozeActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts snoozed on this phone until {time}'**
+  String snoozeActive(String time);
+
+  /// No description provided for @snoozeEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts are back on this phone.'**
+  String get snoozeEnded;
+
   /// No description provided for @batteryLowTitle.
   ///
   /// In en, this message translates to:

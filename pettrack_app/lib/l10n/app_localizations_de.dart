@@ -866,6 +866,35 @@ class AppLocalizationsDe extends AppLocalizations {
   String get quietHoursTo => 'Bis';
 
   @override
+  String get snoozeTitle => 'Alarme stummschalten';
+
+  @override
+  String get snoozeChip => 'Stumm';
+
+  @override
+  String get snoozeChipActive => 'Stumm geschaltet';
+
+  @override
+  String get snooze30m => 'Für 30 Minuten';
+
+  @override
+  String get snooze1h => 'Für eine Stunde';
+
+  @override
+  String get snoozeTonight => 'Bis 23:00';
+
+  @override
+  String get snoozeEnd => 'Stummschaltung beenden';
+
+  @override
+  String snoozeActive(String time) {
+    return 'Alarme auf diesem Handy stumm bis $time';
+  }
+
+  @override
+  String get snoozeEnded => 'Alarme auf diesem Handy sind wieder aktiv.';
+
+  @override
   String get batteryLowTitle => 'Niedriger Akkustand';
 
   @override

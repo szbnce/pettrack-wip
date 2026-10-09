@@ -386,6 +386,22 @@
   "quietHoursSubtitle": "Nessun avviso di zona o batteria in questo intervallo",
   "quietHoursFrom": "Dalle",
   "quietHoursTo": "Fino alle",
+  "snoozeTitle": "Silenzia gli avvisi",
+  "snoozeChip": "Silenzia",
+  "snoozeChipActive": "Silenziato",
+  "snooze30m": "Per 30 minuti",
+  "snooze1h": "Per un'ora",
+  "snoozeTonight": "Fino alle 23:00",
+  "snoozeEnd": "Fine silenzio",
+  "snoozeActive": "Avvisi silenziati su questo telefono fino alle {time}",
+  "@snoozeActive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "snoozeEnded": "Gli avvisi su questo telefono sono di nuovo attivi.",
   "batteryLowTitle": "Batteria scarica",
   "batteryLowBody": "Batteria al {level}%",
   "aboutCardTitle": "Informazioni e aggiornamenti",

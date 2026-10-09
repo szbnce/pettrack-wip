@@ -386,6 +386,22 @@
   "quietHoursSubtitle": "No zone or battery alerts during this time",
   "quietHoursFrom": "From",
   "quietHoursTo": "Until",
+  "snoozeTitle": "Snooze alerts",
+  "snoozeChip": "Snooze",
+  "snoozeChipActive": "Snoozed",
+  "snooze30m": "For 30 minutes",
+  "snooze1h": "For an hour",
+  "snoozeTonight": "Until 23:00",
+  "snoozeEnd": "End snooze",
+  "snoozeActive": "Alerts snoozed on this phone until {time}",
+  "@snoozeActive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "snoozeEnded": "Alerts are back on this phone.",
   "batteryLowTitle": "Low battery",
   "batteryLowBody": "Battery at {level}%",
   "aboutCardTitle": "About & updates",

@@ -848,6 +848,35 @@ class AppLocalizationsKo extends AppLocalizations {
   String get quietHoursTo => '종료';
 
   @override
+  String get snoozeTitle => '알림 음소거';
+
+  @override
+  String get snoozeChip => '음소거';
+
+  @override
+  String get snoozeChipActive => '음소거됨';
+
+  @override
+  String get snooze30m => '30분 동안';
+
+  @override
+  String get snooze1h => '1시간 동안';
+
+  @override
+  String get snoozeTonight => '23:00까지';
+
+  @override
+  String get snoozeEnd => '음소거 해제';
+
+  @override
+  String snoozeActive(String time) {
+    return '이 기기의 알림이 $time까지 음소거됩니다';
+  }
+
+  @override
+  String get snoozeEnded => '이 기기의 알림이 다시 켜졌습니다.';
+
+  @override
   String get batteryLowTitle => '배터리 부족';
 
   @override

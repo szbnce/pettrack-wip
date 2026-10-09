@@ -386,6 +386,22 @@
   "quietHoursSubtitle": "この時間帯はゾーン・バッテリー通知を送りません",
   "quietHoursFrom": "開始",
   "quietHoursTo": "終了",
+  "snoozeTitle": "アラートを消音",
+  "snoozeChip": "消音",
+  "snoozeChipActive": "消音中",
+  "snooze30m": "30分間",
+  "snooze1h": "1時間",
+  "snoozeTonight": "23:00まで",
+  "snoozeEnd": "消音を解除",
+  "snoozeActive": "この端末のアラートは{time}まで消音されます",
+  "@snoozeActive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "snoozeEnded": "この端末のアラートは再び有効です。",
   "batteryLowTitle": "バッテリー残量低下",
   "batteryLowBody": "バッテリー残量 {level}%",
   "aboutCardTitle": "バージョンとアップデート",

@@ -386,6 +386,22 @@
   "quietHoursSubtitle": "此时段不发送区域或电量提醒",
   "quietHoursFrom": "从",
   "quietHoursTo": "到",
+  "snoozeTitle": "静音提醒",
+  "snoozeChip": "静音",
+  "snoozeChipActive": "已静音",
+  "snooze30m": "30 分钟",
+  "snooze1h": "1 小时",
+  "snoozeTonight": "直到 23:00",
+  "snoozeEnd": "结束静音",
+  "snoozeActive": "此手机的提醒将静音至 {time}",
+  "@snoozeActive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "snoozeEnded": "此手机的提醒已重新开启。",
   "batteryLowTitle": "电量不足",
   "batteryLowBody": "电量剩余 {level}%",
   "aboutCardTitle": "关于与更新",

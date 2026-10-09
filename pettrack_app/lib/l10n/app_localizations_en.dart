@@ -859,6 +859,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quietHoursTo => 'Until';
 
   @override
+  String get snoozeTitle => 'Snooze alerts';
+
+  @override
+  String get snoozeChip => 'Snooze';
+
+  @override
+  String get snoozeChipActive => 'Snoozed';
+
+  @override
+  String get snooze30m => 'For 30 minutes';
+
+  @override
+  String get snooze1h => 'For an hour';
+
+  @override
+  String get snoozeTonight => 'Until 23:00';
+
+  @override
+  String get snoozeEnd => 'End snooze';
+
+  @override
+  String snoozeActive(String time) {
+    return 'Alerts snoozed on this phone until $time';
+  }
+
+  @override
+  String get snoozeEnded => 'Alerts are back on this phone.';
+
+  @override
   String get batteryLowTitle => 'Low battery';
 
   @override

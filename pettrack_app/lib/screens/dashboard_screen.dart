@@ -19,6 +19,7 @@ import '../utils/arming.dart';
 import '../utils/evidence.dart';
 import '../utils/feed_filter.dart';
 import '../utils/reconnect.dart';
+import '../utils/snooze.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/skeleton_box.dart';
 import '../widgets/highlight_card.dart';
@@ -78,6 +79,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _alertsSoundEnabled = true;
   double _batteryThreshold = 20.0;
   bool _hasAlertedBattery = false;
+  // "I'm home": alerts on this phone stay quiet until this moment (ms).
+  int? _snoozedUntil;
   bool _hasCameraError = false;
   // Mirrors the monitor's low-light mode (toggled remotely from here).
   bool _nightMode = false;
@@ -307,10 +310,88 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 side: BorderSide(color: edge.withValues(alpha: 0.2)),
                 onSelected: (_) => setState(() => _feedCategory = value),
               ),
+            _buildSnoozeChip(l10n, dark: dark),
           ],
         ),
       ],
     );
+  }
+
+  /// "I'm home" in one tap: quiet this phone's alerts without stopping
+  /// the recording — arming still decides what gets watched.
+  Widget _buildSnoozeChip(AppLocalizations l10n, {required bool dark}) {
+    final theme = Theme.of(context);
+    final snoozed = isSnoozed(
+      DateTime.now().millisecondsSinceEpoch,
+      _snoozedUntil,
+    );
+    final ink = dark ? Colors.white : theme.colorScheme.onSurface;
+    final edge = dark ? Colors.white : theme.colorScheme.outline;
+    final tint = snoozed ? Colors.amber : ink.withValues(alpha: 0.8);
+    return PopupMenuButton<String>(
+      tooltip: snoozed ? l10n.snoozeChipActive : l10n.snoozeTitle,
+      onSelected: (value) => _applySnoozeChoice(value, l10n),
+      itemBuilder: (_) => [
+        PopupMenuItem(value: snoozePreset30m, child: Text(l10n.snooze30m)),
+        PopupMenuItem(value: snoozePreset1h, child: Text(l10n.snooze1h)),
+        PopupMenuItem(
+          value: snoozePresetTonight,
+          child: Text(l10n.snoozeTonight),
+        ),
+        if (snoozed)
+          PopupMenuItem(value: 'end', child: Text(l10n.snoozeEnd)),
+      ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color: snoozed
+              ? Colors.amber.withValues(alpha: 0.18)
+              : (dark ? Colors.white.withValues(alpha: 0.06) : null),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: (snoozed ? Colors.amber : edge).withValues(alpha: 0.2),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              snoozed ? Icons.notifications_off : Icons.notifications_paused,
+              size: 16,
+              color: tint,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              snoozed ? l10n.snoozeChipActive : l10n.snoozeChip,
+              style: TextStyle(fontSize: 12, color: tint),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Start (or end) a snooze and say so — the chip itself is the state.
+  Future<void> _applySnoozeChoice(String value, AppLocalizations l10n) async {
+    if (value == 'end') {
+      await NotificationService.clearSnooze();
+      if (!mounted) return;
+      setState(() => _snoozedUntil = null);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.snoozeEnded)));
+      return;
+    }
+    final until = snoozeUntilMillis(value, DateTime.now());
+    await NotificationService.snoozeUntil(until);
+    if (!mounted) return;
+    final untilLabel = MaterialLocalizations.of(context).formatTimeOfDay(
+      TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(until)),
+    );
+    setState(() => _snoozedUntil = until);
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.snoozeActive(untilLabel))));
   }
 
   IconData _getPetIcon(String type) {
@@ -569,12 +650,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _loadAlertSettings() async {
     final prefs = await SharedPreferences.getInstance();
+    final snooze = await NotificationService.snoozedUntil();
     if (mounted) {
       setState(() {
         _alertsZoneEnabled = prefs.getBool('alerts_zone_enabled') ?? true;
         _alertsBatteryEnabled = prefs.getBool('alerts_battery_enabled') ?? true;
         _alertsSoundEnabled = prefs.getBool('alerts_sound_enabled') ?? true;
         _batteryThreshold = prefs.getDouble('alerts_battery_threshold') ?? 20.0;
+        _snoozedUntil = snooze;
       });
     }
   }

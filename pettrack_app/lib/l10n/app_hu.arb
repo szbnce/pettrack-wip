@@ -286,6 +286,22 @@
   "quietHoursSubtitle": "Ebben az időben nincs zóna- vagy akkumulátor-riasztás",
   "quietHoursFrom": "Ettől",
   "quietHoursTo": "Eddig",
+  "snoozeTitle": "Riasztások némítása",
+  "snoozeChip": "Némítás",
+  "snoozeChipActive": "Némítva",
+  "snooze30m": "30 percre",
+  "snooze1h": "Egy órára",
+  "snoozeTonight": "23:00-ig",
+  "snoozeEnd": "Némítás vége",
+  "snoozeActive": "A riasztások némítva ezen a telefonon eddig: {time}",
+  "@snoozeActive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "snoozeEnded": "A riasztások újra szólnak ezen a telefonon.",
   "batteryLowTitle": "Alacsony akkumulátor",
   "batteryLowBody": "Akkumulátor: {level}%",
   "aboutCardTitle": "Névjegy és frissítések",

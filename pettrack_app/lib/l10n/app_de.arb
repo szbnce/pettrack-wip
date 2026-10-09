@@ -386,6 +386,22 @@
   "quietHoursSubtitle": "Keine Zonen- oder Akku-Warnungen in dieser Zeit",
   "quietHoursFrom": "Von",
   "quietHoursTo": "Bis",
+  "snoozeTitle": "Alarme stummschalten",
+  "snoozeChip": "Stumm",
+  "snoozeChipActive": "Stumm geschaltet",
+  "snooze30m": "Für 30 Minuten",
+  "snooze1h": "Für eine Stunde",
+  "snoozeTonight": "Bis 23:00",
+  "snoozeEnd": "Stummschaltung beenden",
+  "snoozeActive": "Alarme auf diesem Handy stumm bis {time}",
+  "@snoozeActive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "snoozeEnded": "Alarme auf diesem Handy sind wieder aktiv.",
   "batteryLowTitle": "Niedriger Akkustand",
   "batteryLowBody": "Akku bei {level} %",
   "aboutCardTitle": "Über & Updates",

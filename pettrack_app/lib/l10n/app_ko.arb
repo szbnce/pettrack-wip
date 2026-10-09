@@ -386,6 +386,22 @@
   "quietHoursSubtitle": "이 시간에는 구역·배터리 알림을 보내지 않습니다",
   "quietHoursFrom": "시작",
   "quietHoursTo": "종료",
+  "snoozeTitle": "알림 음소거",
+  "snoozeChip": "음소거",
+  "snoozeChipActive": "음소거됨",
+  "snooze30m": "30분 동안",
+  "snooze1h": "1시간 동안",
+  "snoozeTonight": "23:00까지",
+  "snoozeEnd": "음소거 해제",
+  "snoozeActive": "이 기기의 알림이 {time}까지 음소거됩니다",
+  "@snoozeActive": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "snoozeEnded": "이 기기의 알림이 다시 켜졌습니다.",
   "batteryLowTitle": "배터리 부족",
   "batteryLowBody": "배터리 잔량 {level}%",
   "aboutCardTitle": "정보 및 업데이트",

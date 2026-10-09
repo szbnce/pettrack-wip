@@ -851,6 +851,35 @@ class AppLocalizationsJa extends AppLocalizations {
   String get quietHoursTo => '終了';
 
   @override
+  String get snoozeTitle => 'アラートを消音';
+
+  @override
+  String get snoozeChip => '消音';
+
+  @override
+  String get snoozeChipActive => '消音中';
+
+  @override
+  String get snooze30m => '30分間';
+
+  @override
+  String get snooze1h => '1時間';
+
+  @override
+  String get snoozeTonight => '23:00まで';
+
+  @override
+  String get snoozeEnd => '消音を解除';
+
+  @override
+  String snoozeActive(String time) {
+    return 'この端末のアラートは$timeまで消音されます';
+  }
+
+  @override
+  String get snoozeEnded => 'この端末のアラートは再び有効です。';
+
+  @override
   String get batteryLowTitle => 'バッテリー残量低下';
 
   @override

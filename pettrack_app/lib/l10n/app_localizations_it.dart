@@ -867,6 +867,36 @@ class AppLocalizationsIt extends AppLocalizations {
   String get quietHoursTo => 'Fino alle';
 
   @override
+  String get snoozeTitle => 'Silenzia gli avvisi';
+
+  @override
+  String get snoozeChip => 'Silenzia';
+
+  @override
+  String get snoozeChipActive => 'Silenziato';
+
+  @override
+  String get snooze30m => 'Per 30 minuti';
+
+  @override
+  String get snooze1h => 'Per un\'ora';
+
+  @override
+  String get snoozeTonight => 'Fino alle 23:00';
+
+  @override
+  String get snoozeEnd => 'Fine silenzio';
+
+  @override
+  String snoozeActive(String time) {
+    return 'Avvisi silenziati su questo telefono fino alle $time';
+  }
+
+  @override
+  String get snoozeEnded =>
+      'Gli avvisi su questo telefono sono di nuovo attivi.';
+
+  @override
   String get batteryLowTitle => 'Batteria scarica';
 
   @override

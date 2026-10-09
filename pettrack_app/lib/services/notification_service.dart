@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
+import 'package:pettrack_app/utils/snooze.dart';
 
 /// Pure quiet-hours check, exported for tests.
 ///
@@ -25,6 +26,26 @@ class NotificationService {
   static const String _prefsQuietEnabled = 'quiet_hours_enabled';
   static const String _prefsQuietFrom = 'quiet_hours_from';
   static const String _prefsQuietTo = 'quiet_hours_to';
+  static const String _prefsSnoozeUntil = 'alerts_snoozed_until';
+
+  /// Silence alert notifications on this phone until [untilMillis]
+  /// (ms since epoch) — see `utils/snooze.dart` for the presets.
+  static Future<void> snoozeUntil(int untilMillis) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_prefsSnoozeUntil, untilMillis);
+  }
+
+  /// End a running snooze early — alerts speak again right away.
+  static Future<void> clearSnooze() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_prefsSnoozeUntil);
+  }
+
+  /// When the current snooze ends (ms since epoch), or null when none is on.
+  static Future<int?> snoozedUntil() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_prefsSnoozeUntil);
+  }
 
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -94,6 +115,11 @@ class NotificationService {
     return isWithinQuietHours(DateTime.now(), enabled, from, to);
   }
 
+  Future<bool> _inSnooze() async {
+    final until = await snoozedUntil();
+    return isSnoozed(DateTime.now().millisecondsSinceEpoch, until);
+  }
+
   Future<void> requestPermissions() async {
     if (!kIsWeb) {
       await Permission.notification.request();
@@ -117,8 +143,9 @@ class NotificationService {
 
   /// Show an alert-channel notification.
   ///
-  /// Zone and battery alerts honour quiet hours; deliberate actions (the
-  /// settings "test notification" button) pass [respectQuietHours]: false.
+  /// Zone and battery alerts honour quiet hours and an active snooze
+  /// ("I'm home"); deliberate actions (the settings "test notification"
+  /// button) pass [respectQuietHours]: false and come through either way.
   /// A [payload] comes back through [onNotificationOpened] when the user
   /// taps the notification.
   Future<void> showNotification({
@@ -130,6 +157,10 @@ class NotificationService {
   }) async {
     if (respectQuietHours && await _inQuietHours()) {
       debugPrint('Notification suppressed by quiet hours: $title');
+      return;
+    }
+    if (respectQuietHours && await _inSnooze()) {
+      debugPrint('Notification suppressed by snooze: $title');
       return;
     }
     final l10n = await _getL10n();

@@ -845,6 +845,35 @@ class AppLocalizationsZh extends AppLocalizations {
   String get quietHoursTo => '到';
 
   @override
+  String get snoozeTitle => '静音提醒';
+
+  @override
+  String get snoozeChip => '静音';
+
+  @override
+  String get snoozeChipActive => '已静音';
+
+  @override
+  String get snooze30m => '30 分钟';
+
+  @override
+  String get snooze1h => '1 小时';
+
+  @override
+  String get snoozeTonight => '直到 23:00';
+
+  @override
+  String get snoozeEnd => '结束静音';
+
+  @override
+  String snoozeActive(String time) {
+    return '此手机的提醒将静音至 $time';
+  }
+
+  @override
+  String get snoozeEnded => '此手机的提醒已重新开启。';
+
+  @override
   String get batteryLowTitle => '电量不足';
 
   @override
