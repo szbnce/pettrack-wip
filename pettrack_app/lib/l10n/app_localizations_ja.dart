@@ -427,6 +427,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get monitorSleeping => 'スリープ中... ダブルタップで起動';
 
   @override
+  String get monitorBatterySaver => 'バッテリーセーバー — 低速ストリーム';
+
+  @override
   String errorConnectionFailed(String error) {
     return 'サーバーへの接続に失敗しました！IPとトークンを確認してください。\nエラー: $error';
   }

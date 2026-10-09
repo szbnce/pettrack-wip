@@ -27,6 +27,9 @@ builds version together — Settings → About, the update check and
 - Replay day density strip: pick a day and see the whole day hour by
   hour — where the motion actually was — and tap an hour to filter the
   clips to it
+- The monitor phone protects its own battery: below 20% it streams at
+  half speed, below 10% at quarter speed, and says so on the frame —
+  charging always keeps full pace
 - One-tap in-app update on Android: the server stages a new APK
   (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
   and one tap downloads it and opens the system installer — self-hosted,

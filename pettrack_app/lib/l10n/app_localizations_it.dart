@@ -434,6 +434,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get monitorSleeping => 'In riposo... Tocca due volte per svegliare';
 
   @override
+  String get monitorBatterySaver =>
+      'Risparmio energetico — streaming più lento';
+
+  @override
   String errorConnectionFailed(String error) {
     return 'Connessione al server non riuscita! Controlla IP e token.\nErrore: $error';
   }

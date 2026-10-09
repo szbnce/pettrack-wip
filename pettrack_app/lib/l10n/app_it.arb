@@ -221,6 +221,7 @@
     }
   },
   "monitorSleeping": "In riposo... Tocca due volte per svegliare",
+  "monitorBatterySaver": "Risparmio energetico — streaming più lento",
   "errorConnectionFailed": "Connessione al server non riuscita! Controlla IP e token.\nErrore: {error}",
   "@errorConnectionFailed": {
     "placeholders": {

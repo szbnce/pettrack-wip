@@ -882,6 +882,12 @@ abstract class AppLocalizations {
   /// **'Sleeping... Double tap to wake'**
   String get monitorSleeping;
 
+  /// No description provided for @monitorBatterySaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery saver — streaming slower'**
+  String get monitorBatterySaver;
+
   /// No description provided for @errorConnectionFailed.
   ///
   /// In en, this message translates to:

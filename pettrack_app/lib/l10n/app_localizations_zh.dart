@@ -423,6 +423,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get monitorSleeping => '休眠中... 双击唤醒';
 
   @override
+  String get monitorBatterySaver => '省电模式 — 推流已降速';
+
+  @override
   String errorConnectionFailed(String error) {
     return '连接服务器失败！请检查 IP 和令牌。\n错误：$error';
   }

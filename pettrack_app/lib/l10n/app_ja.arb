@@ -221,6 +221,7 @@
     }
   },
   "monitorSleeping": "スリープ中... ダブルタップで起動",
+  "monitorBatterySaver": "バッテリーセーバー — 低速ストリーム",
   "errorConnectionFailed": "サーバーへの接続に失敗しました！IPとトークンを確認してください。\nエラー: {error}",
   "@errorConnectionFailed": {
     "placeholders": {

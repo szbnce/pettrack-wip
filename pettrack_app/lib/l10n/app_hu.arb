@@ -127,6 +127,7 @@
   "stop": "Leállítás",
   "monitorServer": "Szerver:\n{ip}",
   "monitorSleeping": "Alvó mód.... Dupla koppintás az ébresztéshez",
+  "monitorBatterySaver": "Energiatakarékos — lassabb stream",
   "errorConnectionFailed": "Sikertelen csatlakozás a szerverhez! Ellenőrizd az IP-t és a Tokent.\nHiba: {error}",
   "languageEnglish": "English",
   "languageHungarian": "Magyar",

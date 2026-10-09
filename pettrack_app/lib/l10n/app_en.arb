@@ -221,6 +221,7 @@
     }
   },
   "monitorSleeping": "Sleeping... Double tap to wake",
+  "monitorBatterySaver": "Battery saver — streaming slower",
   "errorConnectionFailed": "Failed to connect to server! Check IP and Token.\nError: {error}",
   "@errorConnectionFailed": {
     "placeholders": {

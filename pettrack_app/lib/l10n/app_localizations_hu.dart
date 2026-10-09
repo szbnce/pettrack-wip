@@ -432,6 +432,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get monitorSleeping => 'Alvó mód.... Dupla koppintás az ébresztéshez';
 
   @override
+  String get monitorBatterySaver => 'Energiatakarékos — lassabb stream';
+
+  @override
   String errorConnectionFailed(String error) {
     return 'Sikertelen csatlakozás a szerverhez! Ellenőrizd az IP-t és a Tokent.\nHiba: $error';
   }

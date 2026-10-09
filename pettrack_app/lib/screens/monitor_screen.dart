@@ -16,6 +16,7 @@ import 'package:http/http.dart' as http;
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/theme/colors.dart';
 import 'package:pettrack_app/screens/monitor_setup_screen.dart';
+import 'package:pettrack_app/utils/monitor_throttle.dart';
 import 'package:pettrack_app/utils/night_vision.dart';
 import 'package:pettrack_app/utils/reconnect.dart';
 import 'package:pettrack_app/utils/sound_detect.dart';
@@ -63,6 +64,11 @@ class _MonitorScreenState extends State<MonitorScreen> {
   // A viewer can flip this remotely: torch + exposure + gamma lift so the
   // pet is visible in a dark room.
   bool _nightMode = false;
+  // Stream pacing: what the viewer asked for, tempered by this phone's
+  // battery (see utils/monitor_throttle.dart).
+  double _baseFps = 0.5;
+  int _batteryLevel = 100;
+  bool _isCharging = true;
 
   late String _currentIp;
   late String _currentToken;
@@ -209,14 +215,27 @@ class _MonitorScreenState extends State<MonitorScreen> {
     _statusTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       _sendBatteryStatus();
     });
+    _scheduleStreamTimer();
+  }
 
-    _streamTimer = Timer.periodic(const Duration(milliseconds: 2000), (
-      _,
-    ) async {
+  /// (Re)start the frame timer at the interval the battery allows.
+  void _scheduleStreamTimer() {
+    _streamTimer?.cancel();
+    final interval = frameIntervalMs(
+      baseFps: _baseFps,
+      batteryLevel: _batteryLevel,
+      isCharging: _isCharging,
+    );
+    _streamTimer = Timer.periodic(Duration(milliseconds: interval), (_) async {
       if (!_isCapturing) {
         await _captureAndSendFrame();
       }
     });
+    debugPrint(
+      'Stream interval $interval ms '
+      '(base $_baseFps fps, battery $_batteryLevel%'
+      '${_isCharging ? ', charging' : ''})',
+    );
   }
 
   /// A viewer pressed "play a sound": chirp so the pet looks at the camera.
@@ -313,15 +332,10 @@ class _MonitorScreenState extends State<MonitorScreen> {
   }
 
   void _updateStreamSpeed(double fps) {
+    _baseFps = fps;
     if (!_isStreaming) return;
-    _streamTimer?.cancel();
-    final interval = (1000 / fps).round();
-    _streamTimer = Timer.periodic(Duration(milliseconds: interval), (_) async {
-      if (!_isCapturing) {
-        await _captureAndSendFrame();
-      }
-    });
-    debugPrint("Stream speed updated to $fps FPS ($interval ms)");
+    _scheduleStreamTimer();
+    debugPrint("Stream speed updated to $fps FPS");
   }
 
   void _stopStreaming({bool isManual = false}) {
@@ -351,6 +365,24 @@ class _MonitorScreenState extends State<MonitorScreen> {
       final state = await _battery.batteryState;
       final isCharging =
           state == BatteryState.charging || state == BatteryState.full;
+
+      // Pace the stream by the battery that is actually in this phone.
+      final before = frameIntervalMs(
+        baseFps: _baseFps,
+        batteryLevel: _batteryLevel,
+        isCharging: _isCharging,
+      );
+      _batteryLevel = level;
+      _isCharging = isCharging;
+      final after = frameIntervalMs(
+        baseFps: _baseFps,
+        batteryLevel: _batteryLevel,
+        isCharging: _isCharging,
+      );
+      if (before != after) {
+        _scheduleStreamTimer();
+        if (mounted) setState(() {}); // the saver pill comes or goes
+      }
 
       await http.post(
         Uri.parse('$_currentIp/api/monitor/update'),
@@ -559,9 +591,51 @@ class _MonitorScreenState extends State<MonitorScreen> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadiusGeometry.circular(14),
-                          child: RepaintBoundary(
-                            key: _cameraKey,
-                            child: CameraPreview(_controller),
+                          child: Stack(
+                            children: [
+                              RepaintBoundary(
+                                key: _cameraKey,
+                                child: CameraPreview(_controller),
+                              ),
+                              // Streaming slower is a trade-off, not a
+                              // mystery — say so on the frame itself.
+                              if (isThrottled(
+                                batteryLevel: _batteryLevel,
+                                isCharging: _isCharging,
+                              ))
+                                Positioned(
+                                  left: 8,
+                                  bottom: 8,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black54,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.battery_saver,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          l10n.monitorBatterySaver,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       ),

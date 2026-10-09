@@ -424,6 +424,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get monitorSleeping => '절전 중... 두 번 탭하여 깨우기';
 
   @override
+  String get monitorBatterySaver => '배터리 절약 — 스트리밍 속도 제한';
+
+  @override
   String errorConnectionFailed(String error) {
     return '서버에 연결하지 못했습니다! IP와 토큰을 확인하세요.\n오류: $error';
   }
