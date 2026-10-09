@@ -45,6 +45,7 @@ from auth import (
     failure_count,
     ACCESS_TOKEN_TTL_SECONDS,
     MEDIA_TOKEN_TTL_SECONDS,
+    SHARE_LINK_TTL_SECONDS,
 )
 
 # Reported by /api/version so the apps can show "Server vX" and warn when the
@@ -996,3 +997,22 @@ async def get_replay_video(filename: str, request: Request, token: str = Query(N
     if request.headers.get("range"):
         return range_requests_response(request, file_path, "video/mp4")
     return FileResponse(file_path, media_type="video/mp4")
+
+
+@router.post("/api/replays/{filename}/share")
+async def share_replay_link(filename: str):
+    """A link to one clip, for someone who has no session here.
+
+    Mints a week-long media token scoped to exactly this file, so the
+    link opens in any browser on the network — no app, no login, and no
+    long-lived credential in the message. The clip is gone → the link is
+    worth nothing; the file list keeps only the short-lived player links."""
+    safe_filename = os.path.basename(filename)
+    file_path = os.path.join("replays", safe_filename)
+    if not os.path.exists(file_path) or not safe_filename.endswith(".mp4"):
+        raise HTTPException(status_code=404, detail="Replay not found")
+    token = mint_media_token(safe_filename, ttl_seconds=SHARE_LINK_TTL_SECONDS)
+    return {
+        "url": f"/api/replays/{safe_filename}?token={token}",
+        "expires_in": SHARE_LINK_TTL_SECONDS,
+    }

@@ -397,6 +397,7 @@
   "highlightSubtitle": "오늘의 모든 순간을 한 클립에",
   "highlightMoments": "순간 {count}개",
   "tooltipShare": "공유",
+  "shareLink": "링크 공유",
   "quietHoursTitle": "무음 시간",
   "quietHoursSubtitle": "이 시간에는 구역·배터리 알림을 보내지 않습니다",
   "quietHoursFrom": "시작",

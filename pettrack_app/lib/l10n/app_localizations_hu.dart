@@ -865,6 +865,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get tooltipShare => 'Megosztás';
 
   @override
+  String get shareLink => 'Link megosztása';
+
+  @override
   String get quietHoursTitle => 'Csendes órák';
 
   @override

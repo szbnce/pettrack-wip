@@ -31,6 +31,12 @@ token that can only upload frames, report status and report sound. Media
 tokens reach only the replay files they were minted for. Setting the PIN
 requires a full-scope token. WebSocket endpoints enforce the same allowlist.
 
+**Share links.** Sharing a clip as a link mints a media token scoped to
+that one file and valid for 7 days, so the link opens in a browser without
+a session. It grants nothing else — no feed, no settings, no other clip —
+and it dies with the file. Treat such a link like the clip itself: it is
+for people you trust on your network.
+
 **Transport.** Plain HTTP is acceptable only on a trusted LAN. For anything
 wider, terminate TLS in front (the bundled Caddy setup) or use the native
 TLS options (`PETTRACK_TLS_CERT` / `PETTRACK_TLS_KEY`), and reach the

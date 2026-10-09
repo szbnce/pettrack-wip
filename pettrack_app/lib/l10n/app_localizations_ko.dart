@@ -850,6 +850,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tooltipShare => '공유';
 
   @override
+  String get shareLink => '링크 공유';
+
+  @override
   String get quietHoursTitle => '무음 시간';
 
   @override

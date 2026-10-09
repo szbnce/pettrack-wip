@@ -21,6 +21,9 @@ builds version together — Settings → About, the update check and
 - "Last night" recap: the first time you open the app in the morning it
   says how many events happened overnight — once a day, then out of the
   way
+- Share a replay as a link: a week-long URL scoped to that one clip opens
+  in any browser on the network — no app, no login (SECURITY.md covers
+  the model)
 - One-tap in-app update on Android: the server stages a new APK
   (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
   and one tap downloads it and opens the system installer — self-hosted,

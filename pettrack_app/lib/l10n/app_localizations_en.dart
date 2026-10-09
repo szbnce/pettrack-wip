@@ -862,6 +862,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tooltipShare => 'Share';
 
   @override
+  String get shareLink => 'Share link';
+
+  @override
   String get quietHoursTitle => 'Quiet hours';
 
   @override

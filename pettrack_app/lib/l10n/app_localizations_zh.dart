@@ -847,6 +847,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tooltipShare => '分享';
 
   @override
+  String get shareLink => '分享链接';
+
+  @override
   String get quietHoursTitle => '免打扰时段';
 
   @override

@@ -397,6 +397,7 @@
   "highlightSubtitle": "Every moment from today in one clip",
   "highlightMoments": "{count} moments",
   "tooltipShare": "Share",
+  "shareLink": "Share link",
   "quietHoursTitle": "Quiet hours",
   "quietHoursSubtitle": "No zone or battery alerts during this time",
   "quietHoursFrom": "From",

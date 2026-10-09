@@ -397,6 +397,40 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     }
   }
 
+  /// Share a link instead of the bytes: a week-long, file-scoped URL that
+  /// opens in any browser on the network — for someone who has no session
+  /// and no app. The server mints it; nothing long-lived goes in the message.
+  Future<void> _shareLink(String url) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final segments = Uri.parse(url).pathSegments;
+      if (segments.isEmpty) throw Exception('no filename');
+      final filename = segments.last;
+      final response = await http
+          .post(
+            Uri.parse(
+              '${widget.serverIp}/api/replays/'
+              '${Uri.encodeComponent(filename)}/share',
+            ),
+            headers: AuthService.headers,
+          )
+          .timeout(const Duration(seconds: 5));
+      if (response.statusCode != 200) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final signedPath = body['url'] as String? ?? '';
+      if (signedPath.isEmpty) throw Exception('no url in answer');
+      await SharePlus.instance.share(
+        ShareParams(text: '${l10n.shareInviteText}\n${widget.serverIp}$signedPath'),
+      );
+    } catch (e) {
+      debugPrint('clip link share failed: $e');
+      messenger.showSnackBar(SnackBar(content: Text(l10n.shareFailed)));
+    }
+  }
+
   void _showVideoDialog({required String url, String? heroTag}) {
     final l10n = AppLocalizations.of(context)!;
     Widget player = Container(
@@ -430,6 +464,11 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                       onPressed: () => _shareVideo(url),
                       icon: const Icon(Icons.share),
                       label: Text(l10n.tooltipShare),
+                    ),
+                    IconButton(
+                      tooltip: l10n.shareLink,
+                      onPressed: () => _shareLink(url),
+                      icon: const Icon(Icons.link),
                     ),
                     TextButton.icon(
                       onPressed: () async {

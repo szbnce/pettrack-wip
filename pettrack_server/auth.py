@@ -53,6 +53,9 @@ fernet = Fernet(get_fernet_key(SECRET_TOKEN))
 ACCESS_TOKEN_TTL_SECONDS = 3600
 REFRESH_TOKEN_TTL_SECONDS = 90 * 86400
 MEDIA_TOKEN_TTL_SECONDS = 3600
+# A "share link" to one clip, for someone on the LAN who has no session:
+# a week, still scoped to that single file.
+SHARE_LINK_TTL_SECONDS = 7 * 86400
 
 # PIN/secret login: five failures lock the caller out for five minutes.
 # The counters live in the database, so a restart does not clear them.
@@ -78,10 +81,13 @@ def mint_access_token(session_id: str, scope: str = "full") -> str:
     )
 
 
-def mint_media_token(filename: str) -> str:
-    """Short-lived token scoped to a single replay file, safe for URLs."""
+def mint_media_token(filename: str, ttl_seconds: int = MEDIA_TOKEN_TTL_SECONDS) -> str:
+    """Token scoped to a single replay file, safe for URLs.
+
+    Short-lived by default (player links); a share link passes
+    SHARE_LINK_TTL_SECONDS so it can travel to someone without a session."""
     return jwt.encode(
-        {"auth": "media", "file": filename, "exp": time.time() + MEDIA_TOKEN_TTL_SECONDS},
+        {"auth": "media", "file": filename, "exp": time.time() + ttl_seconds},
         SECRET_TOKEN,
         algorithm="HS256",
     )

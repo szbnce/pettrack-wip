@@ -869,6 +869,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tooltipShare => 'Teilen';
 
   @override
+  String get shareLink => 'Link teilen';
+
+  @override
   String get quietHoursTitle => 'Ruhezeiten';
 
   @override

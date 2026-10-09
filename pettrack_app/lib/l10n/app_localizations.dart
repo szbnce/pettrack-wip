@@ -1662,6 +1662,12 @@ abstract class AppLocalizations {
   /// **'Share'**
   String get tooltipShare;
 
+  /// No description provided for @shareLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Share link'**
+  String get shareLink;
+
   /// No description provided for @quietHoursTitle.
   ///
   /// In en, this message translates to:

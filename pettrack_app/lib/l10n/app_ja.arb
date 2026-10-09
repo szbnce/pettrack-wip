@@ -397,6 +397,7 @@
   "highlightSubtitle": "今日のすべての瞬間を1つのクリップに",
   "highlightMoments": "{count} 件の瞬間",
   "tooltipShare": "共有",
+  "shareLink": "リンクを共有",
   "quietHoursTitle": "消音時間",
   "quietHoursSubtitle": "この時間帯はゾーン・バッテリー通知を送りません",
   "quietHoursFrom": "開始",
