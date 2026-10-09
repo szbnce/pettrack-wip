@@ -987,6 +987,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoZoneFeeder => 'Feeder';
 
   @override
+  String get demoMedName => 'Digestive supplement';
+
+  @override
+  String get demoMedDose => '0.5 ml';
+
+  @override
+  String get demoVacName => 'Myxomatosis vaccine';
+
+  @override
   String get activityLoadError => 'Could not load recent activity';
 
   @override

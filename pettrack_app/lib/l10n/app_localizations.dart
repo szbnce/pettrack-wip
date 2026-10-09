@@ -1902,6 +1902,24 @@ abstract class AppLocalizations {
   /// **'Feeder'**
   String get demoZoneFeeder;
 
+  /// No description provided for @demoMedName.
+  ///
+  /// In en, this message translates to:
+  /// **'Digestive supplement'**
+  String get demoMedName;
+
+  /// No description provided for @demoMedDose.
+  ///
+  /// In en, this message translates to:
+  /// **'0.5 ml'**
+  String get demoMedDose;
+
+  /// No description provided for @demoVacName.
+  ///
+  /// In en, this message translates to:
+  /// **'Myxomatosis vaccine'**
+  String get demoVacName;
+
   /// No description provided for @activityLoadError.
   ///
   /// In en, this message translates to:

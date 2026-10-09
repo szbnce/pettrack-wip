@@ -493,6 +493,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     final weekday = MaterialLocalizations.of(
       context,
     ).narrowWeekdays[day.weekday % 7];
+    // The chips ride the page surface — theme ink keeps them readable in
+    // light mode (white here made every day but today invisible).
+    final ink = theme.colorScheme.onSurface;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -522,7 +525,10 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
             children: [
               Text(
                 weekday,
-                style: const TextStyle(fontSize: 10, color: Colors.white54),
+                style: TextStyle(
+                  fontSize: 10,
+                  color: ink.withValues(alpha: 0.54),
+                ),
               ),
               const SizedBox(height: 2),
               Text(
@@ -530,7 +536,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: isToday ? AppColors.primary : Colors.white,
+                  color: isToday ? AppColors.primary : ink,
                 ),
               ),
               const SizedBox(height: 4),
@@ -554,13 +560,17 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.movie, size: 10, color: Colors.white54),
+                    Icon(
+                      Icons.movie,
+                      size: 10,
+                      color: ink.withValues(alpha: 0.54),
+                    ),
                     const SizedBox(width: 2),
                     Text(
                       '$clips',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 10,
-                        color: Colors.white54,
+                        color: ink.withValues(alpha: 0.54),
                       ),
                     ),
                   ],
@@ -760,8 +770,8 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                   children: [
                     Text(
                       l10n.replaysTitle,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),

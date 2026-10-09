@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'colors.dart';
 
 /// PetTrack brand theme.
@@ -76,6 +77,9 @@ class AppTheme {
     required Color onSurfaceVariant,
   }) {
     final isDark = brightness == Brightness.dark;
+    // The clock and the nav keys are ink too: dark on our light paper, light
+    // on the dark one.
+    final ink = isDark ? Brightness.light : Brightness.dark;
     final text = _textTheme(
       onSurface: onSurface,
       onSurfaceVariant: onSurfaceVariant,
@@ -102,6 +106,14 @@ class AppTheme {
         centerTitle: false,
         titleTextStyle: text.titleLarge,
         iconTheme: IconThemeData(color: onSurface),
+        // Say the glyph tint instead of letting AppBar guess it from its own
+        // background colour: the tab shell's bar is `Colors.transparent`, which
+        // reads to that guess as pure black, so it asks for white icons over
+        // our lightest paper. A bar over a live camera feed declares otherwise.
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness: ink,
+          systemNavigationBarIconBrightness: ink,
+        ),
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(

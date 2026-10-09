@@ -976,6 +976,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get demoZoneFeeder => '급식기';
 
   @override
+  String get demoMedName => '소화 보조제';
+
+  @override
+  String get demoMedDose => '0.5 ml';
+
+  @override
+  String get demoVacName => '믹소마토시스 백신';
+
+  @override
   String get activityLoadError => '활동을 불러올 수 없습니다';
 
   @override

@@ -375,32 +375,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   /// Demo mode's toy feed — zone names come from l10n like everywhere else.
+  ///
+  /// One quiet day of one pet: in and out of the zones, and a couple of
+  /// sounds, so the feed reads like a day and every filter has something
+  /// behind it — a demo that shows only zone movement hides half the product.
   void _loadDemoData() {
     if (!mounted) return;
     final l10n = AppLocalizations.of(context)!;
+    int at(Duration ago) =>
+        DateTime.now().subtract(ago).millisecondsSinceEpoch ~/ 1000;
     setState(() {
       _activities = [
         {
           "event_type": "zone_enter",
-          "timestamp": DateTime.now().millisecondsSinceEpoch ~/ 1000,
+          "timestamp": at(Duration.zero),
           "zone_name": l10n.demoZoneLitter,
         },
         {
+          "event_type": "sound_detected",
+          "timestamp": at(const Duration(minutes: 8)),
+        },
+        {
           "event_type": "zone_left",
-          "timestamp":
-              DateTime.now()
-                  .subtract(const Duration(minutes: 5))
-                  .millisecondsSinceEpoch ~/
-              1000,
+          "timestamp": at(const Duration(minutes: 25)),
           "zone_name": l10n.demoZonePlayground,
         },
         {
           "event_type": "zone_enter",
-          "timestamp":
-              DateTime.now()
-                  .subtract(const Duration(minutes: 15))
-                  .millisecondsSinceEpoch ~/
-              1000,
+          "timestamp": at(const Duration(minutes: 45)),
+          "zone_name": l10n.demoZonePlayground,
+        },
+        {
+          "event_type": "zone_enter",
+          "timestamp": at(const Duration(hours: 2)),
+          "zone_name": l10n.demoZoneFeeder,
+        },
+        {
+          "event_type": "sound_detected",
+          "timestamp": at(const Duration(hours: 4)),
+        },
+        {
+          "event_type": "zone_left",
+          "timestamp": at(const Duration(hours: 6)),
           "zone_name": l10n.demoZoneFeeder,
         },
       ];
@@ -836,11 +852,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ({String text, Color textColor, Color bgColor}) _getBadgeInfo(
     AppLocalizations l10n,
   ) {
-    if (_hasCameraError || _currentUiImage == null) {
+    // Demo mode is a recording of life — it never drops.
+    if (widget.serverIp.contains('demo_ip')) {
+      return (
+        text: l10n.liveStatus,
+        textColor: Colors.green[800]!,
+        bgColor: Colors.green[100]!,
+      );
+    }
+
+    if (_hasCameraError || !_isServerOnline) {
       return (
         text: l10n.offlineStatus,
-        textColor: Colors.red,
+        textColor: Colors.red[800]!,
         bgColor: const Color(0xFFFFE5E5),
+      );
+    }
+
+    // Reachable but silent — the stream is still coming up. Connecting is not
+    // offline, and the badge must not cry wolf on every cold start.
+    if (_currentUiImage == null) {
+      return (
+        text: l10n.searchingStatus,
+        textColor: Colors.orange[800]!,
+        bgColor: Colors.orange[100]!,
       );
     }
 
@@ -1003,9 +1038,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 widget.serverIp.contains('demo_ip')
                     ? l10n.onlineStatus
                     : l10n.liveVideo,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineMedium?.copyWith(color: Colors.white),
+                // Theme ink: white here went invisible on the light surface.
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
               _buildBadge(l10n),
             ],
@@ -1221,9 +1255,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.7),
+            // The status pill wears its own colors — dark ink on a pale pill
+            // reads on light and dark surfaces alike.
+            color: badge.bgColor,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            border: Border.all(color: badge.textColor.withValues(alpha: 0.2)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -1440,6 +1476,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       );
     }).toList();
 
+    // This card is a pale tint in light mode — its words wear theme ink.
+    final ink = Theme.of(context).colorScheme.onSurface;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       padding: const EdgeInsets.all(20),
@@ -1456,13 +1495,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               Text(
                 l10n.zoneVisits,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: ink,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Icon(Icons.pie_chart, size: 18, color: Colors.white54),
+              Icon(
+                Icons.pie_chart,
+                size: 18,
+                color: ink.withValues(alpha: 0.54),
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -1495,8 +1538,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             Expanded(
                               child: Text(
                                 name,
-                                style: const TextStyle(
-                                  color: Colors.white70,
+                                style: TextStyle(
+                                  color: ink.withValues(alpha: 0.7),
                                   fontSize: 12,
                                 ),
                                 overflow: TextOverflow.ellipsis,

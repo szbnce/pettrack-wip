@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,7 +50,9 @@ class _ZonesScreenState extends State<ZonesScreen> {
 
   void _startPolling() {
     if (widget.serverIp.contains('demo_ip')) {
-      debugPrint("Demo mode: skipping Zones HTTP polling");
+      // No server to poll — but the canvas still wants a picture to draw on
+      // and the list still wants its rows.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _loadDemoScene());
       return;
     }
 
@@ -57,6 +60,34 @@ class _ZonesScreenState extends State<ZonesScreen> {
       _fetchFrame();
     });
     _fetchZones();
+  }
+
+  /// Demo stand-ins for the camera frame and the saved zones.
+  Future<void> _loadDemoScene() async {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    setState(() {
+      _loadingZones = false;
+      _existingZones = [
+        {"name": l10n.demoZoneLitter, "type": "toilet", "polygon": []},
+        {"name": l10n.demoZonePlayground, "type": "play", "polygon": []},
+        {"name": l10n.demoZoneFeeder, "type": "food", "polygon": []},
+      ];
+    });
+    final data = await rootBundle.load('assets/demo_frame.jpg');
+    ui.decodeImageFromList(data.buffer.asUint8List(), (ui.Image img) {
+      if (!mounted) {
+        img.dispose();
+        return;
+      }
+      setState(() {
+        _currentUiImage?.dispose();
+        _currentUiImage = img;
+        if (img.width > 0 && img.height > 0) {
+          _cameraAspectRatio = img.width / img.height;
+        }
+      });
+    });
   }
 
   Future<void> _fetchZones() async {
@@ -139,6 +170,8 @@ class _ZonesScreenState extends State<ZonesScreen> {
   /// Saves the given zone list on the server. Returns null on success,
   /// or the error message when the save failed.
   Future<String?> _persistZones(List<dynamic> zones) async {
+    // Demo edits live in memory only — there is no server to say yes or no.
+    if (widget.serverIp.contains('demo_ip')) return null;
     try {
       final response = await http
           .post(
@@ -243,8 +276,8 @@ class _ZonesScreenState extends State<ZonesScreen> {
       children: [
         Text(
           l10n.editZones,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
@@ -520,13 +553,15 @@ class _ZonesScreenState extends State<ZonesScreen> {
   }
 
   Widget _buildExistingZonesList(AppLocalizations l10n) {
+    // On the page surface, so theme ink — white here was a ghost in light mode.
+    final ink = Theme.of(context).colorScheme.onSurface;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           l10n.existingZones,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: ink,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -544,8 +579,8 @@ class _ZonesScreenState extends State<ZonesScreen> {
           EmptyState(
             icon: _zonesFailed ? Icons.cloud_off : Icons.map_outlined,
             title: _zonesFailed ? l10n.zonesLoadError : l10n.noZonesYet,
-            textColor: Colors.white54,
-            iconColor: Colors.white38,
+            textColor: ink.withValues(alpha: 0.6),
+            iconColor: ink.withValues(alpha: 0.4),
             actionLabel: _zonesFailed ? l10n.retry : null,
             onAction: _zonesFailed ? _fetchZones : null,
           )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/utils/pairing.dart';
@@ -22,6 +23,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         title: Text(l10n.qrScannerTitle),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        // The bar floats over a live camera feed, whose frame is dark more
+        // often than not — white icons in both themes.
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: Stack(
         children: [

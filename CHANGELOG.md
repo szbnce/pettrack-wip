@@ -8,6 +8,47 @@ builds version together — Settings → About, the update check and
 
 ## [Unreleased]
 
+### Added
+
+- Arming schedule: watch only when you're away — auto-arm and auto-disarm by
+  weekday and time, always visible on the camera chip
+- One-file settings backup and restore — the whole setup, pairing included,
+  moves to a new phone in a single file
+- First-run safety net: "Skip for now" when no monitor is wired up yet, and
+  a lost session recovers with the pairing secret instead of exiling you to
+  the wizard
+
+### Fixed
+
+- Every socket comes back on its own — streams retry with backoff and the
+  screens say so while they do
+- Light theme speaks up: white-on-light ghost text replaced by theme ink on
+  the dashboard, Zones, the Replays day strip and the desktop headers
+- The status badge no longer cries wolf: while the first frame is still in
+  traffic it says "Searching...", not "OFFLINE!"; demo mode wears its Live
+  face instead of red
+- The Zones screen is alive in demo mode: the bundled frame and the demo
+  zones instead of a spinner and skeletons that never settle
+- Demo mode tells the truth everywhere: Medical carries a sample medication
+  and vaccine instead of crying "server unreachable", and Settings knows the
+  pet's name instead of showing an empty field
+- The status bar clock and icons follow the theme on every screen — white on
+  light made them vanish, and the native window now starts with the right ink
+  instead of waiting for a frame to correct it
+- Settings shows one title, not two
+- QR payloads are validated before login, and wrong PIN, stale secret and
+  missing fields each get their own honest error
+- A refused pet save fails the wizard instead of pretending it saved
+
+### Changed
+
+- Accessibility to WCAG AA: every control speaks, every image says what it
+  is, and contrast holds in both themes
+- The status badge wears a pale pill with dark ink — readable on any surface
+- Release builds sign with the release keystore when `key.properties` is
+  present (see docs/RELEASE_CHECKLIST.md); debug keys keep local builds
+  working
+
 ## [2.0.0] - 2026-10-08
 
 The audience-ready release: a real design language, a real security model,

@@ -979,6 +979,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get demoZoneFeeder => '給餌器';
 
   @override
+  String get demoMedName => '消化サポート';
+
+  @override
+  String get demoMedDose => '0.5 ml';
+
+  @override
+  String get demoVacName => 'ミクソーマ症ワクチン';
+
+  @override
   String get activityLoadError => 'アクティビティを読み込めませんでした';
 
   @override

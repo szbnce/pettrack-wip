@@ -50,7 +50,13 @@ class _MedicalScreenState extends State<MedicalScreen>
     _tabController.addListener(() {
       setState(() {});
     });
-    _loadData();
+    if (widget.serverIp.contains('demo_ip')) {
+      // Demo has no server to be unreachable — show what tracking looks like
+      // instead of crying wolf.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _loadDemoMedical());
+    } else {
+      _loadData();
+    }
   }
 
   @override
@@ -70,6 +76,41 @@ class _MedicalScreenState extends State<MedicalScreen>
       _loading = false;
     });
   }
+
+  /// Demo stand-ins: one medication and one vaccine, so the screen shows what
+  /// tracking looks like instead of an empty, error-toned void.
+  void _loadDemoMedical() {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final now = DateTime.now();
+    setState(() {
+      _medications = [
+        Medication(
+          id: 'demo-med',
+          name: l10n.demoMedName,
+          dose: l10n.demoMedDose,
+          intervalHours: 24,
+          alertEnabled: true,
+          colorValue: 0xFF4DB6AC,
+        ),
+      ];
+      _vaccines = [
+        Vaccine(
+          id: 'demo-vac',
+          name: l10n.demoVacName,
+          dateGiven: _ymd(now.subtract(const Duration(days: 30))),
+          nextDue: _ymd(now.add(const Duration(days: 335))),
+          colorValue: 0xFF64B5F6,
+        ),
+      ];
+      _fromCache = false;
+      _loading = false;
+    });
+  }
+
+  /// Dates the way the dialogs store them: plain ISO day.
+  String _ymd(DateTime d) =>
+      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
   /// Slim banner shown when the lists are the local copy, not the server's.
   Widget _buildCachedBanner(AppLocalizations l10n) {
@@ -321,8 +362,8 @@ class _MedicalScreenState extends State<MedicalScreen>
       children: [
         Text(
           l10n.navMedical,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
@@ -346,8 +387,8 @@ class _MedicalScreenState extends State<MedicalScreen>
             const SizedBox(width: 8),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),

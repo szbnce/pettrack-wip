@@ -973,6 +973,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get demoZoneFeeder => '喂食区';
 
   @override
+  String get demoMedName => '消化补充剂';
+
+  @override
+  String get demoMedDose => '0.5 毫升';
+
+  @override
+  String get demoVacName => '粘液瘤病疫苗';
+
+  @override
   String get activityLoadError => '无法加载活动记录';
 
   @override

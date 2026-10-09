@@ -991,6 +991,15 @@ class AppLocalizationsHu extends AppLocalizations {
   String get demoZoneFeeder => 'Etető';
 
   @override
+  String get demoMedName => 'Emésztéskönnyítő';
+
+  @override
+  String get demoMedDose => '0,5 ml';
+
+  @override
+  String get demoVacName => 'Myxomatosis elleni védőoltás';
+
+  @override
   String get activityLoadError => 'A tevékenységek betöltése nem sikerült';
 
   @override

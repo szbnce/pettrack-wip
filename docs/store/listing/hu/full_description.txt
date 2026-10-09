@@ -1,0 +1,55 @@
+A PetTrack a meglévő telefonjaidból kisállatfigyelőt csinál: egy régi
+telefon lesz a kamera, ez az app a nézegető, minden pedig egy otthoni
+szerveren fut. Előfizetés, felhő és fiók nélkül — kedvenced videója sosem
+hagyja el a házadat.
+
+AMIT KAPSZ
+
+Élő kép, ami nem szakad meg
+· Nézd kedvencedet valós időben, és szólítsd meg egy hanggal
+· Távoli éjszakai mód a sötét szobákhoz
+· A képforrás magától visszakapcsolódik — egy Wi-Fi-hiba nem viszi el a nézetet
+
+Események, amik megtalálnak
+· Mozgás-, hang- (ugatás / nyávogás) és zóna-események, mind pillanatképpel
+· Riasztás a telefonodon, plusz opcionális távoli riasztás ntfy-vel, hogy
+  az iskolában vagy a munkahelyen is értesülj róla
+· Csendes órák és élesítési ütemterv: csak akkor figyeljen, amikor nem vagy otthon
+
+Bizonyíték, nem találgatás
+· Visszajátszás-idővonal: egy napi sáv eseménypontokkal — koppints, nézd meg
+· Átvezetés az eseménytől a pillanatképig a visszajátszás pontos pillanatáig
+· Napi összefoglaló: kedvenced napjának legjobb pillanatai
+· Heti statisztika: zónákban töltött idő, pihenés és aktivitás
+
+A mindennapokra tervezve
+· Zónák egyszerű szavakkal — "az ágy", "az ajtó" —, nem mérnöki kifejezésekkel
+· Több kamera: több régi telefon, egy műszerfal
+· Kezdőképernyős widget és Wear OS társalkalmazás
+· Home Assistant integráció MQTT discovery-n keresztül
+· Rendszer-egészség: az app szól, ha a kamerával vagy a lemezzel gond van
+· Egyfájlos biztonsági mentés és visszaállítás a teljes beállításodról
+· Hét nyelv: angol, magyar, német, olasz, japán, koreai és kínai
+
+HOGYAN MŰKÖDIK
+
+1. Telepítsd az ingyenes szervert egy otthoni gépre (egysoros szkript).
+2. Állítsd fel a régi telefonodat PetTrack monitor módban — ez a kamera.
+3. Telepítsd ezt az appot a mindennapi telefonodra, olvasd be a párosító
+   kódot, és kész.
+
+Minden a helyi Wi-Fi-n működik. Külső elérés? Irányítsd az appot a Tailscale
+címedre — a dokumentáció egy bekezdésben megmutatja.
+
+ADATVÉDELEM
+
+A saját szerver = saját adatok: a videók, események és egészségügyi adatok
+a te szervereden élnek. Az egyetlen opcionális harmadik fél az ntfy a
+távoli riasztásokhoz, és az is ki van kapcsolva, amíg be nem kapcsolod.
+Teljes adatvédelmi nyilatkozat:
+https://github.com/szbnce/PetTrack/blob/main/PRIVACY_POLICY.md
+
+NYÍLT FORRÁSKÓD
+
+A PetTrack GPL-3.0: az app, a szerver és a dokumentáció is nyilvános —
+https://github.com/szbnce/PetTrack

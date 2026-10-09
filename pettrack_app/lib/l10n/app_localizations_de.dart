@@ -996,6 +996,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get demoZoneFeeder => 'Futternapf';
 
   @override
+  String get demoMedName => 'Verdauungshilfe';
+
+  @override
+  String get demoMedDose => '0,5 ml';
+
+  @override
+  String get demoVacName => 'Myxomatose-Impfung';
+
+  @override
   String get activityLoadError => 'Aktivitäten konnten nicht geladen werden';
 
   @override

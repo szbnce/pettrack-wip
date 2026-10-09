@@ -1,0 +1,51 @@
+PetTrack turns the phones you already own into a pet monitor: one old phone becomes the camera, this app is where you watch, and everything runs on a server at home. No subscription, no cloud, no account — your pet's video never leaves your house.
+
+WHAT YOU GET
+
+Live view that stays up
+· Watch your pet in real time and call them with a sound when you need to
+· Remote night mode for dark rooms
+· The stream reconnects by itself — a Wi-Fi blip never kills the view
+
+Events that find you
+· Motion, sound (bark / meow) and zone events, each with a snapshot
+· Alerts on your phone, plus optional remote alerts via ntfy so you hear
+  about it at school or at work
+· Quiet hours and an arming schedule: only watch when you're away
+
+Evidence, not guesswork
+· Replay timeline: a day strip with event dots — tap a dot, watch the clip
+· Tap through from event to snapshot to the exact moment in the replay
+· Daily recap: the highlight of your pet's day
+· Weekly insights: zone time, rest versus active
+
+Built for daily life
+· Zones in plain words — "the bed", "the door" — not engineering knobs
+· Multi-camera: several old phones, one dashboard
+· Home-screen widget and a Wear OS companion
+· Home Assistant integration through MQTT discovery
+· System health: the app tells you when the camera or disk needs attention
+· One-file backup and restore of your whole setup
+· Seven languages: English, Hungarian, German, Italian, Japanese, Korean
+  and Chinese
+
+HOW IT WORKS
+
+1. Install the free server on a computer at home (one-line script).
+2. Prop up an old phone running PetTrack in monitor mode — that's the camera.
+3. Install this app on your everyday phone, scan the pairing code, done.
+
+Everything works on your home Wi-Fi. Want access from outside? Point the
+app at your Tailscale address — the docs cover it in one paragraph.
+
+PRIVACY
+
+Self-hosted means self-hosted: video, events and pet health data live on
+your own server. The only optional third-party service is ntfy for remote
+alerts, and it stays off unless you turn it on. Full privacy policy:
+https://github.com/szbnce/PetTrack/blob/main/PRIVACY_POLICY.md
+
+OPEN SOURCE
+
+PetTrack is GPL-3.0: the app, the server and the docs are all out in the
+open — https://github.com/szbnce/PetTrack

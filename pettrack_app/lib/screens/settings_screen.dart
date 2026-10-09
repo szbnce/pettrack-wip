@@ -108,6 +108,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _ipController.text = ip;
       _tokenController.text = prefs.getString('secret_token') ?? '';
+      // The name and type live on the server in real use (fetched below), but
+      // the field must never start empty: prefs first, and demo is always its
+      // bunny. The dropdown only accepts its known values.
+      _petNameController.text = ip.contains('demo_ip')
+          ? 'Tapsi Hapsi'
+          : (prefs.getString('pet_name') ?? '');
+      final savedType = (prefs.getString('pet_type') ?? 'rabbit')
+          .replaceFirst('petType', '')
+          .toLowerCase();
+      _petType =
+          const [
+            'dog',
+            'cat',
+            'rabbit',
+            'guineapig',
+            'bird',
+            'other',
+          ].contains(savedType)
+          ? savedType
+          : 'rabbit';
       _languageCode = prefs.getString('language_code') ?? 'hu';
       _themeModeString = prefs.getString('theme_mode') ?? 'system';
       _alertsZoneEnabled = prefs.getBool('alerts_zone_enabled') ?? true;
@@ -195,9 +215,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final ntfyUrl = _ntfyUrlController.text.trim();
     if (ntfyUrl.isNotEmpty && !isValidNtfyUrl(ntfyUrl)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.alertsRemoteUrlInvalid)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.alertsRemoteUrlInvalid)));
       return;
     }
     final prefs = await SharedPreferences.getInstance();
@@ -227,7 +247,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     // Get a fresh JWT when the secret changed or there is no valid token yet,
     // otherwise the save below would silently fail with the stale token.
-    if (!ip.contains('demo_ip') && (secret != storedSecret || jwtToken.isEmpty)) {
+    if (!ip.contains('demo_ip') &&
+        (secret != storedSecret || jwtToken.isEmpty)) {
       try {
         final loginRes = await http
             .post(
@@ -250,9 +271,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       } catch (_) {
         if (!mounted) return;
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.invalidSecretToken)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.invalidSecretToken)));
         return;
       }
     }
@@ -326,18 +347,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       setState(() => _isLoading = false);
       PetTrackApp.setLocale(context, Locale(_languageCode));
 
-      ThemeMode newMode;
-      switch (_themeModeString) {
-        case 'light':
-          newMode = ThemeMode.light;
-          break;
-        case 'dark':
-          newMode = ThemeMode.dark;
-          break;
-        default:
-          newMode = ThemeMode.system;
-      }
-      PetTrackApp.setThemeMode(context, newMode);
+      PetTrackApp.setThemeMode(context, _themeModeOf(_themeModeString));
 
       if (widget.isSetup) {
         Navigator.of(context).pushReplacement(
@@ -357,9 +367,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              petSaveFailed ? l10n.setupErrSave : l10n.saveSuccess,
-            ),
+            content: Text(petSaveFailed ? l10n.setupErrSave : l10n.saveSuccess),
             backgroundColor: petSaveFailed
                 ? Theme.of(context).colorScheme.error
                 : AppColors.primary,
@@ -624,10 +632,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Text(l10n.themeDark),
                         ),
                       ],
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          setState(() => _themeModeString = newValue);
-                        }
+                      onChanged: (String? newValue) async {
+                        if (newValue == null) return;
+                        setState(() => _themeModeString = newValue);
+                        // The theme is a display preference, not form data: it
+                        // takes effect the moment it is chosen, and it sticks
+                        // even when nothing else on this screen is saved.
+                        PetTrackApp.setThemeMode(
+                          context,
+                          _themeModeOf(newValue),
+                        );
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString('theme_mode', newValue);
                       },
                     ),
                   ),
@@ -639,6 +655,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     ]);
   }
+
+  /// Maps a stored `theme_mode` preference key to the [ThemeMode] it names.
+  ThemeMode _themeModeOf(String value) => switch (value) {
+    'light' => ThemeMode.light,
+    'dark' => ThemeMode.dark,
+    _ => ThemeMode.system,
+  };
 
   Widget _buildAlertsCard(AppLocalizations l10n) {
     return _buildCard(l10n.alertsTitle, [
@@ -729,7 +752,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       const SizedBox(height: 4),
       Text(l10n.alertsRemoteDesc, style: Theme.of(context).textTheme.bodySmall),
       const SizedBox(height: 12),
-      Text(l10n.alertsRemoteUrlLabel, style: Theme.of(context).textTheme.labelLarge),
+      Text(
+        l10n.alertsRemoteUrlLabel,
+        style: Theme.of(context).textTheme.labelLarge,
+      ),
       const SizedBox(height: 8),
       TextField(
         controller: _ntfyUrlController,
@@ -786,6 +812,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   /// Pull the server's arming state (mode + schedule) into the editor.
   Future<void> _fetchArming() async {
+    if (_ipController.text.trim().contains('demo_ip')) {
+      // Demo has no server to hold a schedule, but the feature is half the
+      // point of the app — show one ready to be edited rather than leaving
+      // the card stuck on its default.
+      setState(() {
+        _armingMode = armingModeSchedule;
+        _armingSchedule = [ArmingWindow.workweek()];
+      });
+      return;
+    }
     try {
       final response = await http
           .get(
@@ -809,7 +845,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// Push a mode and/or schedule change. The server echoes the full
   /// state back; a failure reverts the editor to the previous state.
   Future<void> _saveArming({String? mode, List<ArmingWindow>? schedule}) async {
-    final l10n = AppLocalizations.of(context)!;
     final previousMode = _armingMode;
     final previousSchedule = _armingSchedule;
     setState(() {
@@ -817,6 +852,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (mode != null) _armingMode = mode;
       if (schedule != null) _armingSchedule = schedule;
     });
+    // Demo has no server to hold the schedule: the editor is the whole of the
+    // state, so there is nothing to push and nothing to snap back to.
+    if (_ipController.text.trim().contains('demo_ip')) {
+      setState(() {
+        _savingArming = false;
+      });
+      return;
+    }
+    final l10n = AppLocalizations.of(context)!;
     try {
       final response = await http
           .post(
@@ -850,9 +894,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _armingSchedule = previousSchedule;
         _savingArming = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.settingsSaveError)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.settingsSaveError)));
     }
   }
 
@@ -874,9 +918,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _removeArmingWindow(int index, AppLocalizations l10n) {
     if (_armingSchedule.length <= 1) {
       // Watching nothing is what Off is for; an empty schedule is a trap.
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.armingWindowRequired)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.armingWindowRequired)));
       return;
     }
     final next = [..._armingSchedule]..removeAt(index);
@@ -960,7 +1004,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       children: [
         Row(
           children: [
-            Text(l10n.armingDays, style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              l10n.armingDays,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             const Spacer(),
             IconButton(
               tooltip: l10n.armingRemoveWindow,
@@ -1143,9 +1190,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _testRemoteAlert(AppLocalizations l10n) async {
     final url = _ntfyUrlController.text.trim();
     if (url.isNotEmpty && !isValidNtfyUrl(url)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.alertsRemoteUrlInvalid)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.alertsRemoteUrlInvalid)));
       return;
     }
     setState(() => _testingNtfy = true);
@@ -1226,10 +1273,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             )
             .timeout(const Duration(seconds: 4)),
         http
-            .get(
-              Uri.parse('$base/api/settings'),
-              headers: AuthService.headers,
-            )
+            .get(Uri.parse('$base/api/settings'), headers: AuthService.headers)
             .timeout(const Duration(seconds: 4)),
       ]);
       if (!mounted) return;
@@ -1276,21 +1320,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
           .timeout(const Duration(seconds: 4));
       if (!mounted) return;
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.healthRetentionSaved)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.healthRetentionSaved)));
       } else {
         setState(() => _retentionDays = previous);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.settingsSaveError)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.settingsSaveError)));
       }
     } catch (_) {
       if (!mounted) return;
       setState(() => _retentionDays = previous);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.settingsSaveError)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.settingsSaveError)));
     }
   }
 
@@ -1400,10 +1444,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: theme.textTheme.bodyMedium,
               ),
             ),
-            TextButton(
-              onPressed: _fetchSystemHealth,
-              child: Text(l10n.retry),
-            ),
+            TextButton(onPressed: _fetchSystemHealth, child: Text(l10n.retry)),
           ],
         )
       else if (data == null)
@@ -1692,9 +1733,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: OutlinedButton.icon(
             onPressed: () async {
               final l10n = AppLocalizations.of(context)!;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.syncStarting)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(l10n.syncStarting)));
               final success = await WearSyncService().sendCredentialsToWatch(
                 _ipController.text,
                 _tokenController.text,
@@ -1804,13 +1845,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // The outer bar already says "Settings" — one title is
+                    // enough; content starts with the pet.
                     const SizedBox(height: 20),
-                    Text(
-                      l10n.settingsTitle,
-                      style: Theme.of(context).textTheme.displayMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 40),
                     _buildProfilePicture(l10n),
                     const SizedBox(height: 40),
                     _buildProfileCard(l10n),

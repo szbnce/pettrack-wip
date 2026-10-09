@@ -172,6 +172,30 @@ class _PetTrackAppState extends State<PetTrackApp> with WidgetsBindingObserver {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: currentMode,
+          // The status bar follows the theme even on screens without an
+          // AppBar — white clock and icons on a light page were unreadable.
+          // The region is declarative and merges with an AppBar's own; the
+          // imperative call under it is the floor, because a frame whose
+          // region is not hit leaves the window on the Android theme default
+          // (white icons) and nothing corrects it.
+          builder: (context, child) {
+            final dark = Theme.of(context).brightness == Brightness.dark;
+            final style = SystemUiOverlayStyle(
+              statusBarIconBrightness: dark
+                  ? Brightness.light
+                  : Brightness.dark,
+              systemNavigationBarIconBrightness: dark
+                  ? Brightness.light
+                  : Brightness.dark,
+            );
+            return AnnotatedRegion<SystemUiOverlayStyle>(
+              value: style,
+              child: SystemOverlayStyle(
+                style: style,
+                child: child ?? const SizedBox.shrink(),
+              ),
+            );
+          },
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -193,6 +217,85 @@ class _PetTrackAppState extends State<PetTrackApp> with WidgetsBindingObserver {
       },
     );
   }
+}
+
+/// Pushes a [SystemUiOverlayStyle] to the platform after every build.
+///
+/// [AnnotatedRegion] alone is a hit-test: when the sample point lands on no
+/// region, the window keeps whatever the native theme declared. This calls the
+/// platform directly so the ink always tracks the app's brightness, and asks
+/// the host activity to say it again where Android still listens.
+class SystemOverlayStyle extends StatefulWidget {
+  final SystemUiOverlayStyle style;
+  final Widget child;
+
+  const SystemOverlayStyle({
+    super.key,
+    required this.style,
+    required this.child,
+  });
+
+  @override
+  State<SystemOverlayStyle> createState() => _SystemOverlayStyleState();
+}
+
+class _SystemOverlayStyleState extends State<SystemOverlayStyle>
+    with WidgetsBindingObserver {
+  static const _systemUi = MethodChannel('pettrack/system_ui');
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _push();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Coming back to the foreground is exactly when Android has been known to
+    // hand the window back with the glyphs wiped — say it again.
+    if (state == AppLifecycleState.resumed) _push();
+  }
+
+  @override
+  void didUpdateWidget(SystemOverlayStyle oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.style != widget.style) _push();
+  }
+
+  void _push() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      SystemChrome.setSystemUIOverlayStyle(widget.style);
+      _pushToAndroid();
+    });
+  }
+
+  /// [SystemChrome] only speaks the modern appearance flags, and it drops a
+  /// repeat of a style it has already sent. The host activity re-asserts both
+  /// that and the legacy light-bar flags, and is happy to hear it again.
+  Future<void> _pushToAndroid() async {
+    try {
+      await _systemUi.invokeMethod<void>('setInk', <String, bool>{
+        'status': widget.style.statusBarIconBrightness == Brightness.dark,
+        'nav':
+            widget.style.systemNavigationBarIconBrightness == Brightness.dark,
+      });
+    } on MissingPluginException {
+      // No Android host listening — SystemChrome already said it.
+    } on PlatformException {
+      // System chrome must never be able to take the app down with it.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }
 
 class BootScreen extends StatefulWidget {

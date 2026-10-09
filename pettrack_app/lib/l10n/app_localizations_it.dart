@@ -996,6 +996,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get demoZoneFeeder => 'Mangiatoia';
 
   @override
+  String get demoMedName => 'Integratore digestivo';
+
+  @override
+  String get demoMedDose => '0,5 ml';
+
+  @override
+  String get demoVacName => 'Vaccino contro la mixomatosi';
+
+  @override
   String get activityLoadError => 'Impossibile caricare le attività';
 
   @override
