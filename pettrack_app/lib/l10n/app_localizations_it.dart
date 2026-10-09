@@ -1187,6 +1187,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get feedbackFailed => 'Impossibile inviare la nota.';
 
   @override
+  String feedAllQuiet(String duration) {
+    return 'Tutto tranquillo da $duration';
+  }
+
+  @override
   String get armingTitle => 'Sorveglianza';
 
   @override

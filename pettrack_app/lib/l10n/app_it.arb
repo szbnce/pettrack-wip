@@ -535,6 +535,14 @@
   "feedbackIsMyPet": "È il mio",
   "feedbackThanks": "Grazie — PetTrack imparerà da questo.",
   "feedbackFailed": "Impossibile inviare la nota.",
+  "feedAllQuiet": "Tutto tranquillo da {duration}",
+  "@feedAllQuiet": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
   "armingTitle": "Sorveglianza",
   "armingModeOn": "Sempre acceso",
   "armingModeSchedule": "A programma",

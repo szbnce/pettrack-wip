@@ -1188,6 +1188,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get feedbackFailed => 'Notiz konnte nicht gesendet werden.';
 
   @override
+  String feedAllQuiet(String duration) {
+    return 'Alles ruhig seit $duration';
+  }
+
+  @override
   String get armingTitle => 'Überwachung';
 
   @override

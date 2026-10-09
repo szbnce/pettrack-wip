@@ -435,6 +435,14 @@
   "feedbackIsMyPet": "Az enyém",
   "feedbackThanks": "Köszi — a PetTrack tanulni fog belőle.",
   "feedbackFailed": "Nem sikerült elküldeni a jegyzetet.",
+  "feedAllQuiet": "Csend van — {duration} ideje",
+  "@feedAllQuiet": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
   "armingTitle": "Megfigyelés",
   "armingModeOn": "Mindig bekapcsolva",
   "armingModeSchedule": "Időzítés szerint",

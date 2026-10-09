@@ -2250,6 +2250,12 @@ abstract class AppLocalizations {
   /// **'Could not send that note.'**
   String get feedbackFailed;
 
+  /// No description provided for @feedAllQuiet.
+  ///
+  /// In en, this message translates to:
+  /// **'All quiet for {duration}'**
+  String feedAllQuiet(String duration);
+
   /// No description provided for @armingTitle.
   ///
   /// In en, this message translates to:

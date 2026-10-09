@@ -1161,6 +1161,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get feedbackFailed => '메모를 보내지 못했습니다.';
 
   @override
+  String feedAllQuiet(String duration) {
+    return '$duration 동안 조용합니다';
+  }
+
+  @override
   String get armingTitle => '감시';
 
   @override

@@ -20,6 +20,8 @@ import '../utils/evidence.dart';
 import '../utils/event_feedback.dart';
 import '../utils/feed_export.dart';
 import '../utils/feed_filter.dart';
+import '../utils/format_helpers.dart';
+import '../utils/quiet.dart';
 import '../utils/recap.dart';
 import '../utils/reconnect.dart';
 import '../utils/snooze.dart';
@@ -192,6 +194,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _buildRecapBanner(l10n, dark: false),
+        _buildQuietLine(l10n, dark: false),
         _buildFeedFilter(l10n, dark: false),
         const SizedBox(height: 16),
         if (_activityLoading)
@@ -242,6 +245,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (mounted) {
       setState(() => _recapDismissedDay = prefs.getString('recap_dismissed_day'));
     }
+  }
+
+  /// Silence is the happy path — once it has lasted, say so instead of
+  /// leaving a list that just stops. Hidden until the house has been
+  /// still for half an hour.
+  Widget _buildQuietLine(AppLocalizations l10n, {required bool dark}) {
+    if (_activities.isEmpty) return const SizedBox.shrink();
+    final last = (_activities.first['timestamp'] as num?)?.toInt();
+    final now = DateTime.now();
+    if (!shouldShowQuiet(last, now)) return const SizedBox.shrink();
+    final still = quietFor(last, now)!;
+    final color = dark ? Colors.white54 : AppColors.outline;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Icon(Icons.spa_outlined, size: 16, color: color),
+          const SizedBox(width: 8),
+          Text(
+            l10n.feedAllQuiet(
+              formatDurationSeconds(l10n, still.inSeconds.toDouble()),
+            ),
+            style: TextStyle(color: color, fontSize: 13),
+          ),
+        ],
+      ),
+    );
   }
 
   /// "Last night" in one line: what happened in the night window, once a
@@ -700,8 +730,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _loadDemoData() {
     if (!mounted) return;
     final l10n = AppLocalizations.of(context)!;
+    // The toy feed ended three quarters of an hour ago, so the "all quiet"
+    // line has something to say in the demo too.
     int at(Duration ago) =>
-        DateTime.now().subtract(ago).millisecondsSinceEpoch ~/ 1000;
+        DateTime.now()
+            .subtract(ago + const Duration(minutes: 45))
+            .millisecondsSinceEpoch ~/
+        1000;
     setState(() {
       _activities = [
         {
@@ -1927,6 +1962,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: 12),
           _buildRecapBanner(l10n, dark: true),
+          _buildQuietLine(l10n, dark: true),
           _buildFeedFilter(l10n, dark: true),
           const SizedBox(height: 12),
           if (_activityLoading)

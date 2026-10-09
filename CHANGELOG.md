@@ -36,6 +36,8 @@ builds version together — Settings → About, the update check and
 - Pin a replay: one tap in the player keeps that clip forever. Retention
   and disk pressure both look the other way; the pin list lives next to
   the footage in `.pinned.json`, so it moves with the folder
+- "All quiet for…" on the feed: once the house has been still for half an
+  hour the feed says so, instead of just stopping
 - One-tap in-app update on Android: the server stages a new APK
   (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
   and one tap downloads it and opens the system installer — self-hosted,

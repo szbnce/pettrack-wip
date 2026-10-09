@@ -1179,6 +1179,11 @@ class AppLocalizationsHu extends AppLocalizations {
   String get feedbackFailed => 'Nem sikerült elküldeni a jegyzetet.';
 
   @override
+  String feedAllQuiet(String duration) {
+    return 'Csend van — $duration ideje';
+  }
+
+  @override
   String get armingTitle => 'Megfigyelés';
 
   @override

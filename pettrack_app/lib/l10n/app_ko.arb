@@ -535,6 +535,14 @@
   "feedbackIsMyPet": "우리 아이임",
   "feedbackThanks": "감사합니다 — PetTrack가 학습에 반영합니다.",
   "feedbackFailed": "메모를 보내지 못했습니다.",
+  "feedAllQuiet": "{duration} 동안 조용합니다",
+  "@feedAllQuiet": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
   "armingTitle": "감시",
   "armingModeOn": "항상 켜기",
   "armingModeSchedule": "예약 시간에만",

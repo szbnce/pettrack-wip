@@ -1175,6 +1175,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get feedbackFailed => 'Could not send that note.';
 
   @override
+  String feedAllQuiet(String duration) {
+    return 'All quiet for $duration';
+  }
+
+  @override
   String get armingTitle => 'Watching';
 
   @override

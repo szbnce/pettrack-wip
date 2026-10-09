@@ -535,6 +535,14 @@
   "feedbackIsMyPet": "私のペットです",
   "feedbackThanks": "ありがとうございます — PetTrackが学習します。",
   "feedbackFailed": "メモを送信できませんでした。",
+  "feedAllQuiet": "{duration}ずっと静かです",
+  "@feedAllQuiet": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
   "armingTitle": "見守り",
   "armingModeOn": "常時オン",
   "armingModeSchedule": "スケジュール",

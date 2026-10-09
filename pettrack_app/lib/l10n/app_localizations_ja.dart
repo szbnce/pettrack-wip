@@ -1165,6 +1165,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get feedbackFailed => 'メモを送信できませんでした。';
 
   @override
+  String feedAllQuiet(String duration) {
+    return '$durationずっと静かです';
+  }
+
+  @override
   String get armingTitle => '見守り';
 
   @override

@@ -628,6 +628,14 @@
   "feedbackIsMyPet": "That's my pet",
   "feedbackThanks": "Thanks — PetTrack will learn from that.",
   "feedbackFailed": "Could not send that note.",
+  "feedAllQuiet": "All quiet for {duration}",
+  "@feedAllQuiet": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
   "armingTitle": "Watching",
   "armingModeOn": "Always on",
   "armingModeSchedule": "On a schedule",

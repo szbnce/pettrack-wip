@@ -1157,6 +1157,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get feedbackFailed => '无法发送该备注。';
 
   @override
+  String feedAllQuiet(String duration) {
+    return '已经安静了 $duration';
+  }
+
+  @override
   String get armingTitle => '监控';
 
   @override

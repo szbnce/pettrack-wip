@@ -535,6 +535,14 @@
   "feedbackIsMyPet": "是我的宠物",
   "feedbackThanks": "谢谢 — PetTrack 会从中学习。",
   "feedbackFailed": "无法发送该备注。",
+  "feedAllQuiet": "已经安静了 {duration}",
+  "@feedAllQuiet": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
   "armingTitle": "监控",
   "armingModeOn": "始终开启",
   "armingModeSchedule": "按计划",
