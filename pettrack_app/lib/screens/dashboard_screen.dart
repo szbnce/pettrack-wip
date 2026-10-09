@@ -19,6 +19,7 @@ import '../utils/arming.dart';
 import '../utils/evidence.dart';
 import '../utils/feed_export.dart';
 import '../utils/feed_filter.dart';
+import '../utils/recap.dart';
 import '../utils/reconnect.dart';
 import '../utils/snooze.dart';
 import '../widgets/empty_state.dart';
@@ -82,6 +83,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _hasAlertedBattery = false;
   // "I'm home": alerts on this phone stay quiet until this moment (ms).
   int? _snoozedUntil;
+  // Morning recap: the day whose "last night" banner was already dismissed.
+  String? _recapDismissedDay;
   bool _hasCameraError = false;
   // Mirrors the monitor's low-light mode (toggled remotely from here).
   bool _nightMode = false;
@@ -187,6 +190,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        _buildRecapBanner(l10n, dark: false),
         _buildFeedFilter(l10n, dark: false),
         const SizedBox(height: 16),
         if (_activityLoading)
@@ -229,6 +233,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
       ],
     );
+  }
+
+  Future<void> _loadRecapDismissed() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() => _recapDismissedDay = prefs.getString('recap_dismissed_day'));
+    }
+  }
+
+  /// "Last night" in one line: what happened in the night window, once a
+  /// day, until it's waved away. Nothing overnight → no banner.
+  Widget _buildRecapBanner(AppLocalizations l10n, {required bool dark}) {
+    final now = DateTime.now();
+    final count = countNightEvents(
+      _activities.map((e) => (e['timestamp'] as num?) ?? 0),
+      now,
+    );
+    if (!shouldShowRecap(
+      eventCount: count,
+      dismissedDay: _recapDismissedDay,
+      now: now,
+    )) {
+      return const SizedBox.shrink();
+    }
+    final theme = Theme.of(context);
+    final ink = dark ? Colors.white : theme.colorScheme.onSurface;
+    // The feed caps at 50 events — 50 in the night means "at least 50".
+    final label = count >= 50 ? '50+' : '$count';
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: dark
+            ? Colors.white.withValues(alpha: 0.08)
+            : theme.colorScheme.primaryContainer.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.nightlight_outlined,
+            size: 20,
+            color: ink.withValues(alpha: 0.8),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              l10n.recapBanner(label),
+              style: TextStyle(fontSize: 14, color: ink),
+            ),
+          ),
+          TextButton(
+            onPressed: _dismissRecap,
+            child: Text(l10n.recapDismiss),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _dismissRecap() async {
+    final prefs = await SharedPreferences.getInstance();
+    final day = recapDayKey(DateTime.now());
+    await prefs.setString('recap_dismissed_day', day);
+    if (mounted) setState(() => _recapDismissedDay = day);
   }
 
   /// Search + category chips for the activity feed, in both feed styles.
@@ -503,6 +572,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
     NotificationService().requestPermissions();
     _loadAlertSettings();
+    _loadRecapDismissed();
     _loadProfilePic();
     _fetchPetProfile();
     _loadSecret();
@@ -1782,6 +1852,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
           const SizedBox(height: 12),
+          _buildRecapBanner(l10n, dark: true),
           _buildFeedFilter(l10n, dark: true),
           const SizedBox(height: 12),
           if (_activityLoading)

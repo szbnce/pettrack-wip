@@ -1099,6 +1099,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get feedExportFailed => '无法导出动态。';
 
   @override
+  String recapBanner(String count) {
+    return '昨晚：$count 条动态';
+  }
+
+  @override
+  String get recapDismiss => '知道了';
+
+  @override
   String get armingTitle => '监控';
 
   @override

@@ -498,6 +498,16 @@
   "feedExport": "Esporta CSV",
   "feedExportEmpty": "Ancora niente da esportare.",
   "feedExportFailed": "Impossibile esportare il diario.",
+  "recapBanner": "Stanotte: {count} eventi",
+  "@recapBanner": {
+    "description": "Morning recap banner: {count} is how many events happened overnight (may be 50+ when the feed is capped).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recapDismiss": "Capito",
   "armingTitle": "Sorveglianza",
   "armingModeOn": "Sempre acceso",
   "armingModeSchedule": "A programma",

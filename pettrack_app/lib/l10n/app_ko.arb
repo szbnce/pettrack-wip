@@ -498,6 +498,16 @@
   "feedExport": "CSV 내보내기",
   "feedExportEmpty": "아직 내보낼 내용이 없습니다.",
   "feedExportFailed": "피드를 내보내지 못했습니다.",
+  "recapBanner": "어젯밤: 이벤트 {count}건",
+  "@recapBanner": {
+    "description": "Morning recap banner: {count} is how many events happened overnight (may be 50+ when the feed is capped).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recapDismiss": "확인",
   "armingTitle": "감시",
   "armingModeOn": "항상 켜기",
   "armingModeSchedule": "예약 시간에만",

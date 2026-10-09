@@ -1127,6 +1127,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get feedExportFailed => 'Impossibile esportare il diario.';
 
   @override
+  String recapBanner(String count) {
+    return 'Stanotte: $count eventi';
+  }
+
+  @override
+  String get recapDismiss => 'Capito';
+
+  @override
   String get armingTitle => 'Sorveglianza';
 
   @override

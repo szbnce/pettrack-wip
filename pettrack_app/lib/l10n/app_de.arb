@@ -498,6 +498,16 @@
   "feedExport": "CSV exportieren",
   "feedExportEmpty": "Noch nichts zu exportieren.",
   "feedExportFailed": "Der Feed konnte nicht exportiert werden.",
+  "recapBanner": "Letzte Nacht: {count} Ereignisse",
+  "@recapBanner": {
+    "description": "Morning recap banner: {count} is how many events happened overnight (may be 50+ when the feed is capped).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recapDismiss": "Alles klar",
   "armingTitle": "Überwachung",
   "armingModeOn": "Immer an",
   "armingModeSchedule": "Nach Zeitplan",

@@ -18,6 +18,9 @@ builds version together — Settings → About, the update check and
 - "Free up space now" on the System health card: the retention sweep runs
   on demand instead of waiting for the background timer, and says exactly
   what it freed
+- "Last night" recap: the first time you open the app in the morning it
+  says how many events happened overnight — once a day, then out of the
+  way
 - One-tap in-app update on Android: the server stages a new APK
   (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
   and one tap downloads it and opens the system installer — self-hosted,

@@ -498,6 +498,16 @@
   "feedExport": "导出 CSV",
   "feedExportEmpty": "暂无可导出的内容。",
   "feedExportFailed": "无法导出动态。",
+  "recapBanner": "昨晚：{count} 条动态",
+  "@recapBanner": {
+    "description": "Morning recap banner: {count} is how many events happened overnight (may be 50+ when the feed is capped).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recapDismiss": "知道了",
   "armingTitle": "监控",
   "armingModeOn": "始终开启",
   "armingModeSchedule": "按计划",

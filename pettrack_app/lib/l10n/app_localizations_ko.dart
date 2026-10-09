@@ -1102,6 +1102,14 @@ class AppLocalizationsKo extends AppLocalizations {
   String get feedExportFailed => '피드를 내보내지 못했습니다.';
 
   @override
+  String recapBanner(String count) {
+    return '어젯밤: 이벤트 $count건';
+  }
+
+  @override
+  String get recapDismiss => '확인';
+
+  @override
   String get armingTitle => '감시';
 
   @override

@@ -2142,6 +2142,18 @@ abstract class AppLocalizations {
   /// **'Could not export the feed.'**
   String get feedExportFailed;
 
+  /// Morning recap banner: {count} is how many events happened overnight (may be 50+ when the feed is capped).
+  ///
+  /// In en, this message translates to:
+  /// **'Last night: {count} events'**
+  String recapBanner(String count);
+
+  /// No description provided for @recapDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get recapDismiss;
+
   /// No description provided for @armingTitle.
   ///
   /// In en, this message translates to:

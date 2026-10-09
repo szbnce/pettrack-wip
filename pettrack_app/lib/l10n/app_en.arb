@@ -591,6 +591,16 @@
   "feedExport": "Export CSV",
   "feedExportEmpty": "Nothing to export yet.",
   "feedExportFailed": "Could not export the feed.",
+  "recapBanner": "Last night: {count} events",
+  "@recapBanner": {
+    "description": "Morning recap banner: {count} is how many events happened overnight (may be 50+ when the feed is capped).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recapDismiss": "Got it",
   "armingTitle": "Watching",
   "armingModeOn": "Always on",
   "armingModeSchedule": "On a schedule",

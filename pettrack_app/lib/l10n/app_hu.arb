@@ -398,6 +398,16 @@
   "feedExport": "CSV exportálás",
   "feedExportEmpty": "Még nincs mit exportálni.",
   "feedExportFailed": "Nem sikerült exportálni az eseményeket.",
+  "recapBanner": "Múlt éjjel: {count} esemény",
+  "@recapBanner": {
+    "description": "Morning recap banner: {count} is how many events happened overnight (may be 50+ when the feed is capped).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recapDismiss": "Értem",
   "armingTitle": "Megfigyelés",
   "armingModeOn": "Mindig bekapcsolva",
   "armingModeSchedule": "Időzítés szerint",

@@ -1106,6 +1106,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get feedExportFailed => 'フィードを書き出せませんでした。';
 
   @override
+  String recapBanner(String count) {
+    return '昨夜のイベント：$count件';
+  }
+
+  @override
+  String get recapDismiss => 'わかりました';
+
+  @override
   String get armingTitle => '見守り';
 
   @override

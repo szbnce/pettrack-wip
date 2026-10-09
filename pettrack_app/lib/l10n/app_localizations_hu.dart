@@ -1120,6 +1120,14 @@ class AppLocalizationsHu extends AppLocalizations {
   String get feedExportFailed => 'Nem sikerült exportálni az eseményeket.';
 
   @override
+  String recapBanner(String count) {
+    return 'Múlt éjjel: $count esemény';
+  }
+
+  @override
+  String get recapDismiss => 'Értem';
+
+  @override
   String get armingTitle => 'Megfigyelés';
 
   @override

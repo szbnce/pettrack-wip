@@ -498,6 +498,16 @@
   "feedExport": "CSVを書き出す",
   "feedExportEmpty": "書き出す内容がまだありません。",
   "feedExportFailed": "フィードを書き出せませんでした。",
+  "recapBanner": "昨夜のイベント：{count}件",
+  "@recapBanner": {
+    "description": "Morning recap banner: {count} is how many events happened overnight (may be 50+ when the feed is capped).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recapDismiss": "わかりました",
   "armingTitle": "見守り",
   "armingModeOn": "常時オン",
   "armingModeSchedule": "スケジュール",

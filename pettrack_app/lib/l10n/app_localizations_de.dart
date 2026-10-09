@@ -1129,6 +1129,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get feedExportFailed => 'Der Feed konnte nicht exportiert werden.';
 
   @override
+  String recapBanner(String count) {
+    return 'Letzte Nacht: $count Ereignisse';
+  }
+
+  @override
+  String get recapDismiss => 'Alles klar';
+
+  @override
   String get armingTitle => 'Überwachung';
 
   @override
