@@ -20,6 +20,7 @@ import '../utils/evidence.dart';
 import '../utils/feed_filter.dart';
 import '../utils/reconnect.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/skeleton_box.dart';
 import '../widgets/highlight_card.dart';
 import 'insights_screen.dart';
 import 'replays_screen.dart';
@@ -52,6 +53,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _statusFailures = 0;
   List<dynamic> _activities = [];
   bool _activityError = false;
+  // Skeletons only for the very first fetch (and explicit retries) — the
+  // 1s poll must never flash them over a feed that is already showing.
+  bool _activityLoading = true;
   // Feed search/filter: the query box and the category chips above the feed.
   final TextEditingController _feedSearchController = TextEditingController();
   String _feedQuery = '';
@@ -158,6 +162,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return events;
   }
 
+  /// The feed's shape while the first fetch is in flight — never show
+  /// "nothing here" before we know there is nothing.
+  Widget _feedSkeletons() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (int i = 0; i < 3; i++) ...[
+          if (i > 0) const SizedBox(height: 12),
+          const SkeletonBox.tile(height: 64),
+        ],
+      ],
+    );
+  }
+
   /// The mobile feed: filter row on top, then the timeline of matching
   /// events — every row a door to the footage of that moment.
   Widget _buildMobileFeed(AppLocalizations l10n) {
@@ -167,14 +185,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         _buildFeedFilter(l10n, dark: false),
         const SizedBox(height: 16),
-        if (_activities.isEmpty)
+        if (_activityLoading)
+          _feedSkeletons()
+        else if (_activities.isEmpty)
           EmptyState(
             icon: _activityError ? Icons.cloud_off : Icons.history,
             title: _activityError
                 ? l10n.activityLoadError
                 : l10n.noRecentEvents,
             actionLabel: _activityError ? l10n.retry : null,
-            onAction: _activityError ? _fetchActivity : null,
+            onAction: _activityError ? _retryActivity : null,
           )
         else if (events.isEmpty)
           EmptyState(icon: Icons.search_off, title: l10n.feedNoMatch)
@@ -653,6 +673,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _secretToken = prefs.getString('secret_token');
   }
 
+  /// Retry from an error card: skeletons again, then fetch.
+  void _retryActivity() {
+    setState(() => _activityLoading = true);
+    _fetchActivity();
+  }
+
   Future<void> _fetchActivity() async {
     try {
       final response = await http
@@ -734,6 +760,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } catch (_) {
       if (mounted && !_activityError) {
         setState(() => _activityError = true);
+      }
+    } finally {
+      if (mounted && _activityLoading) {
+        setState(() => _activityLoading = false);
       }
     }
   }
@@ -1598,7 +1628,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 12),
           _buildFeedFilter(l10n, dark: true),
           const SizedBox(height: 12),
-          if (_activities.isEmpty)
+          if (_activityLoading)
+            _feedSkeletons()
+          else if (_activities.isEmpty)
             EmptyState(
               icon: _activityError ? Icons.cloud_off : Icons.history,
               title: _activityError
@@ -1607,7 +1639,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               textColor: Colors.white54,
               iconColor: Colors.white38,
               actionLabel: _activityError ? l10n.retry : null,
-              onAction: _activityError ? _fetchActivity : null,
+              onAction: _activityError ? _retryActivity : null,
             )
           else if (events.isEmpty)
             EmptyState(

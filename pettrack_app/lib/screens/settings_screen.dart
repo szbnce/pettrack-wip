@@ -10,6 +10,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../app_info.dart';
 import '../theme/colors.dart';
+import '../widgets/skeleton_box.dart';
 import '../utils/arming.dart';
 import '../utils/format_helpers.dart';
 import '../utils/server_url.dart';
@@ -1448,11 +1449,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         )
       else if (data == null)
-        const Center(
-          child: Padding(
-            padding: EdgeInsets.all(8),
-            child: CircularProgressIndicator(),
-          ),
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SkeletonBox.tile(height: 56),
+            SizedBox(height: 16),
+            SkeletonBox.tile(height: 56),
+            SizedBox(height: 16),
+            SkeletonBox.tile(height: 56),
+          ],
         )
       else ...[
         _healthRow(

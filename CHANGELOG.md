@@ -20,6 +20,9 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- Every data screen loads honestly: skeletons while content is in flight
+  instead of a false "nothing here" flash — the dashboard feed and the
+  Settings health card were the last offenders
 - Every socket comes back on its own — streams retry with backoff and the
   screens say so while they do
 - Light theme speaks up: white-on-light ghost text replaced by theme ink on
