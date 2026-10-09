@@ -396,6 +396,18 @@
   "versionMatch": "App und Server sind synchron",
   "versionAppOlder": "Der Server ist neuer — bitte die App aktualisieren",
   "versionServerOlder": "Die App ist neuer — bitte den Server aktualisieren",
+  "updateAvailable": "Version {version} ist bereit zur Installation",
+  "@updateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateInstallButton": "Update installieren",
+  "updateDownloading": "Wird heruntergeladen…",
+  "updateDownloadFailed": "Das Update konnte nicht geladen werden. Prüfe den Server und versuche es erneut.",
+  "updateInstallFailed": "Der Android-Installer konnte nicht geöffnet werden.",
   "privacyButton": "Datenschutz",
   "privacyTitle": "Datenschutz",
   "privacyBody": "PetTrack ist komplett selbst gehostet — Kamerabild, Aufnahmen und Tierdaten bleiben auf deinem eigenen Server.\n\n• Keine Cloud, nichts wird irgendwohin hochgeladen\n• Kein Konto — es gibt keinen Dienst, bei dem man sich anmeldet\n• Keine Analyse oder Nachverfolgung\n• Standardmäßig nur im LAN; Fernzugriff nur, wenn du ihn selbst einrichtest",

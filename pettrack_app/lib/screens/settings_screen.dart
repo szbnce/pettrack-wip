@@ -20,6 +20,7 @@ import '../services/notification_service.dart';
 import '../services/wear_sync_service.dart';
 import 'package:http/http.dart' as http;
 import '../services/auth_service.dart';
+import '../services/update_service.dart';
 import '../services/backup_service.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -47,6 +48,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   int _quietHoursTo = 7 * 60;
   String? _serverVersion;
   bool _checkingVersion = false;
+  // One-tap in-app update: a newer APK staged on this server, if any.
+  AppUpdate? _availableUpdate;
+  bool _updatingApp = false;
+  double? _updateProgress;
   bool _isLoading = true;
 
   // System health card (server watchdog: camera, disk, replay retention).
@@ -1235,7 +1240,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   /// Fetches /api/version from the configured server and keeps the result
-  /// for the About card's update check.
+  /// for the About card's update check — and probes whether the server
+  /// has a newer app staged for a one-tap install.
   Future<void> _checkServerVersion() async {
     final raw = _ipController.text.trim();
     if (raw.isEmpty) return;
@@ -1253,11 +1259,59 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } catch (e) {
       debugPrint('version check failed: $e');
     }
+    final update = await checkForAppUpdate(base);
     if (!mounted) return;
     setState(() {
       _serverVersion = version;
+      _availableUpdate = update;
       _checkingVersion = false;
     });
+  }
+
+  /// Download the staged APK and open the Android installer on it. The
+  /// system installer asks the user to confirm — this only stages it.
+  Future<void> _downloadAndInstall() async {
+    final l10n = AppLocalizations.of(context)!;
+    final update = _availableUpdate;
+    if (update == null) return;
+    setState(() {
+      _updatingApp = true;
+      _updateProgress = null;
+    });
+    var handedToInstaller = false;
+    try {
+      final base = normalizeServerUrl(_ipController.text.trim());
+      final apk = await downloadAppUpdate(
+        base,
+        update,
+        onProgress: (got, total) {
+          if (mounted && total > 0) setState(() => _updateProgress = got / total);
+        },
+      );
+      handedToInstaller = true;
+      await installDownloadedUpdate(apk);
+      if (!mounted) return;
+      setState(() {
+        _updatingApp = false;
+        _updateProgress = null;
+      });
+    } catch (e) {
+      debugPrint('app update failed: $e');
+      if (!mounted) return;
+      setState(() {
+        _updatingApp = false;
+        _updateProgress = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            handedToInstaller
+                ? l10n.updateInstallFailed
+                : l10n.updateDownloadFailed,
+          ),
+        ),
+      );
+    }
   }
 
   /// The server's watchdog view plus its retention setting.
@@ -1402,6 +1456,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
           label: Text(l10n.versionCheckButton),
         ),
       ),
+      if (_availableUpdate != null && Platform.isAndroid) ...[
+        const SizedBox(height: 12),
+        Text(
+          l10n.updateAvailable(_availableUpdate!.version),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 8),
+        Center(
+          child: ElevatedButton.icon(
+            onPressed: _updatingApp ? null : _downloadAndInstall,
+            icon: _updatingApp
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.download),
+            label: Text(
+              _updatingApp
+                  ? l10n.updateDownloading
+                  : l10n.updateInstallButton,
+            ),
+          ),
+        ),
+        if (_updateProgress != null) ...[
+          const SizedBox(height: 8),
+          LinearProgressIndicator(value: _updateProgress),
+        ],
+      ],
       const SizedBox(height: 4),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,

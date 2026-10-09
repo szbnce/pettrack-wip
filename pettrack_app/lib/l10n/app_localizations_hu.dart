@@ -895,6 +895,24 @@ class AppLocalizationsHu extends AppLocalizations {
   String get versionServerOlder => 'Az app újabb — frissítsd a szervert';
 
   @override
+  String updateAvailable(String version) {
+    return '$version verzió telepíthető';
+  }
+
+  @override
+  String get updateInstallButton => 'Frissítés telepítése';
+
+  @override
+  String get updateDownloading => 'Letöltés…';
+
+  @override
+  String get updateDownloadFailed =>
+      'A frissítés letöltése nem sikerült. Ellenőrizd a szervert, és próbáld újra.';
+
+  @override
+  String get updateInstallFailed => 'Az Android telepítő nem nyílt meg.';
+
+  @override
   String get privacyButton => 'Adatvédelem';
 
   @override

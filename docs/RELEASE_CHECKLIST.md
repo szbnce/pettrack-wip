@@ -72,6 +72,21 @@ cd .. && python3 tools/check_i18n.py   # 7 locales in sync
 - With `key.properties` present the APK is release-signed; without it,
   debug-signed (fine for testing, not for Play).
 
+### Stage the one-tap update on your server
+
+Self-hosted installs update themselves from the server. On the host, next
+to the running server (or wherever `PETTRACK_UPDATE_DIR` points):
+
+```bash
+mkdir -p updates
+cp PetTrack.apk updates/PetTrack.apk
+echo '{"version": "X.Y.Z"}' > updates/update.json
+```
+
+No restart needed — Settings → About → "Check now" now offers "Install
+update" on Android phones, which downloads the APK and opens the system
+installer. Remove the two files to withdraw the offer.
+
 ## 4. Google Play (AAB)
 
 ```bash
@@ -93,7 +108,9 @@ git push origin main vX.Y.Z
 ```
 
 GitHub release `vX.Y.Z` with the `CHANGELOG.md` section as notes and
-`PetTrack.apk` attached. The in-app update check reads these releases.
+`PetTrack.apk` attached, for people installing fresh. (Existing installs
+get their one-tap update from the server staging step above, not from
+GitHub.)
 
 ## 6. After the release
 

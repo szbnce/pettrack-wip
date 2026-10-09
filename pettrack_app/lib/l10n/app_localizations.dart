@@ -1722,6 +1722,36 @@ abstract class AppLocalizations {
   /// **'The app is newer — update the server'**
   String get versionServerOlder;
 
+  /// No description provided for @updateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version} is ready to install'**
+  String updateAvailable(String version);
+
+  /// No description provided for @updateInstallButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Install update'**
+  String get updateInstallButton;
+
+  /// No description provided for @updateDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading…'**
+  String get updateDownloading;
+
+  /// No description provided for @updateDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not download the update. Check the server and try again.'**
+  String get updateDownloadFailed;
+
+  /// No description provided for @updateInstallFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the Android installer.'**
+  String get updateInstallFailed;
+
   /// No description provided for @privacyButton.
   ///
   /// In en, this message translates to:

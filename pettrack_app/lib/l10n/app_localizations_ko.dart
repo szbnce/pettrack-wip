@@ -880,6 +880,23 @@ class AppLocalizationsKo extends AppLocalizations {
   String get versionServerOlder => '앱이 더 최신입니다 — 서버를 업데이트하세요';
 
   @override
+  String updateAvailable(String version) {
+    return '$version 버전을 설치할 준비가 되었습니다';
+  }
+
+  @override
+  String get updateInstallButton => '업데이트 설치';
+
+  @override
+  String get updateDownloading => '다운로드 중…';
+
+  @override
+  String get updateDownloadFailed => '업데이트를 다운로드하지 못했습니다. 서버를 확인하고 다시 시도하세요.';
+
+  @override
+  String get updateInstallFailed => 'Android 설치 프로그램을 열지 못했습니다.';
+
+  @override
   String get privacyButton => '개인정보 보호';
 
   @override

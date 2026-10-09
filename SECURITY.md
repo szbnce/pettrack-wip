@@ -40,6 +40,15 @@ server over a VPN such as Tailscale rather than port-forwarding :8000.
 enforces. The master secret lives in `.env` next to the server; the Fernet
 key for stored credentials likewise. Back them up like credentials.
 
+**Updates.** The app updates itself from your own server and nowhere else:
+you stage `PetTrack.apk` + `update.json` in the server's updates/ directory,
+the app downloads the file over your LAN with valid credentials (the
+download endpoint rejects anonymous callers), and Android's own installer
+asks for confirmation before replacing anything. There is no third-party
+update service in the path — which also means staging an APK is an
+operator-privileged action: anyone who can write that directory can ship
+code to every install.
+
 **Opt-in egress.** Two features send data off the box, both off by default:
 the Home Assistant MQTT bridge (to *your* broker) and remote alerts via ntfy
 (text-only event titles — never video or snapshots). Quiet hours apply.

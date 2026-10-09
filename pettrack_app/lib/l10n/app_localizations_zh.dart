@@ -877,6 +877,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get versionServerOlder => '应用版本较新 — 请更新服务器';
 
   @override
+  String updateAvailable(String version) {
+    return '版本 $version 已可安装';
+  }
+
+  @override
+  String get updateInstallButton => '安装更新';
+
+  @override
+  String get updateDownloading => '正在下载…';
+
+  @override
+  String get updateDownloadFailed => '无法下载更新。请检查服务器后重试。';
+
+  @override
+  String get updateInstallFailed => '无法打开 Android 安装程序。';
+
+  @override
   String get privacyButton => '隐私';
 
   @override

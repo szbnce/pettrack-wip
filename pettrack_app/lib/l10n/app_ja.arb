@@ -396,6 +396,18 @@
   "versionMatch": "アプリとサーバーのバージョンは一致しています",
   "versionAppOlder": "サーバーの方が新しいです — アプリを更新してください",
   "versionServerOlder": "アプリの方が新しいです — サーバーを更新してください",
+  "updateAvailable": "バージョン {version} をインストールできます",
+  "@updateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateInstallButton": "アップデートをインストール",
+  "updateDownloading": "ダウンロード中…",
+  "updateDownloadFailed": "アップデートをダウンロードできませんでした。サーバーを確認して、もう一度お試しください。",
+  "updateInstallFailed": "Android インストーラーを開けませんでした。",
   "privacyButton": "プライバシー",
   "privacyTitle": "プライバシー",
   "privacyBody": "PetTrack は完全にセルフホストです — カメラ映像、録画、ペットのデータはすべて自分のサーバーに留まります。\n\n• クラウドなし、どこにもアップロードされません\n• アカウントなし — 登録するサービスはありません\n• 分析・トラッキングなし\n• 既定では LAN 内のみ。リモートアクセスは自分で設定した場合だけです",

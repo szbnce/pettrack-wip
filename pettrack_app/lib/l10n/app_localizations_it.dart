@@ -899,6 +899,25 @@ class AppLocalizationsIt extends AppLocalizations {
   String get versionServerOlder => 'L\'app è più recente — aggiorna il server';
 
   @override
+  String updateAvailable(String version) {
+    return 'La versione $version è pronta per l\'installazione';
+  }
+
+  @override
+  String get updateInstallButton => 'Installa aggiornamento';
+
+  @override
+  String get updateDownloading => 'Download in corso…';
+
+  @override
+  String get updateDownloadFailed =>
+      'Impossibile scaricare l\'aggiornamento. Controlla il server e riprova.';
+
+  @override
+  String get updateInstallFailed =>
+      'Impossibile aprire il programma di installazione di Android.';
+
+  @override
   String get privacyButton => 'Privacy';
 
   @override

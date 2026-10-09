@@ -30,7 +30,8 @@ when every one is green, the product side is done.
    tested; see docs/PERFORMANCE.md for how to verify them on a device)*
 6. **Ships like a product.** Semantic versioning + CHANGELOG + tagged release
    notes, one-tap in-app update on Android, backup/restore of settings,
-   documented security posture.
+   documented security posture. *(done — updates are staged on your own
+   server and install with one tap; SECURITY.md documents the model)*
 7. **Distribution ready** *(the user ships, we arm)*. Store-ready assets:
    screenshots, listing copy, signing/release checklist.
 

@@ -10,6 +10,10 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- One-tap in-app update on Android: the server stages a new APK
+  (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
+  and one tap downloads it and opens the system installer — self-hosted,
+  nothing leaves the LAN
 - Arming schedule: watch only when you're away — auto-arm and auto-disarm by
   weekday and time, always visible on the camera chip
 - One-file settings backup and restore — the whole setup, pairing included,

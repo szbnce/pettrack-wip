@@ -296,6 +296,18 @@
   "versionMatch": "Az app és a szerver szinkronban van",
   "versionAppOlder": "A szerver újabb — frissítsd az appot",
   "versionServerOlder": "Az app újabb — frissítsd a szervert",
+  "updateAvailable": "{version} verzió telepíthető",
+  "@updateAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateInstallButton": "Frissítés telepítése",
+  "updateDownloading": "Letöltés…",
+  "updateDownloadFailed": "A frissítés letöltése nem sikerült. Ellenőrizd a szervert, és próbáld újra.",
+  "updateInstallFailed": "Az Android telepítő nem nyílt meg.",
   "privacyButton": "Adatvédelem",
   "privacyTitle": "Adatvédelem",
   "privacyBody": "A PetTrack teljesen saját üzemeltetésű — a kamera képe, a felvételek és a kedvenc adatai a te szervereden maradnak.\n\n• Nincs felhő, semmi nem megy sehova\n• Nincs fiók — nincs szolgáltatás, ahová regisztrálni kellene\n• Nincs analitika vagy követés\n• Alapból csak helyi hálózat; a távoli elérés csak az, amit te állítasz be",

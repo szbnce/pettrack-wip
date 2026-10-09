@@ -883,6 +883,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get versionServerOlder => 'アプリの方が新しいです — サーバーを更新してください';
 
   @override
+  String updateAvailable(String version) {
+    return 'バージョン $version をインストールできます';
+  }
+
+  @override
+  String get updateInstallButton => 'アップデートをインストール';
+
+  @override
+  String get updateDownloading => 'ダウンロード中…';
+
+  @override
+  String get updateDownloadFailed =>
+      'アップデートをダウンロードできませんでした。サーバーを確認して、もう一度お試しください。';
+
+  @override
+  String get updateInstallFailed => 'Android インストーラーを開けませんでした。';
+
+  @override
   String get privacyButton => 'プライバシー';
 
   @override

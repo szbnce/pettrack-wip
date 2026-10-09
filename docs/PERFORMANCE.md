@@ -23,7 +23,7 @@ What holds the budget (all in `pettrack_app/lib/main.dart`):
 Measuring it (device, release/profile build):
 
 ```sh
-adb shell am start -W dev.szbnce.pettrack/.MainActivity   # TotalTime line
+adb shell am start -W com.szbnce.pettrack_app/.MainActivity   # TotalTime line
 ```
 
 or run in profile mode and read logcat for the debug line the app prints

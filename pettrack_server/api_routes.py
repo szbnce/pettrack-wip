@@ -1,5 +1,6 @@
 import os
 import glob
+import json
 import socket
 from fastapi import APIRouter, Depends, HTTPException, Query, Header, Response, Request
 from fastapi.responses import FileResponse
@@ -244,6 +245,62 @@ async def health_probe():
 async def get_version():
     """Unauthenticated version probe for the apps' update check."""
     return {"version": SERVER_VERSION, "name": socket.gethostname() or "pettrack"}
+
+# --- staged app updates ------------------------------------------------------
+# Self-hosted one-tap updates: drop PetTrack.apk and update.json into the
+# updates/ directory (see docs/RELEASE_CHECKLIST.md) and every installed app
+# can update itself. update.json carries the version: {"version": "2.1.0"}.
+
+UPDATE_APK_NAME = "PetTrack.apk"
+
+
+def staged_update() -> dict | None:
+    """The staged APK and its version, or None when nothing is staged.
+
+    Both files must be present: an APK alone says nothing about what it
+    is, and a version without bytes is just a tease. Read at call time so
+    staging a file needs no server restart."""
+    update_dir = os.getenv("PETTRACK_UPDATE_DIR", "updates")
+    apk_path = os.path.join(update_dir, UPDATE_APK_NAME)
+    meta_path = os.path.join(update_dir, "update.json")
+    if not (os.path.isfile(apk_path) and os.path.isfile(meta_path)):
+        return None
+    try:
+        with open(meta_path) as f:
+            version = str(json.load(f).get("version") or "").strip()
+    except (OSError, ValueError):
+        return None
+    if not version:
+        return None
+    return {"version": version, "path": apk_path}
+
+
+@auth_router.get("/api/app/update")
+async def get_app_update():
+    """Unauthenticated update probe (like /api/version): what this server
+    has staged for the app, if anything. The app decides whether it is
+    newer than the build it is running."""
+    staged = staged_update()
+    if staged is None:
+        return {"version": None}
+    return {
+        "version": staged["version"],
+        "apk_bytes": os.path.getsize(staged["path"]),
+    }
+
+
+@router.get("/api/app/update/apk")
+async def download_app_update():
+    """The staged APK. Valid credentials required — this is the one file
+    on the server that, once installed, owns the phone."""
+    staged = staged_update()
+    if staged is None:
+        raise HTTPException(status_code=404, detail="no update staged")
+    return FileResponse(
+        staged["path"],
+        media_type="application/vnd.android.package-archive",
+        filename=UPDATE_APK_NAME,
+    )
 
 @router.post("/api/frame/web")
 async def receive_web_frame(request: Request, token: str = "", monitor_id: str = ""):

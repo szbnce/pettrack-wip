@@ -372,6 +372,24 @@ disk) are pushed in the app's language and with the pet's name; quiet
 hours are honoured the same way local alerts honour them. Everything is
 opt-in: without a topic URL nothing is ever sent.
 
+### One-tap app updates
+
+Your server ships updates to the phones already running PetTrack. Drop the
+new build next to the server's data:
+
+```bash
+mkdir -p updates
+cp PetTrack.apk updates/PetTrack.apk
+echo '{"version": "2.1.0"}' > updates/update.json
+```
+
+Then on the phone: **Settings → About & updates → Check now**. If the
+server has something newer, "Install update" appears — one tap downloads
+the APK and opens Android's installer (which still asks you to confirm).
+Nothing leaves your LAN; details and the security notes are in
+[docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md) and
+[SECURITY.md](SECURITY.md).
+
 ### Development & testing
 
 * `flutter analyze` / `flutter test` — app static analysis and widget tests
