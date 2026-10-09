@@ -1015,6 +1015,17 @@ class AppLocalizationsHu extends AppLocalizations {
   String get replayAllDays => 'Összes nap';
 
   @override
+  String get replaysHourStripTitle => 'Tevékenység óránként';
+
+  @override
+  String replaysHourTooltip(String hour, int count) {
+    return '$hour:00 — $count esemény';
+  }
+
+  @override
+  String get replaysHourClear => 'Egész nap';
+
+  @override
   String get noReplaysForDay => 'Erre a napra nincsenek felvételek';
 
   @override

@@ -8,7 +8,7 @@ from typing import List, Dict
 import time
 import asyncio
 from datetime import datetime
-from database import get_events, get_event_counts_since, get_events_since, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event
+from database import get_events, get_event_counts_since, get_event_hour_counts, get_events_since, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event
 from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, MedicalDataSync, SoundEvent
 from email.utils import formatdate
 import jwt
@@ -495,6 +495,54 @@ async def get_timeline(days: int = Query(default=14, ge=1, le=90)):
             "clips": clips_by_day.get(day, 0),
         })
     return {"days": out}
+
+
+@router.get("/api/timeline/day")
+async def get_timeline_day(date: str = Query(...)):
+    """Hour-by-hour activity for one day — the density strip under the day.
+
+    24 buckets in the server's local hours, the same calendar as
+    /api/timeline: events per hour plus motion clips per hour. A day with
+    nothing in it still answers with 24 zeroed buckets."""
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="expected YYYY-MM-DD")
+
+    events = {h: 0 for h in range(24)}
+    for row in await get_event_hour_counts(date):
+        if 0 <= row["hour"] < 24:
+            events[row["hour"]] = row["n"]
+
+    clips = {h: 0 for h in range(24)}
+    folder = "replays"
+    if os.path.isdir(folder):
+        for filename in os.listdir(folder):
+            if not (
+                filename.startswith("replay_")
+                and filename.endswith(".mp4")
+                and not filename.endswith("_raw.mp4")
+            ):
+                continue
+            path = os.path.join(folder, filename)
+            try:
+                at = datetime.fromtimestamp(os.path.getmtime(path))
+            except OSError:
+                continue
+            if at.strftime("%Y-%m-%d") == date:
+                clips[at.hour] += 1
+
+    return {
+        "date": date,
+        "hours": [
+            {
+                "hour": h,
+                "total": events[h],
+                "clips": clips[h],
+            }
+            for h in range(24)
+        ],
+    }
 
 # One motion recording is started with a 30-second window (see vision.py),
 # which is close enough to count activity time without probing every file.

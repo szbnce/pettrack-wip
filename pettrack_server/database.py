@@ -119,6 +119,21 @@ async def get_event_counts_since(since_ts: float):
         rows = await cursor.fetchall()
         return [dict(row) for row in rows]
 
+async def get_event_hour_counts(day: str):
+    """Per-hour event counts for one calendar day (server-local), for the
+    day's density strip. `day` is `YYYY-MM-DD`."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute(
+            "SELECT strftime('%H', timestamp, 'unixepoch', 'localtime') AS hour, "
+            "COUNT(*) AS n FROM events "
+            "WHERE date(timestamp, 'unixepoch', 'localtime') = ? "
+            "GROUP BY hour ORDER BY hour",
+            (day,),
+        )
+        rows = await cursor.fetchall()
+        return [{"hour": int(r["hour"]), "n": int(r["n"])} for r in rows]
+
 async def save_zones(zones_data):
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("DELETE FROM zones")

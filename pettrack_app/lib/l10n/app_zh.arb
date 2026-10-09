@@ -457,6 +457,20 @@
   "recapEmpty": "这一天没有精彩时刻",
   "recapError": "无法生成回顾（错误 {code}）",
   "replayAllDays": "全部日期",
+  "replaysHourStripTitle": "按小时的活动",
+  "replaysHourTooltip": "{hour}:00 — {count} 条动态",
+  "@replaysHourTooltip": {
+    "description": "Hour-strip tooltip: {hour} is 00–23, {count} the events in that hour.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "replaysHourClear": "全天",
   "noReplaysForDay": "这一天没有录像",
   "timelapseBuilding": "正在生成今天的延时视频…",
   "timelapseEmpty": "这一天的帧数不足",

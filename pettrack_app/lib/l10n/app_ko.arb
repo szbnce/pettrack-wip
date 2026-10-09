@@ -457,6 +457,20 @@
   "recapEmpty": "이 날의 순간이 없습니다",
   "recapError": "요약을 만들 수 없습니다(오류 {code})",
   "replayAllDays": "모든 날",
+  "replaysHourStripTitle": "시간대별 활동",
+  "replaysHourTooltip": "{hour}:00 — 이벤트 {count}건",
+  "@replaysHourTooltip": {
+    "description": "Hour-strip tooltip: {hour} is 00–23, {count} the events in that hour.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "replaysHourClear": "하루 전체",
   "noReplaysForDay": "이 날의 녹화가 없습니다",
   "timelapseBuilding": "오늘의 타임랩스를 만드는 중…",
   "timelapseEmpty": "이 날의 프레임이 부족합니다",

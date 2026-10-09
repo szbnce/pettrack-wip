@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
 import '../utils/evidence.dart';
+import '../utils/hour_strip.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/skeleton_box.dart';
 import '../widgets/video_player_widget.dart';
@@ -52,6 +53,12 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
   /// Day picked in the strip (local midnight), or null for "all days".
   DateTime? _selectedDay;
 
+  /// Hourly density of the selected day (24 buckets from /api/timeline/day).
+  List<dynamic> _dayHours = [];
+
+  /// Hour picked in the density strip, or null for the whole day.
+  int? _selectedHour;
+
   /// The moment jump happens once per screen, not on every refresh.
   bool _jumpedToMoment = false;
 
@@ -60,6 +67,21 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     super.initState();
     _selectedDay = widget.initialDay;
     _fetchReplays();
+    if (_selectedDay != null) _fetchDayHours(_selectedDay!);
+  }
+
+  /// Day-strip selection: the hour strip comes with it, and the hour
+  /// filter of the previous day never survives the switch.
+  void _selectDay(DateTime? day) {
+    setState(() {
+      _selectedDay = day;
+      _selectedHour = null;
+    });
+    if (day == null) {
+      setState(() => _dayHours = []);
+    } else {
+      _fetchDayHours(day);
+    }
   }
 
   bool get _isDemo => widget.serverIp.contains('demo_ip');
@@ -114,6 +136,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
         });
         if (haptic) HapticFeedback.lightImpact();
         _jumpToMoment();
+        // The clip list just changed — the day's strip may have too.
+        final selected = _selectedDay;
+        if (selected != null) _fetchDayHours(selected);
       } else {
         setState(() {
           _errorStatus = response.statusCode;
@@ -171,6 +196,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
       _timelineByDay = byDay;
       _isLoading = false;
     });
+    // The day strip's hours come from these clips too.
+    final selected = _selectedDay;
+    if (selected != null) _fetchDayHours(selected);
   }
 
   /// Playback needs real video; demo mode just says so.
@@ -219,13 +247,65 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
 
   List<dynamic> get _visibleReplays {
     final day = _selectedDay;
-    if (day == null) return _replays;
-    final start = day.millisecondsSinceEpoch ~/ 1000;
-    final end = start + 24 * 60 * 60;
-    return _replays.where((r) {
-      final ts = (r['timestamp'] as num).toInt();
-      return ts >= start && ts < end;
-    }).toList();
+    var list = _replays;
+    if (day != null) {
+      final start = day.millisecondsSinceEpoch ~/ 1000;
+      final end = start + 24 * 60 * 60;
+      list = list.where((r) {
+        final ts = (r['timestamp'] as num).toInt();
+        return ts >= start && ts < end;
+      }).toList();
+    }
+    final hour = _selectedHour;
+    if (hour != null) {
+      list = list.where((r) {
+        final ts = (r['timestamp'] as num).toInt();
+        return DateTime.fromMillisecondsSinceEpoch(ts * 1000).hour == hour;
+      }).toList();
+    }
+    return list;
+  }
+
+  /// The day's 24 hours for the density strip. A missing endpoint (an
+  /// older server) simply means no strip — the screen works without it.
+  Future<void> _fetchDayHours(DateTime day) async {
+    final key = _dayKey(day);
+    if (_isDemo) {
+      // Derive the strip from the synthetic clips — no server out there.
+      final hours = List.generate(
+        24,
+        (h) => <String, dynamic>{'hour': h, 'total': 0, 'clips': 0},
+      );
+      for (final r in _replays) {
+        final ts = (r['timestamp'] as num).toInt();
+        final at = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+        if (_dayKey(at) != key) continue;
+        hours[at.hour]['clips'] = (hours[at.hour]['clips'] as int) + 1;
+        hours[at.hour]['total'] = (hours[at.hour]['total'] as int) + 1;
+      }
+      if (mounted) setState(() => _dayHours = hours);
+      return;
+    }
+    try {
+      final response = await http
+          .get(
+            Uri.parse('${widget.serverIp}/api/timeline/day?date=$key'),
+            headers: AuthService.headers,
+          )
+          .timeout(const Duration(seconds: 3));
+      if (!mounted) return;
+      // A day change mid-flight: the newer selection owns the strip.
+      final current = _selectedDay == null ? null : _dayKey(_selectedDay!);
+      if (current != key) return;
+      final hours = response.statusCode == 200
+          ? ((jsonDecode(response.body) as Map<String, dynamic>)['hours']
+                    as List? ??
+                [])
+          : <dynamic>[];
+      setState(() => _dayHours = hours);
+    } catch (_) {
+      if (mounted) setState(() => _dayHours = []);
+    }
   }
 
   /// Same colours as the dashboard activity feed, so a dot always means
@@ -423,7 +503,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
       final signedPath = body['url'] as String? ?? '';
       if (signedPath.isEmpty) throw Exception('no url in answer');
       await SharePlus.instance.share(
-        ShareParams(text: '${l10n.shareInviteText}\n${widget.serverIp}$signedPath'),
+        ShareParams(
+          text: '${l10n.shareInviteText}\n${widget.serverIp}$signedPath',
+        ),
       );
     } catch (e) {
       debugPrint('clip link share failed: $e');
@@ -506,7 +588,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
             child: ChoiceChip(
               label: Text(l10n.replayAllDays),
               selected: _selectedDay == null,
-              onSelected: (_) => setState(() => _selectedDay = null),
+              onSelected: (_) => _selectDay(null),
             ),
           ),
           for (final day in _stripDays()) _buildDayCell(day, theme),
@@ -539,9 +621,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: InkWell(
-        onTap: () => setState(() {
-          _selectedDay = isSelected ? null : day;
-        }),
+        onTap: () => _selectDay(isSelected ? null : day),
         borderRadius: BorderRadius.circular(12),
         child: Container(
           width: 52,
@@ -644,6 +724,106 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// The selected day, hour by hour: how busy each one was. A tap filters
+  /// the grid to that hour; the strip is the map of where the day happened.
+  Widget _buildHourStrip(AppLocalizations l10n, ThemeData theme) {
+    final ink = theme.colorScheme.onSurface;
+    final totals = [
+      for (final h in _dayHours) ((h['total'] as num?) ?? 0).toInt(),
+    ];
+    final maxTotal = totals.fold<int>(0, (a, b) => a > b ? a : b);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.replaysHourStripTitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: ink.withValues(alpha: 0.7),
+                  ),
+                ),
+              ),
+              if (_selectedHour != null)
+                TextButton(
+                  onPressed: () => setState(() => _selectedHour = null),
+                  child: Text(l10n.replaysHourClear),
+                ),
+            ],
+          ),
+          SizedBox(
+            height: 52,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (final h in _dayHours)
+                  _buildHourBar(h, maxTotal, ink: ink, l10n: l10n),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              for (final h in _dayHours)
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      // Sparse ticks: every six hours is enough to read
+                      // the day without a wall of numbers.
+                      (h['hour'] as int) % 6 == 0
+                          ? hourLabel(h['hour'] as int)
+                          : '',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: ink.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHourBar(
+    Map<String, dynamic> hour,
+    int maxTotal, {
+    required Color ink,
+    required AppLocalizations l10n,
+  }) {
+    final h = (hour['hour'] as num).toInt();
+    final total = ((hour['total'] as num?) ?? 0).toInt();
+    final selected = _selectedHour == h;
+    return Expanded(
+      child: Tooltip(
+        message: l10n.replaysHourTooltip(hourLabel(h), total),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () =>
+              setState(() => _selectedHour = _selectedHour == h ? null : h),
+          child: Container(
+            height: hourBarHeight(total, maxTotal),
+            margin: const EdgeInsets.symmetric(horizontal: 1),
+            decoration: BoxDecoration(
+              color: selected
+                  ? AppColors.primary
+                  : total > 0
+                  ? AppColors.primary.withValues(alpha: 0.55)
+                  : ink.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -783,7 +963,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
               textColor: Colors.white54,
               iconColor: Colors.white24,
               actionLabel: l10n.replayAllDays,
-              onAction: () => setState(() => _selectedDay = null),
+              onAction: () => _selectDay(null),
             )
           : RefreshIndicator(
               onRefresh: () => _fetchReplays(haptic: true),
@@ -792,6 +972,8 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
       content = Column(
         children: [
           _buildDayStrip(l10n, theme),
+          if (_selectedDay != null && _dayHours.isNotEmpty)
+            _buildHourStrip(l10n, theme),
           if (_selectedDay != null) _buildDayActions(l10n),
           Expanded(child: grid),
         ],

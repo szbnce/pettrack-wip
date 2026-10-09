@@ -24,6 +24,9 @@ builds version together — Settings → About, the update check and
 - Share a replay as a link: a week-long URL scoped to that one clip opens
   in any browser on the network — no app, no login (SECURITY.md covers
   the model)
+- Replay day density strip: pick a day and see the whole day hour by
+  hour — where the motion actually was — and tap an hour to filter the
+  clips to it
 - One-tap in-app update on Android: the server stages a new APK
   (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
   and one tap downloads it and opens the system installer — self-hosted,

@@ -1002,6 +1002,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get replayAllDays => 'すべての日';
 
   @override
+  String get replaysHourStripTitle => '時間ごとのアクティビティ';
+
+  @override
+  String replaysHourTooltip(String hour, int count) {
+    return '$hour:00 — $count件のイベント';
+  }
+
+  @override
+  String get replaysHourClear => '1日全体';
+
+  @override
   String get noReplaysForDay => 'この日の録画はありません';
 
   @override

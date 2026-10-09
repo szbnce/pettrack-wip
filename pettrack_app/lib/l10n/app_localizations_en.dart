@@ -1011,6 +1011,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get replayAllDays => 'All days';
 
   @override
+  String get replaysHourStripTitle => 'Activity by hour';
+
+  @override
+  String replaysHourTooltip(String hour, int count) {
+    return '$hour:00 — $count events';
+  }
+
+  @override
+  String get replaysHourClear => 'Whole day';
+
+  @override
   String get noReplaysForDay => 'No replays for this day';
 
   @override

@@ -457,6 +457,20 @@
   "recapEmpty": "Nessun momento per questo giorno",
   "recapError": "Impossibile creare il riassunto (errore {code})",
   "replayAllDays": "Tutti i giorni",
+  "replaysHourStripTitle": "Attività per ora",
+  "replaysHourTooltip": "{hour}:00 — {count} eventi",
+  "@replaysHourTooltip": {
+    "description": "Hour-strip tooltip: {hour} is 00–23, {count} the events in that hour.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "replaysHourClear": "Tutto il giorno",
   "noReplaysForDay": "Nessuna ripresa per questo giorno",
   "timelapseBuilding": "Creazione della timelapse del giorno…",
   "timelapseEmpty": "Non ci sono abbastanza fotogrammi per questo giorno",

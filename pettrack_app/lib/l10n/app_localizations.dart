@@ -1938,6 +1938,24 @@ abstract class AppLocalizations {
   /// **'All days'**
   String get replayAllDays;
 
+  /// No description provided for @replaysHourStripTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity by hour'**
+  String get replaysHourStripTitle;
+
+  /// Hour-strip tooltip: {hour} is 00–23, {count} the events in that hour.
+  ///
+  /// In en, this message translates to:
+  /// **'{hour}:00 — {count} events'**
+  String replaysHourTooltip(String hour, int count);
+
+  /// No description provided for @replaysHourClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole day'**
+  String get replaysHourClear;
+
   /// No description provided for @noReplaysForDay.
   ///
   /// In en, this message translates to:

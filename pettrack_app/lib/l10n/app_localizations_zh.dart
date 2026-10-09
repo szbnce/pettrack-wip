@@ -995,6 +995,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get replayAllDays => '全部日期';
 
   @override
+  String get replaysHourStripTitle => '按小时的活动';
+
+  @override
+  String replaysHourTooltip(String hour, int count) {
+    return '$hour:00 — $count 条动态';
+  }
+
+  @override
+  String get replaysHourClear => '全天';
+
+  @override
   String get noReplaysForDay => '这一天没有录像';
 
   @override

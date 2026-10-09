@@ -998,6 +998,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get replayAllDays => '모든 날';
 
   @override
+  String get replaysHourStripTitle => '시간대별 활동';
+
+  @override
+  String replaysHourTooltip(String hour, int count) {
+    return '$hour:00 — 이벤트 $count건';
+  }
+
+  @override
+  String get replaysHourClear => '하루 전체';
+
+  @override
   String get noReplaysForDay => '이 날의 녹화가 없습니다';
 
   @override

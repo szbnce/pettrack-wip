@@ -457,6 +457,20 @@
   "recapEmpty": "この日の思い出はありません",
   "recapError": "まとめを作成できませんでした（エラー {code}）",
   "replayAllDays": "すべての日",
+  "replaysHourStripTitle": "時間ごとのアクティビティ",
+  "replaysHourTooltip": "{hour}:00 — {count}件のイベント",
+  "@replaysHourTooltip": {
+    "description": "Hour-strip tooltip: {hour} is 00–23, {count} the events in that hour.",
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "replaysHourClear": "1日全体",
   "noReplaysForDay": "この日の録画はありません",
   "timelapseBuilding": "その日のタイムラプスを作成中…",
   "timelapseEmpty": "この日のフレームが足りません",
