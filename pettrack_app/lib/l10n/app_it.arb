@@ -472,6 +472,11 @@
     }
   },
   "replaysHourClear": "Tutto il giorno",
+  "pinClip": "Fissa clip",
+  "unpinClip": "Sblocca",
+  "clipPinned": "Fissata — questa resta.",
+  "clipUnpinned": "Sbloccata.",
+  "clipPinFailed": "Impossibile aggiornare la clip.",
   "noReplaysForDay": "Nessuna ripresa per questo giorno",
   "timelapseBuilding": "Creazione della timelapse del giorno…",
   "timelapseEmpty": "Non ci sono abbastanza fotogrammi per questo giorno",

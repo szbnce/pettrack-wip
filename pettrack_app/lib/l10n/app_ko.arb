@@ -472,6 +472,11 @@
     }
   },
   "replaysHourClear": "하루 전체",
+  "pinClip": "클립 고정",
+  "unpinClip": "고정 해제",
+  "clipPinned": "고정됨 — 이 클립은 남습니다.",
+  "clipUnpinned": "고정 해제됨.",
+  "clipPinFailed": "고정을 변경하지 못했습니다.",
   "noReplaysForDay": "이 날의 녹화가 없습니다",
   "timelapseBuilding": "오늘의 타임랩스를 만드는 중…",
   "timelapseEmpty": "이 날의 프레임이 부족합니다",

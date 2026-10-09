@@ -1012,6 +1012,21 @@ class AppLocalizationsKo extends AppLocalizations {
   String get replaysHourClear => '하루 전체';
 
   @override
+  String get pinClip => '클립 고정';
+
+  @override
+  String get unpinClip => '고정 해제';
+
+  @override
+  String get clipPinned => '고정됨 — 이 클립은 남습니다.';
+
+  @override
+  String get clipUnpinned => '고정 해제됨.';
+
+  @override
+  String get clipPinFailed => '고정을 변경하지 못했습니다.';
+
+  @override
   String get noReplaysForDay => '이 날의 녹화가 없습니다';
 
   @override

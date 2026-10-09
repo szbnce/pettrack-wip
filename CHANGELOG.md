@@ -33,6 +33,9 @@ builds version together — Settings → About, the update check and
 - Teach PetTrack from the feed: long-press any event to say "not my pet"
   or "that's my pet". The note is stored with its moment and context for
   the classifier's training pass — nothing retrains from them yet
+- Pin a replay: one tap in the player keeps that clip forever. Retention
+  and disk pressure both look the other way; the pin list lives next to
+  the footage in `.pinned.json`, so it moves with the folder
 - One-tap in-app update on Android: the server stages a new APK
   (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
   and one tap downloads it and opens the system installer — self-hosted,

@@ -1029,6 +1029,21 @@ class AppLocalizationsHu extends AppLocalizations {
   String get replaysHourClear => 'Egész nap';
 
   @override
+  String get pinClip => 'Klip rögzítése';
+
+  @override
+  String get unpinClip => 'Rögzítés feloldása';
+
+  @override
+  String get clipPinned => 'Rögzítve — ez megmarad.';
+
+  @override
+  String get clipUnpinned => 'Rögzítés feloldva.';
+
+  @override
+  String get clipPinFailed => 'Nem sikerült módosítani a rögzítést.';
+
+  @override
   String get noReplaysForDay => 'Erre a napra nincsenek felvételek';
 
   @override

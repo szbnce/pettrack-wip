@@ -7,6 +7,7 @@ import os
 import shutil
 import time
 
+import pins
 import settings as app_settings
 
 # Quiet this long with no frames at all and the camera is worth an alert —
@@ -65,7 +66,11 @@ def replay_stats(folder: str = "replays") -> dict:
                 count += 1
             except OSError:
                 pass
-    return {"count": count, "bytes": total_bytes}
+    return {
+        "count": count,
+        "bytes": total_bytes,
+        "pinned": len(pins.load_pins(folder)),
+    }
 
 
 def prune_replays(
@@ -80,6 +85,7 @@ def prune_replays(
     Retention is the normal policy (see settings.get_replay_retention_days);
     min_free_bytes is the safety valve so a full disk never stops a recording
     mid-day. In-progress *_raw.mp4 twins are kept for an hour, then dropped.
+    Pinned clips (pins.py) survive both — a pin is absolute.
     Returns {"deleted": n, "freed_bytes": n}."""
     deleted = 0
     freed_bytes = 0
@@ -90,25 +96,30 @@ def prune_replays(
     if retention_days is None:
         retention_days = app_settings.get_replay_retention_days()
     cutoff = now - retention_days * 86400
+    pinned = pins.load_pins(folder)
 
-    keep = []  # (mtime, path) oldest first — the order disk pressure drops them
+    # keep = (mtime, path, pinned) oldest first — the order disk pressure drops them
+    keep = []
     for filename in os.listdir(folder):
         if not filename.endswith(".mp4"):
             continue
         path = os.path.join(folder, filename)
         if not os.path.isfile(path):
             continue
+        is_pinned = filename in pinned
         mtime = os.path.getmtime(path)
         stale_raw = filename.endswith("_raw.mp4") and now - mtime > STALE_RAW_SECONDS
-        if mtime < cutoff or stale_raw:
+        if is_pinned:
+            keep.append((mtime, path, True))
+        elif mtime < cutoff or stale_raw:
             try:
                 freed_bytes += os.path.getsize(path)
                 os.remove(path)
                 deleted += 1
             except OSError:
-                keep.append((mtime, path))
+                keep.append((mtime, path, False))
         else:
-            keep.append((mtime, path))
+            keep.append((mtime, path, False))
 
     if min_free_bytes:
         keep.sort()
@@ -117,7 +128,11 @@ def prune_replays(
         except OSError:
             free = None
         while free is not None and free < min_free_bytes and keep:
-            _, path = keep.pop(0)
+            # Oldest unpinned first; if everything left is pinned, pins win.
+            victim = next((i for i, item in enumerate(keep) if not item[2]), None)
+            if victim is None:
+                break
+            _, path, _ = keep.pop(victim)
             try:
                 size = os.path.getsize(path)
                 os.remove(path)

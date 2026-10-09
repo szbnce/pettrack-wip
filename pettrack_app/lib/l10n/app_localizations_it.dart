@@ -1036,6 +1036,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get replaysHourClear => 'Tutto il giorno';
 
   @override
+  String get pinClip => 'Fissa clip';
+
+  @override
+  String get unpinClip => 'Sblocca';
+
+  @override
+  String get clipPinned => 'Fissata — questa resta.';
+
+  @override
+  String get clipUnpinned => 'Sbloccata.';
+
+  @override
+  String get clipPinFailed => 'Impossibile aggiornare la clip.';
+
+  @override
   String get noReplaysForDay => 'Nessuna ripresa per questo giorno';
 
   @override

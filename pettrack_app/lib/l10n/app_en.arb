@@ -472,6 +472,11 @@
     }
   },
   "replaysHourClear": "Whole day",
+  "pinClip": "Pin clip",
+  "unpinClip": "Unpin",
+  "clipPinned": "Pinned — this one stays.",
+  "clipUnpinned": "Unpinned.",
+  "clipPinFailed": "Could not update the pin.",
   "noReplaysForDay": "No replays for this day",
   "timelapseBuilding": "Building the day's timelapse…",
   "timelapseEmpty": "Not enough frames for this day",

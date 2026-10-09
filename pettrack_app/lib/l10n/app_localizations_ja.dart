@@ -1016,6 +1016,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get replaysHourClear => '1日全体';
 
   @override
+  String get pinClip => 'クリップを固定';
+
+  @override
+  String get unpinClip => '固定を解除';
+
+  @override
+  String get clipPinned => '固定しました — このクリップは残ります。';
+
+  @override
+  String get clipUnpinned => '固定を解除しました。';
+
+  @override
+  String get clipPinFailed => '固定を変更できませんでした。';
+
+  @override
   String get noReplaysForDay => 'この日の録画はありません';
 
   @override

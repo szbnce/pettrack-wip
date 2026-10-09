@@ -372,6 +372,11 @@
     }
   },
   "replaysHourClear": "Egész nap",
+  "pinClip": "Klip rögzítése",
+  "unpinClip": "Rögzítés feloldása",
+  "clipPinned": "Rögzítve — ez megmarad.",
+  "clipUnpinned": "Rögzítés feloldva.",
+  "clipPinFailed": "Nem sikerült módosítani a rögzítést.",
   "noReplaysForDay": "Erre a napra nincsenek felvételek",
   "timelapseBuilding": "A nap timelapse-ének építése…",
   "timelapseEmpty": "Erre a napra nincs elég képkocka",

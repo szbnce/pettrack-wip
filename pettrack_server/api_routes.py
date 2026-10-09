@@ -21,6 +21,7 @@ import notify
 import timelapse
 import health
 import maintenance
+import pins
 import settings as app_settings
 import arming
 
@@ -935,7 +936,8 @@ async def list_replays():
     folder = "replays"
     if not os.path.exists(folder):
         return {"replays": []}
-    
+
+    pinned = pins.load_pins(folder)
     files = []
     for filename in os.listdir(folder):
         if filename.endswith(".mp4"):
@@ -952,6 +954,7 @@ async def list_replays():
                 "filename": filename,
                 "timestamp": int(os.path.getmtime(file_path)),
                 "size": os.path.getsize(file_path),
+                "pinned": filename in pinned,
                 # Short-lived, file-scoped URL so clients never have to put
                 # their long-lived token into a link.
                 "url": f"/api/replays/{filename}?token={mint_media_token(filename)}",
@@ -1106,3 +1109,34 @@ async def share_replay_link(filename: str):
         "url": f"/api/replays/{safe_filename}?token={token}",
         "expires_in": SHARE_LINK_TTL_SECONDS,
     }
+
+
+def _existing_replay(filename: str) -> str:
+    """Resolve a replay name inside the folder, or 404.
+
+    basename() keeps `../` out of the folder — the same fence the player
+    and the share link already use."""
+    safe_filename = os.path.basename(filename)
+    file_path = os.path.join("replays", safe_filename)
+    if not os.path.exists(file_path) or not safe_filename.endswith(".mp4"):
+        raise HTTPException(status_code=404, detail="Replay not found")
+    return safe_filename
+
+
+@router.post("/api/replays/{filename}/pin")
+async def pin_replay(filename: str):
+    """Keep this clip: the retention sweep and disk pressure both look away.
+
+    A pin is absolute — it lives next to the footage in `.pinned.json`, so
+    it survives a folder move and needs no database."""
+    safe_filename = _existing_replay(filename)
+    pins.pin(safe_filename)
+    return {"filename": safe_filename, "pinned": True}
+
+
+@router.post("/api/replays/{filename}/unpin")
+async def unpin_replay(filename: str):
+    """Let retention have this clip again."""
+    safe_filename = _existing_replay(filename)
+    pins.unpin(safe_filename)
+    return {"filename": safe_filename, "pinned": False}

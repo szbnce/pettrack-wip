@@ -354,7 +354,48 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     _showVideoDialog(
       url: '${widget.serverIp}$signedPath',
       heroTag: 'replay-${replay['filename']}',
+      filename: replay['filename'] as String?,
+      pinned: replay['pinned'] == true,
     );
+  }
+
+  /// Pin = keep forever: the retention sweep and disk pressure both look away.
+  /// Returns whether the server agreed, so the UI only flips on success.
+  Future<bool> _togglePin(
+    String filename,
+    bool currentlyPinned,
+    AppLocalizations l10n,
+  ) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final action = currentlyPinned ? 'unpin' : 'pin';
+    try {
+      final response = await http
+          .post(
+            Uri.parse(
+              '${widget.serverIp}/api/replays/${Uri.encodeComponent(filename)}/$action',
+            ),
+            headers: AuthService.headers,
+          )
+          .timeout(const Duration(seconds: 4));
+      if (!mounted) return false;
+      if (response.statusCode != 200) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final pinned = body['pinned'] == true;
+      setState(() {
+        for (final r in _replays) {
+          if (r is Map && r['filename'] == filename) r['pinned'] = pinned;
+        }
+      });
+      messenger.showSnackBar(
+        SnackBar(content: Text(pinned ? l10n.clipPinned : l10n.clipUnpinned)),
+      );
+      return true;
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.clipPinFailed)));
+      return false;
+    }
   }
 
   /// Build a day's timelapse on the server (cached there) and play it.
@@ -513,64 +554,95 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     }
   }
 
-  void _showVideoDialog({required String url, String? heroTag}) {
+  void _showVideoDialog({
+    required String url,
+    String? heroTag,
+    String? filename,
+    bool pinned = false,
+  }) {
     final l10n = AppLocalizations.of(context)!;
     Widget player = Container(
       color: Colors.black,
       child: VideoPlayerWidget(videoUrl: url),
     );
     if (heroTag != null) player = Hero(tag: heroTag, child: player);
+    // Hoisted out of the builder so setDialogState keeps the flipped star
+    // instead of resetting it to the value the list had when the dialog opened.
+    var isPinned = pinned;
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.all(16),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(child: player),
-              Container(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close),
-                      label: Text(l10n.close),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.all(16),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(child: player),
+                  Container(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton.icon(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.close),
+                          label: Text(l10n.close),
+                        ),
+                        TextButton.icon(
+                          onPressed: () => _shareVideo(url),
+                          icon: const Icon(Icons.share),
+                          label: Text(l10n.tooltipShare),
+                        ),
+                        IconButton(
+                          tooltip: l10n.shareLink,
+                          onPressed: () => _shareLink(url),
+                          icon: const Icon(Icons.link),
+                        ),
+                        if (filename != null)
+                          IconButton(
+                            tooltip: isPinned ? l10n.unpinClip : l10n.pinClip,
+                            onPressed: () async {
+                              final ok = await _togglePin(
+                                filename,
+                                isPinned,
+                                l10n,
+                              );
+                              if (ok && mounted) {
+                                setDialogState(() => isPinned = !isPinned);
+                              }
+                            },
+                            icon: Icon(
+                              isPinned
+                                  ? Icons.push_pin
+                                  : Icons.push_pin_outlined,
+                            ),
+                          ),
+                        TextButton.icon(
+                          onPressed: () async {
+                            final uri = Uri.parse(url);
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(
+                                uri,
+                                mode: LaunchMode.externalApplication,
+                              );
+                            }
+                          },
+                          icon: const Icon(Icons.open_in_browser),
+                          label: Text(l10n.openDownload),
+                        ),
+                      ],
                     ),
-                    TextButton.icon(
-                      onPressed: () => _shareVideo(url),
-                      icon: const Icon(Icons.share),
-                      label: Text(l10n.tooltipShare),
-                    ),
-                    IconButton(
-                      tooltip: l10n.shareLink,
-                      onPressed: () => _shareLink(url),
-                      icon: const Icon(Icons.link),
-                    ),
-                    TextButton.icon(
-                      onPressed: () async {
-                        final uri = Uri.parse(url);
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(
-                            uri,
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      },
-                      icon: const Icon(Icons.open_in_browser),
-                      label: Text(l10n.openDownload),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -877,6 +949,16 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                       color: AppColors.primary,
                     ),
                   ),
+                  if (replay['pinned'] == true)
+                    Positioned(
+                      top: 6,
+                      right: 6,
+                      child: Icon(
+                        Icons.push_pin,
+                        size: 16,
+                        color: Colors.amber.shade600,
+                      ),
+                    ),
                   Positioned(
                     bottom: 0,
                     left: 0,

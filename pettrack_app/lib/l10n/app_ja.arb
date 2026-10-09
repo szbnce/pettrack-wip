@@ -472,6 +472,11 @@
     }
   },
   "replaysHourClear": "1日全体",
+  "pinClip": "クリップを固定",
+  "unpinClip": "固定を解除",
+  "clipPinned": "固定しました — このクリップは残ります。",
+  "clipUnpinned": "固定を解除しました。",
+  "clipPinFailed": "固定を変更できませんでした。",
   "noReplaysForDay": "この日の録画はありません",
   "timelapseBuilding": "その日のタイムラプスを作成中…",
   "timelapseEmpty": "この日のフレームが足りません",

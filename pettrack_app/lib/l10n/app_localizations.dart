@@ -1962,6 +1962,36 @@ abstract class AppLocalizations {
   /// **'Whole day'**
   String get replaysHourClear;
 
+  /// No description provided for @pinClip.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin clip'**
+  String get pinClip;
+
+  /// No description provided for @unpinClip.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin'**
+  String get unpinClip;
+
+  /// No description provided for @clipPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned — this one stays.'**
+  String get clipPinned;
+
+  /// No description provided for @clipUnpinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpinned.'**
+  String get clipUnpinned;
+
+  /// No description provided for @clipPinFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update the pin.'**
+  String get clipPinFailed;
+
   /// No description provided for @noReplaysForDay.
   ///
   /// In en, this message translates to:

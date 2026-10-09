@@ -1025,6 +1025,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get replaysHourClear => 'Whole day';
 
   @override
+  String get pinClip => 'Pin clip';
+
+  @override
+  String get unpinClip => 'Unpin';
+
+  @override
+  String get clipPinned => 'Pinned — this one stays.';
+
+  @override
+  String get clipUnpinned => 'Unpinned.';
+
+  @override
+  String get clipPinFailed => 'Could not update the pin.';
+
+  @override
   String get noReplaysForDay => 'No replays for this day';
 
   @override

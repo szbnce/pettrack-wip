@@ -472,6 +472,11 @@
     }
   },
   "replaysHourClear": "Ganzer Tag",
+  "pinClip": "Clip anheften",
+  "unpinClip": "Lösen",
+  "clipPinned": "Angeheftet — dieser bleibt.",
+  "clipUnpinned": "Nicht mehr angeheftet.",
+  "clipPinFailed": "Anheften hat nicht geklappt.",
   "noReplaysForDay": "An diesem Tag keine Aufnahmen",
   "timelapseBuilding": "Timelapse des Tages wird erstellt…",
   "timelapseEmpty": "Für diesen Tag nicht genug Bilder",

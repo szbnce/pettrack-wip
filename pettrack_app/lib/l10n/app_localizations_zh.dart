@@ -1009,6 +1009,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get replaysHourClear => '全天';
 
   @override
+  String get pinClip => '固定片段';
+
+  @override
+  String get unpinClip => '取消固定';
+
+  @override
+  String get clipPinned => '已固定 — 这段会保留。';
+
+  @override
+  String get clipUnpinned => '已取消固定。';
+
+  @override
+  String get clipPinFailed => '无法更新固定状态。';
+
+  @override
   String get noReplaysForDay => '这一天没有录像';
 
   @override

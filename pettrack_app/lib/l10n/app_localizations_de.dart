@@ -1036,6 +1036,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get replaysHourClear => 'Ganzer Tag';
 
   @override
+  String get pinClip => 'Clip anheften';
+
+  @override
+  String get unpinClip => 'Lösen';
+
+  @override
+  String get clipPinned => 'Angeheftet — dieser bleibt.';
+
+  @override
+  String get clipUnpinned => 'Nicht mehr angeheftet.';
+
+  @override
+  String get clipPinFailed => 'Anheften hat nicht geklappt.';
+
+  @override
   String get noReplaysForDay => 'An diesem Tag keine Aufnahmen';
 
   @override
