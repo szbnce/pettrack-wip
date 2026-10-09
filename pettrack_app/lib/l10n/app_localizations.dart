@@ -1254,6 +1254,30 @@ abstract class AppLocalizations {
   /// **'Replay retention updated'**
   String get healthRetentionSaved;
 
+  /// No description provided for @healthCleanupNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Free up space now'**
+  String get healthCleanupNow;
+
+  /// Storage cleanup result: {size} is the freed space, {count} how many files went away.
+  ///
+  /// In en, this message translates to:
+  /// **'Freed {size} — {count} items cleaned up.'**
+  String healthCleanupDone(String size, int count);
+
+  /// No description provided for @healthCleanupNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to clean up — everything is within the retention window.'**
+  String get healthCleanupNone;
+
+  /// No description provided for @healthCleanupFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleanup failed. Try again.'**
+  String get healthCleanupFailed;
+
   /// No description provided for @healthLoadError.
   ///
   /// In en, this message translates to:

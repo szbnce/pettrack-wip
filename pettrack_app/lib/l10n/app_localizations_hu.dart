@@ -645,6 +645,21 @@ class AppLocalizationsHu extends AppLocalizations {
   String get healthRetentionSaved => 'Megőrzési idő frissítve';
 
   @override
+  String get healthCleanupNow => 'Tárhely felszabadítása most';
+
+  @override
+  String healthCleanupDone(String size, int count) {
+    return 'Felszabadítva: $size — $count elem törölve.';
+  }
+
+  @override
+  String get healthCleanupNone =>
+      'Nincs mit takarítani — minden a megőrzési időn belül van.';
+
+  @override
+  String get healthCleanupFailed => 'A takarítás nem sikerült. Próbáld újra.';
+
+  @override
   String get healthLoadError => 'A rendszerállapot nem tölthető be';
 
   @override

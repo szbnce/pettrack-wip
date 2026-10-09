@@ -196,6 +196,21 @@
   "healthReplaysStored": "{count} visszajátszás · {size}",
   "healthKeepReplays": "Visszajátszások megőrzése",
   "healthRetentionSaved": "Megőrzési idő frissítve",
+  "healthCleanupNow": "Tárhely felszabadítása most",
+  "healthCleanupDone": "Felszabadítva: {size} — {count} elem törölve.",
+  "@healthCleanupDone": {
+    "description": "Storage cleanup result: {size} is the freed space, {count} how many files went away.",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "healthCleanupNone": "Nincs mit takarítani — minden a megőrzési időn belül van.",
+  "healthCleanupFailed": "A takarítás nem sikerült. Próbáld újra.",
   "healthLoadError": "A rendszerállapot nem tölthető be",
   "cameraOfflineTitle": "Kamera offline",
   "cameraOfflineBody": "10 perce nincs videó a kameráról",

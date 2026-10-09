@@ -643,6 +643,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get healthRetentionSaved => 'Replay retention updated';
 
   @override
+  String get healthCleanupNow => 'Free up space now';
+
+  @override
+  String healthCleanupDone(String size, int count) {
+    return 'Freed $size — $count items cleaned up.';
+  }
+
+  @override
+  String get healthCleanupNone =>
+      'Nothing to clean up — everything is within the retention window.';
+
+  @override
+  String get healthCleanupFailed => 'Cleanup failed. Try again.';
+
+  @override
   String get healthLoadError => 'Could not load system health';
 
   @override

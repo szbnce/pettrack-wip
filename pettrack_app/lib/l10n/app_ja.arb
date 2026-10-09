@@ -297,6 +297,21 @@
   "healthReplaysStored": "リプレイ {count} 件 · {size}",
   "healthKeepReplays": "リプレイの保存期間",
   "healthRetentionSaved": "保存期間を更新しました",
+  "healthCleanupNow": "今すぐ空き容量を確保",
+  "healthCleanupDone": "{size} を解放しました — {count} 件を整理しました。",
+  "@healthCleanupDone": {
+    "description": "Storage cleanup result: {size} is the freed space, {count} how many files went away.",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "healthCleanupNone": "整理するものはありません — すべて保存期間内です。",
+  "healthCleanupFailed": "整理できませんでした。もう一度お試しください。",
   "healthLoadError": "システムの状態を読み込めませんでした",
   "cameraOfflineTitle": "カメラオフライン",
   "cameraOfflineBody": "10分間カメラからの映像がありません",

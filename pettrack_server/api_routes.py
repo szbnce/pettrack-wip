@@ -20,6 +20,7 @@ import mqtt_bridge
 import notify
 import timelapse
 import health
+import maintenance
 import settings as app_settings
 import arming
 
@@ -624,6 +625,26 @@ async def get_system_health():
         "camera_quiet_seconds": (now - freshest) if freshest else None,
         "monitors": monitors,
         "alerts": alerts,
+        "disk": disk,
+        "replays": {
+            **health.replay_stats(),
+            "retention_days": app_settings.get_replay_retention_days(),
+        },
+    }
+
+
+@router.post("/api/maintenance/cleanup")
+def post_maintenance_cleanup():
+    """Free up space now: the retention sweep without waiting for the timer.
+
+    Same pass the background loop runs every ten minutes (captured images,
+    stale timelapse stills, replays past retention and the oldest clips
+    under disk pressure). Returns what went away and the disk picture
+    afterwards, so the health card can refresh from the answer alone."""
+    stats = maintenance.run_cleanup_once()
+    disk = health.disk_snapshot("replays" if os.path.isdir("replays") else ".")
+    return {
+        **stats,
         "disk": disk,
         "replays": {
             **health.replay_stats(),

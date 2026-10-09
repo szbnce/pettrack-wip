@@ -297,6 +297,21 @@
   "healthReplaysStored": "{count} replays · {size}",
   "healthKeepReplays": "Keep replays for",
   "healthRetentionSaved": "Replay retention updated",
+  "healthCleanupNow": "Free up space now",
+  "healthCleanupDone": "Freed {size} — {count} items cleaned up.",
+  "@healthCleanupDone": {
+    "description": "Storage cleanup result: {size} is the freed space, {count} how many files went away.",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "healthCleanupNone": "Nothing to clean up — everything is within the retention window.",
+  "healthCleanupFailed": "Cleanup failed. Try again.",
   "healthLoadError": "Could not load system health",
   "cameraOfflineTitle": "Camera offline",
   "cameraOfflineBody": "No video from the camera for 10 minutes",

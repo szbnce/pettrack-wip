@@ -19,11 +19,19 @@ from api_routes import auth_router, router
 from database import init_db
 
 
-@pytest.fixture(scope="session")
-def client(tmp_path_factory):
-    """TestClient over the real routers, with an isolated temp DB."""
+@pytest.fixture(scope="session", autouse=True)
+def _db(tmp_path_factory):
+    """Every test runs against an isolated temp DB (cwd = a temp dir).
+
+    Session-wide and autouse: pure-logic tests must not need the API
+    client just to get the schema the lockout fixture writes to."""
     os.chdir(tmp_path_factory.mktemp("pettrack_db"))
     asyncio.run(init_db())
+
+
+@pytest.fixture(scope="session")
+def client(_db):
+    """TestClient over the real routers, against the session DB."""
     app = FastAPI()
     app.include_router(router)
     app.include_router(auth_router)

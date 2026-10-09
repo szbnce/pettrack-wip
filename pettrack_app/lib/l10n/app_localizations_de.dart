@@ -647,6 +647,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get healthRetentionSaved => 'Aufbewahrungszeitraum aktualisiert';
 
   @override
+  String get healthCleanupNow => 'Jetzt Speicher freigeben';
+
+  @override
+  String healthCleanupDone(String size, int count) {
+    return '$size freigegeben — $count Elemente bereinigt.';
+  }
+
+  @override
+  String get healthCleanupNone =>
+      'Nichts zu bereinigen — alles liegt im Aufbewahrungsfenster.';
+
+  @override
+  String get healthCleanupFailed =>
+      'Bereinigung fehlgeschlagen. Versuch es erneut.';
+
+  @override
   String get healthLoadError => 'Systemzustand konnte nicht geladen werden';
 
   @override

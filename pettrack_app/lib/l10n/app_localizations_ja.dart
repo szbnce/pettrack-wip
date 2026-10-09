@@ -637,6 +637,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get healthRetentionSaved => '保存期間を更新しました';
 
   @override
+  String get healthCleanupNow => '今すぐ空き容量を確保';
+
+  @override
+  String healthCleanupDone(String size, int count) {
+    return '$size を解放しました — $count 件を整理しました。';
+  }
+
+  @override
+  String get healthCleanupNone => '整理するものはありません — すべて保存期間内です。';
+
+  @override
+  String get healthCleanupFailed => '整理できませんでした。もう一度お試しください。';
+
+  @override
   String get healthLoadError => 'システムの状態を読み込めませんでした';
 
   @override

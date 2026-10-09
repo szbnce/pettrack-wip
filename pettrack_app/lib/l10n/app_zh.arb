@@ -297,6 +297,21 @@
   "healthReplaysStored": "{count} 个回放 · {size}",
   "healthKeepReplays": "回放保留时长",
   "healthRetentionSaved": "回放保留设置已更新",
+  "healthCleanupNow": "立即释放空间",
+  "healthCleanupDone": "已释放 {size} — 清理了 {count} 项。",
+  "@healthCleanupDone": {
+    "description": "Storage cleanup result: {size} is the freed space, {count} how many files went away.",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "healthCleanupNone": "无需清理 — 所有内容都在保留期内。",
+  "healthCleanupFailed": "清理失败，请重试。",
   "healthLoadError": "无法加载系统状态",
   "cameraOfflineTitle": "摄像头离线",
   "cameraOfflineBody": "摄像头已有 10 分钟没有画面",

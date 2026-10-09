@@ -633,6 +633,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get healthRetentionSaved => '回放保留设置已更新';
 
   @override
+  String get healthCleanupNow => '立即释放空间';
+
+  @override
+  String healthCleanupDone(String size, int count) {
+    return '已释放 $size — 清理了 $count 项。';
+  }
+
+  @override
+  String get healthCleanupNone => '无需清理 — 所有内容都在保留期内。';
+
+  @override
+  String get healthCleanupFailed => '清理失败，请重试。';
+
+  @override
   String get healthLoadError => '无法加载系统状态';
 
   @override

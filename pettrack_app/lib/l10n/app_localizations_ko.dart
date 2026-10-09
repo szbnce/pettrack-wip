@@ -634,6 +634,20 @@ class AppLocalizationsKo extends AppLocalizations {
   String get healthRetentionSaved => '보관 기간이 업데이트되었습니다';
 
   @override
+  String get healthCleanupNow => '지금 공간 확보';
+
+  @override
+  String healthCleanupDone(String size, int count) {
+    return '$size 확보 — $count개 정리했습니다.';
+  }
+
+  @override
+  String get healthCleanupNone => '정리할 것이 없습니다 — 모두 보관 기간 안에 있습니다.';
+
+  @override
+  String get healthCleanupFailed => '정리하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
   String get healthLoadError => '시스템 상태를 불러오지 못했습니다';
 
   @override

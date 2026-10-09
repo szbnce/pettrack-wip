@@ -297,6 +297,21 @@
   "healthReplaysStored": "{count} registrazioni · {size}",
   "healthKeepReplays": "Conserva le registrazioni per",
   "healthRetentionSaved": "Periodo di conservazione aggiornato",
+  "healthCleanupNow": "Libera spazio ora",
+  "healthCleanupDone": "Liberati {size} — {count} elementi ripuliti.",
+  "@healthCleanupDone": {
+    "description": "Storage cleanup result: {size} is the freed space, {count} how many files went away.",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "healthCleanupNone": "Niente da ripulire — tutto è nella finestra di conservazione.",
+  "healthCleanupFailed": "Pulizia non riuscita. Riprova.",
   "healthLoadError": "Impossibile caricare lo stato del sistema",
   "cameraOfflineTitle": "Telecamera offline",
   "cameraOfflineBody": "Nessun video dalla telecamera da 10 minuti",

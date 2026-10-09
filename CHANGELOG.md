@@ -15,6 +15,9 @@ builds version together — Settings → About, the update check and
   running, arming still decides what gets watched
 - Feed export: the activity feed — filtered as you see it — leaves the app
   as a spreadsheet-ready CSV through the share sheet
+- "Free up space now" on the System health card: the retention sweep runs
+  on demand instead of waiting for the background timer, and says exactly
+  what it freed
 - One-tap in-app update on Android: the server stages a new APK
   (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
   and one tap downloads it and opens the system installer — self-hosted,

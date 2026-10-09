@@ -71,6 +71,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   // Backup & restore: one file carrying the whole setup.
   bool _workingBackup = false;
+  // "Free up space now": the server-side retention sweep, on demand.
+  bool _workingCleanup = false;
 
   String _getLocalizedPetType(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
@@ -1393,6 +1395,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  /// Free up space now: run the server's retention sweep without waiting
+  /// for the background timer, then say what went away. The answer carries
+  /// the fresh disk picture, so the health card updates from it alone.
+  Future<void> _cleanupNow(AppLocalizations l10n) async {
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _workingCleanup = true);
+    try {
+      final response = await http
+          .post(
+            Uri.parse(
+              '${normalizeServerUrl(_ipController.text.trim())}'
+              '/api/maintenance/cleanup',
+            ),
+            headers: {'x-api-token': AuthService.token},
+          )
+          .timeout(const Duration(seconds: 15));
+      if (!mounted) return;
+      if (response.statusCode != 200) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.healthCleanupFailed)),
+        );
+        return;
+      }
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      int n(String key) => (body[key] as num? ?? 0).toInt();
+      final freed =
+          n('images_freed_bytes') +
+          n('timelapse_freed_bytes') +
+          n('replays_freed_bytes');
+      final deleted =
+          n('images_deleted') + n('timelapse_deleted') + n('replays_deleted');
+      final data = Map<String, dynamic>.from(_health ?? {});
+      data['disk'] = body['disk'];
+      data['replays'] = body['replays'];
+      setState(() => _health = data);
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            deleted == 0
+                ? l10n.healthCleanupNone
+                : l10n.healthCleanupDone(formatBytes(freed), deleted),
+          ),
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.healthCleanupFailed)),
+      );
+    } finally {
+      if (mounted) setState(() => _workingCleanup = false);
+    }
+  }
+
   String _versionStatus(AppLocalizations l10n) {
     final server = _serverVersion;
     if (server == null) return l10n.versionUnknown;
@@ -1600,6 +1656,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
           ],
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: _workingCleanup ? null : () => _cleanupNow(l10n),
+            icon: _workingCleanup
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.cleaning_services_outlined),
+            label: Text(l10n.healthCleanupNow),
+          ),
         ),
       ],
     ]);

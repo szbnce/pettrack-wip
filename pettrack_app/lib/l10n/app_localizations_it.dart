@@ -647,6 +647,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get healthRetentionSaved => 'Periodo di conservazione aggiornato';
 
   @override
+  String get healthCleanupNow => 'Libera spazio ora';
+
+  @override
+  String healthCleanupDone(String size, int count) {
+    return 'Liberati $size — $count elementi ripuliti.';
+  }
+
+  @override
+  String get healthCleanupNone =>
+      'Niente da ripulire — tutto è nella finestra di conservazione.';
+
+  @override
+  String get healthCleanupFailed => 'Pulizia non riuscita. Riprova.';
+
+  @override
   String get healthLoadError => 'Impossibile caricare lo stato del sistema';
 
   @override
