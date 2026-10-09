@@ -2100,6 +2100,24 @@ abstract class AppLocalizations {
   /// **'No matching events'**
   String get feedNoMatch;
 
+  /// No description provided for @feedExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export CSV'**
+  String get feedExport;
+
+  /// No description provided for @feedExportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to export yet.'**
+  String get feedExportEmpty;
+
+  /// No description provided for @feedExportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not export the feed.'**
+  String get feedExportFailed;
+
   /// No description provided for @armingTitle.
   ///
   /// In en, this message translates to:

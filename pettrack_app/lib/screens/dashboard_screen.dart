@@ -17,6 +17,7 @@ import '../services/notification_service.dart';
 import '../services/home_widget_service.dart';
 import '../utils/arming.dart';
 import '../utils/evidence.dart';
+import '../utils/feed_export.dart';
 import '../utils/feed_filter.dart';
 import '../utils/reconnect.dart';
 import '../utils/snooze.dart';
@@ -311,6 +312,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onSelected: (_) => setState(() => _feedCategory = value),
               ),
             _buildSnoozeChip(l10n, dark: dark),
+            _buildExportChip(l10n, dark: dark),
           ],
         ),
       ],
@@ -392,6 +394,77 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(l10n.snoozeActive(untilLabel))));
+  }
+
+  /// Hand the feed to a spreadsheet: whatever the filters are showing,
+  /// exported as a CSV file through the share sheet.
+  Widget _buildExportChip(AppLocalizations l10n, {required bool dark}) {
+    final theme = Theme.of(context);
+    final ink = dark ? Colors.white : theme.colorScheme.onSurface;
+    final edge = dark ? Colors.white : theme.colorScheme.outline;
+    return Tooltip(
+      message: l10n.feedExport,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () => _exportFeedCsv(l10n),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            color: dark ? Colors.white.withValues(alpha: 0.06) : null,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: edge.withValues(alpha: 0.2)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.ios_share, size: 16, color: ink.withValues(alpha: 0.8)),
+              const SizedBox(width: 6),
+              Text(
+                l10n.feedExport,
+                style: TextStyle(fontSize: 12, color: ink.withValues(alpha: 0.8)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _exportFeedCsv(AppLocalizations l10n) async {
+    final events = _filteredActivities(l10n);
+    if (events.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.feedExportEmpty)));
+      return;
+    }
+    try {
+      final rows = <List<String>>[];
+      for (final raw in events) {
+        final ev = Map<String, dynamic>.from(raw as Map);
+        final ts = (ev['timestamp'] as num).toInt();
+        final date = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+        final display = _eventDisplay(ev, l10n);
+        rows.add([
+          '$ts',
+          date.toIso8601String(),
+          '${ev['event_type'] ?? ''}',
+          '${ev['zone_name'] ?? ''}',
+          display.$3,
+          display.$4,
+        ]);
+      }
+      final dir = await getTemporaryDirectory();
+      final file = File('${dir.path}/${feedCsvFileName(DateTime.now())}');
+      await file.writeAsString(buildFeedCsv(rows), flush: true);
+      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
+    } catch (e) {
+      debugPrint('feed export failed: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.feedExportFailed)));
+    }
   }
 
   IconData _getPetIcon(String type) {

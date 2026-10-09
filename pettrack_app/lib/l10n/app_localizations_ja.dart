@@ -1083,6 +1083,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get feedNoMatch => '一致するイベントがありません';
 
   @override
+  String get feedExport => 'CSVを書き出す';
+
+  @override
+  String get feedExportEmpty => '書き出す内容がまだありません。';
+
+  @override
+  String get feedExportFailed => 'フィードを書き出せませんでした。';
+
+  @override
   String get armingTitle => '見守り';
 
   @override

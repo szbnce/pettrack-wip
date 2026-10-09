@@ -1076,6 +1076,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get feedNoMatch => '没有匹配的事件';
 
   @override
+  String get feedExport => '导出 CSV';
+
+  @override
+  String get feedExportEmpty => '暂无可导出的内容。';
+
+  @override
+  String get feedExportFailed => '无法导出动态。';
+
+  @override
   String get armingTitle => '监控';
 
   @override

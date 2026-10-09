@@ -1103,6 +1103,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get feedNoMatch => 'Nessun evento corrispondente';
 
   @override
+  String get feedExport => 'Esporta CSV';
+
+  @override
+  String get feedExportEmpty => 'Ancora niente da esportare.';
+
+  @override
+  String get feedExportFailed => 'Impossibile esportare il diario.';
+
+  @override
   String get armingTitle => 'Sorveglianza';
 
   @override

@@ -1096,6 +1096,15 @@ class AppLocalizationsHu extends AppLocalizations {
   String get feedNoMatch => 'Nincs találat';
 
   @override
+  String get feedExport => 'CSV exportálás';
+
+  @override
+  String get feedExportEmpty => 'Még nincs mit exportálni.';
+
+  @override
+  String get feedExportFailed => 'Nem sikerült exportálni az eseményeket.';
+
+  @override
   String get armingTitle => 'Megfigyelés';
 
   @override

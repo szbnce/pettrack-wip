@@ -1079,6 +1079,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get feedNoMatch => '일치하는 이벤트가 없습니다';
 
   @override
+  String get feedExport => 'CSV 내보내기';
+
+  @override
+  String get feedExportEmpty => '아직 내보낼 내용이 없습니다.';
+
+  @override
+  String get feedExportFailed => '피드를 내보내지 못했습니다.';
+
+  @override
   String get armingTitle => '감시';
 
   @override
