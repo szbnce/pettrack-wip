@@ -1127,6 +1127,25 @@ class AppLocalizationsKo extends AppLocalizations {
   String get recapDismiss => '확인';
 
   @override
+  String get feedbackTitle => 'PetTrack에게 알려주기';
+
+  @override
+  String get feedbackBody =>
+      '이것이 당신의 반려동물이었나요? 이런 메모는 PetTrack가 누가 카메라의 대상인지 배우는 데 도움이 됩니다.';
+
+  @override
+  String get feedbackNotMyPet => '우리 아이가 아님';
+
+  @override
+  String get feedbackIsMyPet => '우리 아이임';
+
+  @override
+  String get feedbackThanks => '감사합니다 — PetTrack가 학습에 반영합니다.';
+
+  @override
+  String get feedbackFailed => '메모를 보내지 못했습니다.';
+
+  @override
   String get armingTitle => '감시';
 
   @override

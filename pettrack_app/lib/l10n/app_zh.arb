@@ -524,6 +524,12 @@
     }
   },
   "recapDismiss": "知道了",
+  "feedbackTitle": "教教 PetTrack",
+  "feedbackBody": "这是你的宠物吗？这样的备注能帮助 PetTrack 学会谁才是镜头里的主角。",
+  "feedbackNotMyPet": "不是我的宠物",
+  "feedbackIsMyPet": "是我的宠物",
+  "feedbackThanks": "谢谢 — PetTrack 会从中学习。",
+  "feedbackFailed": "无法发送该备注。",
   "armingTitle": "监控",
   "armingModeOn": "始终开启",
   "armingModeSchedule": "按计划",

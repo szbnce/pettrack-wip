@@ -524,6 +524,12 @@
     }
   },
   "recapDismiss": "Alles klar",
+  "feedbackTitle": "PetTrack beibringen",
+  "feedbackBody": "War das dein Haustier? Solche Notizen helfen PetTrack zu lernen, wer dazugehört.",
+  "feedbackNotMyPet": "Nicht mein Haustier",
+  "feedbackIsMyPet": "Das ist meins",
+  "feedbackThanks": "Danke — PetTrack lernt daraus.",
+  "feedbackFailed": "Notiz konnte nicht gesendet werden.",
   "armingTitle": "Überwachung",
   "armingModeOn": "Immer an",
   "armingModeSchedule": "Nach Zeitplan",

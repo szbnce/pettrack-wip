@@ -524,6 +524,12 @@
     }
   },
   "recapDismiss": "わかりました",
+  "feedbackTitle": "PetTrackに教える",
+  "feedbackBody": "これはあなたのペットでしたか？このようなメモが、誰が映るべきかをPetTrackが学ぶ助けになります。",
+  "feedbackNotMyPet": "私のペットではない",
+  "feedbackIsMyPet": "私のペットです",
+  "feedbackThanks": "ありがとうございます — PetTrackが学習します。",
+  "feedbackFailed": "メモを送信できませんでした。",
   "armingTitle": "見守り",
   "armingModeOn": "常時オン",
   "armingModeSchedule": "スケジュール",

@@ -8,7 +8,7 @@ from typing import List, Dict
 import time
 import asyncio
 from datetime import datetime
-from database import get_events, get_event_counts_since, get_event_hour_counts, get_events_since, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event
+from database import get_events, get_event_counts_since, get_event_hour_counts, get_events_since, get_zones, save_zones, get_pet, save_pet, get_medical_data, save_medical_data, log_event, save_event_feedback, get_event_feedback
 from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, MedicalDataSync, SoundEvent
 from email.utils import formatdate
 import jwt
@@ -680,6 +680,48 @@ async def get_system_health():
             "retention_days": app_settings.get_replay_retention_days(),
         },
     }
+
+
+FEEDBACK_KINDS = ("not_my_pet", "is_my_pet")
+
+
+class FeedbackNote(BaseModel):
+    # Seconds since epoch — the moment the viewer is talking about.
+    timestamp: float
+    kind: str = "not_my_pet"
+    event_type: str | None = None
+    zone_name: str | None = None
+    filename: str | None = None
+
+
+@router.post("/api/feedback")
+async def post_feedback(req: FeedbackNote, x_api_token: str = Header(None)):
+    """A teaching note from the viewer: "that wasn't my pet"...
+
+    Stored with the moment and the event's own context so a training pass
+    can pair it with the frame later. Nothing retrains from these yet —
+    collecting them is this endpoint's whole job. Full tokens only: a
+    monitor phone is a camera, not a teacher."""
+    await require_full_token(x_api_token)
+    if req.kind not in FEEDBACK_KINDS:
+        raise HTTPException(status_code=400, detail="unknown feedback kind")
+    await save_event_feedback(
+        timestamp=req.timestamp,
+        kind=req.kind,
+        event_type=req.event_type,
+        zone_name=req.zone_name,
+        filename=req.filename,
+    )
+    return {"ok": True}
+
+
+@router.get("/api/feedback")
+async def list_feedback(
+    limit: int = Query(50, ge=1, le=500), x_api_token: str = Header(None)
+):
+    """The teaching notes so far, newest first — the training-pass raw material."""
+    await require_full_token(x_api_token)
+    return {"notes": await get_event_feedback(limit)}
 
 
 @router.post("/api/maintenance/cleanup")

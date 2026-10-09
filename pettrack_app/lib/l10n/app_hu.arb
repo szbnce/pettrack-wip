@@ -424,6 +424,12 @@
     }
   },
   "recapDismiss": "Értem",
+  "feedbackTitle": "Tanítsd a PetTrackot",
+  "feedbackBody": "A te állatod volt ez? Az ilyen jegyzetek segítenek a PetTracknak megtanulni, ki tartozik ide.",
+  "feedbackNotMyPet": "Nem az én állatom",
+  "feedbackIsMyPet": "Az enyém",
+  "feedbackThanks": "Köszi — a PetTrack tanulni fog belőle.",
+  "feedbackFailed": "Nem sikerült elküldeni a jegyzetet.",
   "armingTitle": "Megfigyelés",
   "armingModeOn": "Mindig bekapcsolva",
   "armingModeSchedule": "Időzítés szerint",

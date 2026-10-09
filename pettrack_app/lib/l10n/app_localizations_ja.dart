@@ -1131,6 +1131,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get recapDismiss => 'わかりました';
 
   @override
+  String get feedbackTitle => 'PetTrackに教える';
+
+  @override
+  String get feedbackBody =>
+      'これはあなたのペットでしたか？このようなメモが、誰が映るべきかをPetTrackが学ぶ助けになります。';
+
+  @override
+  String get feedbackNotMyPet => '私のペットではない';
+
+  @override
+  String get feedbackIsMyPet => '私のペットです';
+
+  @override
+  String get feedbackThanks => 'ありがとうございます — PetTrackが学習します。';
+
+  @override
+  String get feedbackFailed => 'メモを送信できませんでした。';
+
+  @override
   String get armingTitle => '見守り';
 
   @override

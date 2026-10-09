@@ -524,6 +524,12 @@
     }
   },
   "recapDismiss": "Capito",
+  "feedbackTitle": "Insegna a PetTrack",
+  "feedbackBody": "Era il tuo animale? Note come questa aiutano PetTrack a imparare chi appartiene alla telecamera.",
+  "feedbackNotMyPet": "Non è il mio animale",
+  "feedbackIsMyPet": "È il mio",
+  "feedbackThanks": "Grazie — PetTrack imparerà da questo.",
+  "feedbackFailed": "Impossibile inviare la nota.",
   "armingTitle": "Sorveglianza",
   "armingModeOn": "Sempre acceso",
   "armingModeSchedule": "A programma",

@@ -1124,6 +1124,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recapDismiss => '知道了';
 
   @override
+  String get feedbackTitle => '教教 PetTrack';
+
+  @override
+  String get feedbackBody => '这是你的宠物吗？这样的备注能帮助 PetTrack 学会谁才是镜头里的主角。';
+
+  @override
+  String get feedbackNotMyPet => '不是我的宠物';
+
+  @override
+  String get feedbackIsMyPet => '是我的宠物';
+
+  @override
+  String get feedbackThanks => '谢谢 — PetTrack 会从中学习。';
+
+  @override
+  String get feedbackFailed => '无法发送该备注。';
+
+  @override
   String get armingTitle => '监控';
 
   @override

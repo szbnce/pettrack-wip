@@ -617,6 +617,12 @@
     }
   },
   "recapDismiss": "Got it",
+  "feedbackTitle": "Teach PetTrack",
+  "feedbackBody": "Was this your pet? Notes like this help PetTrack learn who belongs on camera.",
+  "feedbackNotMyPet": "Not my pet",
+  "feedbackIsMyPet": "That's my pet",
+  "feedbackThanks": "Thanks — PetTrack will learn from that.",
+  "feedbackFailed": "Could not send that note.",
   "armingTitle": "Watching",
   "armingModeOn": "Always on",
   "armingModeSchedule": "On a schedule",

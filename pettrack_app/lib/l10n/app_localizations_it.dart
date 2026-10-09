@@ -1153,6 +1153,25 @@ class AppLocalizationsIt extends AppLocalizations {
   String get recapDismiss => 'Capito';
 
   @override
+  String get feedbackTitle => 'Insegna a PetTrack';
+
+  @override
+  String get feedbackBody =>
+      'Era il tuo animale? Note come questa aiutano PetTrack a imparare chi appartiene alla telecamera.';
+
+  @override
+  String get feedbackNotMyPet => 'Non è il mio animale';
+
+  @override
+  String get feedbackIsMyPet => 'È il mio';
+
+  @override
+  String get feedbackThanks => 'Grazie — PetTrack imparerà da questo.';
+
+  @override
+  String get feedbackFailed => 'Impossibile inviare la nota.';
+
+  @override
   String get armingTitle => 'Sorveglianza';
 
   @override

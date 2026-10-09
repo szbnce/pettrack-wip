@@ -17,6 +17,7 @@ import '../services/notification_service.dart';
 import '../services/home_widget_service.dart';
 import '../utils/arming.dart';
 import '../utils/evidence.dart';
+import '../utils/event_feedback.dart';
 import '../utils/feed_export.dart';
 import '../utils/feed_filter.dart';
 import '../utils/recap.dart';
@@ -228,6 +229,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 timeString,
                 isLast: index == events.length - 1,
                 onTap: () => _openEvidenceAt((ev['timestamp'] as num).toInt()),
+                onLongPress: () => _teachEvent(ev, l10n),
               );
             },
           ),
@@ -616,6 +618,78 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
     );
+  }
+
+  /// Long-press a feed row to teach PetTrack who belongs on camera.
+  Future<void> _teachEvent(dynamic ev, AppLocalizations l10n) async {
+    final kind = await showDialog<String>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(l10n.feedbackTitle),
+        contentPadding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
+        children: [
+          Text(l10n.feedbackBody, style: const TextStyle(fontSize: 14)),
+          const SizedBox(height: 12),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(context, feedbackKindNotMyPet),
+            child: Text(l10n.feedbackNotMyPet),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(context, feedbackKindIsMyPet),
+            child: Text(l10n.feedbackIsMyPet),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
+    );
+    if (kind == null || !mounted) return;
+    await _sendFeedback(ev, kind, l10n);
+  }
+
+  Future<void> _sendFeedback(
+    dynamic ev,
+    String kind,
+    AppLocalizations l10n,
+  ) async {
+    final messenger = ScaffoldMessenger.of(context);
+    if (widget.serverIp.contains('demo_ip')) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.feedbackThanks)));
+      return;
+    }
+    try {
+      final response = await http
+          .post(
+            Uri.parse('${widget.serverIp}/api/feedback'),
+            headers: {
+              'x-api-token': AuthService.token,
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode(
+              feedbackPayload(
+                timestampSeconds: ev['timestamp'] as num,
+                kind: kind,
+                eventType: ev['event_type'] as String?,
+                zoneName: ev['zone_name'] as String?,
+              ),
+            ),
+          )
+          .timeout(const Duration(seconds: 4));
+      if (!mounted) return;
+      if (response.statusCode != 200) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.feedbackThanks)));
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.feedbackFailed)));
+    }
   }
 
   /// Demo mode's toy feed — zone names come from l10n like everywhere else.
@@ -1896,6 +1970,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: InkWell(
                     onTap: () =>
                         _openEvidenceAt((ev['timestamp'] as num).toInt()),
+                    onLongPress: () => _teachEvent(ev, l10n),
                     borderRadius: BorderRadius.circular(8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -2403,6 +2478,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     String time, {
     bool isLast = false,
     VoidCallback? onTap,
+    VoidCallback? onLongPress,
   }) {
     return IntrinsicHeight(
       child: Row(
@@ -2436,6 +2512,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: onTap,
+                  onLongPress: onLongPress,
                   borderRadius: BorderRadius.circular(12),
                   child: Ink(
                     padding: const EdgeInsets.all(16),

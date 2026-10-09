@@ -1145,6 +1145,25 @@ class AppLocalizationsHu extends AppLocalizations {
   String get recapDismiss => 'Értem';
 
   @override
+  String get feedbackTitle => 'Tanítsd a PetTrackot';
+
+  @override
+  String get feedbackBody =>
+      'A te állatod volt ez? Az ilyen jegyzetek segítenek a PetTracknak megtanulni, ki tartozik ide.';
+
+  @override
+  String get feedbackNotMyPet => 'Nem az én állatom';
+
+  @override
+  String get feedbackIsMyPet => 'Az enyém';
+
+  @override
+  String get feedbackThanks => 'Köszi — a PetTrack tanulni fog belőle.';
+
+  @override
+  String get feedbackFailed => 'Nem sikerült elküldeni a jegyzetet.';
+
+  @override
   String get armingTitle => 'Megfigyelés';
 
   @override

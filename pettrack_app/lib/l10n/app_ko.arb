@@ -524,6 +524,12 @@
     }
   },
   "recapDismiss": "확인",
+  "feedbackTitle": "PetTrack에게 알려주기",
+  "feedbackBody": "이것이 당신의 반려동물이었나요? 이런 메모는 PetTrack가 누가 카메라의 대상인지 배우는 데 도움이 됩니다.",
+  "feedbackNotMyPet": "우리 아이가 아님",
+  "feedbackIsMyPet": "우리 아이임",
+  "feedbackThanks": "감사합니다 — PetTrack가 학습에 반영합니다.",
+  "feedbackFailed": "메모를 보내지 못했습니다.",
   "armingTitle": "감시",
   "armingModeOn": "항상 켜기",
   "armingModeSchedule": "예약 시간에만",

@@ -59,6 +59,17 @@ async def init_db():
                 last_attempt REAL NOT NULL
                 )
         """)
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS event_feedback (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                timestamp REAL NOT NULL,
+                kind TEXT NOT NULL,
+                event_type TEXT,
+                zone_name TEXT,
+                filename TEXT,
+                created_at REAL NOT NULL
+                )
+        """)
         try:
             await db.execute("ALTER TABLE zones ADD COLUMN type TEXT DEFAULT 'safe'")
         except Exception:
@@ -180,6 +191,36 @@ async def get_medical_data():
 async def save_medical_data(medications: list, vaccines: list):
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("DELETE FROM medical_data")
-        await db.execute("INSERT INTO medical_data (medications, vaccines) VALUES (?, ?)", 
+        await db.execute("INSERT INTO medical_data (medications, vaccines) VALUES (?, ?)",
                          (json.dumps(medications), json.dumps(vaccines)))
         await db.commit()
+
+async def save_event_feedback(
+    timestamp: float,
+    kind: str,
+    event_type: str = None,
+    zone_name: str = None,
+    filename: str = None,
+):
+    """A viewer's teaching note about one moment ("not my pet").
+
+    Kept with the event's own context so a training pass can pair it with
+    the frame later without hunting the original row."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            "INSERT INTO event_feedback "
+            "(timestamp, kind, event_type, zone_name, filename, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (timestamp, kind, event_type, zone_name, filename, time.time()),
+        )
+        await db.commit()
+
+async def get_event_feedback(limit: int = 50):
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute(
+            "SELECT * FROM event_feedback ORDER BY created_at DESC LIMIT ?",
+            (limit,),
+        )
+        rows = await cursor.fetchall()
+        return [dict(row) for row in rows]

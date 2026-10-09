@@ -2184,6 +2184,42 @@ abstract class AppLocalizations {
   /// **'Got it'**
   String get recapDismiss;
 
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Teach PetTrack'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Was this your pet? Notes like this help PetTrack learn who belongs on camera.'**
+  String get feedbackBody;
+
+  /// No description provided for @feedbackNotMyPet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not my pet'**
+  String get feedbackNotMyPet;
+
+  /// No description provided for @feedbackIsMyPet.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s my pet'**
+  String get feedbackIsMyPet;
+
+  /// No description provided for @feedbackThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks — PetTrack will learn from that.'**
+  String get feedbackThanks;
+
+  /// No description provided for @feedbackFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not send that note.'**
+  String get feedbackFailed;
+
   /// No description provided for @armingTitle.
   ///
   /// In en, this message translates to:

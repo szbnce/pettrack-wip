@@ -1141,6 +1141,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recapDismiss => 'Got it';
 
   @override
+  String get feedbackTitle => 'Teach PetTrack';
+
+  @override
+  String get feedbackBody =>
+      'Was this your pet? Notes like this help PetTrack learn who belongs on camera.';
+
+  @override
+  String get feedbackNotMyPet => 'Not my pet';
+
+  @override
+  String get feedbackIsMyPet => 'That\'s my pet';
+
+  @override
+  String get feedbackThanks => 'Thanks — PetTrack will learn from that.';
+
+  @override
+  String get feedbackFailed => 'Could not send that note.';
+
+  @override
   String get armingTitle => 'Watching';
 
   @override

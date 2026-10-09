@@ -30,6 +30,9 @@ builds version together — Settings → About, the update check and
 - The monitor phone protects its own battery: below 20% it streams at
   half speed, below 10% at quarter speed, and says so on the frame —
   charging always keeps full pace
+- Teach PetTrack from the feed: long-press any event to say "not my pet"
+  or "that's my pet". The note is stored with its moment and context for
+  the classifier's training pass — nothing retrains from them yet
 - One-tap in-app update on Android: the server stages a new APK
   (`updates/PetTrack.apk` + `update.json`), Settings → About offers it,
   and one tap downloads it and opens the system installer — self-hosted,
