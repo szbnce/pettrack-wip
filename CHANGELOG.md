@@ -20,6 +20,13 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- Live stream latency stays structural, not lucky: frames fan out per client
+  (one slow phone no longer delays the others) and skip to the newest frame
+  instead of replaying a stale backlog; vision analysis rides beside the
+  stream and classifier inference runs in a thread
+- Cold start has no wasted motion: parallel platform init and no fixed
+  splash delay in the boot route — targets and how to measure them live in
+  `docs/PERFORMANCE.md`
 - Every data screen loads honestly: skeletons while content is in flight
   instead of a false "nothing here" flash — the dashboard feed and the
   Settings health card were the last offenders

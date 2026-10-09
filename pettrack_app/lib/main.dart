@@ -7,7 +7,7 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:camera/camera.dart';
 import 'dart:io' show Platform;
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, kDebugMode;
 
 import 'theme/app_theme.dart';
 import 'services/auth_service.dart';
@@ -22,31 +22,45 @@ import 'screens/wear/wear_dashboard_screen.dart';
 late List<CameraDescription> _cameras;
 List<CameraDescription> get cameras => _cameras;
 
+/// True on WearOS, so the watch gets its own first screen.
+Future<bool> _detectWatch() async {
+  if (kIsWeb || !Platform.isAndroid) return false;
+  try {
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+    return androidInfo.systemFeatures.contains('android.hardware.type.watch');
+  } catch (_) {
+    return false;
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final coldStart = Stopwatch()..start();
   PaintingBinding.instance.imageCache.maximumSize = 50;
   PaintingBinding.instance.imageCache.maximumSizeBytes =
       20 * 1024 * 1024; // 20 MB
-
-  try {
-    _cameras = await availableCameras();
-  } catch (e) {
-    debugPrint('No cameras found: $e');
-    _cameras = [];
-  }
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  final prefs = await SharedPreferences.getInstance();
+  // The cold-start budget is 2 s to first meaningful frame, so the
+  // platform lookups run together instead of one after another, and
+  // camera discovery (monitor-only) never holds up the app side.
+  final results = await Future.wait<dynamic>([
+    availableCameras().catchError((_) => <CameraDescription>[]),
+    SharedPreferences.getInstance(),
+    AuthService.init(),
+    _detectWatch(),
+  ]);
+  _cameras = results[0] as List<CameraDescription>;
+  final prefs = results[1] as SharedPreferences;
   final savedLocale = prefs.getString('language_code') ?? 'hu';
   final themeModeString = prefs.getString('theme_mode') ?? 'system';
 
   // The access token is short-lived; keep it fresh in the background so
   // screens can read it live at request time (see AuthService).
-  await AuthService.init();
   unawaited(AuthService.refreshIfNeeded());
   Timer.periodic(
     const Duration(minutes: 5),
@@ -66,24 +80,23 @@ void main() async {
       initialThemeMode = ThemeMode.system;
   }
 
-  bool isWatch = false;
-  if (!kIsWeb && Platform.isAndroid) {
-    try {
-      final deviceInfo = DeviceInfoPlugin();
-      final androidInfo = await deviceInfo.androidInfo;
-      isWatch = androidInfo.systemFeatures.contains(
-        'android.hardware.type.watch',
-      );
-    } catch (_) {}
-  }
-
   runApp(
     PetTrackApp(
       initialLocale: savedLocale,
       initialThemeMode: initialThemeMode,
-      isWatch: isWatch,
+      isWatch: results[3] as bool,
     ),
   );
+
+  if (kDebugMode) {
+    // The number behind "cold start < 2 s": run in profile on a device and
+    // read this line from logcat.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      debugPrint(
+        'cold start: first frame in ${coldStart.elapsedMilliseconds} ms',
+      );
+    });
+  }
 }
 
 class PetTrackApp extends StatefulWidget {
@@ -317,8 +330,7 @@ class _BootScreenState extends State<BootScreen> {
     final prefs = await SharedPreferences.getInstance();
     final mode = prefs.getString('app_mode');
 
-    await Future.delayed(const Duration(milliseconds: 800));
-
+    // No artificial splash delay: route the moment prefs say where to go.
     if (!mounted) return;
 
     if (widget.isWatch) {

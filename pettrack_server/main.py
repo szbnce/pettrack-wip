@@ -20,6 +20,24 @@ import mqtt_bridge
 
 app = FastAPI()
 
+# Analysis rides beside the live stream, never in front of it. The receive
+# loop only enqueues; a frame is broadcast the moment it arrives and the
+# vision work (decode, motion, DB writes) keeps up on its own. The queue is
+# unbounded and in-order: nothing is dropped, and the video writer always
+# sees frames in capture order.
+_frame_queue: asyncio.Queue = asyncio.Queue()
+
+
+async def _vision_worker():
+    while True:
+        data = await _frame_queue.get()
+        try:
+            await process_and_save_frame(data)
+        except Exception as e:
+            print(f"Vision: frame processing failed: {e}", flush=True)
+        finally:
+            _frame_queue.task_done()
+
 # Cross-origin access is off by default: the web dashboard is served from this
 # same origin, and the mobile/wear apps are not subject to CORS. Set
 # PETTRACK_CORS_ORIGINS (comma-separated) to whitelist extra origins if you
@@ -48,6 +66,7 @@ async def startup_event():
         
     asyncio.create_task(cleanup_old_images())
     asyncio.create_task(watchdog_loop())
+    asyncio.create_task(_vision_worker())
 
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -125,13 +144,14 @@ async def tracker_websocket(websocket: WebSocket, token: str = None, client_id: 
             data = await websocket.receive_bytes()
             mid = update_latest_frame(data, monitor_id)
 
-            # Only viewers watching this camera (or all of them) get the frame.
-            asyncio.create_task(client_manager.broadcast_bytes(data, source_id=mid))
+            # Only viewers watching this camera (or all of them) get the
+            # frame — and they get it now; the vision worker picks it up
+            # off the queue behind us.
+            await client_manager.broadcast_bytes(data, source_id=mid)
+            _frame_queue.put_nowait(data)
 
             if monitor_state["frame_count"] % 10 == 0:
                 print(f"Received frame #{monitor_state['frame_count']} from {monitor_id}: {len(data)} bytes", flush=True)
-
-            await process_and_save_frame(data)
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
@@ -151,7 +171,7 @@ async def client_websocket(websocket: WebSocket, token: str = None, monitor: str
     # monitor=<id> narrows the stream to one camera; no param keeps the old
     # "every camera" behaviour for the web dashboard.
     await client_manager.connect(websocket, key=monitor or None)
-    asyncio.create_task(manager.broadcast_text(json.dumps({"action": "set_fps", "fps": 5}), source_id=monitor or None))
+    await manager.broadcast_text(json.dumps({"action": "set_fps", "fps": 5}), source_id=monitor or None)
     try:
         while True:
             message = await websocket.receive()
@@ -164,7 +184,7 @@ async def client_websocket(websocket: WebSocket, token: str = None, monitor: str
     except Exception:
         client_manager.disconnect(websocket)
         if len(client_manager.active.connections) == 0:
-            asyncio.create_task(manager.broadcast_text(json.dumps({"action": "set_fps", "fps": 0.5})))
+            await manager.broadcast_text(json.dumps({"action": "set_fps", "fps": 0.5}))
 
 
 if os.path.exists("static"):

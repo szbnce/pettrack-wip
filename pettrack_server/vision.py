@@ -153,7 +153,12 @@ async def process_and_save_frame(image_bytes: bytes):
                 return
             crop = _crop_around_center(frame, cx_norm, cy_norm)
             rgb = np.ascontiguousarray(crop[:, :, ::-1])
-            verdict = classifier.classify_rgb(rgb, min_confidence=CLASSIFIER_MIN_CONF)
+            # Inference is the one genuinely heavy call in the pipeline —
+            # a thread keeps it from stalling the event loop under the
+            # live stream.
+            verdict = await asyncio.to_thread(
+                classifier.classify_rgb, rgb, min_confidence=CLASSIFIER_MIN_CONF
+            )
             if not verdict.is_pet:
                 if now - _last_ignored_log > 30:
                     _last_ignored_log = now

@@ -26,7 +26,8 @@ when every one is green, the product side is done.
 5. **Craft.** No broken-looking state anywhere (error + retry, empty states,
    skeletons on every data screen), accessibility AA (semantics, scaling,
    contrast), full 7-locale parity, performance targets (cold start < 2 s,
-   stream latency < 1 s).
+   stream latency < 1 s). *(done — the structure for both numbers is in and
+   tested; see docs/PERFORMANCE.md for how to verify them on a device)*
 6. **Ships like a product.** Semantic versioning + CHANGELOG + tagged release
    notes, one-tap in-app update on Android, backup/restore of settings,
    documented security posture.
