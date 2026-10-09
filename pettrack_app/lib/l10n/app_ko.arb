@@ -483,5 +483,7 @@
   "backupInvalid": "이 파일은 PetTrack 백업이 아닙니다",
   "backupRestored": "백업이 복원되었습니다",
   "backupRestoredOffline": "이 휴대폰에 백업이 복원되었습니다. 설정을 열어 저장하면 서버와 동기화됩니다.",
-  "backupRestoreError": "백업을 복원하지 못했습니다"
+  "backupRestoreError": "백업을 복원하지 못했습니다",
+  "setupSkipMonitor": "지금은 건너뛰기",
+  "setupMissingFields": "서버 주소와 PIN을 입력하세요"
 }

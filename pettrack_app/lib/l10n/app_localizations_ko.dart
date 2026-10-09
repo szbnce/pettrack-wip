@@ -1132,4 +1132,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get backupRestoreError => '백업을 복원하지 못했습니다';
+
+  @override
+  String get setupSkipMonitor => '지금은 건너뛰기';
+
+  @override
+  String get setupMissingFields => '서버 주소와 PIN을 입력하세요';
 }

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
+import 'package:pettrack_app/utils/pairing.dart';
 import 'package:pettrack_app/utils/server_url.dart';
 import 'package:pettrack_app/widgets/server_discovery_dialog.dart';
 import '../services/auth_service.dart';
@@ -67,9 +68,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     final result = await Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (_) => const QRScannerScreen()));
-    if (result != null && result is Map<String, dynamic>) {
-      _processLogin(result['ip'], result['secret']);
-    }
+    // The scanner only hands over well-formed payloads; re-check anyway so
+    // a bad map can never crash the login.
+    final fields = pairingFields(result);
+    if (fields != null) _processLogin(fields['ip']!, fields['secret']!);
   }
 
   Future<void> _startDemoMode(BuildContext context) async {
@@ -114,9 +116,15 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   }
 
   Future<void> _handlePinSubmit() async {
+    final l10n = AppLocalizations.of(context)!;
     final pin = _pinController.text.trim();
     final ipInput = _ipController.text.trim();
-    if (pin.isEmpty || ipInput.isEmpty) return;
+    if (pin.isEmpty || ipInput.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.setupMissingFields)));
+      return;
+    }
 
     // Demo logic moved to _startDemoMode()
 
@@ -216,20 +224,27 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
           curve: Curves.easeInOut,
         );
       } else {
-        throw Exception("Login Failed");
+        // The server answered and said no — wrong PIN, not a network wobble.
+        setState(() => _isLoading = false);
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.setupErrPin)));
+        }
       }
     } catch (e) {
+      // Reachable-but-refused and unreachable look alike from here.
       setState(() => _isLoading = false);
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.setupErrPin)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.setupErrConnect)));
       }
     }
   }
 
   Future<void> _processLogin(String ip, String secret) async {
+    final l10n = AppLocalizations.of(context)!;
     // QR payloads may hold "host:port" (server terminal) or a full URL
     // (in-app QR) — normalize so both work.
     ip = normalizeServerUrl(ip);
@@ -322,12 +337,18 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
           curve: Curves.easeInOut,
         );
       } else {
-        throw Exception("Login Failed");
+        // A QR can outlive the secret it carries — say so instead of
+        // blaming the network.
+        setState(() => _isLoading = false);
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.invalidSecretToken)));
+        }
       }
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(l10n.setupErrConnect)));
@@ -354,14 +375,24 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     setState(() => _isLoading = true);
 
     try {
-      await http.post(
-        Uri.parse('$_serverIp/api/pet'),
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-token': _jwtToken!,
-        },
-        body: jsonEncode({'name': _nameController.text, 'type': _selectedType}),
-      );
+      final response = await http
+          .post(
+            Uri.parse('$_serverIp/api/pet'),
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-token': _jwtToken!,
+            },
+            body: jsonEncode({
+              'name': _nameController.text,
+              'type': _selectedType,
+            }),
+          )
+          .timeout(const Duration(seconds: 4));
+      // A save that the server refused is a failed save — never finish the
+      // wizard on top of it and pretend the pet was stored.
+      if (response.statusCode != 200) {
+        throw Exception('pet save failed: HTTP ${response.statusCode}');
+      }
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('server_ip', _serverIp!);
@@ -386,6 +417,24 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         ).showSnackBar(SnackBar(content: Text(l10n.setupErrSave)));
       }
     }
+  }
+
+  /// A monitor is optional hardware — no monitor yet is a valid state, not a
+  /// wizard that never ends. Cancel the wait and go live.
+  Future<void> _skipMonitorWait() async {
+    _monitorPollTimer?.cancel();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_setup_completed', true);
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => MainNavigationScreen(
+          serverIp: _serverIp!,
+          token: _jwtToken!,
+          petName: _nameController.text,
+        ),
+      ),
+    );
   }
 
   void _startMonitorPolling() {
@@ -577,7 +626,16 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                   size: 200.0,
                 ),
               ),
-              actionButton: const CircularProgressIndicator(),
+              actionButton: Column(
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: _skipMonitorWait,
+                    child: Text(l10n.setupSkipMonitor),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

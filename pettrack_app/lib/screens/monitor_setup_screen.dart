@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/screens/monitor_screen.dart';
+import 'package:pettrack_app/utils/pairing.dart';
 import 'package:pettrack_app/utils/server_url.dart';
 import 'package:pettrack_app/widgets/server_discovery_dialog.dart';
 import '../services/auth_service.dart';
@@ -25,41 +26,37 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
 
   Future<void> _handleScan(String rawData) async {
     if (_isProcessing) return;
+    // Only a well-formed pairing payload may reach prefs and the monitor —
+    // anything else is somebody's unrelated QR.
+    final fields = parsePairingPayload(rawData);
+    if (fields == null) return;
     setState(() => _isProcessing = true);
 
-    try {
-      final data = jsonDecode(rawData);
-      if (data['ip'] != null && data['secret'] != null) {
-        // The server QR holds "host:port"; wizard QRs hold a full URL.
-        final serverUrl = normalizeServerUrl(data['ip'] as String);
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('server_ip', serverUrl);
-        await prefs.setString('server_token', data['secret']);
+    // The server QR holds "host:port"; wizard QRs hold a full URL.
+    final serverUrl = normalizeServerUrl(fields['ip']!);
+    final secret = fields['secret']!;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('server_ip', serverUrl);
+    await prefs.setString('server_token', secret);
 
-        String clientId = prefs.getString('client_id') ?? '';
-        if (clientId.isEmpty) {
-          clientId =
-              'monitor_${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}';
-          await prefs.setString('client_id', clientId);
-        }
-
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MonitorScreen(
-              serverIp: serverUrl,
-              token: data['secret'],
-              clientId: clientId,
-            ),
-          ),
-        );
-      } else {
-        setState(() => _isProcessing = false);
-      }
-    } catch (e) {
-      setState(() => _isProcessing = false);
+    String clientId = prefs.getString('client_id') ?? '';
+    if (clientId.isEmpty) {
+      clientId =
+          'monitor_${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}';
+      await prefs.setString('client_id', clientId);
     }
+
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MonitorScreen(
+          serverIp: serverUrl,
+          token: secret,
+          clientId: clientId,
+        ),
+      ),
+    );
   }
 
   Future<void> _startDemoMode(BuildContext context) async {
@@ -105,9 +102,15 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
   }
 
   Future<void> _handlePinSubmit() async {
+    final l10n = AppLocalizations.of(context)!;
     final pin = _pinController.text.trim();
     final ipInput = _ipController.text.trim();
-    if (pin.isEmpty || ipInput.isEmpty) return;
+    if (pin.isEmpty || ipInput.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.setupMissingFields)));
+      return;
+    }
 
     // Demo logic moved to _startDemoMode()
 
@@ -158,15 +161,21 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
           ),
         );
       } else {
-        throw Exception("Login Failed");
+        // The server answered and said no — wrong PIN, not a network wobble.
+        setState(() => _isProcessing = false);
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.setupErrPin)));
+        }
       }
     } catch (e) {
+      // Reachable-but-refused and unreachable look alike from here.
       setState(() => _isProcessing = false);
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(l10n.setupErrPin)));
+        ).showSnackBar(SnackBar(content: Text(l10n.setupErrConnect)));
       }
     }
   }

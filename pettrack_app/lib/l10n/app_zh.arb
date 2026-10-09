@@ -483,5 +483,7 @@
   "backupInvalid": "该文件不是 PetTrack 备份",
   "backupRestored": "备份已恢复",
   "backupRestoredOffline": "备份已在本机恢复。打开设置并保存以与服务器同步。",
-  "backupRestoreError": "无法恢复备份"
+  "backupRestoreError": "无法恢复备份",
+  "setupSkipMonitor": "暂时跳过",
+  "setupMissingFields": "请输入服务器地址和 PIN"
 }

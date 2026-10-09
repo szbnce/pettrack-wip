@@ -2207,6 +2207,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not restore the backup'**
   String get backupRestoreError;
+
+  /// No description provided for @setupSkipMonitor.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get setupSkipMonitor;
+
+  /// No description provided for @setupMissingFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the server address and the PIN'**
+  String get setupMissingFields;
 }
 
 class _AppLocalizationsDelegate

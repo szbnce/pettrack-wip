@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
+import 'package:pettrack_app/utils/pairing.dart';
 
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({super.key});
@@ -32,16 +32,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               final List<Barcode> barcodes = capture.barcodes;
               for (final barcode in barcodes) {
                 final rawValue = barcode.rawValue;
-                if (rawValue != null &&
-                    rawValue.contains('ip') &&
-                    rawValue.contains('secret')) {
+                if (rawValue == null) continue;
+                final data = parsePairingPayload(rawValue);
+                if (data != null) {
                   _hasScanned = true;
-                  try {
-                    final data = jsonDecode(rawValue);
-                    Navigator.of(context).pop(data);
-                  } catch (e) {
-                    _hasScanned = false;
-                  }
+                  Navigator.of(context).pop(data);
                   break;
                 }
               }

@@ -250,11 +250,23 @@ class _BootScreenState extends State<BootScreen> {
     }
 
     if (mode == 'client') {
-      final ip = prefs.getString('server_ip');
-      final token = prefs.getString('jwt_token');
+      final ip = prefs.getString('server_ip') ?? '';
+      var token = prefs.getString('jwt_token') ?? '';
+      final secret = prefs.getString('secret_token') ?? '';
       final petName = prefs.getString('pet_name') ?? '';
 
-      if (ip != null && ip.isNotEmpty && token != null && token.isNotEmpty) {
+      // A phone that knows its server and secret must never be sent back
+      // through the wizard just because the session lapsed — log in again.
+      if (token.isEmpty && ip.isNotEmpty && secret.isNotEmpty) {
+        final recovered = await AuthService.loginWithSecret(
+          serverIp: ip,
+          secret: secret,
+        );
+        if (recovered) token = AuthService.token;
+        if (!mounted) return;
+      }
+
+      if (ip.isNotEmpty && token.isNotEmpty) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
@@ -309,6 +321,18 @@ class _BootScreenState extends State<BootScreen> {
           ),
         );
       }
+    } else {
+      // An unknown mode (a hand-edited pref, a build that changed its mind)
+      // must not strand anyone on the spinner — start over, not hang.
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const LanguageScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      );
     }
   }
 

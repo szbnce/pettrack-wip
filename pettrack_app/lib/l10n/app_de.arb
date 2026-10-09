@@ -483,5 +483,7 @@
   "backupInvalid": "Diese Datei ist kein PetTrack-Backup",
   "backupRestored": "Backup wiederhergestellt",
   "backupRestoredOffline": "Backup auf diesem Handy wiederhergestellt. Öffne die Einstellungen und speichere, um mit dem Server zu synchronisieren.",
-  "backupRestoreError": "Das Backup konnte nicht wiederhergestellt werden"
+  "backupRestoreError": "Das Backup konnte nicht wiederhergestellt werden",
+  "setupSkipMonitor": "Erstmal überspringen",
+  "setupMissingFields": "Gib Serveradresse und PIN ein"
 }

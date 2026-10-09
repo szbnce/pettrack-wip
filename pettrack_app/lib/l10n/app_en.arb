@@ -576,5 +576,7 @@
   "backupInvalid": "That file is not a PetTrack backup",
   "backupRestored": "Backup restored",
   "backupRestoredOffline": "Backup restored on this phone. Open Settings and save to sync with the server.",
-  "backupRestoreError": "Could not restore the backup"
+  "backupRestoreError": "Could not restore the backup",
+  "setupSkipMonitor": "Skip for now",
+  "setupMissingFields": "Enter the server address and the PIN"
 }

@@ -1154,4 +1154,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get backupRestoreError => 'Impossibile ripristinare il backup';
+
+  @override
+  String get setupSkipMonitor => 'Salta per ora';
+
+  @override
+  String get setupMissingFields => 'Inserisci l\'indirizzo del server e il PIN';
 }

@@ -483,5 +483,7 @@
   "backupInvalid": "このファイルは PetTrack のバックアップではありません",
   "backupRestored": "バックアップを復元しました",
   "backupRestoredOffline": "この端末にバックアップを復元しました。設定を開いて保存するとサーバーと同期します。",
-  "backupRestoreError": "バックアップを復元できませんでした"
+  "backupRestoreError": "バックアップを復元できませんでした",
+  "setupSkipMonitor": "今はスキップ",
+  "setupMissingFields": "サーバーアドレスと PIN を入力してください"
 }

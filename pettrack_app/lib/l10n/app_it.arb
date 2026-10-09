@@ -483,5 +483,7 @@
   "backupInvalid": "Questo file non è un backup di PetTrack",
   "backupRestored": "Backup ripristinato",
   "backupRestoredOffline": "Backup ripristinato su questo telefono. Apri Impostazioni e salva per sincronizzare con il server.",
-  "backupRestoreError": "Impossibile ripristinare il backup"
+  "backupRestoreError": "Impossibile ripristinare il backup",
+  "setupSkipMonitor": "Salta per ora",
+  "setupMissingFields": "Inserisci l'indirizzo del server e il PIN"
 }

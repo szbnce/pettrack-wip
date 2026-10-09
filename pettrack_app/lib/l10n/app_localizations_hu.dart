@@ -1149,4 +1149,10 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get backupRestoreError => 'A backupot nem sikerült visszaállítani';
+
+  @override
+  String get setupSkipMonitor => 'Most kihagyom';
+
+  @override
+  String get setupMissingFields => 'Add meg a szerver címét és a PIN-kódot';
 }

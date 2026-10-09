@@ -1125,4 +1125,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get backupRestoreError => '无法恢复备份';
+
+  @override
+  String get setupSkipMonitor => '暂时跳过';
+
+  @override
+  String get setupMissingFields => '请输入服务器地址和 PIN';
 }

@@ -383,5 +383,7 @@
   "backupInvalid": "Ez a fájl nem PetTrack backup",
   "backupRestored": "Backup visszaállítva",
   "backupRestoredOffline": "A backup visszaállítva ezen a telefonon. Nyisd meg a Beállításokat és mentsd, hogy szinkronizálj a szerverrel.",
-  "backupRestoreError": "A backupot nem sikerült visszaállítani"
+  "backupRestoreError": "A backupot nem sikerült visszaállítani",
+  "setupSkipMonitor": "Most kihagyom",
+  "setupMissingFields": "Add meg a szerver címét és a PIN-kódot"
 }

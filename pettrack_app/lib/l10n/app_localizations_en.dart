@@ -1144,4 +1144,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backupRestoreError => 'Could not restore the backup';
+
+  @override
+  String get setupSkipMonitor => 'Skip for now';
+
+  @override
+  String get setupMissingFields => 'Enter the server address and the PIN';
 }

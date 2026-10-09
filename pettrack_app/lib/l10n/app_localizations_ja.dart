@@ -1133,4 +1133,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get backupRestoreError => 'バックアップを復元できませんでした';
+
+  @override
+  String get setupSkipMonitor => '今はスキップ';
+
+  @override
+  String get setupMissingFields => 'サーバーアドレスと PIN を入力してください';
 }

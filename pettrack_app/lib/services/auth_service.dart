@@ -119,4 +119,38 @@ class AuthService {
     await p.remove(roleKey);
     await p.remove(monitorAccessKey);
   }
+
+  /// Log in with the pairing secret — the recovery path for a phone that
+  /// still knows its server and secret but has no live session (expired,
+  /// revoked, or cleared). True when a fresh session was stored.
+  static Future<bool> loginWithSecret({
+    required String serverIp,
+    required String secret,
+  }) async {
+    if (serverIp.isEmpty || secret.isEmpty) return false;
+    try {
+      final response = await http
+          .post(
+            Uri.parse('${normalizeServerUrl(serverIp)}/api/auth/login'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'secret': secret}),
+          )
+          .timeout(const Duration(seconds: 4));
+      if (response.statusCode != 200) return false;
+      final body = jsonDecode(response.body);
+      final token = body is Map ? body['token'] : null;
+      if (token is! String || token.isEmpty) return false;
+      final refresh = body['refresh_token'];
+      final expires = body['expires_in'];
+      await saveSession(
+        accessToken: token,
+        refreshToken: refresh is String ? refresh : '',
+        expiresInSeconds: expires is num ? expires.toInt() : 3600,
+        role: 'viewer',
+      );
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 }
