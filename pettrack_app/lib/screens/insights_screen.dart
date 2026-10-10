@@ -7,10 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../models/insights_data.dart';
 import '../theme/colors.dart';
 import '../utils/format_helpers.dart';
+import '../utils/insights_card.dart';
 import '../utils/insights_share.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/skeleton_box.dart';
@@ -112,23 +114,44 @@ class _InsightsScreenState extends State<InsightsScreen> {
   String _duration(double seconds, AppLocalizations l10n) =>
       formatDurationSeconds(l10n, seconds);
 
-  /// A text card of the range's headline numbers — the share sheet decides
-  /// where it goes.
+  /// "4 – 10 Oct" for the card's subtitle. The card never formats dates
+  /// itself, so the range reads the same way as the rest of the app.
+  String _datesLabel(List<InsightDay> window) {
+    final localizations = MaterialLocalizations.of(context);
+    if (window.isEmpty) return '';
+    final first = DateTime.parse(window.first.date);
+    final last = DateTime.parse(window.last.date);
+    final from = localizations.formatMediumDate(first);
+    final to = localizations.formatMediumDate(last);
+    return first == last ? from : '$from – $to';
+  }
+
+  /// The pet's name, as Settings writes it — the card's title names them.
+  Future<String> _petName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('pet_name') ?? '';
+  }
+
+  /// Show the card before it leaves: the post the owner is about to make,
+  /// with the image and the text form as two honest choices.
   Future<void> _shareSummary() async {
     final data = _data;
     if (data == null) return;
     final l10n = AppLocalizations.of(context)!;
-    try {
-      await SharePlus.instance.share(
-        ShareParams(text: buildInsightsShareText(l10n, data, _rangeDays)),
-      );
-    } catch (e) {
-      debugPrint('insights share failed: $e');
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.shareFailed)));
-    }
+    final petName = await _petName();
+    if (!mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (sheetContext) => _InsightsShareSheet(
+        l10n: l10n,
+        data: data,
+        rangeDays: _rangeDays,
+        petName: petName,
+        datesLabel: _datesLabel(data.daysInRange(_rangeDays)),
+      ),
+    );
   }
 
   String _dayLabel(BuildContext context, String date) =>
@@ -673,6 +696,123 @@ class _InsightsScreenState extends State<InsightsScreen> {
         ),
       ),
       child: child,
+    );
+  }
+}
+
+/// The card's send-off: see the post first, then pick the form it leaves in.
+class _InsightsShareSheet extends StatefulWidget {
+  final AppLocalizations l10n;
+  final InsightsData data;
+  final int rangeDays;
+  final String petName;
+  final String datesLabel;
+
+  const _InsightsShareSheet({
+    required this.l10n,
+    required this.data,
+    required this.rangeDays,
+    required this.petName,
+    required this.datesLabel,
+  });
+
+  @override
+  State<_InsightsShareSheet> createState() => _InsightsShareSheetState();
+}
+
+class _InsightsShareSheetState extends State<_InsightsShareSheet> {
+  final _cardKey = GlobalKey();
+  bool _busy = false;
+
+  Future<void> _asImage() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await shareInsightsCardPng(_cardKey);
+      if (mounted) Navigator.pop(context);
+    } catch (e) {
+      debugPrint('insights card share failed: $e');
+      if (!mounted) return;
+      setState(() => _busy = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(widget.l10n.shareFailed)));
+    }
+  }
+
+  Future<void> _asText() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await SharePlus.instance.share(
+        ShareParams(
+          text: buildInsightsShareText(
+            widget.l10n,
+            widget.data,
+            widget.rangeDays,
+          ),
+        ),
+      );
+      if (mounted) Navigator.pop(context);
+    } catch (e) {
+      debugPrint('insights text share failed: $e');
+      if (!mounted) return;
+      setState(() => _busy = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(widget.l10n.shareFailed)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = widget.l10n;
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l10n.insightsCardShareTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            // The card paints at its own fixed size; the box only scales the
+            // preview. The PNG is taken from the unscaled card behind it.
+            SizedBox(
+              height: 300,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: RepaintBoundary(
+                  key: _cardKey,
+                  child: InsightsCard(
+                    l10n: l10n,
+                    data: widget.data,
+                    rangeDays: widget.rangeDays,
+                    petName: widget.petName,
+                    datesLabel: widget.datesLabel,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            FilledButton.icon(
+              onPressed: _busy ? null : _asImage,
+              icon: const Icon(Icons.image_outlined),
+              label: Text(l10n.insightsCardShareImage),
+            ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: _busy ? null : _asText,
+              icon: const Icon(Icons.notes_outlined),
+              label: Text(l10n.insightsCardShareText),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

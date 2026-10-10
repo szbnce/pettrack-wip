@@ -293,6 +293,28 @@
   "insightsClips": "{n} motion clips",
   "insightsSounds": "{n} sound events",
   "insightsLoadError": "Could not load insights",
+  "insightsCardNamed": "{petName} on PetTrack",
+  "@insightsCardNamed": {
+    "placeholders": {
+      "petName": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsCardGeneric": "My pet on PetTrack",
+  "insightsCardMoving": "on the move",
+  "insightsCardTopZone": "Most time in {zone}",
+  "@insightsCardTopZone": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "insightsCardFooter": "Recorded on PetTrack",
+  "insightsCardShareTitle": "Share this card",
+  "insightsCardShareImage": "Share as image",
+  "insightsCardShareText": "Share as text",
   "demoZoneKitchen": "Kitchen",
   "demoZoneSofa": "Sofa",
   "demoZoneBed": "Bed",

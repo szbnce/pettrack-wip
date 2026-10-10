@@ -608,6 +608,34 @@ class AppLocalizationsHu extends AppLocalizations {
   String get insightsLoadError => 'Nem sikerült betölteni az elemzést';
 
   @override
+  String insightsCardNamed(String petName) {
+    return '$petName a PetTracken';
+  }
+
+  @override
+  String get insightsCardGeneric => 'A kisállatom a PetTracken';
+
+  @override
+  String get insightsCardMoving => 'mozgásban';
+
+  @override
+  String insightsCardTopZone(String zone) {
+    return 'A legtöbb idő itt: $zone';
+  }
+
+  @override
+  String get insightsCardFooter => 'Rögzítette: PetTrack';
+
+  @override
+  String get insightsCardShareTitle => 'Kártya megosztása';
+
+  @override
+  String get insightsCardShareImage => 'Megosztás képként';
+
+  @override
+  String get insightsCardShareText => 'Megosztás szövegként';
+
+  @override
   String get demoZoneKitchen => 'Konyha';
 
   @override

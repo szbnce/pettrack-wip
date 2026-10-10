@@ -596,6 +596,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String get insightsLoadError => '无法加载洞察数据';
 
   @override
+  String insightsCardNamed(String petName) {
+    return '$petName的 PetTrack';
+  }
+
+  @override
+  String get insightsCardGeneric => '我家宝贝的 PetTrack';
+
+  @override
+  String get insightsCardMoving => '活动时间';
+
+  @override
+  String insightsCardTopZone(String zone) {
+    return '待得最久的地方：$zone';
+  }
+
+  @override
+  String get insightsCardFooter => '由 PetTrack 记录';
+
+  @override
+  String get insightsCardShareTitle => '分享这张卡片';
+
+  @override
+  String get insightsCardShareImage => '以图片分享';
+
+  @override
+  String get insightsCardShareText => '以文字分享';
+
+  @override
   String get demoZoneKitchen => '厨房';
 
   @override

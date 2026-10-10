@@ -1188,6 +1188,54 @@ abstract class AppLocalizations {
   /// **'Could not load insights'**
   String get insightsLoadError;
 
+  /// No description provided for @insightsCardNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'{petName} on PetTrack'**
+  String insightsCardNamed(String petName);
+
+  /// No description provided for @insightsCardGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'My pet on PetTrack'**
+  String get insightsCardGeneric;
+
+  /// No description provided for @insightsCardMoving.
+  ///
+  /// In en, this message translates to:
+  /// **'on the move'**
+  String get insightsCardMoving;
+
+  /// No description provided for @insightsCardTopZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Most time in {zone}'**
+  String insightsCardTopZone(String zone);
+
+  /// No description provided for @insightsCardFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded on PetTrack'**
+  String get insightsCardFooter;
+
+  /// No description provided for @insightsCardShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this card'**
+  String get insightsCardShareTitle;
+
+  /// No description provided for @insightsCardShareImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Share as image'**
+  String get insightsCardShareImage;
+
+  /// No description provided for @insightsCardShareText.
+  ///
+  /// In en, this message translates to:
+  /// **'Share as text'**
+  String get insightsCardShareText;
+
   /// No description provided for @demoZoneKitchen.
   ///
   /// In en, this message translates to:

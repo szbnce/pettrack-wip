@@ -600,6 +600,34 @@ class AppLocalizationsJa extends AppLocalizations {
   String get insightsLoadError => '分析を読み込めませんでした';
 
   @override
+  String insightsCardNamed(String petName) {
+    return '$petNameのPetTrack';
+  }
+
+  @override
+  String get insightsCardGeneric => 'うちの子のPetTrack';
+
+  @override
+  String get insightsCardMoving => '動いていた時間';
+
+  @override
+  String insightsCardTopZone(String zone) {
+    return 'いちばんいたのは$zone';
+  }
+
+  @override
+  String get insightsCardFooter => 'PetTrackで記録';
+
+  @override
+  String get insightsCardShareTitle => 'このカードを共有';
+
+  @override
+  String get insightsCardShareImage => '画像として共有';
+
+  @override
+  String get insightsCardShareText => 'テキストとして共有';
+
+  @override
   String get demoZoneKitchen => 'キッチン';
 
   @override

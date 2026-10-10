@@ -606,6 +606,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get insightsLoadError => 'Could not load insights';
 
   @override
+  String insightsCardNamed(String petName) {
+    return '$petName on PetTrack';
+  }
+
+  @override
+  String get insightsCardGeneric => 'My pet on PetTrack';
+
+  @override
+  String get insightsCardMoving => 'on the move';
+
+  @override
+  String insightsCardTopZone(String zone) {
+    return 'Most time in $zone';
+  }
+
+  @override
+  String get insightsCardFooter => 'Recorded on PetTrack';
+
+  @override
+  String get insightsCardShareTitle => 'Share this card';
+
+  @override
+  String get insightsCardShareImage => 'Share as image';
+
+  @override
+  String get insightsCardShareText => 'Share as text';
+
+  @override
   String get demoZoneKitchen => 'Kitchen';
 
   @override

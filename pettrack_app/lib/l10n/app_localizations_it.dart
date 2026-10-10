@@ -612,6 +612,34 @@ class AppLocalizationsIt extends AppLocalizations {
   String get insightsLoadError => 'Impossibile caricare le analisi';
 
   @override
+  String insightsCardNamed(String petName) {
+    return '$petName su PetTrack';
+  }
+
+  @override
+  String get insightsCardGeneric => 'Il mio animale su PetTrack';
+
+  @override
+  String get insightsCardMoving => 'in movimento';
+
+  @override
+  String insightsCardTopZone(String zone) {
+    return 'Più tempo in $zone';
+  }
+
+  @override
+  String get insightsCardFooter => 'Registrato con PetTrack';
+
+  @override
+  String get insightsCardShareTitle => 'Condividi questa card';
+
+  @override
+  String get insightsCardShareImage => 'Condividi come immagine';
+
+  @override
+  String get insightsCardShareText => 'Condividi come testo';
+
+  @override
   String get demoZoneKitchen => 'Cucina';
 
   @override

@@ -597,6 +597,34 @@ class AppLocalizationsKo extends AppLocalizations {
   String get insightsLoadError => '분석을 불러올 수 없습니다';
 
   @override
+  String insightsCardNamed(String petName) {
+    return '$petName의 PetTrack';
+  }
+
+  @override
+  String get insightsCardGeneric => '우리 아이의 PetTrack';
+
+  @override
+  String get insightsCardMoving => '움직인 시간';
+
+  @override
+  String insightsCardTopZone(String zone) {
+    return '가장 오래 있던 곳: $zone';
+  }
+
+  @override
+  String get insightsCardFooter => 'PetTrack으로 기록';
+
+  @override
+  String get insightsCardShareTitle => '이 카드 공유';
+
+  @override
+  String get insightsCardShareImage => '이미지로 공유';
+
+  @override
+  String get insightsCardShareText => '텍스트로 공유';
+
+  @override
   String get demoZoneKitchen => '주방';
 
   @override

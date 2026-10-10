@@ -19,7 +19,8 @@ when every one is green, the product side is done.
    notices them. *(mostly done — quiet hours, ntfy bridge, watchdog,
    self-healing stream reconnection; audit the alert edges)*
 3. **Worth sharing.** One-tap share for replays, the daily highlight and the
-   week's insights — the kind of screenshots people post.
+   week's insights — the kind of screenshots people post. *(done — the week
+   card renders as a shareable image as well as text)*
 4. **Daily-use depth.** Event → evidence tap-through (snapshot + jump to the
    replay moment), feed search/filter, arming schedule ("only watch when
    I'm away").

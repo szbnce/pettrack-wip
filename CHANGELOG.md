@@ -10,6 +10,10 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- A shareable week card: Insights' share button now shows the post before
+  it leaves — the pet's name, the headline number, the week's shape as a
+  bar chart, and where the time went — as an image you can post anywhere,
+  or as the plain text it used to be
 - Delete a clip now: the false alarm, the knocked-over camera — one tap in
   the player, a confirmation, and the recording is gone for good. The pin
   goes with it, and only a full session can do it (a monitor phone is a
