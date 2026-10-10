@@ -1372,6 +1372,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get setupSkipMonitor => 'Salta per ora';
 
   @override
+  String get setupMonitorUnreachable =>
+      'Il server non è ancora raggiungibile… Controlla che sia in esecuzione e sulla stessa rete.';
+
+  @override
   String get setupMissingFields => 'Inserisci l\'indirizzo del server e il PIN';
 
   @override

@@ -1331,6 +1331,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get setupSkipMonitor => '暂时跳过';
 
   @override
+  String get setupMonitorUnreachable => '暂时无法连接服务器… 请检查服务器是否在运行，且与本机在同一网络。';
+
+  @override
   String get setupMissingFields => '请输入服务器地址和 PIN';
 
   @override

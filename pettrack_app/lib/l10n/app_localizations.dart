@@ -2580,6 +2580,12 @@ abstract class AppLocalizations {
   /// **'Skip for now'**
   String get setupSkipMonitor;
 
+  /// No description provided for @setupMonitorUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Still reaching the server… Check that the server is running and on the same network.'**
+  String get setupMonitorUnreachable;
+
   /// No description provided for @setupMissingFields.
   ///
   /// In en, this message translates to:

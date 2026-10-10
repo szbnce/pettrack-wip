@@ -1344,6 +1344,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get setupSkipMonitor => '今はスキップ';
 
   @override
+  String get setupMonitorUnreachable =>
+      'サーバーにまだ接続できません… 起動していて同じネットワーク上にあるか確認してください。';
+
+  @override
   String get setupMissingFields => 'サーバーアドレスと PIN を入力してください';
 
   @override

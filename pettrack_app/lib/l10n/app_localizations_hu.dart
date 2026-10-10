@@ -1363,6 +1363,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get setupSkipMonitor => 'Most kihagyom';
 
   @override
+  String get setupMonitorUnreachable =>
+      'A szerver még nem érhető el… Ellenőrizd, hogy fut és ugyanazon a hálózaton van.';
+
+  @override
   String get setupMissingFields => 'Add meg a szerver címét és a PIN-kódot';
 
   @override

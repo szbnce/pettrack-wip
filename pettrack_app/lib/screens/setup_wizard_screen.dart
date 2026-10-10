@@ -491,6 +491,12 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     );
   }
 
+  // The wait page polls for the camera. A silent catch here used to mean a
+  // server blip looked exactly like "still waiting" — count the misses and
+  // say so once they add up.
+  int _monitorPollFailures = 0;
+  bool _monitorServerUnreachable = false;
+
   void _startMonitorPolling() {
     _monitorPollTimer = Timer.periodic(const Duration(seconds: 2), (
       timer,
@@ -505,6 +511,14 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
+          if (_monitorPollFailures > 0 || _monitorServerUnreachable) {
+            if (mounted) {
+              setState(() {
+                _monitorPollFailures = 0;
+                _monitorServerUnreachable = false;
+              });
+            }
+          }
           if (data['monitor_online'] == true) {
             timer.cancel();
 
@@ -523,11 +537,23 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
               );
             }
           }
+        } else {
+          _notePollFailure();
         }
-      } catch (e) {
-        // ignore
+      } catch (_) {
+        _notePollFailure();
       }
     });
+  }
+
+  void _notePollFailure() {
+    _monitorPollFailures++;
+    // Three misses in a row (~6s) is not a blip — tell the user the server
+    // itself is out of reach, because that is a different problem from a
+    // camera that has not shown up yet.
+    if (_monitorPollFailures >= 3 && !_monitorServerUnreachable && mounted) {
+      setState(() => _monitorServerUnreachable = true);
+    }
   }
 
   @override
@@ -601,6 +627,26 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                 icon: Icons.qr_code_scanner,
                 child: Column(
                   children: [
+                    // Scan first: most people hold the server terminal's QR
+                    // in front of the phone. The form below is the fallback,
+                    // not the main event.
+                    ElevatedButton.icon(
+                      onPressed: _isLoading ? null : _startQRscan,
+                      icon: const Icon(Icons.camera_alt),
+                      label: Text(
+                        l10n.setupScanBtn,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 15,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(l10n.orSeparator),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: _ipController,
                       decoration: InputDecoration(
@@ -625,10 +671,6 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                       keyboardType: TextInputType.number,
                       maxLength: 4,
                     ),
-                    ElevatedButton(
-                      onPressed: _handlePinSubmit,
-                      child: Text(l10n.submitPin),
-                    ),
                     const SizedBox(height: 16),
                     TextButton.icon(
                       onPressed: () => _startDemoMode(context),
@@ -638,25 +680,13 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                         foregroundColor: Colors.orange,
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    Text(l10n.orSeparator),
                   ],
                 ),
                 actionButton: _isLoading
                     ? const CircularProgressIndicator()
-                    : ElevatedButton.icon(
-                        onPressed: _startQRscan,
-                        icon: const Icon(Icons.camera_alt),
-                        label: Text(
-                          l10n.setupScanBtn,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 30,
-                            vertical: 15,
-                          ),
-                        ),
+                    : ElevatedButton(
+                        onPressed: _isLoading ? null : _handlePinSubmit,
+                        child: Text(l10n.submitPin),
                       ),
               ),
 
@@ -732,6 +762,16 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                   children: [
                     const CircularProgressIndicator(),
                     const SizedBox(height: 16),
+                    if (_monitorServerUnreachable) ...[
+                      Text(
+                        l10n.setupMonitorUnreachable,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
                     TextButton(
                       onPressed: _skipMonitorWait,
                       child: Text(l10n.setupSkipMonitor),

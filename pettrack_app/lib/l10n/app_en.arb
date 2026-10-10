@@ -711,6 +711,7 @@
   "backupRestoredOffline": "Backup restored on this phone. Open Settings and save to sync with the server.",
   "backupRestoreError": "Could not restore the backup",
   "setupSkipMonitor": "Skip for now",
+  "setupMonitorUnreachable": "Still reaching the server… Check that the server is running and on the same network.",
   "setupMissingFields": "Enter the server address and the PIN",
   "noCameraTitle": "No camera connected yet",
   "noCameraDesc": "Open PetTrack Monitor on the old phone and scan the pairing code. The camera will show up here within a few seconds.",

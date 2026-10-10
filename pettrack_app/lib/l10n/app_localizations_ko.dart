@@ -1342,6 +1342,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get setupSkipMonitor => '지금은 건너뛰기';
 
   @override
+  String get setupMonitorUnreachable =>
+      '서버에 아직 연결할 수 없습니다… 실행 중이고 같은 네트워크에 있는지 확인하세요.';
+
+  @override
   String get setupMissingFields => '서버 주소와 PIN을 입력하세요';
 
   @override

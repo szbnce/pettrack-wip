@@ -1374,6 +1374,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get setupSkipMonitor => 'Erstmal überspringen';
 
   @override
+  String get setupMonitorUnreachable =>
+      'Der Server ist noch nicht erreichbar… Prüfe, ob er läuft und im selben Netzwerk ist.';
+
+  @override
   String get setupMissingFields => 'Gib Serveradresse und PIN ein';
 
   @override

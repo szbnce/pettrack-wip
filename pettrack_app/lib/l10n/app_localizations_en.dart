@@ -1358,6 +1358,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setupSkipMonitor => 'Skip for now';
 
   @override
+  String get setupMonitorUnreachable =>
+      'Still reaching the server… Check that the server is running and on the same network.';
+
+  @override
   String get setupMissingFields => 'Enter the server address and the PIN';
 
   @override

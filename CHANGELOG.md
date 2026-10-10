@@ -148,6 +148,13 @@ builds version together — Settings → About, the update check and
 
 ### Changed
 
+- The setup wizard leads with the camera. "Read QR Code" is the first thing
+  on page 1 — the address form is the fallback below the "OR" line, not the
+  other way round — and the PIN button stays put (and stays dead) while a
+  pairing attempt is in flight instead of inviting a double tap
+- The "waiting for the camera" page no longer pretends nothing is wrong:
+  after a few seconds of the server not answering it says so, so a dead
+  server is distinguishable from a camera that has not shown up yet
 - Accessibility to WCAG AA: every control speaks, every image says what it
   is, and contrast holds in both themes
 - The status badge wears a pale pill with dark ink — readable on any surface
