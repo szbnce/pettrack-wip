@@ -35,6 +35,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
   bool _isLoading = false;
   Timer? _monitorPollTimer;
+  // Which wizard page is showing. The PageView is deliberately not
+  // swipeable, so this is the only way back — and without it a system
+  // back on page 2 threw away a pairing that had already succeeded.
+  int _currentPage = 0;
 
   final List<String> _petTypes = [
     'dog',
@@ -113,6 +117,59 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         ),
       );
     }
+  }
+
+  /// Remember that pairing worked, before the rest of the wizard does.
+  ///
+  /// The secret used to be written to secure storage here and nowhere else
+  /// until `_finishSetup`, so an app kill mid-wizard restarted pairing from
+  /// scratch even though the phone already knew the server.
+  Future<void> _savePairProgress(String ip, String secret) async {
+    await _secureStorage.write(key: 'secret_token', value: secret);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('server_ip', ip);
+    await prefs.setString('secret_token', secret);
+  }
+
+  void _goNext() {
+    setState(() => _currentPage++);
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _goBack() {
+    if (_currentPage == 0) return;
+    setState(() => _currentPage--);
+    _pageController.previousPage(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  /// System back means "one step back" in the wizard, and "are you sure"
+  /// on the first page — never "throw away a pairing that already worked".
+  Future<bool> _confirmExit() async {
+    final l10n = AppLocalizations.of(context)!;
+    final leaving = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.setupExitTitle),
+        content: Text(l10n.setupExitBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l10n.setupExitStay),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(l10n.setupExitLeave),
+          ),
+        ],
+      ),
+    );
+    return leaving ?? false;
   }
 
   Future<void> _handlePinSubmit() async {
@@ -217,12 +274,9 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
           _isLoading = false;
         });
 
-        await _secureStorage.write(key: 'secret_token', value: _secretToken!);
+        await _savePairProgress(targetIp, _secretToken!);
 
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+        _goNext();
       } else {
         // The server answered and said no — wrong PIN, not a network wobble.
         setState(() => _isLoading = false);
@@ -330,12 +384,9 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
           _isLoading = false;
         });
 
-        await _secureStorage.write(key: 'secret_token', value: secret);
+        await _savePairProgress(ip, secret);
 
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+        _goNext();
       } else {
         // A QR can outlive the secret it carries — say so instead of
         // blaming the network.
@@ -403,10 +454,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
       if (mounted) {
         setState(() => _isLoading = false);
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+        _goNext();
         _startMonitorPolling();
       }
     } catch (e) {
@@ -477,6 +525,40 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _resumePairProgress();
+  }
+
+  /// If a previous run got as far as pairing but not as far as a pet, come
+  /// back to the page that was missing instead of making the user pair again.
+  Future<void> _resumePairProgress() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('is_setup_completed') ?? false) return;
+    if ((prefs.getString('pet_name') ?? '').isNotEmpty) return;
+    final ip = prefs.getString('server_ip') ?? '';
+    final secret = prefs.getString('secret_token') ?? '';
+    if (ip.isEmpty || secret.isEmpty) return;
+
+    // The phone already knows this server. Try to pick the session back up
+    // so the next page is pet setup, not the PIN field.
+    final recovered = await AuthService.loginWithSecret(
+      serverIp: ip,
+      secret: secret,
+    );
+    if (!mounted) return;
+    setState(() => _ipController.text = ip);
+    if (recovered) {
+      setState(() {
+        _serverIp = ip;
+        _secretToken = secret;
+        _jwtToken = AuthService.token;
+      });
+      _goNext();
+    }
+  }
+
+  @override
   void dispose() {
     _monitorPollTimer?.cancel();
     _pageController.dispose();
@@ -489,155 +571,170 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: PageView(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            _buildPage(
-              title: l10n.setupWelcomeTitle,
-              description: l10n.setupWelcomeDesc,
-              icon: Icons.qr_code_scanner,
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _ipController,
-                    decoration: InputDecoration(
-                      labelText: l10n.serverIp,
-                      hintText: l10n.serverIpHint,
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ServerDiscoveryButton(
-                    onSelected: (address) {
-                      _ipController.text = normalizeServerUrl(address);
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _pinController,
-                    decoration: InputDecoration(
-                      labelText: l10n.enterPin,
-                      border: const OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    maxLength: 4,
-                  ),
-                  ElevatedButton(
-                    onPressed: _handlePinSubmit,
-                    child: Text(l10n.submitPin),
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton.icon(
-                    onPressed: () => _startDemoMode(context),
-                    icon: const Icon(Icons.play_circle_fill),
-                    label: Text(l10n.demoModeBtn),
-                    style: TextButton.styleFrom(foregroundColor: Colors.orange),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(l10n.orSeparator),
-                ],
-              ),
-              actionButton: _isLoading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton.icon(
-                      onPressed: _startQRscan,
-                      icon: const Icon(Icons.camera_alt),
-                      label: Text(
-                        l10n.setupScanBtn,
-                        style: const TextStyle(fontSize: 18),
+      body: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (didPop) return;
+          if (_currentPage > 0) {
+            _goBack();
+            return;
+          }
+          if (await _confirmExit() && context.mounted) {
+            Navigator.of(context).pop();
+          }
+        },
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              _buildPage(
+                title: l10n.setupWelcomeTitle,
+                description: l10n.setupWelcomeDesc,
+                icon: Icons.qr_code_scanner,
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _ipController,
+                      decoration: InputDecoration(
+                        labelText: l10n.serverIp,
+                        hintText: l10n.serverIpHint,
+                        border: const OutlineInputBorder(),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 15,
+                    ),
+                    const SizedBox(height: 10),
+                    ServerDiscoveryButton(
+                      onSelected: (address) {
+                        _ipController.text = normalizeServerUrl(address);
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _pinController,
+                      decoration: InputDecoration(
+                        labelText: l10n.enterPin,
+                        border: const OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      maxLength: 4,
+                    ),
+                    ElevatedButton(
+                      onPressed: _handlePinSubmit,
+                      child: Text(l10n.submitPin),
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton.icon(
+                      onPressed: () => _startDemoMode(context),
+                      icon: const Icon(Icons.play_circle_fill),
+                      label: Text(l10n.demoModeBtn),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.orange,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(l10n.orSeparator),
+                  ],
+                ),
+                actionButton: _isLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton.icon(
+                        onPressed: _startQRscan,
+                        icon: const Icon(Icons.camera_alt),
+                        label: Text(
+                          l10n.setupScanBtn,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 30,
+                            vertical: 15,
+                          ),
                         ),
                       ),
-                    ),
-            ),
+              ),
 
-            _buildPage(
-              title: l10n.setupSuccessTitle,
-              description: l10n.setupSuccessDesc,
-              icon: Icons.pets,
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: l10n.petName,
-                      border: const OutlineInputBorder(),
+              _buildPage(
+                title: l10n.setupSuccessTitle,
+                description: l10n.setupSuccessDesc,
+                icon: Icons.pets,
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: l10n.petName,
+                        border: const OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    DropdownButtonFormField<String>(
+                      initialValue: _selectedType,
+                      decoration: InputDecoration(
+                        labelText: l10n.petTypeTitle,
+                        border: const OutlineInputBorder(),
+                      ),
+                      items: _petTypes.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(_getTranslatedType(value, l10n)),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedType = newValue!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                actionButton: ElevatedButton(
+                  onPressed: _finishSetup,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 15,
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
-                    initialValue: _selectedType,
-                    decoration: InputDecoration(
-                      labelText: l10n.petTypeTitle,
-                      border: const OutlineInputBorder(),
-                    ),
-                    items: _petTypes.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(_getTranslatedType(value, l10n)),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedType = newValue!;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              actionButton: ElevatedButton(
-                onPressed: _finishSetup,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 15,
+                  child: Text(
+                    l10n.setupNextBtn,
+                    style: const TextStyle(fontSize: 18),
                   ),
                 ),
-                child: Text(
-                  l10n.setupNextBtn,
-                  style: const TextStyle(fontSize: 18),
-                ),
               ),
-            ),
 
-            _buildPage(
-              title: l10n.setupMonitorTitle,
-              description: l10n.setupMonitorDesc,
-              icon: Icons.camera_indoor,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: QrImageView(
-                  data: jsonEncode({
-                    "ip": "$_serverIp",
-                    "secret": _secretToken,
-                  }),
-                  version: QrVersions.auto,
-                  size: 200.0,
-                ),
-              ),
-              actionButton: Column(
-                children: [
-                  const CircularProgressIndicator(),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: _skipMonitorWait,
-                    child: Text(l10n.setupSkipMonitor),
+              _buildPage(
+                title: l10n.setupMonitorTitle,
+                description: l10n.setupMonitorDesc,
+                icon: Icons.camera_indoor,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                ],
+                  child: QrImageView(
+                    data: jsonEncode({
+                      "ip": "$_serverIp",
+                      "secret": _secretToken,
+                    }),
+                    version: QrVersions.auto,
+                    size: 200.0,
+                  ),
+                ),
+                actionButton: Column(
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: _skipMonitorWait,
+                      child: Text(l10n.setupSkipMonitor),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -650,35 +747,66 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     required Widget actionButton,
     Widget? child,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 80, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(height: 24),
-          Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
+    // Centered when there is room, scrollable when there is not — a wizard
+    // page that overflows on a short phone is a broken first run.
+    final page = LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 80,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  description,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                // ignore: use_null_aware_elements
+                if (child != null) child,
+                if (child != null) const SizedBox(height: 32),
+                actionButton,
+              ],
+            ),
           ),
-          const SizedBox(height: 16),
-          Text(
-            description,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 32),
-          // ignore: use_null_aware_elements
-          if (child != null) child,
-          if (child != null) const SizedBox(height: 32),
-          actionButton,
-        ],
+        ),
       ),
+    );
+
+    return Stack(
+      children: [
+        page,
+        // The only way back: the page view is not swipeable and there is no
+        // app bar, which used to mean a system back left the whole wizard.
+        if (_currentPage > 0)
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 4,
+            left: 4,
+            child: IconButton(
+              onPressed: _goBack,
+              tooltip: AppLocalizations.of(context)!.setupBack,
+              icon: const Icon(Icons.arrow_back),
+            ),
+          ),
+      ],
     );
   }
 }

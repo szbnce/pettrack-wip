@@ -369,6 +369,26 @@ class _BootScreenState extends State<BootScreen> {
       var token = prefs.getString('jwt_token') ?? '';
       final secret = prefs.getString('secret_token') ?? '';
       final petName = prefs.getString('pet_name') ?? '';
+      // Pairing alone is not setup. A phone that got as far as the secret
+      // but never named a pet belongs in the wizard — which now resumes
+      // where it left off — not in an empty dashboard.
+      final setupDone =
+          (prefs.getBool('is_setup_completed') ?? false) || petName.isNotEmpty;
+
+      if (!setupDone) {
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const SetupWizardScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+          ),
+        );
+        return;
+      }
 
       // A phone that knows its server and secret must never be sent back
       // through the wizard just because the session lapsed — log in again.

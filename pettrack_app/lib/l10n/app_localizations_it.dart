@@ -1381,4 +1381,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get noCameraShowQr => 'Mostra codice di abbinamento';
+
+  @override
+  String get setupBack => 'Indietro';
+
+  @override
+  String get setupExitTitle => 'Uscire dalla configurazione?';
+
+  @override
+  String get setupExitBody => 'Puoi configurare PetTrack quando vuoi.';
+
+  @override
+  String get setupExitStay => 'Continua';
+
+  @override
+  String get setupExitLeave => 'Esci';
 }

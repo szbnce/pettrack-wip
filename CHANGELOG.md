@@ -74,6 +74,12 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- The setup wizard can go back. System back used to throw the whole wizard
+  away — including a pairing that had already succeeded — and there was no
+  in-page way back either. Back now steps to the previous page, asks before
+  leaving on the first one, and a pairing that was interrupted resumes at
+  pet setup instead of starting over. The wizard page also scrolls instead
+  of overflowing on a short screen
 - An empty camera card is no longer a dead end. "Skip for now" in the
   wizard used to drop you on a spinner that never ended, with the pairing
   QR buried in Settings → Advanced. The card now says the camera is not

@@ -607,5 +607,10 @@
   "setupMissingFields": "サーバーアドレスと PIN を入力してください",
   "noCameraTitle": "カメラがまだ接続されていません",
   "noCameraDesc": "古いスマホで PetTrack Monitor を開き、ペアリングコードを読み取ってください。数秒でここにカメラが表示されます。",
-  "noCameraShowQr": "ペアリングコードを表示"
+  "noCameraShowQr": "ペアリングコードを表示",
+  "setupBack": "戻る",
+  "setupExitTitle": "セットアップを終了しますか？",
+  "setupExitBody": "PetTrack のセットアップはいつでも再開できます。",
+  "setupExitStay": "続ける",
+  "setupExitLeave": "終了"
 }

@@ -514,5 +514,10 @@
   "setupMissingFields": "Add meg a szerver címét és a PIN-kódot",
   "noCameraTitle": "Még nincs csatlakoztatva kamera",
   "noCameraDesc": "Nyisd meg a PetTrack Monitor appot a régi telefonon, és olvasd be a párosító kódot. A kamera pár másodpercen belül itt megjelenik.",
-  "noCameraShowQr": "Párosító kód mutatása"
+  "noCameraShowQr": "Párosító kód mutatása",
+  "setupBack": "Vissza",
+  "setupExitTitle": "Kilépsz a beállításból?",
+  "setupExitBody": "A PetTrack beállítását bármikor folytathatod.",
+  "setupExitStay": "Folytatom",
+  "setupExitLeave": "Kilépek"
 }

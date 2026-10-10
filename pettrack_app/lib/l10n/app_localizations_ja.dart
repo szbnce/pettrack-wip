@@ -1353,4 +1353,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noCameraShowQr => 'ペアリングコードを表示';
+
+  @override
+  String get setupBack => '戻る';
+
+  @override
+  String get setupExitTitle => 'セットアップを終了しますか？';
+
+  @override
+  String get setupExitBody => 'PetTrack のセットアップはいつでも再開できます。';
+
+  @override
+  String get setupExitStay => '続ける';
+
+  @override
+  String get setupExitLeave => '終了';
 }

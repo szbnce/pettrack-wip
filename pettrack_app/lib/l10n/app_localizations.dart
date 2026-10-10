@@ -2603,6 +2603,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show pairing code'**
   String get noCameraShowQr;
+
+  /// No description provided for @setupBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get setupBack;
+
+  /// No description provided for @setupExitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave setup?'**
+  String get setupExitTitle;
+
+  /// No description provided for @setupExitBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can come back and set up PetTrack any time.'**
+  String get setupExitBody;
+
+  /// No description provided for @setupExitStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep going'**
+  String get setupExitStay;
+
+  /// No description provided for @setupExitLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get setupExitLeave;
 }
 
 class _AppLocalizationsDelegate

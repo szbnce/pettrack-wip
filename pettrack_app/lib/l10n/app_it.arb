@@ -607,5 +607,10 @@
   "setupMissingFields": "Inserisci l'indirizzo del server e il PIN",
   "noCameraTitle": "Nessuna telecamera collegata",
   "noCameraDesc": "Apri PetTrack Monitor sul vecchio telefono e scansiona il codice di abbinamento. La telecamera apparirà qui in pochi secondi.",
-  "noCameraShowQr": "Mostra codice di abbinamento"
+  "noCameraShowQr": "Mostra codice di abbinamento",
+  "setupBack": "Indietro",
+  "setupExitTitle": "Uscire dalla configurazione?",
+  "setupExitBody": "Puoi configurare PetTrack quando vuoi.",
+  "setupExitStay": "Continua",
+  "setupExitLeave": "Esci"
 }

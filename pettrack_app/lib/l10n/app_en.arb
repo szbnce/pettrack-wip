@@ -714,5 +714,10 @@
   "setupMissingFields": "Enter the server address and the PIN",
   "noCameraTitle": "No camera connected yet",
   "noCameraDesc": "Open PetTrack Monitor on the old phone and scan the pairing code. The camera will show up here within a few seconds.",
-  "noCameraShowQr": "Show pairing code"
+  "noCameraShowQr": "Show pairing code",
+  "setupBack": "Back",
+  "setupExitTitle": "Leave setup?",
+  "setupExitBody": "You can come back and set up PetTrack any time.",
+  "setupExitStay": "Keep going",
+  "setupExitLeave": "Leave"
 }

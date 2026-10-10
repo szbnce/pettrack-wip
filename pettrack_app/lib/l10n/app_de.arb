@@ -607,5 +607,10 @@
   "setupMissingFields": "Gib Serveradresse und PIN ein",
   "noCameraTitle": "Noch keine Kamera verbunden",
   "noCameraDesc": "Öffne PetTrack Monitor auf dem alten Handy und scan den Kopplungscode. Die Kamera erscheint hier in wenigen Sekunden.",
-  "noCameraShowQr": "Koppelungscode zeigen"
+  "noCameraShowQr": "Koppelungscode zeigen",
+  "setupBack": "Zurück",
+  "setupExitTitle": "Einrichtung verlassen?",
+  "setupExitBody": "Du kannst PetTrack jederzeit einrichten.",
+  "setupExitStay": "Weitermachen",
+  "setupExitLeave": "Verlassen"
 }

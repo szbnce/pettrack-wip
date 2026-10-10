@@ -1352,4 +1352,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get noCameraShowQr => '페어링 코드 보기';
+
+  @override
+  String get setupBack => '뒤로';
+
+  @override
+  String get setupExitTitle => '설정을 나갈까요?';
+
+  @override
+  String get setupExitBody => 'PetTrack 설정은 언제든 다시 진행할 수 있습니다.';
+
+  @override
+  String get setupExitStay => '계속하기';
+
+  @override
+  String get setupExitLeave => '나가기';
 }

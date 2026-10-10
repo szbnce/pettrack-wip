@@ -1372,4 +1372,19 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get noCameraShowQr => 'Párosító kód mutatása';
+
+  @override
+  String get setupBack => 'Vissza';
+
+  @override
+  String get setupExitTitle => 'Kilépsz a beállításból?';
+
+  @override
+  String get setupExitBody => 'A PetTrack beállítását bármikor folytathatod.';
+
+  @override
+  String get setupExitStay => 'Folytatom';
+
+  @override
+  String get setupExitLeave => 'Kilépek';
 }

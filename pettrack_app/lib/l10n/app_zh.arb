@@ -607,5 +607,10 @@
   "setupMissingFields": "请输入服务器地址和 PIN",
   "noCameraTitle": "还没有连接摄像头",
   "noCameraDesc": "在旧手机上打开 PetTrack Monitor，扫描配对码。几秒钟内摄像头就会出现在这里。",
-  "noCameraShowQr": "显示配对码"
+  "noCameraShowQr": "显示配对码",
+  "setupBack": "返回",
+  "setupExitTitle": "退出设置？",
+  "setupExitBody": "你可以随时回来完成 PetTrack 的设置。",
+  "setupExitStay": "继续",
+  "setupExitLeave": "退出"
 }

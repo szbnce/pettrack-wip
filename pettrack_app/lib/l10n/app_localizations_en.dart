@@ -1367,4 +1367,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noCameraShowQr => 'Show pairing code';
+
+  @override
+  String get setupBack => 'Back';
+
+  @override
+  String get setupExitTitle => 'Leave setup?';
+
+  @override
+  String get setupExitBody => 'You can come back and set up PetTrack any time.';
+
+  @override
+  String get setupExitStay => 'Keep going';
+
+  @override
+  String get setupExitLeave => 'Leave';
 }

@@ -1341,4 +1341,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noCameraShowQr => '显示配对码';
+
+  @override
+  String get setupBack => '返回';
+
+  @override
+  String get setupExitTitle => '退出设置？';
+
+  @override
+  String get setupExitBody => '你可以随时回来完成 PetTrack 的设置。';
+
+  @override
+  String get setupExitStay => '继续';
+
+  @override
+  String get setupExitLeave => '退出';
 }
