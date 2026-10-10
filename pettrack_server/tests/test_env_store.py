@@ -108,3 +108,15 @@ def test_the_settings_save_survives_a_directory_called_env(scratch):
     sidecar = (scratch / ".env" / env_store.SIDECAR_NAME).read_text()
     assert "PETTRACK_REPLAY_RETENTION_DAYS" in sidecar
     assert "7" in sidecar
+
+
+def test_a_parent_env_file_is_somebody_elses_secrets(scratch, monkeypatch):
+    """Bare load_dotenv() walks up the tree and would adopt whatever `.env`
+    it finds in a parent directory. That is not our settings file."""
+    inner = scratch / "inner"
+    inner.mkdir()
+    (scratch / ".env").write_text("PETTRACK_NTFY_URL=https://stranger.example/leak\n")
+    monkeypatch.chdir(inner)
+
+    load_persistent_env()
+    assert "PETTRACK_NTFY_URL" not in os.environ

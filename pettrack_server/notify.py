@@ -199,6 +199,13 @@ async def flush_pending() -> int:
     for item in list(_pending):
         if now - item.queued_at > MAX_ALERT_AGE:
             _pending.remove(item)
+            # Dropped on purpose — but never quietly. "Never miss a moment"
+            # includes knowing when one was missed.
+            print(
+                f"ntfy bridge: dropped {item.event_type} after "
+                f"{int(now - item.queued_at)}s and {item.attempts} retries",
+                flush=True,
+            )
             continue
         item.attempts += 1
         if await _publish_for(item.event_type, item.zone_name, item.details):

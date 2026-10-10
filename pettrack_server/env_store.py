@@ -108,9 +108,14 @@ def load_persistent_env() -> None:
     Precedence: whatever the container already set is the operator's word
     and wins; then the sidecar (where a write fell back to, so it is the
     newer truth); then `.env`.
+
+    The path is pinned: bare ``load_dotenv()`` walks up the tree and would
+    quietly adopt a *parent* directory's ``.env``, which is somebody else's
+    secrets. A directory named ``.env`` is not a settings file — it loads
+    nothing here and the sidecar takes over, which is the whole point.
     """
     operator = set(os.environ)
-    load_dotenv()
+    load_dotenv(".env", override=False)
     sidecar = sidecar_path()
     if os.path.isfile(sidecar):
         for key, value in _parse_env_file(sidecar).items():
