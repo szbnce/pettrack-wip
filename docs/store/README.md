@@ -16,9 +16,11 @@ store/
 │       ├── title.txt             ≤ 30 characters
 │       ├── short_description.txt ≤ 80 characters
 │       └── full_description.txt  ≤ 4000 characters
-└── screenshots/
-    ├── SHOT_LIST.md    # which screens, in which state
-    └── *.png           # the actual shots (phone, 1080×2400)
+├── screenshots/
+│   ├── SHOT_LIST.md    # which screens, in which state
+│   └── *.jpg           # the actual shots (phone, 1200×2608)
+├── feature_graphic.png # 1024 × 500
+└── icon_512.png        # 512 × 512
 ```
 
 One folder per Play Store listing locale, matching the seven languages the
@@ -46,3 +48,6 @@ editing.
   `https://github.com/szbnce/PetTrack/blob/main/PRIVACY_POLICY.md`
 - Screenshots are taken in demo mode (no camera, no server needed) —
   `screenshots/SHOT_LIST.md` says how.
+- `feature_graphic.png` is cropped from the brand banner (`pictures/banner.png`).
+- `icon_512.png` is the app icon at Play's required size.
+- Screenshots 02-feed and 03-insights are still to capture (see SHOT_LIST.md).
