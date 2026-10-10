@@ -16,8 +16,10 @@ when every one is green, the product side is done.
    edges)*
 2. **Never miss a moment.** Alerts always arrive (local + ntfy), the stream
    reconnects by itself, the watchdog surfaces failures before the user
-   notices them. *(mostly done — quiet hours, ntfy bridge, watchdog,
-   self-healing stream reconnection; audit the alert edges)*
+   notices them. *(done — quiet hours, ntfy bridge, watchdog, self-healing
+   stream reconnection, a retry queue so a failed push waits instead of
+   vanishing, and quiet hours that mute the pet but not a dead camera or a
+   full disk)*
 3. **Worth sharing.** One-tap share for replays, the daily highlight and the
    week's insights — the kind of screenshots people post. *(done — the week
    card renders as a shareable image as well as text)*
