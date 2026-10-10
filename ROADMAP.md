@@ -12,8 +12,13 @@ when every one is green, the product side is done.
 
 1. **Flawless first run.** Download to "I can see my pet" in under 10
    minutes: no IP typing, no dead ends, every failure recoverable in plain
-   language. *(mostly done — wizard, mDNS/QR pairing, demo mode; audit the
-   edges)*
+   language. *(done — wizard, mDNS/QR pairing, demo mode, and every dead end
+   the audit found: an empty camera card that shows the pairing QR, a wizard
+   that can go back and resumes an interrupted pairing, a boot that recovers
+   instead of exiling a set-up phone, pairing errors that name the problem
+   instead of leaking status codes, a QR scanner that speaks up when the code
+   is not ours or the camera will not start, and a first page that leads with
+   the camera)*
 2. **Never miss a moment.** Alerts always arrive (local + ntfy), the stream
    reconnects by itself, the watchdog surfaces failures before the user
    notices them. *(done — quiet hours, ntfy bridge, watchdog, self-healing
@@ -38,9 +43,8 @@ when every one is green, the product side is done.
 7. **Distribution ready** *(the user ships, we arm)*. Store-ready assets:
    screenshots, listing copy, signing/release checklist.
 
-Work order: the Gate 5 error/empty-state pass first (it is what makes every
-later feature look premium), then 3 → 4 → 6 → 2's self-healing stream →
-1's edge audit → 7. Each item lands green (analyzer + tests + i10n parity).
+Work order: Gate 4 (daily-use depth) next, then 7 (the store assets are
+already drafted). Each item lands green (analyzer + tests + i10n parity).
 
 ## Quick wins (hours each, big first-impression impact)
 
