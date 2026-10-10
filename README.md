@@ -154,8 +154,18 @@ Both options get you to the same place: a PetTrack server with the web dashboard
    ```
 2. Build and start the container
    ```sh
+   # Once: create the host paths Docker is about to mount. Docker creates a
+   # *missing* bind-mount source as a directory, which is how pettrack.db
+   # and .env end up as folders on the first run. Touching them first avoids it.
+   mkdir -p pettrack_server/replays pettrack_server/captured_images pettrack_server/updates
+   touch pettrack_server/pettrack.db pettrack_server/.env
+
    docker compose up -d --build pettrack
    ```
+   The entrypoint also checks each mount and, if one is the wrong kind, says
+   exactly which folder to move aside — it never deletes anything. If `.env`
+   is already a directory (the Docker default), settings simply live in
+   `.env/pettrack.env` on that same mount instead.
 3. Read the startup logs and note the **4-digit PIN** (and the QR code for pairing phones)
    ```sh
    docker logs pettrack

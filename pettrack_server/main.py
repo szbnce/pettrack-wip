@@ -11,7 +11,8 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from manager import manager, client_manager, client_command_to_monitor
-from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, touch_monitor, mark_monitor_offline, SECRET_TOKEN, fernet, set_key, token_valid, token_payload, session_active
+from api_routes import router as zones_router, auth_router, monitor_state, active_zones, update_latest_frame, touch_monitor, mark_monitor_offline, SECRET_TOKEN, fernet, token_valid, token_payload, session_active
+from env_store import safe_set_key
 from tasks import cleanup_old_images, watchdog_loop
 from vision import process_and_save_frame
 from database import init_db, get_zones
@@ -94,13 +95,7 @@ async def startup_event():
             web_pin = f"{random.randint(1000, 9999):04d}"
             if web_pin != "8068":
                 break
-        try:
-            set_key(".env", "PETTRACK_WEB_PIN", web_pin)
-        except OSError:
-            # Fallback for Docker bind mounts where os.replace fails
-            with open(".env", "a") as f:
-                f.write(f"\nPETTRACK_WEB_PIN='{web_pin}'\n")
-        os.environ["PETTRACK_WEB_PIN"] = web_pin
+        safe_set_key("PETTRACK_WEB_PIN", web_pin)
 
     print("\n" + "="*55)
     print("SCAN THIS QR CODE WITH PETTRACK CLIENT!")

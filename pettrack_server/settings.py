@@ -7,9 +7,8 @@ import os
 from datetime import datetime
 from urllib.parse import urlparse
 
-from dotenv import set_key
-
 import arming
+from env_store import safe_set_key
 
 # How long replays stay on disk before pruning drops them. 14 days is long
 # enough to scroll back through a fortnight of activity and short enough
@@ -34,15 +33,12 @@ class NtfyUrlError(ValueError):
 
 
 def _set_env(key: str, value: str) -> None:
-    """Persist to .env and the live process environment.
+    """Persist to the settings file and the live process environment.
 
-    The append fallback covers Docker bind mounts where os.replace fails."""
-    try:
-        set_key(".env", key, value)
-    except OSError:
-        with open(".env", "a") as f:
-            f.write(f"\n{key}={value}\n")
-    os.environ[key] = value
+    safe_set_key handles a `.env` that is not writable (or not even a
+    file) and mirrors into the environment either way, so a saved setting
+    takes effect now even on a box that has nowhere to keep it."""
+    safe_set_key(key, value)
 
 
 def get_replay_retention_days() -> int:

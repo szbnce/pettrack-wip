@@ -24,22 +24,26 @@ import uuid
 import aiosqlite
 import jwt
 from cryptography.fernet import Fernet
-from dotenv import load_dotenv, set_key
 
 from database import DB_PATH
+from env_store import load_persistent_env, safe_set_key
 
-load_dotenv()
+load_persistent_env()
 
 SECRET_TOKEN = os.getenv("PETTRACK_SECRET")
 if not SECRET_TOKEN:
     print("No secret found! Generating a new ultra-secure 64-char token...")
     new_secret = secrets.token_urlsafe(48)
-    try:
-        set_key(".env", "PETTRACK_SECRET", new_secret)
-    except OSError:
-        # Fallback for Docker bind mounts where os.replace fails
-        with open(".env", "a") as f:
-            f.write(f"\nPETTRACK_SECRET='{new_secret}'\n")
+    # Never fatal: a settings file we cannot write is not worth a dead
+    # server — but the secret has to survive a restart, or every session,
+    # PIN and encrypted record dies with this process.
+    if not safe_set_key("PETTRACK_SECRET", new_secret):
+        print(
+            "auth: WARNING — the secret could not be saved anywhere. "
+            "Every restart will look like a new install. Set PETTRACK_SECRET "
+            "in the environment (or PETTRACK_SECRET_FILE to a writable path).",
+            flush=True,
+        )
     SECRET_TOKEN = new_secret
 
 

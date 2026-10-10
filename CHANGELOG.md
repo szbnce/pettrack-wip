@@ -10,6 +10,12 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- The container says what is wrong instead of tracebacking: on the first
+  `docker compose up` a missing bind-mount source becomes a *directory*,
+  which used to crash the boot in a loop and mint a new master secret every
+  time. The entrypoint now checks every mount and points at the folder to
+  move aside; settings fall back to `.env/pettrack.env` on the same mount
+  and survive a rebuild
 - A shareable week card: Insights' share button now shows the post before
   it leaves — the pet's name, the headline number, the week's shape as a
   bar chart, and where the time went — as an image you can post anywhere,
@@ -64,6 +70,13 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- The server no longer dies on a settings file it cannot write. A directory
+  called `.env` — the classic Docker bind-mount accident — used to raise
+  `IsADirectoryError` on every boot *and* in the fallback that reopened the
+  same directory, crash-looping uvicorn and rotating the master secret each
+  time (every session, PIN and encrypted record with it). Every writer now
+  goes through one safe path that takes no for an answer and keeps the
+  running server working even on a read-only box
 - Backwards compatibility is a promise now (docs/COMPATIBILITY.md): the
   2.1.0+3 APK upgrades older installs in place keeping login and settings,
   new servers keep answering the old clients' token shapes, and an old

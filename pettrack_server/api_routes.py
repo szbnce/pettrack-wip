@@ -13,7 +13,7 @@ from schemas import ZoneConfig, Point, MonitorUpdate, LoginRequest, PetProfile, 
 from email.utils import formatdate
 import jwt
 import hmac
-from dotenv import set_key
+from env_store import safe_set_key
 from pydantic import BaseModel, Field
 from manager import client_manager
 import mqtt_bridge
@@ -390,8 +390,7 @@ async def set_pin(req: PinRequest, x_api_token: str = Header(None)):
     if not re.fullmatch(r"\d{4,8}", req.pin):
         raise HTTPException(status_code=422, detail="PIN must be 4-8 digits")
 
-    set_key(".env", "PETTRACK_WEB_PIN", req.pin)
-    os.environ["PETTRACK_WEB_PIN"] = req.pin
+    safe_set_key("PETTRACK_WEB_PIN", req.pin)
     return {"status": "success"}
 
 

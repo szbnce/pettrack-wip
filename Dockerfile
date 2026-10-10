@@ -11,4 +11,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire server directory (this includes the already compiled Flutter web app in 'static/')
 COPY pettrack_server/ .
 
+# A bind mount whose host path was missing arrives as a directory; the
+# preflight says so in one sentence instead of letting the boot fall over.
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
