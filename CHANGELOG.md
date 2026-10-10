@@ -74,6 +74,11 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- An empty camera card is no longer a dead end. "Skip for now" in the
+  wizard used to drop you on a spinner that never ended, with the pairing
+  QR buried in Settings → Advanced. The card now says the camera is not
+  connected yet, names the next step, and shows the pairing code in one
+  tap
 - The server no longer dies on a settings file it cannot write. A directory
   called `.env` — the classic Docker bind-mount accident — used to raise
   `IsADirectoryError` on every boot *and* in the fallback that reopened the

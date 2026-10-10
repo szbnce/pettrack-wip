@@ -1357,4 +1357,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get setupMissingFields => 'Enter the server address and the PIN';
+
+  @override
+  String get noCameraTitle => 'No camera connected yet';
+
+  @override
+  String get noCameraDesc =>
+      'Open PetTrack Monitor on the old phone and scan the pairing code. The camera will show up here within a few seconds.';
+
+  @override
+  String get noCameraShowQr => 'Show pairing code';
 }

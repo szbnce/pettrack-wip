@@ -1342,4 +1342,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get setupMissingFields => '서버 주소와 PIN을 입력하세요';
+
+  @override
+  String get noCameraTitle => '아직 연결된 카메라가 없습니다';
+
+  @override
+  String get noCameraDesc =>
+      '오래된 스마트폰에서 PetTrack Monitor를 열고 페어링 코드를 스캔하세요. 몇 초 안에 카메라가 여기에 나타납니다.';
+
+  @override
+  String get noCameraShowQr => '페어링 코드 보기';
 }

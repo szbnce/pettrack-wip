@@ -1332,4 +1332,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get setupMissingFields => '请输入服务器地址和 PIN';
+
+  @override
+  String get noCameraTitle => '还没有连接摄像头';
+
+  @override
+  String get noCameraDesc => '在旧手机上打开 PetTrack Monitor，扫描配对码。几秒钟内摄像头就会出现在这里。';
+
+  @override
+  String get noCameraShowQr => '显示配对码';
 }

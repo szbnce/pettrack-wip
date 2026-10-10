@@ -604,5 +604,8 @@
   "backupRestoredOffline": "이 휴대폰에 백업이 복원되었습니다. 설정을 열어 저장하면 서버와 동기화됩니다.",
   "backupRestoreError": "백업을 복원하지 못했습니다",
   "setupSkipMonitor": "지금은 건너뛰기",
-  "setupMissingFields": "서버 주소와 PIN을 입력하세요"
+  "setupMissingFields": "서버 주소와 PIN을 입력하세요",
+  "noCameraTitle": "아직 연결된 카메라가 없습니다",
+  "noCameraDesc": "오래된 스마트폰에서 PetTrack Monitor를 열고 페어링 코드를 스캔하세요. 몇 초 안에 카메라가 여기에 나타납니다.",
+  "noCameraShowQr": "페어링 코드 보기"
 }

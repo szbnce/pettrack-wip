@@ -511,5 +511,8 @@
   "backupRestoredOffline": "A backup visszaállítva ezen a telefonon. Nyisd meg a Beállításokat és mentsd, hogy szinkronizálj a szerverrel.",
   "backupRestoreError": "A backupot nem sikerült visszaállítani",
   "setupSkipMonitor": "Most kihagyom",
-  "setupMissingFields": "Add meg a szerver címét és a PIN-kódot"
+  "setupMissingFields": "Add meg a szerver címét és a PIN-kódot",
+  "noCameraTitle": "Még nincs csatlakoztatva kamera",
+  "noCameraDesc": "Nyisd meg a PetTrack Monitor appot a régi telefonon, és olvasd be a párosító kódot. A kamera pár másodpercen belül itt megjelenik.",
+  "noCameraShowQr": "Párosító kód mutatása"
 }

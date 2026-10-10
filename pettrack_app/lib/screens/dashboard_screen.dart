@@ -10,6 +10,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pettrack_app/l10n/app_localizations.dart';
 import '../theme/colors.dart';
@@ -21,11 +22,13 @@ import '../utils/event_feedback.dart';
 import '../utils/feed_export.dart';
 import '../utils/feed_filter.dart';
 import '../utils/format_helpers.dart';
+import '../utils/pairing.dart';
 import '../utils/quiet.dart';
 import '../utils/recap.dart';
 import '../utils/reconnect.dart';
 import '../utils/snooze.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/no_camera_card.dart';
 import '../widgets/skeleton_box.dart';
 import '../widgets/highlight_card.dart';
 import 'insights_screen.dart';
@@ -57,6 +60,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Timer? _timer;
   bool _isServerOnline = true;
   int _statusFailures = 0;
+  // True once /api/status has answered at least once. Without it the camera
+  // card cannot tell "no monitor has checked in" from "we have not asked yet",
+  // and the difference is a helpful empty state versus a wrong one.
+  bool _statusLoaded = false;
   List<dynamic> _activities = [];
   bool _activityError = false;
   // Skeletons only for the very first fetch (and explicit retries) — the
@@ -1120,6 +1127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         var reconnectAfter = false;
         setState(() {
           _isServerOnline = true;
+          _statusLoaded = true;
           _statusFailures = 0;
           if (data['monitor_id'] != null) {
             _monitorId = data['monitor_id'];
@@ -1519,6 +1527,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   fit: BoxFit.contain,
                                 ),
                               ),
+                            )
+                          else if (_statusLoaded && _monitors.isEmpty)
+                            // A helpful empty state, not a spinner that never
+                            // ends: "Skip for now" used to strand people here
+                            // with no idea the Monitor app was the next step.
+                            NoCameraCard(
+                              title: l10n.noCameraTitle,
+                              description: l10n.noCameraDesc,
+                              buttonLabel: l10n.noCameraShowQr,
+                              onShowQr: () => _showPairingQrDialog(l10n),
                             )
                           else
                             const Center(
@@ -2338,6 +2356,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// The pairing QR, one tap from an empty camera card. The same code lives
+  /// under Settings → Advanced, which is the wrong place to look when the
+  /// answer to "why is there no picture" is "the Monitor app is not paired".
+  void _showPairingQrDialog(AppLocalizations l10n) {
+    final secret = _secretToken ?? '';
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.setupMonitorTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(l10n.settingsQrDialogDesc),
+            const SizedBox(height: 20),
+            Container(
+              width: 216,
+              height: 216,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: QrImageView(
+                data: pairingQrPayload(widget.serverIp, secret),
+                version: QrVersions.auto,
+                size: 200.0,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.settingsQrDialogDone),
+          ),
+        ],
       ),
     );
   }

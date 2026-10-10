@@ -1371,4 +1371,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get setupMissingFields => 'Inserisci l\'indirizzo del server e il PIN';
+
+  @override
+  String get noCameraTitle => 'Nessuna telecamera collegata';
+
+  @override
+  String get noCameraDesc =>
+      'Apri PetTrack Monitor sul vecchio telefono e scansiona il codice di abbinamento. La telecamera apparirà qui in pochi secondi.';
+
+  @override
+  String get noCameraShowQr => 'Mostra codice di abbinamento';
 }

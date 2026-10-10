@@ -604,5 +604,8 @@
   "backupRestoredOffline": "备份已在本机恢复。打开设置并保存以与服务器同步。",
   "backupRestoreError": "无法恢复备份",
   "setupSkipMonitor": "暂时跳过",
-  "setupMissingFields": "请输入服务器地址和 PIN"
+  "setupMissingFields": "请输入服务器地址和 PIN",
+  "noCameraTitle": "还没有连接摄像头",
+  "noCameraDesc": "在旧手机上打开 PetTrack Monitor，扫描配对码。几秒钟内摄像头就会出现在这里。",
+  "noCameraShowQr": "显示配对码"
 }

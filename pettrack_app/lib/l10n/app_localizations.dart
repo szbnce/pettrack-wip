@@ -2585,6 +2585,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter the server address and the PIN'**
   String get setupMissingFields;
+
+  /// No description provided for @noCameraTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No camera connected yet'**
+  String get noCameraTitle;
+
+  /// No description provided for @noCameraDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Open PetTrack Monitor on the old phone and scan the pairing code. The camera will show up here within a few seconds.'**
+  String get noCameraDesc;
+
+  /// No description provided for @noCameraShowQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Show pairing code'**
+  String get noCameraShowQr;
 }
 
 class _AppLocalizationsDelegate

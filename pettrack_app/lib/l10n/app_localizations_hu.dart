@@ -1362,4 +1362,14 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get setupMissingFields => 'Add meg a szerver címét és a PIN-kódot';
+
+  @override
+  String get noCameraTitle => 'Még nincs csatlakoztatva kamera';
+
+  @override
+  String get noCameraDesc =>
+      'Nyisd meg a PetTrack Monitor appot a régi telefonon, és olvasd be a párosító kódot. A kamera pár másodpercen belül itt megjelenik.';
+
+  @override
+  String get noCameraShowQr => 'Párosító kód mutatása';
 }

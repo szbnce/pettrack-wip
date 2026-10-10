@@ -1373,4 +1373,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get setupMissingFields => 'Gib Serveradresse und PIN ein';
+
+  @override
+  String get noCameraTitle => 'Noch keine Kamera verbunden';
+
+  @override
+  String get noCameraDesc =>
+      'Öffne PetTrack Monitor auf dem alten Handy und scan den Kopplungscode. Die Kamera erscheint hier in wenigen Sekunden.';
+
+  @override
+  String get noCameraShowQr => 'Koppelungscode zeigen';
 }

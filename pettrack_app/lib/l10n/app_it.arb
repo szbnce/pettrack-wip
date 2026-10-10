@@ -604,5 +604,8 @@
   "backupRestoredOffline": "Backup ripristinato su questo telefono. Apri Impostazioni e salva per sincronizzare con il server.",
   "backupRestoreError": "Impossibile ripristinare il backup",
   "setupSkipMonitor": "Salta per ora",
-  "setupMissingFields": "Inserisci l'indirizzo del server e il PIN"
+  "setupMissingFields": "Inserisci l'indirizzo del server e il PIN",
+  "noCameraTitle": "Nessuna telecamera collegata",
+  "noCameraDesc": "Apri PetTrack Monitor sul vecchio telefono e scansiona il codice di abbinamento. La telecamera apparirà qui in pochi secondi.",
+  "noCameraShowQr": "Mostra codice di abbinamento"
 }

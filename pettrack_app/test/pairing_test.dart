@@ -38,4 +38,32 @@ void main() {
       expect(pairingFields(null), isNull);
     });
   });
+
+  group('pairingQrPayload', () {
+    test('drops the scheme so the monitor can dial it', () {
+      final fields = parsePairingPayload(
+        pairingQrPayload('http://192.168.1.5:8000', 's'),
+      );
+      expect(fields, {'ip': '192.168.1.5:8000', 'secret': 's'});
+    });
+
+    test('tidies a trailing slash and an https scheme', () {
+      final fields = parsePairingPayload(
+        pairingQrPayload('https://pet.home/', 's'),
+      );
+      expect(fields, {'ip': 'pet.home', 'secret': 's'});
+    });
+
+    test('a payload it builds is a payload it accepts', () {
+      // The round trip is the point: whatever the dashboard shows as a QR
+      // must be scannable by the same parser the monitor uses.
+      for (final url in [
+        'http://10.0.0.2:8000',
+        'https://pet.example.com',
+        'http://192.168.1.10:8000/',
+      ]) {
+        expect(parsePairingPayload(pairingQrPayload(url, 'abc')), isNotNull);
+      }
+    });
+  });
 }

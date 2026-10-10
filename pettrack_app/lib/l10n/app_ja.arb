@@ -604,5 +604,8 @@
   "backupRestoredOffline": "この端末にバックアップを復元しました。設定を開いて保存するとサーバーと同期します。",
   "backupRestoreError": "バックアップを復元できませんでした",
   "setupSkipMonitor": "今はスキップ",
-  "setupMissingFields": "サーバーアドレスと PIN を入力してください"
+  "setupMissingFields": "サーバーアドレスと PIN を入力してください",
+  "noCameraTitle": "カメラがまだ接続されていません",
+  "noCameraDesc": "古いスマホで PetTrack Monitor を開き、ペアリングコードを読み取ってください。数秒でここにカメラが表示されます。",
+  "noCameraShowQr": "ペアリングコードを表示"
 }

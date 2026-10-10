@@ -1343,4 +1343,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get setupMissingFields => 'サーバーアドレスと PIN を入力してください';
+
+  @override
+  String get noCameraTitle => 'カメラがまだ接続されていません';
+
+  @override
+  String get noCameraDesc =>
+      '古いスマホで PetTrack Monitor を開き、ペアリングコードを読み取ってください。数秒でここにカメラが表示されます。';
+
+  @override
+  String get noCameraShowQr => 'ペアリングコードを表示';
 }

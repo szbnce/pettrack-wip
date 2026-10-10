@@ -604,5 +604,8 @@
   "backupRestoredOffline": "Backup auf diesem Handy wiederhergestellt. Öffne die Einstellungen und speichere, um mit dem Server zu synchronisieren.",
   "backupRestoreError": "Das Backup konnte nicht wiederhergestellt werden",
   "setupSkipMonitor": "Erstmal überspringen",
-  "setupMissingFields": "Gib Serveradresse und PIN ein"
+  "setupMissingFields": "Gib Serveradresse und PIN ein",
+  "noCameraTitle": "Noch keine Kamera verbunden",
+  "noCameraDesc": "Öffne PetTrack Monitor auf dem alten Handy und scan den Kopplungscode. Die Kamera erscheint hier in wenigen Sekunden.",
+  "noCameraShowQr": "Koppelungscode zeigen"
 }
