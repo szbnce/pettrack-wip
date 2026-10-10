@@ -612,5 +612,10 @@
   "setupExitTitle": "Uscire dalla configurazione?",
   "setupExitBody": "Puoi configurare PetTrack quando vuoi.",
   "setupExitStay": "Continua",
-  "setupExitLeave": "Esci"
+  "setupExitLeave": "Esci",
+  "recoveryTitle": "Impossibile raggiungere il server",
+  "recoveryBody": "PetTrack è ancora configurato — questo telefono non riesce solo a raggiungere il server adesso. Verifica che sia in esecuzione e che tu sia sulla stessa rete.",
+  "recoveryRetry": "Riprova",
+  "recoveryStartOver": "Ricomincia",
+  "recoveryStillUnreachable": "Ancora irraggiungibile. Verifica che il server sia in esecuzione e che tu sia sulla stessa Wi-Fi."
 }

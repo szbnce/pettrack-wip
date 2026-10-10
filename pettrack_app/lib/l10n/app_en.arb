@@ -719,5 +719,10 @@
   "setupExitTitle": "Leave setup?",
   "setupExitBody": "You can come back and set up PetTrack any time.",
   "setupExitStay": "Keep going",
-  "setupExitLeave": "Leave"
+  "setupExitLeave": "Leave",
+  "recoveryTitle": "Can't reach your server",
+  "recoveryBody": "PetTrack is still set up — this phone just cannot reach the server right now. Check that it is running and that you are on the same network.",
+  "recoveryRetry": "Try again",
+  "recoveryStartOver": "Start over",
+  "recoveryStillUnreachable": "Still unreachable. Check that the server is running and you are on the same Wi-Fi."
 }

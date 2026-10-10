@@ -612,5 +612,10 @@
   "setupExitTitle": "セットアップを終了しますか？",
   "setupExitBody": "PetTrack のセットアップはいつでも再開できます。",
   "setupExitStay": "続ける",
-  "setupExitLeave": "終了"
+  "setupExitLeave": "終了",
+  "recoveryTitle": "サーバーに接続できません",
+  "recoveryBody": "PetTrack の設定はそのままです。このスマホがいまサーバーに届いていないだけです。サーバーが起動していて、同じネットワークにいるか確認してください。",
+  "recoveryRetry": "再試行",
+  "recoveryStartOver": "最初からやり直す",
+  "recoveryStillUnreachable": "まだ接続できません。サーバーが起動していて、同じ Wi-Fi にいるか確認してください。"
 }

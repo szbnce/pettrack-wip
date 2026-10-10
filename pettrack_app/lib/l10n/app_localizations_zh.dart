@@ -1356,4 +1356,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get setupExitLeave => '退出';
+
+  @override
+  String get recoveryTitle => '无法连接到你的服务器';
+
+  @override
+  String get recoveryBody =>
+      'PetTrack 仍然已完成设置 —— 只是这部手机现在联系不上服务器。请确认服务器在运行，且你在同一个网络中。';
+
+  @override
+  String get recoveryRetry => '重试';
+
+  @override
+  String get recoveryStartOver => '重新开始';
+
+  @override
+  String get recoveryStillUnreachable => '仍然无法连接。请确认服务器在运行，且你在同一个 Wi-Fi 上。';
 }

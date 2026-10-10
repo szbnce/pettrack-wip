@@ -1396,4 +1396,21 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get setupExitLeave => 'Esci';
+
+  @override
+  String get recoveryTitle => 'Impossibile raggiungere il server';
+
+  @override
+  String get recoveryBody =>
+      'PetTrack è ancora configurato — questo telefono non riesce solo a raggiungere il server adesso. Verifica che sia in esecuzione e che tu sia sulla stessa rete.';
+
+  @override
+  String get recoveryRetry => 'Riprova';
+
+  @override
+  String get recoveryStartOver => 'Ricomincia';
+
+  @override
+  String get recoveryStillUnreachable =>
+      'Ancora irraggiungibile. Verifica che il server sia in esecuzione e che tu sia sulla stessa Wi-Fi.';
 }

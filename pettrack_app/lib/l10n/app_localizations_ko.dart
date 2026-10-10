@@ -1367,4 +1367,21 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get setupExitLeave => '나가기';
+
+  @override
+  String get recoveryTitle => '서버에 연결할 수 없습니다';
+
+  @override
+  String get recoveryBody =>
+      'PetTrack 설정은 그대로입니다. 이 스마트폰이 지금 서버에 닿지 못하는 것뿐입니다. 서버가 실행 중인지, 같은 네트워크에 있는지 확인하세요.';
+
+  @override
+  String get recoveryRetry => '다시 시도';
+
+  @override
+  String get recoveryStartOver => '처음부터 다시';
+
+  @override
+  String get recoveryStillUnreachable =>
+      '여전히 연결할 수 없습니다. 서버가 실행 중이고 같은 Wi-Fi에 있는지 확인하세요.';
 }

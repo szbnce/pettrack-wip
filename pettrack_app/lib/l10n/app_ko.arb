@@ -612,5 +612,10 @@
   "setupExitTitle": "설정을 나갈까요?",
   "setupExitBody": "PetTrack 설정은 언제든 다시 진행할 수 있습니다.",
   "setupExitStay": "계속하기",
-  "setupExitLeave": "나가기"
+  "setupExitLeave": "나가기",
+  "recoveryTitle": "서버에 연결할 수 없습니다",
+  "recoveryBody": "PetTrack 설정은 그대로입니다. 이 스마트폰이 지금 서버에 닿지 못하는 것뿐입니다. 서버가 실행 중인지, 같은 네트워크에 있는지 확인하세요.",
+  "recoveryRetry": "다시 시도",
+  "recoveryStartOver": "처음부터 다시",
+  "recoveryStillUnreachable": "여전히 연결할 수 없습니다. 서버가 실행 중이고 같은 Wi-Fi에 있는지 확인하세요."
 }

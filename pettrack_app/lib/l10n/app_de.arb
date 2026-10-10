@@ -612,5 +612,10 @@
   "setupExitTitle": "Einrichtung verlassen?",
   "setupExitBody": "Du kannst PetTrack jederzeit einrichten.",
   "setupExitStay": "Weitermachen",
-  "setupExitLeave": "Verlassen"
+  "setupExitLeave": "Verlassen",
+  "recoveryTitle": "Server nicht erreichbar",
+  "recoveryBody": "PetTrack ist weiterhin eingerichtet — dieses Handy kann den Server gerade nur nicht erreichen. Prüfe, dass er läuft und du im selben Netzwerk bist.",
+  "recoveryRetry": "Erneut versuchen",
+  "recoveryStartOver": "Neu beginnen",
+  "recoveryStillUnreachable": "Immer noch nicht erreichbar. Prüfe, dass der Server läuft und du im selben WLAN bist."
 }

@@ -1398,4 +1398,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get setupExitLeave => 'Verlassen';
+
+  @override
+  String get recoveryTitle => 'Server nicht erreichbar';
+
+  @override
+  String get recoveryBody =>
+      'PetTrack ist weiterhin eingerichtet — dieses Handy kann den Server gerade nur nicht erreichen. Prüfe, dass er läuft und du im selben Netzwerk bist.';
+
+  @override
+  String get recoveryRetry => 'Erneut versuchen';
+
+  @override
+  String get recoveryStartOver => 'Neu beginnen';
+
+  @override
+  String get recoveryStillUnreachable =>
+      'Immer noch nicht erreichbar. Prüfe, dass der Server läuft und du im selben WLAN bist.';
 }

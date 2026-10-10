@@ -612,5 +612,10 @@
   "setupExitTitle": "退出设置？",
   "setupExitBody": "你可以随时回来完成 PetTrack 的设置。",
   "setupExitStay": "继续",
-  "setupExitLeave": "退出"
+  "setupExitLeave": "退出",
+  "recoveryTitle": "无法连接到你的服务器",
+  "recoveryBody": "PetTrack 仍然已完成设置 —— 只是这部手机现在联系不上服务器。请确认服务器在运行，且你在同一个网络中。",
+  "recoveryRetry": "重试",
+  "recoveryStartOver": "重新开始",
+  "recoveryStillUnreachable": "仍然无法连接。请确认服务器在运行，且你在同一个 Wi-Fi 上。"
 }

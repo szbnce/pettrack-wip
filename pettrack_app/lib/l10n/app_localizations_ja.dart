@@ -1368,4 +1368,21 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get setupExitLeave => '終了';
+
+  @override
+  String get recoveryTitle => 'サーバーに接続できません';
+
+  @override
+  String get recoveryBody =>
+      'PetTrack の設定はそのままです。このスマホがいまサーバーに届いていないだけです。サーバーが起動していて、同じネットワークにいるか確認してください。';
+
+  @override
+  String get recoveryRetry => '再試行';
+
+  @override
+  String get recoveryStartOver => '最初からやり直す';
+
+  @override
+  String get recoveryStillUnreachable =>
+      'まだ接続できません。サーバーが起動していて、同じ Wi-Fi にいるか確認してください。';
 }

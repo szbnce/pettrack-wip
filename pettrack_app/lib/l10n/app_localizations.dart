@@ -2633,6 +2633,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Leave'**
   String get setupExitLeave;
+
+  /// No description provided for @recoveryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t reach your server'**
+  String get recoveryTitle;
+
+  /// No description provided for @recoveryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'PetTrack is still set up — this phone just cannot reach the server right now. Check that it is running and that you are on the same network.'**
+  String get recoveryBody;
+
+  /// No description provided for @recoveryRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get recoveryRetry;
+
+  /// No description provided for @recoveryStartOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get recoveryStartOver;
+
+  /// No description provided for @recoveryStillUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Still unreachable. Check that the server is running and you are on the same Wi-Fi.'**
+  String get recoveryStillUnreachable;
 }
 
 class _AppLocalizationsDelegate

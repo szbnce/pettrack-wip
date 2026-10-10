@@ -74,6 +74,11 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- A set-up phone is never told to pair again. When the session lapsed and
+  the server could not be reached at boot, the app fell through to the
+  setup wizard with no explanation — it looked like the setup was lost.
+  That is a network problem, and the new recovery screen says so, with
+  "Try again" and an explicit "Start over" if that is what you meant
 - The setup wizard can go back. System back used to throw the whole wizard
   away — including a pairing that had already succeeded — and there was no
   in-page way back either. Back now steps to the previous page, asks before

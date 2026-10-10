@@ -1387,4 +1387,21 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get setupExitLeave => 'Kilépek';
+
+  @override
+  String get recoveryTitle => 'Nem érjük el a szervert';
+
+  @override
+  String get recoveryBody =>
+      'A PetTrack beállítása megvan — ez a telefon most csak nem éri el a szervert. Ellenőrizd, hogy fut, és hogy ugyanazon a hálózaton vagy.';
+
+  @override
+  String get recoveryRetry => 'Újra';
+
+  @override
+  String get recoveryStartOver => 'Elölről kezdem';
+
+  @override
+  String get recoveryStillUnreachable =>
+      'Továbbra sem érjük el. Ellenőrizd, hogy a szerver fut, és hogy ugyanazon a Wi-Fi-n vagy.';
 }

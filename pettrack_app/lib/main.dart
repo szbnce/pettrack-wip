@@ -16,6 +16,7 @@ import 'screens/main_navigation.dart';
 import 'screens/setup_wizard_screen.dart';
 import 'screens/monitor_setup_screen.dart';
 import 'screens/monitor_screen.dart';
+import 'screens/server_recovery_screen.dart';
 import 'screens/wear/wear_setup_screen.dart';
 import 'screens/wear/wear_dashboard_screen.dart';
 
@@ -410,6 +411,20 @@ class _BootScreenState extends State<BootScreen> {
                   token: token,
                   petName: petName,
                 ),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+          ),
+        );
+      } else if (setupDone && ip.isNotEmpty) {
+        // Set up, but no session and the server did not answer. That is a
+        // network problem wearing a login problem's clothes — never the
+        // wizard, which would look like the setup was lost.
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                ServerRecoveryScreen(serverIp: ip),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
                   return FadeTransition(opacity: animation, child: child);

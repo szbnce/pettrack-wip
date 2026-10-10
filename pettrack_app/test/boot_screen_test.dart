@@ -4,6 +4,7 @@ import 'package:pettrack_app/l10n/app_localizations.dart';
 import 'package:pettrack_app/main.dart';
 import 'package:pettrack_app/screens/language_screen.dart';
 import 'package:pettrack_app/screens/main_navigation.dart';
+import 'package:pettrack_app/screens/server_recovery_screen.dart';
 import 'package:pettrack_app/screens/setup_wizard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -58,4 +59,26 @@ void main() {
     expect(find.byType(MainNavigationScreen), findsNothing);
     expect(find.byType(BootScreen), findsNothing);
   });
+
+  testWidgets(
+    'a set-up phone that cannot reach its server is not told to pair again',
+    (tester) async {
+      // The session lapsed and the network is down. The wizard would look
+      // like the setup was lost; this is a network problem, and it says so.
+      SharedPreferences.setMockInitialValues({
+        'app_mode': 'client',
+        'server_ip': 'http://192.168.1.10:8000',
+        'secret_token': 's3cret',
+        'pet_name': 'Berci',
+        'is_setup_completed': true,
+      });
+      await tester.pumpWidget(_wrap(const BootScreen()));
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ServerRecoveryScreen), findsOneWidget);
+      expect(find.byType(SetupWizardScreen), findsNothing);
+      expect(find.byType(BootScreen), findsNothing);
+    },
+  );
 }
