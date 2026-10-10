@@ -7,12 +7,18 @@ so a barking dog is news at work too. Opt-in: nothing is sent until a
 topic URL is saved in Settings → Alerts, and the app's quiet-hours window
 is honoured the same way local notifications honour it.
 
+Quiet hours mute the pet, not the product. A camera that went dark or a
+disk that filled up is the tool saying it is broken, and that has to
+reach you whether or not the house is asleep.
+
 Message copy lives here rather than in the app's .arb files because the
 push is sent when no UI is open; it follows the language the app saved
 (ntfy_lang)."""
 import asyncio
+import time
 import urllib.error
 import urllib.request
+from dataclasses import dataclass, field
 from email.header import Header
 
 import settings as app_settings
@@ -20,6 +26,11 @@ import settings as app_settings
 # What becomes a push. zone_exit is only half a story (someone left) and
 # would double the noise, so it stays feed-only.
 PUSH_EVENTS = {"zone_enter", "sound_detected", "camera_offline", "disk_low"}
+
+# The product telling you it is broken. These punch through quiet hours —
+# sleeping through a dead camera is the worst failure mode a surveillance
+# tool has.
+HEALTH_EVENTS = {"camera_offline", "disk_low"}
 
 _TAGS = {
     "zone_enter": "tada",
@@ -135,18 +146,87 @@ async def _publish_for(event_type: str, zone_name: str = None, details: str = No
     return await _publish(title, body, event_type)
 
 
+# --- the retry queue ---------------------------------------------------------
+#
+# A failed push is not a lost alert. A "your dog barked" that arrives twenty
+# minutes late is still news; one that never arrives is the product failing
+# at its one job. Anything that cannot go out waits here and the retry loop
+# in tasks.py walks it until it lands.
+#
+# Kept in memory on purpose: the common failure is a ntfy blip measured in
+# seconds to minutes, and the events themselves are in the feed either way.
+# Alerts older than an hour are dropped — a stale alert is worse than silence.
+
+
+MAX_ALERT_AGE = 60 * 60
+MAX_PENDING = 100
+
+
+@dataclass
+class _Pending:
+    event_type: str
+    zone_name: str | None = None
+    details: str | None = None
+    queued_at: float = field(default_factory=time.time)
+    attempts: int = 0
+
+
+_pending: list[_Pending] = []
+
+
+def pending_count() -> int:
+    return len(_pending)
+
+
+def reset_pending() -> None:
+    _pending.clear()
+
+
+def _queue(event_type: str, zone_name: str | None, details: str | None) -> bool:
+    if len(_pending) >= MAX_PENDING:
+        # A full queue is a long outage — keep the newest news.
+        _pending.pop(0)
+    _pending.append(_Pending(event_type, zone_name, details))
+    return True
+
+
+async def flush_pending() -> int:
+    """Retry whatever is waiting. Returns how many landed this pass."""
+    if not _pending or not app_settings.get_ntfy_url():
+        return 0
+    now = time.time()
+    landed = 0
+    for item in list(_pending):
+        if now - item.queued_at > MAX_ALERT_AGE:
+            _pending.remove(item)
+            continue
+        item.attempts += 1
+        if await _publish_for(item.event_type, item.zone_name, item.details):
+            _pending.remove(item)
+            landed += 1
+    return landed
+
+
 async def push_event(event_type: str, zone_name: str = None, details: str = None) -> bool:
-    """Push one interesting event, unless config or quiet hours say no."""
+    """Push one interesting event, unless config or quiet hours say no.
+
+    Returns True when the alert is on its way — either delivered or waiting
+    for a retry — and False only when we never intend to send it."""
     if event_type not in PUSH_EVENTS:
         return False
-    if not app_settings.get_ntfy_url() or app_settings.is_quiet_now():
+    if not app_settings.get_ntfy_url():
         return False
-    return await _publish_for(event_type, zone_name, details)
+    if app_settings.is_quiet_now() and event_type not in HEALTH_EVENTS:
+        return False
+    if await _publish_for(event_type, zone_name, details):
+        return True
+    return _queue(event_type, zone_name, details)
 
 
 async def push_test() -> bool:
     """A deliberate setup check — ignores quiet hours, like the in-app
-    test-notification button does."""
+    test-notification button does. Never queued: the button is asking
+    "does it work right now", not "will it work eventually"."""
     if not app_settings.get_ntfy_url():
         return False
     return await _publish_for("test")

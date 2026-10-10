@@ -10,6 +10,10 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- A failed push is not a lost alert: if ntfy is unreachable the alert waits
+  and goes out when the topic comes back — an hour at most, because a stale
+  "your dog barked" is worse than silence. Quiet hours still mute the pet,
+  but a dead camera or a full disk punches through at high priority
 - The container says what is wrong instead of tracebacking: on the first
   `docker compose up` a missing bind-mount source becomes a *directory*,
   which used to crash the boot in a loop and mint a new master secret every

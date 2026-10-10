@@ -5,6 +5,7 @@ import asyncio
 import health
 import api_routes
 import maintenance
+import notify
 from database import log_event
 
 async def cleanup_old_images():
@@ -49,5 +50,19 @@ async def watchdog_loop():
         disk_was_low = disk_low
 
         await asyncio.sleep(60)
+
+
+async def alert_retry_loop():
+    """Walk the alerts that could not go out, until they land or age out.
+
+    Half a minute is fast enough that a barked-at-the-mailman still feels
+    like news, and slow enough that a flapping topic is not hammered."""
+    while True:
+        try:
+            await notify.flush_pending()
+        except Exception as e:
+            print(f"Error in alert retry task: {e}", flush=True)
+
+        await asyncio.sleep(30)
 
         
