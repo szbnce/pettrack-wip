@@ -531,7 +531,7 @@ abstract class AppLocalizations {
   /// No description provided for @invalidSecretToken.
   ///
   /// In en, this message translates to:
-  /// **'Invalid Secret Token!'**
+  /// **'That code is no longer valid. Show a fresh QR from the server terminal and scan it again.'**
   String get invalidSecretToken;
 
   /// No description provided for @decodingError.
@@ -1395,7 +1395,7 @@ abstract class AppLocalizations {
   /// No description provided for @setupErrPin.
   ///
   /// In en, this message translates to:
-  /// **'Failed to connect or invalid PIN!'**
+  /// **'That PIN is not right. Check the 4-digit PIN in the server terminal.'**
   String get setupErrPin;
 
   /// No description provided for @saveSuccess.
@@ -2663,6 +2663,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Still unreachable. Check that the server is running and you are on the same Wi-Fi.'**
   String get recoveryStillUnreachable;
+
+  /// No description provided for @setupErrServerVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'The server answered in a way this app does not understand. It may be an older version — update it and try again.'**
+  String get setupErrServerVersion;
+
+  /// No description provided for @discoveryTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'The search is taking longer than usual. You can enter the server address manually.'**
+  String get discoveryTimedOut;
+
+  /// No description provided for @qrScannerNotOurs.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not a PetTrack pairing code. Scan the QR shown in the server terminal.'**
+  String get qrScannerNotOurs;
+
+  /// No description provided for @qrScannerCameraDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is needed to read the pairing code. Allow camera access in system settings, or go back and enter the server address by hand.'**
+  String get qrScannerCameraDenied;
+
+  /// No description provided for @qrScannerCameraBroken.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera could not be started on this device. Go back and enter the server address by hand.'**
+  String get qrScannerCameraBroken;
+
+  /// No description provided for @qrScannerGoBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get qrScannerGoBack;
 }
 
 class _AppLocalizationsDelegate

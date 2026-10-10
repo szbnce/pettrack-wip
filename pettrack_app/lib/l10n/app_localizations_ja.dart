@@ -241,7 +241,8 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get invalidSecretToken => '無効なシークレットトークンです！';
+  String get invalidSecretToken =>
+      'このコードは無効になりました。サーバーのターミナルで新しい QR を表示して、もう一度読み取ってください。';
 
   @override
   String decodingError(String e) {
@@ -715,7 +716,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get orSeparator => 'または';
 
   @override
-  String get setupErrPin => '接続に失敗したか、PINが無効です！';
+  String get setupErrPin =>
+      'その PIN が正しくありません。サーバーのターミナルに表示される 4 桁の PIN を確認してください。';
 
   @override
   String get saveSuccess => '設定を保存しました！';
@@ -1385,4 +1387,27 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get recoveryStillUnreachable =>
       'まだ接続できません。サーバーが起動していて、同じ Wi-Fi にいるか確認してください。';
+
+  @override
+  String get setupErrServerVersion =>
+      'サーバーの応答をこのアプリが解釈できませんでした。古いバージョンの可能性があります。更新してからもう一度お試しください。';
+
+  @override
+  String get discoveryTimedOut =>
+      '検索にいつもより時間がかかっています。サーバーのアドレスを手動で入力することもできます。';
+
+  @override
+  String get qrScannerNotOurs =>
+      'これは PetTrack のペアリングコードではありません。サーバーのターミナルに表示される QR を読み取ってください。';
+
+  @override
+  String get qrScannerCameraDenied =>
+      'ペアリングコードを読み取るにはカメラへのアクセスが必要です。システム設定で許可するか、戻ってサーバーのアドレスを手動で入力してください。';
+
+  @override
+  String get qrScannerCameraBroken =>
+      'この端末ではカメラを起動できませんでした。戻ってサーバーのアドレスを手動で入力してください。';
+
+  @override
+  String get qrScannerGoBack => '戻る';
 }

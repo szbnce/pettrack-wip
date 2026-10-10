@@ -74,6 +74,21 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- Pairing errors say what actually went wrong. A wrong PIN, a stale QR code
+  and a server that answered in a shape this app does not understand used to
+  collapse into one raw HTTP error (or silence). Each now has its own
+  sentence, and the copy names the next step instead of the status code
+- The QR scanner is no longer a dead end. Scanning a code that is not a
+  PetTrack pairing used to be ignored without a word — it read as a broken
+  camera. The scanner now says the code is not one of ours; a denied camera
+  permission and a camera that will not start each get their own message and
+  a way back to the manual address form
+- A hung server search no longer blames the device. When the network lookup
+  never answered, the discovery dialog used to say automatic discovery "is
+  not available on this device", sending people hunting a setting that was
+  not the problem. It now says the search is slow and hands over the address
+  field; the honest "not supported here" sentence is kept for platforms that
+  genuinely cannot browse
 - A set-up phone is never told to pair again. When the session lapsed and
   the server could not be reached at boot, the app fell through to the
   setup wizard with no explanation — it looked like the setup was lost.

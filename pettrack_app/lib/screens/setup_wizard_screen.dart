@@ -388,13 +388,19 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
         _goNext();
       } else {
-        // A QR can outlive the secret it carries — say so instead of
-        // blaming the network.
+        // Not every "no" means the code is stale. A 4xx is the secret
+        // saying no; anything else is the server speaking a language this
+        // app does not know, which is usually a version gap — blaming the
+        // QR for that sends people to scan the same code again forever.
         setState(() => _isLoading = false);
         if (mounted) {
+          final code = response.statusCode;
+          final message = (code >= 400 && code < 500)
+              ? l10n.invalidSecretToken
+              : l10n.setupErrServerVersion;
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(l10n.invalidSecretToken)));
+          ).showSnackBar(SnackBar(content: Text(message)));
         }
       }
     } catch (e) {

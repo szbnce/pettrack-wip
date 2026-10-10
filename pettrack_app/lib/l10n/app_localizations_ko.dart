@@ -240,7 +240,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get invalidSecretToken => '잘못된 비밀 토큰입니다!';
+  String get invalidSecretToken =>
+      '이 코드는 더 이상 유효하지 않습니다. 서버 터미널에서 새 QR을 띄우고 다시 스캔하세요.';
 
   @override
   String decodingError(String e) {
@@ -712,7 +713,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get orSeparator => '또는';
 
   @override
-  String get setupErrPin => '연결에 실패했거나 PIN이 잘못되었습니다!';
+  String get setupErrPin => 'PIN이 올바르지 않습니다. 서버 터미널의 4자리 PIN을 확인하세요.';
 
   @override
   String get saveSuccess => '설정이 저장되었습니다!';
@@ -1384,4 +1385,27 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get recoveryStillUnreachable =>
       '여전히 연결할 수 없습니다. 서버가 실행 중이고 같은 Wi-Fi에 있는지 확인하세요.';
+
+  @override
+  String get setupErrServerVersion =>
+      '서버가 이 앱이 이해할 수 없는 방식으로 응답했습니다. 이전 버전일 수 있습니다. 업데이트한 뒤 다시 시도하세요.';
+
+  @override
+  String get discoveryTimedOut =>
+      '검색이 평소보다 오래 걸리고 있습니다. 서버 주소를 직접 입력할 수도 있습니다.';
+
+  @override
+  String get qrScannerNotOurs =>
+      'PetTrack 페어링 코드가 아닙니다. 서버 터미널에 표시된 QR을 스캔하세요.';
+
+  @override
+  String get qrScannerCameraDenied =>
+      '페어링 코드를 읽으려면 카메라 접근 권한이 필요합니다. 시스템 설정에서 허용하거나, 뒤로 가서 서버 주소를 직접 입력하세요.';
+
+  @override
+  String get qrScannerCameraBroken =>
+      '이 기기에서 카메라를 시작할 수 없습니다. 뒤로 가서 서버 주소를 직접 입력하세요.';
+
+  @override
+  String get qrScannerGoBack => '뒤로';
 }

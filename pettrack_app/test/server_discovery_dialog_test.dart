@@ -15,17 +15,18 @@ Widget _wrap(Widget child, {Locale? locale}) {
 void main() {
   testWidgets('discovery button is localized', (tester) async {
     await tester.pumpWidget(
-      _wrap(ServerDiscoveryButton(onSelected: (_) {}), locale: const Locale('hu')),
+      _wrap(
+        ServerDiscoveryButton(onSelected: (_) {}),
+        locale: const Locale('hu'),
+      ),
     );
     expect(find.text('Szerver keresése a hálózaton'), findsOneWidget);
     expect(find.byIcon(Icons.wifi_find), findsOneWidget);
   });
 
-  testWidgets('dialog falls back to manual entry where NSD is missing', (
-    tester,
-  ) async {
-    // No NSD platform implementation in tests -> the dialog must degrade to
-    // the "enter the address manually" message instead of spinning forever.
+  testWidgets('a hung lookup says so and offers manual entry', (tester) async {
+    // The browse never answers in tests — the dialog must say the search is
+    // slow and hand the address field over, not claim the device has no NSD.
     String? selected;
     await tester.pumpWidget(
       _wrap(
@@ -42,10 +43,19 @@ void main() {
 
     expect(
       find.text(
+        'The search is taking longer than usual. '
+        'You can enter the server address manually.',
+      ),
+      findsOneWidget,
+    );
+    // The longer "not available on this device" sentence would send people
+    // hunting a setting that is not the problem.
+    expect(
+      find.text(
         'Automatic discovery is not available on this device. '
         'Enter the server address manually.',
       ),
-      findsOneWidget,
+      findsNothing,
     );
     expect(selected, isNull);
   });

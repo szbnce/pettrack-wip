@@ -47,6 +47,9 @@ class _DiscoveryDialogState extends State<_DiscoveryDialog> {
   Timer? _emptyTimer;
   bool _unsupported = false;
   bool _searchTimedOut = false;
+  // The browse started but never answered — a different problem from a
+  // device that cannot browse at all, and it gets a different sentence.
+  bool _slowSearch = false;
 
   @override
   void initState() {
@@ -61,9 +64,11 @@ class _DiscoveryDialogState extends State<_DiscoveryDialog> {
   }
 
   Future<void> _startScan() async {
-    final discovery = ServerDiscovery(onChanged: () {
-      if (mounted) setState(() {});
-    });
+    final discovery = ServerDiscovery(
+      onChanged: () {
+        if (mounted) setState(() {});
+      },
+    );
     try {
       // A hung NSD lookup must not trap the user in a spinner — if the
       // browse does not even start, fall back to manual entry.
@@ -73,6 +78,12 @@ class _DiscoveryDialogState extends State<_DiscoveryDialog> {
         return;
       }
       setState(() => _discovery = discovery);
+    } on TimeoutException {
+      // A hung NSD lookup is not the same as a device without NSD. Saying
+      // "not available on this device" sends people hunting a setting that
+      // is not the problem.
+      await discovery.stop();
+      if (mounted) setState(() => _slowSearch = true);
     } catch (_) {
       // Platform without NSD (web, Linux desktop): fall back to manual entry.
       await discovery.stop();
@@ -98,6 +109,8 @@ class _DiscoveryDialogState extends State<_DiscoveryDialog> {
         width: double.maxFinite,
         child: _unsupported
             ? Text(l10n.discoveryNotSupported)
+            : _slowSearch
+            ? Text(l10n.discoveryTimedOut)
             : Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

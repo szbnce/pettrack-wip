@@ -138,7 +138,7 @@
       }
     }
   },
-  "invalidSecretToken": "無効なシークレットトークンです！",
+  "invalidSecretToken": "このコードは無効になりました。サーバーのターミナルで新しい QR を表示して、もう一度読み取ってください。",
   "decodingError": "デコードエラー: {e}",
   "@decodingError": {
     "placeholders": {
@@ -338,7 +338,7 @@
   "settingsSignOutTitle": "このサーバーからサインアウトしますか？",
   "settingsSignOutMessage": "このデバイスのトークンは削除され、サーバー上のセッションは無効になります。ペアリングPINでもう一度サインインしてください。",
   "orSeparator": "または",
-  "setupErrPin": "接続に失敗したか、PINが無効です！",
+  "setupErrPin": "その PIN が正しくありません。サーバーのターミナルに表示される 4 桁の PIN を確認してください。",
   "saveSuccess": "設定を保存しました！",
   "navReplays": "リプレイ",
   "replaysTitle": "リプレイ",
@@ -617,5 +617,11 @@
   "recoveryBody": "PetTrack の設定はそのままです。このスマホがいまサーバーに届いていないだけです。サーバーが起動していて、同じネットワークにいるか確認してください。",
   "recoveryRetry": "再試行",
   "recoveryStartOver": "最初からやり直す",
-  "recoveryStillUnreachable": "まだ接続できません。サーバーが起動していて、同じ Wi-Fi にいるか確認してください。"
+  "recoveryStillUnreachable": "まだ接続できません。サーバーが起動していて、同じ Wi-Fi にいるか確認してください。",
+  "setupErrServerVersion": "サーバーの応答をこのアプリが解釈できませんでした。古いバージョンの可能性があります。更新してからもう一度お試しください。",
+  "discoveryTimedOut": "検索にいつもより時間がかかっています。サーバーのアドレスを手動で入力することもできます。",
+  "qrScannerNotOurs": "これは PetTrack のペアリングコードではありません。サーバーのターミナルに表示される QR を読み取ってください。",
+  "qrScannerCameraDenied": "ペアリングコードを読み取るにはカメラへのアクセスが必要です。システム設定で許可するか、戻ってサーバーのアドレスを手動で入力してください。",
+  "qrScannerCameraBroken": "この端末ではカメラを起動できませんでした。戻ってサーバーのアドレスを手動で入力してください。",
+  "qrScannerGoBack": "戻る"
 }

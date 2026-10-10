@@ -243,7 +243,8 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get invalidSecretToken => 'Hibás Secret Token!';
+  String get invalidSecretToken =>
+      'Ez a kód már nem érvényes. Mutass egy friss QR-kódot a szerver termináljából, és olvasd be újra.';
 
   @override
   String decodingError(String e) {
@@ -726,7 +727,8 @@ class AppLocalizationsHu extends AppLocalizations {
   String get orSeparator => 'VAGY';
 
   @override
-  String get setupErrPin => 'Sikertelen csatlakozás vagy hibás PIN!';
+  String get setupErrPin =>
+      'Ez a PIN nem jó. Ellenőrizd a 4 jegyű PIN-t a szerver termináljában.';
 
   @override
   String get saveSuccess => 'Beállítások elmentve!';
@@ -1404,4 +1406,27 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String get recoveryStillUnreachable =>
       'Továbbra sem érjük el. Ellenőrizd, hogy a szerver fut, és hogy ugyanazon a Wi-Fi-n vagy.';
+
+  @override
+  String get setupErrServerVersion =>
+      'A szerver olyan választ adott, amit ez az app nem ért. Lehet, hogy régebbi verzió — frissítsd, és próbáld újra.';
+
+  @override
+  String get discoveryTimedOut =>
+      'A keresés a szokásosnál tovább tart. Megadhatod a szerver címét kézzel is.';
+
+  @override
+  String get qrScannerNotOurs =>
+      'Ez nem PetTrack párosító kód. Olvasd be a szerver termináljában megjelenő QR-kódot.';
+
+  @override
+  String get qrScannerCameraDenied =>
+      'A párosító kód olvasásához kamera-hozzáférés kell. Engedélyezd a rendszerbeállításokban, vagy lépj vissza, és add meg a szerver címét kézzel.';
+
+  @override
+  String get qrScannerCameraBroken =>
+      'Ezen az eszközön nem sült elindítani a kamerát. Lépj vissza, és add meg a szerver címét kézzel.';
+
+  @override
+  String get qrScannerGoBack => 'Vissza';
 }

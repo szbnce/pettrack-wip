@@ -138,7 +138,7 @@
       }
     }
   },
-  "invalidSecretToken": "Ungültiges Geheimtoken!",
+  "invalidSecretToken": "Dieser Code ist nicht mehr gültig. Zeig ein frisches QR aus dem Server-Terminal und scan es erneut.",
   "decodingError": "Dekodierfehler: {e}",
   "@decodingError": {
     "placeholders": {
@@ -338,7 +338,7 @@
   "settingsSignOutTitle": "Von diesem Server abmelden?",
   "settingsSignOutMessage": "Dieses Gerät vergisst seine Token und die Sitzung auf dem Server wird widerrufen. Mit der Anmelde-PIN wieder anmelden.",
   "orSeparator": "ODER",
-  "setupErrPin": "Verbindung fehlgeschlagen oder ungültige PIN!",
+  "setupErrPin": "Diese PIN stimmt nicht. Prüf die 4-stellige PIN im Server-Terminal.",
   "saveSuccess": "Einstellungen gespeichert!",
   "navReplays": "Aufnahmen",
   "replaysTitle": "Aufnahmen",
@@ -617,5 +617,11 @@
   "recoveryBody": "PetTrack ist weiterhin eingerichtet — dieses Handy kann den Server gerade nur nicht erreichen. Prüfe, dass er läuft und du im selben Netzwerk bist.",
   "recoveryRetry": "Erneut versuchen",
   "recoveryStartOver": "Neu beginnen",
-  "recoveryStillUnreachable": "Immer noch nicht erreichbar. Prüfe, dass der Server läuft und du im selben WLAN bist."
+  "recoveryStillUnreachable": "Immer noch nicht erreichbar. Prüfe, dass der Server läuft und du im selben WLAN bist.",
+  "setupErrServerVersion": "Der Server hat so geantwortet, dass diese App es nicht versteht. Er ist vielleicht älter — aktualisiere ihn und versuch es erneut.",
+  "discoveryTimedOut": "Die Suche dauert länger als sonst. Du kannst die Serveradresse auch von Hand eingeben.",
+  "qrScannerNotOurs": "Das ist kein PetTrack-Koppelungscode. Scan das QR aus dem Server-Terminal.",
+  "qrScannerCameraDenied": "Für den Koppelungscode braucht die App Kamerazugriff. Erlaube ihn in den Systemeinstellungen, oder geh zurück und gib die Serveradresse von Hand ein.",
+  "qrScannerCameraBroken": "Die Kamera konnte auf diesem Gerät nicht gestartet werden. Geh zurück und gib die Serveradresse von Hand ein.",
+  "qrScannerGoBack": "Zurück"
 }

@@ -240,7 +240,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get invalidSecretToken => '密钥令牌无效！';
+  String get invalidSecretToken => '该代码已失效。请在服务器终端上显示一个新的二维码，然后重新扫描。';
 
   @override
   String decodingError(String e) {
@@ -710,7 +710,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get orSeparator => '或';
 
   @override
-  String get setupErrPin => '连接失败或 PIN 无效！';
+  String get setupErrPin => 'PIN 不正确。请查看服务器终端上的 4 位 PIN。';
 
   @override
   String get saveSuccess => '设置已保存！';
@@ -1372,4 +1372,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get recoveryStillUnreachable => '仍然无法连接。请确认服务器在运行，且你在同一个 Wi-Fi 上。';
+
+  @override
+  String get setupErrServerVersion => '服务器的响应这部应用无法理解。它可能是较旧的版本 —— 请更新后再试一次。';
+
+  @override
+  String get discoveryTimedOut => '搜索比平时花的时间更长。你也可以手动输入服务器地址。';
+
+  @override
+  String get qrScannerNotOurs => '这不是 PetTrack 配对码。请扫描服务器终端上显示的二维码。';
+
+  @override
+  String get qrScannerCameraDenied => '读取配对码需要相机权限。请在系统设置中允许，或返回手动输入服务器地址。';
+
+  @override
+  String get qrScannerCameraBroken => '这台设备上无法启动相机。请返回并手动输入服务器地址。';
+
+  @override
+  String get qrScannerGoBack => '返回';
 }

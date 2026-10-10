@@ -14,6 +14,9 @@ class QRScannerScreen extends StatefulWidget {
 class _QRScannerScreenState extends State<QRScannerScreen> {
   final MobileScannerController _controller = MobileScannerController();
   bool _hasScanned = false;
+  // A code that is not ours used to be ignored without a word, which reads
+  // as "the camera is broken". Say what happened instead.
+  bool _rejectedCode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,21 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                   break;
                 }
               }
+              // Every barcode in the frame was something else — say so
+              // rather than leaving a green frame and silence.
+              if (!_hasScanned && !_rejectedCode && barcodes.isNotEmpty) {
+                setState(() => _rejectedCode = true);
+              }
+            },
+            errorBuilder: (context, error) {
+              final denied =
+                  error.errorCode == MobileScannerErrorCode.permissionDenied;
+              return _ScannerProblem(
+                message: denied
+                    ? l10n.qrScannerCameraDenied
+                    : l10n.qrScannerCameraBroken,
+                buttonLabel: l10n.qrScannerGoBack,
+              );
             },
           ),
 
@@ -72,7 +90,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  l10n.qrScannerHint,
+                  _rejectedCode ? l10n.qrScannerNotOurs : l10n.qrScannerHint,
                   style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
@@ -88,5 +106,42 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+}
+
+/// When the camera cannot run at all, say why and give the way out.
+///
+/// A black preview with a green frame is the worst possible answer to
+/// "why is nothing happening" on the one screen that pairs the phone.
+class _ScannerProblem extends StatelessWidget {
+  final String message;
+  final String buttonLabel;
+
+  const _ScannerProblem({required this.message, required this.buttonLabel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.no_photography, size: 56, color: Colors.white54),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white, fontSize: 15),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).maybePop(),
+              child: Text(buttonLabel),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

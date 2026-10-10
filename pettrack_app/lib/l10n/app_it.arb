@@ -138,7 +138,7 @@
       }
     }
   },
-  "invalidSecretToken": "Token segreto non valido!",
+  "invalidSecretToken": "Quel codice non è più valido. Mostra un nuovo QR dal terminale del server e scansionalo di nuovo.",
   "decodingError": "Errore di decodifica: {e}",
   "@decodingError": {
     "placeholders": {
@@ -338,7 +338,7 @@
   "settingsSignOutTitle": "Disconnettersi da questo server?",
   "settingsSignOutMessage": "Questo dispositivo dimentica i token e la sessione sul server viene revocata. Accedi di nuovo con il PIN di associazione.",
   "orSeparator": "OPPURE",
-  "setupErrPin": "Connessione non riuscita o PIN non valido!",
+  "setupErrPin": "Quel PIN non è corretto. Controlla il PIN a 4 cifre nel terminale del server.",
   "saveSuccess": "Impostazioni salvate!",
   "navReplays": "Registrazioni",
   "replaysTitle": "Registrazioni",
@@ -617,5 +617,11 @@
   "recoveryBody": "PetTrack è ancora configurato — questo telefono non riesce solo a raggiungere il server adesso. Verifica che sia in esecuzione e che tu sia sulla stessa rete.",
   "recoveryRetry": "Riprova",
   "recoveryStartOver": "Ricomincia",
-  "recoveryStillUnreachable": "Ancora irraggiungibile. Verifica che il server sia in esecuzione e che tu sia sulla stessa Wi-Fi."
+  "recoveryStillUnreachable": "Ancora irraggiungibile. Verifica che il server sia in esecuzione e che tu sia sulla stessa Wi-Fi.",
+  "setupErrServerVersion": "Il server ha risposto in un modo che questa app non capisce. Forse è una versione più vecchia — aggiornala e riprova.",
+  "discoveryTimedOut": "La ricerca sta durando più del solito. Puoi inserire l'indirizzo del server manualmente.",
+  "qrScannerNotOurs": "Questo non è un codice di abbinamento PetTrack. Scansiona il QR mostrato nel terminale del server.",
+  "qrScannerCameraDenied": "Per leggere il codice di abbinamento serve l'accesso alla fotocamera. Consentilo nelle impostazioni di sistema, oppure torna indietro e inserisci l'indirizzo del server a mano.",
+  "qrScannerCameraBroken": "Su questo dispositivo non è stato possibile avviare la fotocamera. Torna indietro e inserisci l'indirizzo del server a mano.",
+  "qrScannerGoBack": "Indietro"
 }

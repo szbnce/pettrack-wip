@@ -200,6 +200,24 @@ class _MonitorSetupScreenState extends State<MonitorSetupScreen> {
                   }
                 }
               },
+              // The manual card is already on screen, so the camera failing
+              // is not a dead end — it just needs to stop looking like a
+              // black rectangle.
+              errorBuilder: (context, error) => Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    error.errorCode == MobileScannerErrorCode.permissionDenied
+                        ? l10n.qrScannerCameraDenied
+                        : l10n.qrScannerCameraBroken,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+              ),
             ),
             SafeArea(
               child: Align(

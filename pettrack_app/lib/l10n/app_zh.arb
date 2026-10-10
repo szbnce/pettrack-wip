@@ -138,7 +138,7 @@
       }
     }
   },
-  "invalidSecretToken": "密钥令牌无效！",
+  "invalidSecretToken": "该代码已失效。请在服务器终端上显示一个新的二维码，然后重新扫描。",
   "decodingError": "解码错误：{e}",
   "@decodingError": {
     "placeholders": {
@@ -338,7 +338,7 @@
   "settingsSignOutTitle": "从此服务器退出登录？",
   "settingsSignOutMessage": "此设备将忘记令牌，服务器上的会话会被吊销。可用配对 PIN 重新登录。",
   "orSeparator": "或",
-  "setupErrPin": "连接失败或 PIN 无效！",
+  "setupErrPin": "PIN 不正确。请查看服务器终端上的 4 位 PIN。",
   "saveSuccess": "设置已保存！",
   "navReplays": "回放",
   "replaysTitle": "回放",
@@ -617,5 +617,11 @@
   "recoveryBody": "PetTrack 仍然已完成设置 —— 只是这部手机现在联系不上服务器。请确认服务器在运行，且你在同一个网络中。",
   "recoveryRetry": "重试",
   "recoveryStartOver": "重新开始",
-  "recoveryStillUnreachable": "仍然无法连接。请确认服务器在运行，且你在同一个 Wi-Fi 上。"
+  "recoveryStillUnreachable": "仍然无法连接。请确认服务器在运行，且你在同一个 Wi-Fi 上。",
+  "setupErrServerVersion": "服务器的响应这部应用无法理解。它可能是较旧的版本 —— 请更新后再试一次。",
+  "discoveryTimedOut": "搜索比平时花的时间更长。你也可以手动输入服务器地址。",
+  "qrScannerNotOurs": "这不是 PetTrack 配对码。请扫描服务器终端上显示的二维码。",
+  "qrScannerCameraDenied": "读取配对码需要相机权限。请在系统设置中允许，或返回手动输入服务器地址。",
+  "qrScannerCameraBroken": "这台设备上无法启动相机。请返回并手动输入服务器地址。",
+  "qrScannerGoBack": "返回"
 }

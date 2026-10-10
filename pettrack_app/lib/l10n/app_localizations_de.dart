@@ -246,7 +246,8 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get invalidSecretToken => 'Ungültiges Geheimtoken!';
+  String get invalidSecretToken =>
+      'Dieser Code ist nicht mehr gültig. Zeig ein frisches QR aus dem Server-Terminal und scan es erneut.';
 
   @override
   String decodingError(String e) {
@@ -730,7 +731,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get orSeparator => 'ODER';
 
   @override
-  String get setupErrPin => 'Verbindung fehlgeschlagen oder ungültige PIN!';
+  String get setupErrPin =>
+      'Diese PIN stimmt nicht. Prüf die 4-stellige PIN im Server-Terminal.';
 
   @override
   String get saveSuccess => 'Einstellungen gespeichert!';
@@ -1415,4 +1417,27 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get recoveryStillUnreachable =>
       'Immer noch nicht erreichbar. Prüfe, dass der Server läuft und du im selben WLAN bist.';
+
+  @override
+  String get setupErrServerVersion =>
+      'Der Server hat so geantwortet, dass diese App es nicht versteht. Er ist vielleicht älter — aktualisiere ihn und versuch es erneut.';
+
+  @override
+  String get discoveryTimedOut =>
+      'Die Suche dauert länger als sonst. Du kannst die Serveradresse auch von Hand eingeben.';
+
+  @override
+  String get qrScannerNotOurs =>
+      'Das ist kein PetTrack-Koppelungscode. Scan das QR aus dem Server-Terminal.';
+
+  @override
+  String get qrScannerCameraDenied =>
+      'Für den Koppelungscode braucht die App Kamerazugriff. Erlaube ihn in den Systemeinstellungen, oder geh zurück und gib die Serveradresse von Hand ein.';
+
+  @override
+  String get qrScannerCameraBroken =>
+      'Die Kamera konnte auf diesem Gerät nicht gestartet werden. Geh zurück und gib die Serveradresse von Hand ein.';
+
+  @override
+  String get qrScannerGoBack => 'Zurück';
 }

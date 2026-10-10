@@ -138,7 +138,7 @@
       }
     }
   },
-  "invalidSecretToken": "Invalid Secret Token!",
+  "invalidSecretToken": "That code is no longer valid. Show a fresh QR from the server terminal and scan it again.",
   "decodingError": "Decoding error: {e}",
   "@decodingError": {
     "placeholders": {
@@ -352,7 +352,7 @@
   "settingsSignOutTitle": "Sign out of this server?",
   "settingsSignOutMessage": "This device forgets its tokens and its session on the server is revoked. Sign in again with the pairing PIN.",
   "orSeparator": "OR",
-  "setupErrPin": "Failed to connect or invalid PIN!",
+  "setupErrPin": "That PIN is not right. Check the 4-digit PIN in the server terminal.",
   "saveSuccess": "Settings saved!",
   "navReplays": "Replays",
   "replaysTitle": "Replays",
@@ -724,5 +724,11 @@
   "recoveryBody": "PetTrack is still set up — this phone just cannot reach the server right now. Check that it is running and that you are on the same network.",
   "recoveryRetry": "Try again",
   "recoveryStartOver": "Start over",
-  "recoveryStillUnreachable": "Still unreachable. Check that the server is running and you are on the same Wi-Fi."
+  "recoveryStillUnreachable": "Still unreachable. Check that the server is running and you are on the same Wi-Fi.",
+  "setupErrServerVersion": "The server answered in a way this app does not understand. It may be an older version — update it and try again.",
+  "discoveryTimedOut": "The search is taking longer than usual. You can enter the server address manually.",
+  "qrScannerNotOurs": "That is not a PetTrack pairing code. Scan the QR shown in the server terminal.",
+  "qrScannerCameraDenied": "Camera access is needed to read the pairing code. Allow camera access in system settings, or go back and enter the server address by hand.",
+  "qrScannerCameraBroken": "The camera could not be started on this device. Go back and enter the server address by hand.",
+  "qrScannerGoBack": "Go back"
 }

@@ -82,7 +82,7 @@
   "themeLight": "Világos mód",
   "themeDark": "Sötét mód",
   "failedToLoadPetProfile": "Nem sikerült betölteni a profilt: {e}",
-  "invalidSecretToken": "Hibás Secret Token!",
+  "invalidSecretToken": "Ez a kód már nem érvényes. Mutass egy friss QR-kódot a szerver termináljából, és olvasd be újra.",
   "decodingError": "Dekódolási hiba: {e}",
   "setupWelcomeTitle": "Üdvözöl a PetTrack!",
   "setupWelcomeDesc": "A legbiztonságosabb kisállatfigyelő\n\nElső lépésként olvasd be a szerver QR kódját!",
@@ -244,7 +244,7 @@
   "settingsSignOutTitle": "Kijelentkezés erről a szerverről?",
   "settingsSignOutMessage": "Ez az eszköz elfelejti a tokenjeit, és a munkamenet a szerveren visszavonásra kerül. A párosító PIN-kóddal újra bejelentkezhetsz.",
   "orSeparator": "VAGY",
-  "setupErrPin": "Sikertelen csatlakozás vagy hibás PIN!",
+  "setupErrPin": "Ez a PIN nem jó. Ellenőrizd a 4 jegyű PIN-t a szerver termináljában.",
   "saveSuccess": "Beállítások elmentve!",
   "navReplays": "Visszajátszások",
   "replaysTitle": "Visszajátszások",
@@ -524,5 +524,11 @@
   "recoveryBody": "A PetTrack beállítása megvan — ez a telefon most csak nem éri el a szervert. Ellenőrizd, hogy fut, és hogy ugyanazon a hálózaton vagy.",
   "recoveryRetry": "Újra",
   "recoveryStartOver": "Elölről kezdem",
-  "recoveryStillUnreachable": "Továbbra sem érjük el. Ellenőrizd, hogy a szerver fut, és hogy ugyanazon a Wi-Fi-n vagy."
+  "recoveryStillUnreachable": "Továbbra sem érjük el. Ellenőrizd, hogy a szerver fut, és hogy ugyanazon a Wi-Fi-n vagy.",
+  "setupErrServerVersion": "A szerver olyan választ adott, amit ez az app nem ért. Lehet, hogy régebbi verzió — frissítsd, és próbáld újra.",
+  "discoveryTimedOut": "A keresés a szokásosnál tovább tart. Megadhatod a szerver címét kézzel is.",
+  "qrScannerNotOurs": "Ez nem PetTrack párosító kód. Olvasd be a szerver termináljában megjelenő QR-kódot.",
+  "qrScannerCameraDenied": "A párosító kód olvasásához kamera-hozzáférés kell. Engedélyezd a rendszerbeállításokban, vagy lépj vissza, és add meg a szerver címét kézzel.",
+  "qrScannerCameraBroken": "Ezen az eszközön nem sült elindítani a kamerát. Lépj vissza, és add meg a szerver címét kézzel.",
+  "qrScannerGoBack": "Vissza"
 }
