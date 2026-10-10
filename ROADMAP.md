@@ -16,8 +16,8 @@ when every one is green, the product side is done.
    edges)*
 2. **Never miss a moment.** Alerts always arrive (local + ntfy), the stream
    reconnects by itself, the watchdog surfaces failures before the user
-   notices them. *(mostly done — quiet hours, ntfy bridge, watchdog; needs
-   self-healing stream reconnection)*
+   notices them. *(mostly done — quiet hours, ntfy bridge, watchdog,
+   self-healing stream reconnection; audit the alert edges)*
 3. **Worth sharing.** One-tap share for replays, the daily highlight and the
    week's insights — the kind of screenshots people post.
 4. **Daily-use depth.** Event → evidence tap-through (snapshot + jump to the
@@ -41,12 +41,10 @@ later feature look premium), then 3 → 4 → 6 → 2's self-healing stream →
 
 ## Quick wins (hours each, big first-impression impact)
 
-1. **Plain-language settings + Advanced drawer.** Today the app speaks
-   "threshold / coverage / zone polygon". Split everyday settings
-   (notifications, sound, dark mode, pet profile) from engineering knobs
-   (`PETTRACK_*`, ports, tokens) behind an "Advanced" section — and label
-   things the way a pet owner would say them ("Notify me when Berci leaves
-   the bed zone").
+1. **Plain-language settings + Advanced drawer** *(done)*. The notification
+   toggles speak the way a pet owner would say them ("Tell me when Berci
+   enters or leaves a zone"), and the wiring — server address, pairing
+   secret, account — sits behind a collapsed "Advanced" drawer.
 2. **Connection status that never leaves you guessing.** One persistent,
    human-readable status chip: `Connected to home server` / `Reconnecting…` /
    `Server unreachable — are you on the same Wi-Fi?`, with a one-tap retry.

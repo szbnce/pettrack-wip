@@ -18,19 +18,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get uploadProfilePicture => 'Carica immagine del profilo';
 
   @override
-  String get serverIp => 'IP del server';
+  String get serverIp => 'Indirizzo del server';
 
   @override
   String get serverIpHint => 'es. 192.168.1.100';
 
   @override
-  String get secretToken => 'Token segreto';
+  String get secretToken => 'Segreto di associazione';
 
   @override
-  String get petName => 'Nome dell\'animale';
+  String get petName => 'Il nome del tuo animale';
 
   @override
-  String get petNameHint => 'Inserisci il nome';
+  String get petNameHint => 'es. Berci';
 
   @override
   String get save => 'Salva';
@@ -127,7 +127,7 @@ class AppLocalizationsIt extends AppLocalizations {
       'Qui va tutto bene.|Sembra che stia dormendo.|Pieno di energia!|Sta sorvegliando la zona.|Aspetta la cena.|Sta annusando qualcosa.|Sta riposando tranquillo.|Nel posto preferito.|Vuole giocare.|Tutto tranquillo.';
 
   @override
-  String get petTypeTitle => 'Tipo di animale';
+  String get petTypeTitle => 'Che tipo di animale?';
 
   @override
   String get petTypeDog => 'Cane';
@@ -151,14 +151,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get alertsTitle => 'Notifiche';
 
   @override
-  String get alertsZone => 'Avvisi di zona (Ingresso/Uscita)';
+  String alertsZone(String petName) {
+    return 'Avvisami quando $petName entra o esce da una zona';
+  }
 
   @override
-  String get alertsBattery => 'Avviso batteria scarica';
+  String get alertsZoneGeneric =>
+      'Avvisami quando il mio animale entra o esce da una zona';
+
+  @override
+  String get alertsBattery =>
+      'Avvisami quando la batteria del telefono che fa da camera sta per esaurirsi';
 
   @override
   String batteryThreshold(int level) {
-    return 'Soglia batteria: $level%';
+    return 'Avvisami al $level% o meno';
   }
 
   @override
@@ -284,7 +291,7 @@ class AppLocalizationsIt extends AppLocalizations {
       'Apri l\'app Monitor sull\'altro telefono e scansiona questo codice QR per connetterti!';
 
   @override
-  String get settingsShowQrBtn => 'Mostra codice QR';
+  String get settingsShowQrBtn => 'Mostra codice QR di associazione';
 
   @override
   String get settingsQrDialogDesc => 'Scansiona con il vecchio telefono:';
@@ -310,10 +317,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Impossibile connettersi al server PetTrack.\nControlla la rete o se il server è in esecuzione.';
 
   @override
-  String get profileAndSystem => 'Profilo e sistema';
+  String get profileAndSystem => 'Il mio animale';
 
   @override
-  String get monitorAndConnection => 'Monitor e connessione';
+  String get monitorAndConnection => 'Server e associazione';
 
   @override
   String get offlineStatus => 'OFFLINE!';
@@ -880,7 +887,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get quietHoursSubtitle =>
-      'Nessun avviso di zona o batteria in questo intervallo';
+      'Niente avvisi in questo periodo — la telecamera continua a guardare';
 
   @override
   String get quietHoursFrom => 'Dalle';
@@ -1075,7 +1082,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get nightModeOff => 'Modalità notte disattivata';
 
   @override
-  String get alertsSound => 'Avvisi sonori (abbaiare / miagolare)';
+  String get alertsSound => 'Avvisami quando sento abbaiare o miagolare';
 
   @override
   String get soundDetectedTitle => 'Suono rilevato';
@@ -1122,6 +1129,16 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settingsSaveError => 'Impossibile salvare la modifica';
+
+  @override
+  String get settingsAdvanced => 'Avanzate';
+
+  @override
+  String get settingsAdvancedDesc =>
+      'Indirizzo del server, associazione e account — il cablaggio dietro l\'app. Ti serve raramente.';
+
+  @override
+  String get settingsAccount => 'Account';
 
   @override
   String get shareFailed => 'Impossibile condividere';

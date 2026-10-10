@@ -2,11 +2,11 @@
   "appName": "PetTrack",
   "settingsTitle": "设置",
   "uploadProfilePicture": "上传头像",
-  "serverIp": "服务器 IP",
+  "serverIp": "服务器地址",
   "serverIpHint": "例如 192.168.1.100",
-  "secretToken": "密钥令牌",
-  "petName": "宠物名字",
-  "petNameHint": "请输入名字",
+  "secretToken": "配对密钥",
+  "petName": "宠物的名字",
+  "petNameHint": "例如：Berci",
   "save": "保存",
   "navDashboard": "仪表盘",
   "navZones": "区域",
@@ -75,7 +75,7 @@
   "leftTheZone": "离开了区域。",
   "greetingsList": "嗨，老板！|欢迎回来！|祝你今天愉快！|嘿！|你好吗？|你好！|最近怎么样？|很高兴又见到你！|准备好了吗？|来看看它们在做什么！",
   "subGreetingsList": "这里一切都好。|好像在睡觉。|精力充沛！|正在观察周围。|在等晚饭。|在闻什么东西。|在安静休息。|在最喜欢的地方。|想玩耍。|一切安静。",
-  "petTypeTitle": "宠物类型",
+  "petTypeTitle": "是什么宠物？",
   "petTypeDog": "狗",
   "petTypeCat": "猫",
   "petTypeRabbit": "兔子",
@@ -83,9 +83,17 @@
   "petTypeBird": "鸟",
   "petTypeOther": "其他",
   "alertsTitle": "通知",
-  "alertsZone": "区域提醒（进入/离开）",
-  "alertsBattery": "低电量提醒",
-  "batteryThreshold": "电量阈值：{level}%",
+  "alertsZone": "{petName}进出区域时告诉我",
+  "@alertsZone": {
+    "placeholders": {
+      "petName": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsZoneGeneric": "我的宠物进出区域时告诉我",
+  "alertsBattery": "摄像头手机电量低时提醒我",
+  "batteryThreshold": "电量低于或等于 {level}% 时提醒我",
   "@batteryThreshold": {
     "placeholders": {
       "level": {
@@ -150,7 +158,7 @@
   "setupErrEmpty": "请输入名字！",
   "setupMonitorTitle": "监视器设置",
   "setupMonitorDesc": "在另一部手机上打开 Monitor 应用，扫描此二维码进行连接！",
-  "settingsShowQrBtn": "显示二维码",
+  "settingsShowQrBtn": "显示配对二维码",
   "settingsQrDialogDesc": "用旧手机扫描：",
   "settingsQrDialogDone": "完成",
   "settingsResetApp": "重置应用并重新设置",
@@ -158,8 +166,8 @@
   "settingsResetConfirmDesc": "这将删除所有保存的数据并重新启动设置向导。",
   "serverUnreachableTitle": "无法连接服务器",
   "serverUnreachableDesc": "无法连接到 PetTrack 服务器。\n请检查网络或服务器是否在运行。",
-  "profileAndSystem": "资料与系统",
-  "monitorAndConnection": "监视器与连接",
+  "profileAndSystem": "我的宠物",
+  "monitorAndConnection": "服务器与配对",
   "offlineStatus": "离线！",
   "liveStatus": "直播",
   "searchingStatus": "搜索中...",
@@ -400,7 +408,7 @@
   "tooltipShare": "分享",
   "shareLink": "分享链接",
   "quietHoursTitle": "免打扰时段",
-  "quietHoursSubtitle": "此时段不发送区域或电量提醒",
+  "quietHoursSubtitle": "这段时间不提醒 — 摄像头继续守着",
   "quietHoursFrom": "从",
   "quietHoursTo": "到",
   "snoozeTitle": "静音提醒",
@@ -484,7 +492,7 @@
   "tooltipNightMode": "夜间模式",
   "nightModeOn": "夜间模式已开启",
   "nightModeOff": "夜间模式已关闭",
-  "alertsSound": "声音提醒（吠叫 / 猫叫）",
+  "alertsSound": "听到叫声时告诉我",
   "soundDetectedTitle": "检测到声音",
   "soundDetectedBody": "摄像头附近有大声响。",
   "@timelapseError": {
@@ -507,6 +515,9 @@
   "medicalCachedNotice": "无法连接服务器 — 显示已保存的副本",
   "tooltipPlayPause": "播放 / 暂停",
   "settingsSaveError": "无法保存更改",
+  "settingsAdvanced": "高级",
+  "settingsAdvancedDesc": "服务器地址、配对与账户 — 应用背后的接线。你几乎用不到。",
+  "settingsAccount": "账户",
   "shareFailed": "无法分享",
   "evidenceNoClip": "该时刻附近没有录像片段",
   "feedSearchHint": "搜索事件",

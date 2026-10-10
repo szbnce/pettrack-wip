@@ -18,19 +18,19 @@ class AppLocalizationsHu extends AppLocalizations {
   String get uploadProfilePicture => 'Profilkép feltöltése';
 
   @override
-  String get serverIp => 'Szerver IP';
+  String get serverIp => 'Szervercím';
 
   @override
   String get serverIpHint => 'pl. 192.168.1.100';
 
   @override
-  String get secretToken => 'Titkos Token';
+  String get secretToken => 'Párosítási titok';
 
   @override
-  String get petName => 'Kedvenc neve';
+  String get petName => 'Kedvenced neve';
 
   @override
-  String get petNameHint => 'Írd be a nevét';
+  String get petNameHint => 'pl. Berci';
 
   @override
   String get save => 'Mentés';
@@ -126,7 +126,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'Itt minden rendben.|Úgy tűnik, alszik.|Tele van energiával!|Figyeli a terepet.|Várja a vacsorát.|Szimatol valamit.|Békésen pihen.|A kedvenc helyén van.|Játszani szeretne.|Minden csendes.';
 
   @override
-  String get petTypeTitle => 'Állat fajtája';
+  String get petTypeTitle => 'Milyen állat?';
 
   @override
   String get petTypeDog => 'Kutya';
@@ -150,14 +150,20 @@ class AppLocalizationsHu extends AppLocalizations {
   String get alertsTitle => 'Értesítések';
 
   @override
-  String get alertsZone => 'Zóna riasztások (Ki/Be lépés)';
+  String alertsZone(String petName) {
+    return 'Szólj, ha $petName zónába lép vagy elhagyja';
+  }
 
   @override
-  String get alertsBattery => 'Alacsony akkumlátor riasztás';
+  String get alertsZoneGeneric =>
+      'Szólj, ha a kisállatom zónába lép vagy elhagyja';
+
+  @override
+  String get alertsBattery => 'Szólj, ha a kamera telefon lemerülőben van';
 
   @override
   String batteryThreshold(int level) {
-    return 'Akkumlátor határ: $level%';
+    return 'Szólj $level%-nál vagy alatta';
   }
 
   @override
@@ -282,7 +288,7 @@ class AppLocalizationsHu extends AppLocalizations {
       'Nyisd meg a Monitor appot a régi telefonodon, és olvasd be ezt a QR kódot a csatlakozáshoz!';
 
   @override
-  String get settingsShowQrBtn => 'QR kód megjelenítése';
+  String get settingsShowQrBtn => 'Párosító QR-kód mutatása';
 
   @override
   String get settingsQrDialogDesc => 'Olvasd be a régi telefonnal:';
@@ -308,10 +314,10 @@ class AppLocalizationsHu extends AppLocalizations {
       'Nem sikerült csatlakozni a PetTrack szerverhez.\nKérlek ellenőrizd a hálózatot, hogy fut-e a szerver.';
 
   @override
-  String get profileAndSystem => 'Profil & Rendszer';
+  String get profileAndSystem => 'Kisállatom';
 
   @override
-  String get monitorAndConnection => 'Monitor & Kapcsolat';
+  String get monitorAndConnection => 'Szerver és párosítás';
 
   @override
   String get offlineStatus => 'OFFLINE!';
@@ -875,7 +881,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get quietHoursSubtitle =>
-      'Ebben az időben nincs zóna- vagy akkumulátor-riasztás';
+      'Ebben az időben nincs riasztás — a kamera tovább néz';
 
   @override
   String get quietHoursFrom => 'Ettől';
@@ -1067,7 +1073,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get nightModeOff => 'Éjszakai mód kikapcsolva';
 
   @override
-  String get alertsSound => 'Hangjelzések (ugatás / nyávogás)';
+  String get alertsSound => 'Szólj, ha ugatást vagy nyávogást hallok';
 
   @override
   String get soundDetectedTitle => 'Hang észlelve';
@@ -1114,6 +1120,16 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get settingsSaveError => 'A módosítás mentése nem sikerült';
+
+  @override
+  String get settingsAdvanced => 'Speciális';
+
+  @override
+  String get settingsAdvancedDesc =>
+      'Szervercím, párosítás és fiók — az app mögötti vezetékek. Ritkán van rá szükség.';
+
+  @override
+  String get settingsAccount => 'Fiók';
 
   @override
   String get shareFailed => 'A megosztás nem sikerült';

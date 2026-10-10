@@ -129,7 +129,7 @@ abstract class AppLocalizations {
   /// No description provided for @serverIp.
   ///
   /// In en, this message translates to:
-  /// **'Server IP'**
+  /// **'Server address'**
   String get serverIp;
 
   /// No description provided for @serverIpHint.
@@ -141,19 +141,19 @@ abstract class AppLocalizations {
   /// No description provided for @secretToken.
   ///
   /// In en, this message translates to:
-  /// **'Secret Token'**
+  /// **'Pairing secret'**
   String get secretToken;
 
   /// No description provided for @petName.
   ///
   /// In en, this message translates to:
-  /// **'Pet name'**
+  /// **'Your pet\'s name'**
   String get petName;
 
   /// No description provided for @petNameHint.
   ///
   /// In en, this message translates to:
-  /// **'Enter the name'**
+  /// **'e.g. Berci'**
   String get petNameHint;
 
   /// No description provided for @save.
@@ -321,7 +321,7 @@ abstract class AppLocalizations {
   /// No description provided for @petTypeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Pet Type'**
+  /// **'What kind of pet?'**
   String get petTypeTitle;
 
   /// No description provided for @petTypeDog.
@@ -369,19 +369,25 @@ abstract class AppLocalizations {
   /// No description provided for @alertsZone.
   ///
   /// In en, this message translates to:
-  /// **'Zone alerts (Enter/Exit)'**
-  String get alertsZone;
+  /// **'Tell me when {petName} enters or leaves a zone'**
+  String alertsZone(String petName);
+
+  /// No description provided for @alertsZoneGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me when my pet enters or leaves a zone'**
+  String get alertsZoneGeneric;
 
   /// No description provided for @alertsBattery.
   ///
   /// In en, this message translates to:
-  /// **'Low battery alert'**
+  /// **'Warn me when the camera phone is low on battery'**
   String get alertsBattery;
 
   /// No description provided for @batteryThreshold.
   ///
   /// In en, this message translates to:
-  /// **'Battery threshold: {level}%'**
+  /// **'Warn me at {level}% or below'**
   String batteryThreshold(int level);
 
   /// No description provided for @testNotification.
@@ -603,7 +609,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsShowQrBtn.
   ///
   /// In en, this message translates to:
-  /// **'Show QR Code'**
+  /// **'Show pairing QR code'**
   String get settingsShowQrBtn;
 
   /// No description provided for @settingsQrDialogDesc.
@@ -651,13 +657,13 @@ abstract class AppLocalizations {
   /// No description provided for @profileAndSystem.
   ///
   /// In en, this message translates to:
-  /// **'Profile & System'**
+  /// **'My pet'**
   String get profileAndSystem;
 
   /// No description provided for @monitorAndConnection.
   ///
   /// In en, this message translates to:
-  /// **'Monitor & Connection'**
+  /// **'Server & pairing'**
   String get monitorAndConnection;
 
   /// No description provided for @offlineStatus.
@@ -1683,7 +1689,7 @@ abstract class AppLocalizations {
   /// No description provided for @quietHoursSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'No zone or battery alerts during this time'**
+  /// **'No alerts during this time — the camera keeps watching'**
   String get quietHoursSubtitle;
 
   /// No description provided for @quietHoursFrom.
@@ -2037,7 +2043,7 @@ abstract class AppLocalizations {
   /// No description provided for @alertsSound.
   ///
   /// In en, this message translates to:
-  /// **'Sound alerts (bark / meow)'**
+  /// **'Tell me when I hear barking or meowing'**
   String get alertsSound;
 
   /// No description provided for @soundDetectedTitle.
@@ -2129,6 +2135,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not save the change'**
   String get settingsSaveError;
+
+  /// No description provided for @settingsAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get settingsAdvanced;
+
+  /// No description provided for @settingsAdvancedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Server address, pairing and account — the wiring behind the app. You rarely need this.'**
+  String get settingsAdvancedDesc;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsAccount;
 
   /// No description provided for @shareFailed.
   ///

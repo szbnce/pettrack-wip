@@ -18,19 +18,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get uploadProfilePicture => 'プロフィール画像をアップロード';
 
   @override
-  String get serverIp => 'サーバーIP';
+  String get serverIp => 'サーバーアドレス';
 
   @override
   String get serverIpHint => '例: 192.168.1.100';
 
   @override
-  String get secretToken => 'シークレットトークン';
+  String get secretToken => 'ペアリングシークレット';
 
   @override
-  String get petName => 'ペットの名前';
+  String get petName => 'うちの子の名前';
 
   @override
-  String get petNameHint => '名前を入力';
+  String get petNameHint => '例：Berci';
 
   @override
   String get save => '保存';
@@ -126,7 +126,7 @@ class AppLocalizationsJa extends AppLocalizations {
       'ここは順調です。|眠っているようです。|元気いっぱい！|あたりを見張っています。|夕食を待っています。|何かを嗅いでいます。|落ち着いて休んでいます。|お気に入りの場所です。|遊びたがっています。|静かです。';
 
   @override
-  String get petTypeTitle => 'ペットの種類';
+  String get petTypeTitle => 'どんな子？';
 
   @override
   String get petTypeDog => '犬';
@@ -150,14 +150,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get alertsTitle => '通知';
 
   @override
-  String get alertsZone => 'ゾーン通知（入退場）';
+  String alertsZone(String petName) {
+    return '$petNameがゾーンに入ったり出たりしたら知らせて';
+  }
 
   @override
-  String get alertsBattery => 'バッテリー低下アラート';
+  String get alertsZoneGeneric => 'うちの子がゾーンに入ったり出たりしたら知らせて';
+
+  @override
+  String get alertsBattery => 'カメラのスマホのバッテリーが少なくなりたら知らせて';
 
   @override
   String batteryThreshold(int level) {
-    return 'バッテリーしきい値: $level%';
+    return '$level%以下になったら知らせて';
   }
 
   @override
@@ -278,7 +283,7 @@ class AppLocalizationsJa extends AppLocalizations {
       'もう一方のスマホでMonitorアプリを開き、このQRコードをスキャンして接続してください！';
 
   @override
-  String get settingsShowQrBtn => 'QRコードを表示';
+  String get settingsShowQrBtn => 'ペアリング用QRコードを表示';
 
   @override
   String get settingsQrDialogDesc => '古いスマホでスキャンしてください：';
@@ -304,10 +309,10 @@ class AppLocalizationsJa extends AppLocalizations {
       'PetTrackサーバーに接続できません。\nネットワークやサーバーの起動状態を確認してください。';
 
   @override
-  String get profileAndSystem => 'プロフィールとシステム';
+  String get profileAndSystem => 'うちの子';
 
   @override
-  String get monitorAndConnection => 'モニターと接続';
+  String get monitorAndConnection => 'サーバーとペアリング';
 
   @override
   String get offlineStatus => 'オフライン！';
@@ -862,7 +867,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get quietHoursTitle => '消音時間';
 
   @override
-  String get quietHoursSubtitle => 'この時間帯はゾーン・バッテリー通知を送りません';
+  String get quietHoursSubtitle => 'この時間は通知を止めます — カメラは見続けています';
 
   @override
   String get quietHoursFrom => '開始';
@@ -1054,7 +1059,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nightModeOff => 'ナイトモードをオフにしました';
 
   @override
-  String get alertsSound => '音の通知（鳴き声）';
+  String get alertsSound => '吠え声や鳴き声が聞こえたら知らせて';
 
   @override
   String get soundDetectedTitle => '音を検出しました';
@@ -1100,6 +1105,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsSaveError => '変更を保存できませんでした';
+
+  @override
+  String get settingsAdvanced => '詳細設定';
+
+  @override
+  String get settingsAdvancedDesc =>
+      'サーバーアドレス、ペアリング、アカウント — アプリを支える配線です。めったに使いません。';
+
+  @override
+  String get settingsAccount => 'アカウント';
 
   @override
   String get shareFailed => '共有できませんでした';

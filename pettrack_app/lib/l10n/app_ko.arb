@@ -2,11 +2,11 @@
   "appName": "PetTrack",
   "settingsTitle": "설정",
   "uploadProfilePicture": "프로필 사진 업로드",
-  "serverIp": "서버 IP",
+  "serverIp": "서버 주소",
   "serverIpHint": "예: 192.168.1.100",
-  "secretToken": "비밀 토큰",
-  "petName": "반려동물 이름",
-  "petNameHint": "이름을 입력하세요",
+  "secretToken": "페어링 비밀값",
+  "petName": "우리 아이 이름",
+  "petNameHint": "예: Berci",
   "save": "저장",
   "navDashboard": "대시보드",
   "navZones": "구역",
@@ -75,7 +75,7 @@
   "leftTheZone": "구역에서 나갔습니다.",
   "greetingsList": "안녕하세요, 보스!|다시 오신 것을 환영해요!|좋은 하루 보내세요!|안녕!|잘 지내요?|안녕하세요!|뭐 하고 있어요?|다시 만나서 반가워요!|준비됐나요?|무엇을 하는지 볼까요!",
   "subGreetingsList": "여기는 잘 지냅니다.|자는 것 같아요.|에너지가 넘쳐요!|주변을 살피고 있어요.|저녁을 기다리는 중이에요.|무엇인가를 냄새 맡고 있어요.|편안하게 쉬고 있어요.|좋아하는 자리에 있어요.|놀고 싶어 해요.|조용합니다.",
-  "petTypeTitle": "반려동물 종류",
+  "petTypeTitle": "어떤 동물인가요?",
   "petTypeDog": "강아지",
   "petTypeCat": "고양이",
   "petTypeRabbit": "토끼",
@@ -83,9 +83,17 @@
   "petTypeBird": "새",
   "petTypeOther": "기타",
   "alertsTitle": "알림",
-  "alertsZone": "구역 알림(입장/퇴장)",
-  "alertsBattery": "배터리 부족 알림",
-  "batteryThreshold": "배터리 임계값: {level}%",
+  "alertsZone": "{petName}가 구역에 들어가거나 나가면 알려줘",
+  "@alertsZone": {
+    "placeholders": {
+      "petName": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsZoneGeneric": "우리 아이가 구역에 들어가거나 나가면 알려줘",
+  "alertsBattery": "카메라 폰의 배터리가 부족해지면 알려줘",
+  "batteryThreshold": "{level}% 이하가 되면 알려줘",
   "@batteryThreshold": {
     "placeholders": {
       "level": {
@@ -150,7 +158,7 @@
   "setupErrEmpty": "이름을 입력하세요!",
   "setupMonitorTitle": "모니터 설정",
   "setupMonitorDesc": "다른 휴대폰에서 Monitor 앱을 열고 이 QR 코드를 스캔하여 연결하세요!",
-  "settingsShowQrBtn": "QR 코드 보기",
+  "settingsShowQrBtn": "페어링 QR 코드 보기",
   "settingsQrDialogDesc": "이전 휴대폰으로 스캔하세요:",
   "settingsQrDialogDone": "완료",
   "settingsResetApp": "앱 초기화 및 설정 다시 시작",
@@ -158,8 +166,8 @@
   "settingsResetConfirmDesc": "저장된 모든 데이터가 삭제되고 설정 마법사가 다시 시작됩니다.",
   "serverUnreachableTitle": "서버에 연결할 수 없음",
   "serverUnreachableDesc": "PetTrack 서버에 연결할 수 없습니다.\n네트워크나 서버 실행 여부를 확인하세요.",
-  "profileAndSystem": "프로필 및 시스템",
-  "monitorAndConnection": "모니터 및 연결",
+  "profileAndSystem": "우리 아이",
+  "monitorAndConnection": "서버 및 페어링",
   "offlineStatus": "오프라인!",
   "liveStatus": "실시간",
   "searchingStatus": "검색 중...",
@@ -400,7 +408,7 @@
   "tooltipShare": "공유",
   "shareLink": "링크 공유",
   "quietHoursTitle": "무음 시간",
-  "quietHoursSubtitle": "이 시간에는 구역·배터리 알림을 보내지 않습니다",
+  "quietHoursSubtitle": "이 시간에는 알림을 보내지 않아요 — 카메라는 계속 지켜봐요",
   "quietHoursFrom": "시작",
   "quietHoursTo": "종료",
   "snoozeTitle": "알림 음소거",
@@ -484,7 +492,7 @@
   "tooltipNightMode": "야간 모드",
   "nightModeOn": "야간 모드를 켰습니다",
   "nightModeOff": "야간 모드를 껐습니다",
-  "alertsSound": "소리 알림(짖음 / 야옹)",
+  "alertsSound": "짖는 소리나 야옹 소리가 들리면 알려줘",
   "soundDetectedTitle": "소리 감지됨",
   "soundDetectedBody": "카메라 근처에서 큰 소리가 났습니다.",
   "@timelapseError": {
@@ -507,6 +515,9 @@
   "medicalCachedNotice": "서버에 연결할 수 없음 — 저장된 사본 표시 중",
   "tooltipPlayPause": "재생 / 일시정지",
   "settingsSaveError": "변경 사항을 저장할 수 없습니다",
+  "settingsAdvanced": "고급",
+  "settingsAdvancedDesc": "서버 주소, 페어링, 계정 — 앱 뒤의 배선입니다. 거의 필요하지 않아요.",
+  "settingsAccount": "계정",
   "shareFailed": "공유할 수 없습니다",
   "evidenceNoClip": "그 순간 근처에 녹화된 클립이 없습니다",
   "feedSearchHint": "이벤트 검색",

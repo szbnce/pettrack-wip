@@ -18,19 +18,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get uploadProfilePicture => '上传头像';
 
   @override
-  String get serverIp => '服务器 IP';
+  String get serverIp => '服务器地址';
 
   @override
   String get serverIpHint => '例如 192.168.1.100';
 
   @override
-  String get secretToken => '密钥令牌';
+  String get secretToken => '配对密钥';
 
   @override
-  String get petName => '宠物名字';
+  String get petName => '宠物的名字';
 
   @override
-  String get petNameHint => '请输入名字';
+  String get petNameHint => '例如：Berci';
 
   @override
   String get save => '保存';
@@ -126,7 +126,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '这里一切都好。|好像在睡觉。|精力充沛！|正在观察周围。|在等晚饭。|在闻什么东西。|在安静休息。|在最喜欢的地方。|想玩耍。|一切安静。';
 
   @override
-  String get petTypeTitle => '宠物类型';
+  String get petTypeTitle => '是什么宠物？';
 
   @override
   String get petTypeDog => '狗';
@@ -150,14 +150,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get alertsTitle => '通知';
 
   @override
-  String get alertsZone => '区域提醒（进入/离开）';
+  String alertsZone(String petName) {
+    return '$petName进出区域时告诉我';
+  }
 
   @override
-  String get alertsBattery => '低电量提醒';
+  String get alertsZoneGeneric => '我的宠物进出区域时告诉我';
+
+  @override
+  String get alertsBattery => '摄像头手机电量低时提醒我';
 
   @override
   String batteryThreshold(int level) {
-    return '电量阈值：$level%';
+    return '电量低于或等于 $level% 时提醒我';
   }
 
   @override
@@ -276,7 +281,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get setupMonitorDesc => '在另一部手机上打开 Monitor 应用，扫描此二维码进行连接！';
 
   @override
-  String get settingsShowQrBtn => '显示二维码';
+  String get settingsShowQrBtn => '显示配对二维码';
 
   @override
   String get settingsQrDialogDesc => '用旧手机扫描：';
@@ -300,10 +305,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get serverUnreachableDesc => '无法连接到 PetTrack 服务器。\n请检查网络或服务器是否在运行。';
 
   @override
-  String get profileAndSystem => '资料与系统';
+  String get profileAndSystem => '我的宠物';
 
   @override
-  String get monitorAndConnection => '监视器与连接';
+  String get monitorAndConnection => '服务器与配对';
 
   @override
   String get offlineStatus => '离线！';
@@ -856,7 +861,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get quietHoursTitle => '免打扰时段';
 
   @override
-  String get quietHoursSubtitle => '此时段不发送区域或电量提醒';
+  String get quietHoursSubtitle => '这段时间不提醒 — 摄像头继续守着';
 
   @override
   String get quietHoursFrom => '从';
@@ -1047,7 +1052,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nightModeOff => '夜间模式已关闭';
 
   @override
-  String get alertsSound => '声音提醒（吠叫 / 猫叫）';
+  String get alertsSound => '听到叫声时告诉我';
 
   @override
   String get soundDetectedTitle => '检测到声音';
@@ -1093,6 +1098,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsSaveError => '无法保存更改';
+
+  @override
+  String get settingsAdvanced => '高级';
+
+  @override
+  String get settingsAdvancedDesc => '服务器地址、配对与账户 — 应用背后的接线。你几乎用不到。';
+
+  @override
+  String get settingsAccount => '账户';
 
   @override
   String get shareFailed => '无法分享';

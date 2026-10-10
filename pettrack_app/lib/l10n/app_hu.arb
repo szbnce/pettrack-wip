@@ -2,11 +2,11 @@
   "appName": "PetTrack",
   "settingsTitle": "Beállítások",
   "uploadProfilePicture": "Profilkép feltöltése",
-  "serverIp": "Szerver IP",
+  "serverIp": "Szervercím",
   "serverIpHint": "pl. 192.168.1.100",
-  "secretToken": "Titkos Token",
-  "petName": "Kedvenc neve",
-  "petNameHint": "Írd be a nevét",
+  "secretToken": "Párosítási titok",
+  "petName": "Kedvenced neve",
+  "petNameHint": "pl. Berci",
   "save": "Mentés",
   "navDashboard": "Kezdőlap",
   "navZones": "Zónák",
@@ -33,7 +33,7 @@
   "leftTheZone": "Elhagyta a zónát.",
   "greetingsList": "Szia Gazda!|Üdv újra!|Szép napot!|Hali!|Hogy s mint?|Helló!|Mizu?|Jó újra látni!|Készen állsz?|Nézzük, mit csinál!",
   "subGreetingsList": "Itt minden rendben.|Úgy tűnik, alszik.|Tele van energiával!|Figyeli a terepet.|Várja a vacsorát.|Szimatol valamit.|Békésen pihen.|A kedvenc helyén van.|Játszani szeretne.|Minden csendes.",
-  "petTypeTitle": "Állat fajtája",
+  "petTypeTitle": "Milyen állat?",
   "petTypeDog": "Kutya",
   "petTypeCat": "Macska",
   "petTypeRabbit": "Nyúl",
@@ -41,9 +41,24 @@
   "petTypeBird": "Madár",
   "petTypeOther": "Egyéb",
   "alertsTitle": "Értesítések",
-  "alertsZone": "Zóna riasztások (Ki/Be lépés)",
-  "alertsBattery": "Alacsony akkumlátor riasztás",
-  "batteryThreshold": "Akkumlátor határ: {level}%",
+  "alertsZone": "Szólj, ha {petName} zónába lép vagy elhagyja",
+  "@alertsZone": {
+    "placeholders": {
+      "petName": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsZoneGeneric": "Szólj, ha a kisállatom zónába lép vagy elhagyja",
+  "alertsBattery": "Szólj, ha a kamera telefon lemerülőben van",
+  "batteryThreshold": "Szólj {level}%-nál vagy alatta",
+  "@batteryThreshold": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
   "testNotification": "Értesítés tesztelése",
   "testNotifTitle": "Teszt értesítés",
   "testNotifBody": "Sikeresen beállítottad az értesítéseket!",
@@ -80,7 +95,7 @@
   "setupErrEmpty": "Adj meg egy nevet!",
   "setupMonitorTitle": "Kamera beállítása",
   "setupMonitorDesc": "Nyisd meg a Monitor appot a régi telefonodon, és olvasd be ezt a QR kódot a csatlakozáshoz!",
-  "settingsShowQrBtn": "QR kód megjelenítése",
+  "settingsShowQrBtn": "Párosító QR-kód mutatása",
   "settingsQrDialogDesc": "Olvasd be a régi telefonnal:",
   "settingsQrDialogDone": "Kész",
   "settingsResetApp": "App alaphelyzetbe állítása",
@@ -88,8 +103,8 @@
   "settingsResetConfirmDesc": "Ez minden adatot töröl és újraindítja a beállítási varázslót.",
   "serverUnreachableTitle": "Szerver nem elérhető",
   "serverUnreachableDesc": "Nem sikerült csatlakozni a PetTrack szerverhez.\nKérlek ellenőrizd a hálózatot, hogy fut-e a szerver.",
-  "profileAndSystem": "Profil & Rendszer",
-  "monitorAndConnection": "Monitor & Kapcsolat",
+  "profileAndSystem": "Kisállatom",
+  "monitorAndConnection": "Szerver és párosítás",
   "offlineStatus": "OFFLINE!",
   "liveStatus": "Élő",
   "searchingStatus": "Keresés...",
@@ -300,7 +315,7 @@
   "tooltipShare": "Megosztás",
   "shareLink": "Link megosztása",
   "quietHoursTitle": "Csendes órák",
-  "quietHoursSubtitle": "Ebben az időben nincs zóna- vagy akkumulátor-riasztás",
+  "quietHoursSubtitle": "Ebben az időben nincs riasztás — a kamera tovább néz",
   "quietHoursFrom": "Ettől",
   "quietHoursTo": "Eddig",
   "snoozeTitle": "Riasztások némítása",
@@ -384,7 +399,7 @@
   "tooltipNightMode": "Éjszakai mód",
   "nightModeOn": "Éjszakai mód bekapcsolva",
   "nightModeOff": "Éjszakai mód kikapcsolva",
-  "alertsSound": "Hangjelzések (ugatás / nyávogás)",
+  "alertsSound": "Szólj, ha ugatást vagy nyávogást hallok",
   "soundDetectedTitle": "Hang észlelve",
   "soundDetectedBody": "Hangos zaj a kamera közelében.",
   "@timelapseError": {
@@ -407,6 +422,9 @@
   "medicalCachedNotice": "A szerver nem elérhető — a mentett másolat látható",
   "tooltipPlayPause": "Lejátszás / szünet",
   "settingsSaveError": "A módosítás mentése nem sikerült",
+  "settingsAdvanced": "Speciális",
+  "settingsAdvancedDesc": "Szervercím, párosítás és fiók — az app mögötti vezetékek. Ritkán van rá szükség.",
+  "settingsAccount": "Fiók",
   "shareFailed": "A megosztás nem sikerült",
   "evidenceNoClip": "Nincs felvétel ehhez a pillanathoz",
   "feedSearchHint": "Események keresése",

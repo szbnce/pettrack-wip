@@ -2,11 +2,11 @@
   "appName": "PetTrack",
   "settingsTitle": "設定",
   "uploadProfilePicture": "プロフィール画像をアップロード",
-  "serverIp": "サーバーIP",
+  "serverIp": "サーバーアドレス",
   "serverIpHint": "例: 192.168.1.100",
-  "secretToken": "シークレットトークン",
-  "petName": "ペットの名前",
-  "petNameHint": "名前を入力",
+  "secretToken": "ペアリングシークレット",
+  "petName": "うちの子の名前",
+  "petNameHint": "例：Berci",
   "save": "保存",
   "navDashboard": "ダッシュボード",
   "navZones": "ゾーン",
@@ -75,7 +75,7 @@
   "leftTheZone": "ゾーンを出ました。",
   "greetingsList": "やあ、ボス！|おかえり！|いい一日を！|やあ！|元気？|こんにちは！|調子はどう？|また会えて嬉しいよ！|準備はいい？|何をしているか見てみよう！",
   "subGreetingsList": "ここは順調です。|眠っているようです。|元気いっぱい！|あたりを見張っています。|夕食を待っています。|何かを嗅いでいます。|落ち着いて休んでいます。|お気に入りの場所です。|遊びたがっています。|静かです。",
-  "petTypeTitle": "ペットの種類",
+  "petTypeTitle": "どんな子？",
   "petTypeDog": "犬",
   "petTypeCat": "猫",
   "petTypeRabbit": "うさぎ",
@@ -83,9 +83,17 @@
   "petTypeBird": "鳥",
   "petTypeOther": "その他",
   "alertsTitle": "通知",
-  "alertsZone": "ゾーン通知（入退場）",
-  "alertsBattery": "バッテリー低下アラート",
-  "batteryThreshold": "バッテリーしきい値: {level}%",
+  "alertsZone": "{petName}がゾーンに入ったり出たりしたら知らせて",
+  "@alertsZone": {
+    "placeholders": {
+      "petName": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsZoneGeneric": "うちの子がゾーンに入ったり出たりしたら知らせて",
+  "alertsBattery": "カメラのスマホのバッテリーが少なくなりたら知らせて",
+  "batteryThreshold": "{level}%以下になったら知らせて",
   "@batteryThreshold": {
     "placeholders": {
       "level": {
@@ -150,7 +158,7 @@
   "setupErrEmpty": "名前を入力してください！",
   "setupMonitorTitle": "モニター設定",
   "setupMonitorDesc": "もう一方のスマホでMonitorアプリを開き、このQRコードをスキャンして接続してください！",
-  "settingsShowQrBtn": "QRコードを表示",
+  "settingsShowQrBtn": "ペアリング用QRコードを表示",
   "settingsQrDialogDesc": "古いスマホでスキャンしてください：",
   "settingsQrDialogDone": "完了",
   "settingsResetApp": "アプリをリセットして設定をやり直す",
@@ -158,8 +166,8 @@
   "settingsResetConfirmDesc": "保存されたすべてのデータが削除され、セットアップウィザードが再起動します。",
   "serverUnreachableTitle": "サーバーに接続できません",
   "serverUnreachableDesc": "PetTrackサーバーに接続できません。\nネットワークやサーバーの起動状態を確認してください。",
-  "profileAndSystem": "プロフィールとシステム",
-  "monitorAndConnection": "モニターと接続",
+  "profileAndSystem": "うちの子",
+  "monitorAndConnection": "サーバーとペアリング",
   "offlineStatus": "オフライン！",
   "liveStatus": "ライブ",
   "searchingStatus": "検索中...",
@@ -400,7 +408,7 @@
   "tooltipShare": "共有",
   "shareLink": "リンクを共有",
   "quietHoursTitle": "消音時間",
-  "quietHoursSubtitle": "この時間帯はゾーン・バッテリー通知を送りません",
+  "quietHoursSubtitle": "この時間は通知を止めます — カメラは見続けています",
   "quietHoursFrom": "開始",
   "quietHoursTo": "終了",
   "snoozeTitle": "アラートを消音",
@@ -484,7 +492,7 @@
   "tooltipNightMode": "ナイトモード",
   "nightModeOn": "ナイトモードをオンにしました",
   "nightModeOff": "ナイトモードをオフにしました",
-  "alertsSound": "音の通知（鳴き声）",
+  "alertsSound": "吠え声や鳴き声が聞こえたら知らせて",
   "soundDetectedTitle": "音を検出しました",
   "soundDetectedBody": "カメラの近くで大きな音がしました。",
   "@timelapseError": {
@@ -507,6 +515,9 @@
   "medicalCachedNotice": "サーバーに接続できません — 保存されたコピーを表示中",
   "tooltipPlayPause": "再生 / 一時停止",
   "settingsSaveError": "変更を保存できませんでした",
+  "settingsAdvanced": "詳細設定",
+  "settingsAdvancedDesc": "サーバーアドレス、ペアリング、アカウント — アプリを支える配線です。めったに使いません。",
+  "settingsAccount": "アカウント",
   "shareFailed": "共有できませんでした",
   "evidenceNoClip": "その時刻の近くに録画クリップがありません",
   "feedSearchHint": "イベントを検索",

@@ -18,19 +18,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get uploadProfilePicture => '프로필 사진 업로드';
 
   @override
-  String get serverIp => '서버 IP';
+  String get serverIp => '서버 주소';
 
   @override
   String get serverIpHint => '예: 192.168.1.100';
 
   @override
-  String get secretToken => '비밀 토큰';
+  String get secretToken => '페어링 비밀값';
 
   @override
-  String get petName => '반려동물 이름';
+  String get petName => '우리 아이 이름';
 
   @override
-  String get petNameHint => '이름을 입력하세요';
+  String get petNameHint => '예: Berci';
 
   @override
   String get save => '저장';
@@ -126,7 +126,7 @@ class AppLocalizationsKo extends AppLocalizations {
       '여기는 잘 지냅니다.|자는 것 같아요.|에너지가 넘쳐요!|주변을 살피고 있어요.|저녁을 기다리는 중이에요.|무엇인가를 냄새 맡고 있어요.|편안하게 쉬고 있어요.|좋아하는 자리에 있어요.|놀고 싶어 해요.|조용합니다.';
 
   @override
-  String get petTypeTitle => '반려동물 종류';
+  String get petTypeTitle => '어떤 동물인가요?';
 
   @override
   String get petTypeDog => '강아지';
@@ -150,14 +150,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get alertsTitle => '알림';
 
   @override
-  String get alertsZone => '구역 알림(입장/퇴장)';
+  String alertsZone(String petName) {
+    return '$petName가 구역에 들어가거나 나가면 알려줘';
+  }
 
   @override
-  String get alertsBattery => '배터리 부족 알림';
+  String get alertsZoneGeneric => '우리 아이가 구역에 들어가거나 나가면 알려줘';
+
+  @override
+  String get alertsBattery => '카메라 폰의 배터리가 부족해지면 알려줘';
 
   @override
   String batteryThreshold(int level) {
-    return '배터리 임계값: $level%';
+    return '$level% 이하가 되면 알려줘';
   }
 
   @override
@@ -276,7 +281,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get setupMonitorDesc => '다른 휴대폰에서 Monitor 앱을 열고 이 QR 코드를 스캔하여 연결하세요!';
 
   @override
-  String get settingsShowQrBtn => 'QR 코드 보기';
+  String get settingsShowQrBtn => '페어링 QR 코드 보기';
 
   @override
   String get settingsQrDialogDesc => '이전 휴대폰으로 스캔하세요:';
@@ -301,10 +306,10 @@ class AppLocalizationsKo extends AppLocalizations {
       'PetTrack 서버에 연결할 수 없습니다.\n네트워크나 서버 실행 여부를 확인하세요.';
 
   @override
-  String get profileAndSystem => '프로필 및 시스템';
+  String get profileAndSystem => '우리 아이';
 
   @override
-  String get monitorAndConnection => '모니터 및 연결';
+  String get monitorAndConnection => '서버 및 페어링';
 
   @override
   String get offlineStatus => '오프라인!';
@@ -859,7 +864,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get quietHoursTitle => '무음 시간';
 
   @override
-  String get quietHoursSubtitle => '이 시간에는 구역·배터리 알림을 보내지 않습니다';
+  String get quietHoursSubtitle => '이 시간에는 알림을 보내지 않아요 — 카메라는 계속 지켜봐요';
 
   @override
   String get quietHoursFrom => '시작';
@@ -1050,7 +1055,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nightModeOff => '야간 모드를 껐습니다';
 
   @override
-  String get alertsSound => '소리 알림(짖음 / 야옹)';
+  String get alertsSound => '짖는 소리나 야옹 소리가 들리면 알려줘';
 
   @override
   String get soundDetectedTitle => '소리 감지됨';
@@ -1096,6 +1101,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsSaveError => '변경 사항을 저장할 수 없습니다';
+
+  @override
+  String get settingsAdvanced => '고급';
+
+  @override
+  String get settingsAdvancedDesc =>
+      '서버 주소, 페어링, 계정 — 앱 뒤의 배선입니다. 거의 필요하지 않아요.';
+
+  @override
+  String get settingsAccount => '계정';
 
   @override
   String get shareFailed => '공유할 수 없습니다';

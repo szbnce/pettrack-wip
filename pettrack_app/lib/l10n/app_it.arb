@@ -2,11 +2,11 @@
   "appName": "PetTrack",
   "settingsTitle": "Impostazioni",
   "uploadProfilePicture": "Carica immagine del profilo",
-  "serverIp": "IP del server",
+  "serverIp": "Indirizzo del server",
   "serverIpHint": "es. 192.168.1.100",
-  "secretToken": "Token segreto",
-  "petName": "Nome dell'animale",
-  "petNameHint": "Inserisci il nome",
+  "secretToken": "Segreto di associazione",
+  "petName": "Il nome del tuo animale",
+  "petNameHint": "es. Berci",
   "save": "Salva",
   "navDashboard": "Dashboard",
   "navZones": "Zone",
@@ -75,7 +75,7 @@
   "leftTheZone": "Ha lasciato la zona.",
   "greetingsList": "Ciao capo!|Bentornato!|Buona giornata!|Ehi!|Come stai?|Ciao!|Che succede?|Felice di rivederti!|Pronti?|Vediamo cosa sta facendo!",
   "subGreetingsList": "Qui va tutto bene.|Sembra che stia dormendo.|Pieno di energia!|Sta sorvegliando la zona.|Aspetta la cena.|Sta annusando qualcosa.|Sta riposando tranquillo.|Nel posto preferito.|Vuole giocare.|Tutto tranquillo.",
-  "petTypeTitle": "Tipo di animale",
+  "petTypeTitle": "Che tipo di animale?",
   "petTypeDog": "Cane",
   "petTypeCat": "Gatto",
   "petTypeRabbit": "Coniglio",
@@ -83,9 +83,17 @@
   "petTypeBird": "Uccello",
   "petTypeOther": "Altro",
   "alertsTitle": "Notifiche",
-  "alertsZone": "Avvisi di zona (Ingresso/Uscita)",
-  "alertsBattery": "Avviso batteria scarica",
-  "batteryThreshold": "Soglia batteria: {level}%",
+  "alertsZone": "Avvisami quando {petName} entra o esce da una zona",
+  "@alertsZone": {
+    "placeholders": {
+      "petName": {
+        "type": "String"
+      }
+    }
+  },
+  "alertsZoneGeneric": "Avvisami quando il mio animale entra o esce da una zona",
+  "alertsBattery": "Avvisami quando la batteria del telefono che fa da camera sta per esaurirsi",
+  "batteryThreshold": "Avvisami al {level}% o meno",
   "@batteryThreshold": {
     "placeholders": {
       "level": {
@@ -150,7 +158,7 @@
   "setupErrEmpty": "Inserisci un nome!",
   "setupMonitorTitle": "Configurazione monitor",
   "setupMonitorDesc": "Apri l'app Monitor sull'altro telefono e scansiona questo codice QR per connetterti!",
-  "settingsShowQrBtn": "Mostra codice QR",
+  "settingsShowQrBtn": "Mostra codice QR di associazione",
   "settingsQrDialogDesc": "Scansiona con il vecchio telefono:",
   "settingsQrDialogDone": "Fatto",
   "settingsResetApp": "Reimposta app e riavvia configurazione",
@@ -158,8 +166,8 @@
   "settingsResetConfirmDesc": "Questo eliminerà tutti i dati salvati e riavvierà la procedura di configurazione.",
   "serverUnreachableTitle": "Server non raggiungibile",
   "serverUnreachableDesc": "Impossibile connettersi al server PetTrack.\nControlla la rete o se il server è in esecuzione.",
-  "profileAndSystem": "Profilo e sistema",
-  "monitorAndConnection": "Monitor e connessione",
+  "profileAndSystem": "Il mio animale",
+  "monitorAndConnection": "Server e associazione",
   "offlineStatus": "OFFLINE!",
   "liveStatus": "Dal vivo",
   "searchingStatus": "Ricerca...",
@@ -400,7 +408,7 @@
   "tooltipShare": "Condividi",
   "shareLink": "Condividi link",
   "quietHoursTitle": "Ore di quiete",
-  "quietHoursSubtitle": "Nessun avviso di zona o batteria in questo intervallo",
+  "quietHoursSubtitle": "Niente avvisi in questo periodo — la telecamera continua a guardare",
   "quietHoursFrom": "Dalle",
   "quietHoursTo": "Fino alle",
   "snoozeTitle": "Silenzia gli avvisi",
@@ -484,7 +492,7 @@
   "tooltipNightMode": "Modalità notte",
   "nightModeOn": "Modalità notte attivata",
   "nightModeOff": "Modalità notte disattivata",
-  "alertsSound": "Avvisi sonori (abbaiare / miagolare)",
+  "alertsSound": "Avvisami quando sento abbaiare o miagolare",
   "soundDetectedTitle": "Suono rilevato",
   "soundDetectedBody": "Rumore forte vicino alla telecamera.",
   "@timelapseError": {
@@ -507,6 +515,9 @@
   "medicalCachedNotice": "Server non raggiungibile — mostra la copia salvata",
   "tooltipPlayPause": "Riproduci / pausa",
   "settingsSaveError": "Impossibile salvare la modifica",
+  "settingsAdvanced": "Avanzate",
+  "settingsAdvancedDesc": "Indirizzo del server, associazione e account — il cablaggio dietro l'app. Ti serve raramente.",
+  "settingsAccount": "Account",
   "shareFailed": "Impossibile condividere",
   "evidenceNoClip": "Nessun clip registrato vicino a quel momento",
   "feedSearchHint": "Cerca eventi",

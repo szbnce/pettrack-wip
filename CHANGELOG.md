@@ -10,6 +10,10 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- Plain-language settings: the notification toggles speak the way a pet
+  owner would say them ("Tell me when Berci enters or leaves a zone") and
+  the wiring — server address, pairing secret, account — sits in a
+  collapsed "Advanced" drawer, so everyday settings stay the whole story
 - "I'm home" alert snooze: one tap on the feed's Snooze chip silences this
   phone's alerts for 30 minutes, an hour or until 23:00 — recording keeps
   running, arming still decides what gets watched

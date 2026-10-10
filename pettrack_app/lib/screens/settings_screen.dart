@@ -13,6 +13,7 @@ import '../theme/colors.dart';
 import '../widgets/skeleton_box.dart';
 import '../utils/arming.dart';
 import '../utils/format_helpers.dart';
+import '../utils/pet_labels.dart';
 import '../utils/server_url.dart';
 import '../main.dart';
 import 'main_navigation.dart';
@@ -74,6 +75,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // "Free up space now": the server-side retention sweep, on demand.
   bool _workingCleanup = false;
 
+  // The Advanced drawer holds the wiring — server address, pairing secret,
+  // account actions. Collapsed by default so everyday settings stay the
+  // whole story for someone who just wants to watch their pet.
+  bool _advancedExpanded = false;
+
   String _getLocalizedPetType(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
     switch (type) {
@@ -95,6 +101,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
+    // The notification labels name the pet ("Tell me when Berci…"), so the
+    // copy follows the name as it is typed instead of waiting for a save.
+    _petNameController.addListener(() => setState(() {}));
     _loadSettings();
   }
 
@@ -385,7 +394,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Widget _buildCard(String title, List<Widget> children) {
+  Widget _buildCard(
+    String title,
+    List<Widget> children, {
+    String? subtitle,
+    VoidCallback? onHeaderTap,
+    bool expanded = true,
+  }) {
+    final titleStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
+      fontWeight: FontWeight.bold,
+      color: AppColors.primary,
+    );
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 24),
@@ -404,15 +423,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
+          if (onHeaderTap == null)
+            Text(title, style: titleStyle)
+          else
+            InkWell(
+              onTap: onHeaderTap,
+              borderRadius: BorderRadius.circular(8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(title, style: titleStyle),
+                        if (subtitle != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            subtitle,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    expanded ? Icons.expand_less : Icons.expand_more,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          ...children,
+          if (expanded) ...[const SizedBox(height: 20), ...children],
         ],
       ),
     );
@@ -672,9 +714,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   };
 
   Widget _buildAlertsCard(AppLocalizations l10n) {
+    // Notification copy names the pet ("Tell me when Berci…"); fall back to
+    // the generic line before a name has been typed.
     return _buildCard(l10n.alertsTitle, [
       SwitchListTile(
-        title: Text(l10n.alertsZone),
+        title: Text(zoneAlertLabel(l10n, _petNameController.text)),
         value: _alertsZoneEnabled,
         onChanged: (val) => setState(() => _alertsZoneEnabled = val),
         contentPadding: EdgeInsets.zero,
@@ -1708,155 +1752,171 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildMonitorCard(AppLocalizations l10n) {
-    return _buildCard(l10n.monitorAndConnection, [
-      Text(l10n.serverIp, style: Theme.of(context).textTheme.labelLarge),
-      const SizedBox(height: 8),
-      TextField(
-        controller: _ipController,
-        decoration: InputDecoration(hintText: l10n.serverIpHint),
-      ),
-      const SizedBox(height: 20),
-      Text(l10n.secretToken, style: Theme.of(context).textTheme.labelLarge),
-      const SizedBox(height: 8),
-      TextField(controller: _tokenController, obscureText: true),
-      const SizedBox(height: 24),
-      SizedBox(
-        width: double.infinity,
-        child: ElevatedButton.icon(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text(l10n.setupMonitorTitle),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(l10n.settingsQrDialogDesc),
-                    const SizedBox(height: 20),
-                    Container(
-                      width: 216,
-                      height: 216,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
+  /// The Advanced drawer: server address, pairing secret and account actions.
+  /// Collapsed by default — everyday settings should be the whole story for
+  /// someone who just wants to watch their pet.
+  Widget _buildAdvancedCard(AppLocalizations l10n) {
+    return _buildCard(
+      l10n.settingsAdvanced,
+      [
+        Text(
+          l10n.monitorAndConnection,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        const SizedBox(height: 8),
+        Text(l10n.serverIp, style: Theme.of(context).textTheme.labelLarge),
+        const SizedBox(height: 8),
+        TextField(
+          controller: _ipController,
+          decoration: InputDecoration(hintText: l10n.serverIpHint),
+        ),
+        const SizedBox(height: 20),
+        Text(l10n.secretToken, style: Theme.of(context).textTheme.labelLarge),
+        const SizedBox(height: 8),
+        TextField(controller: _tokenController, obscureText: true),
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(l10n.setupMonitorTitle),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(l10n.settingsQrDialogDesc),
+                      const SizedBox(height: 20),
+                      Container(
+                        width: 216,
+                        height: 216,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: QrImageView(
+                          data: jsonEncode({
+                            "ip": _normalizeHost(_ipController.text),
+                            "secret": _tokenController.text,
+                          }),
+                          version: QrVersions.auto,
+                          size: 200.0,
+                        ),
                       ),
-                      child: QrImageView(
-                        data: jsonEncode({
-                          "ip": _normalizeHost(_ipController.text),
-                          "secret": _tokenController.text,
-                        }),
-                        version: QrVersions.auto,
-                        size: 200.0,
-                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(l10n.settingsQrDialogDone),
                     ),
                   ],
                 ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(l10n.settingsQrDialogDone),
-                  ),
-                ],
-              ),
-            );
-          },
-          icon: const Icon(Icons.qr_code),
-          label: Text(l10n.settingsShowQrBtn),
+              );
+            },
+            icon: const Icon(Icons.qr_code),
+            label: Text(l10n.settingsShowQrBtn),
+          ),
         ),
-      ),
-      const SizedBox(height: 16),
-      SizedBox(
-        width: double.infinity,
-        child: OutlinedButton.icon(
-          onPressed: () async {
-            final confirm = await showDialog<bool>(
-              context: context,
-              builder: (BuildContext ctx) {
-                return AlertDialog(
-                  title: Text(l10n.settingsSignOutTitle),
-                  content: Text(l10n.settingsSignOutMessage),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(false),
-                      child: Text(l10n.cancel),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(true),
-                      child: Text(l10n.settingsSignOut),
-                    ),
-                  ],
-                );
-              },
-            );
-
-            if (confirm == true) {
-              // Revoke the session on the server, forget it on this device.
-              await AuthService.logout();
-              if (mounted) {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => const BootScreen()),
-                  (route) => false,
-                );
-              }
-            }
-          },
-          icon: const Icon(Icons.logout),
-          label: Text(l10n.settingsSignOut),
-        ),
-      ),
-      const SizedBox(height: 16),
-      SizedBox(
-        width: double.infinity,
-        child: OutlinedButton.icon(
-          onPressed: () async {
-            final confirm = await showDialog<bool>(
-              context: context,
-              builder: (BuildContext ctx) {
-                return AlertDialog(
-                  title: Text(l10n.settingsResetConfirmTitle),
-                  content: Text(l10n.settingsResetConfirmDesc),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(false),
-                      child: Text(l10n.cancel),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(true),
-                      child: Text(
-                        l10n.settingsResetApp,
-                        style: const TextStyle(color: Colors.redAccent),
+        const Divider(height: 32),
+        Text(l10n.settingsAccount, style: Theme.of(context).textTheme.labelLarge),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext ctx) {
+                  return AlertDialog(
+                    title: Text(l10n.settingsSignOutTitle),
+                    content: Text(l10n.settingsSignOutMessage),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(false),
+                        child: Text(l10n.cancel),
                       ),
-                    ),
-                  ],
-                );
-              },
-            );
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(true),
+                        child: Text(l10n.settingsSignOut),
+                      ),
+                    ],
+                  );
+                },
+              );
 
-            if (confirm == true) {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.clear();
-              if (mounted) {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => const BootScreen()),
-                  (route) => false,
-                );
+              if (confirm == true) {
+                // Revoke the session on the server, forget it on this device.
+                await AuthService.logout();
+                if (mounted) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const BootScreen()),
+                    (route) => false,
+                  );
+                }
               }
-            }
-          },
-          icon: const Icon(Icons.restore, color: Colors.redAccent),
-          label: Text(
-            l10n.settingsResetApp,
-            style: const TextStyle(color: Colors.redAccent),
-          ),
-          style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            side: const BorderSide(color: Colors.redAccent),
+            },
+            icon: const Icon(Icons.logout),
+            label: Text(l10n.settingsSignOut),
           ),
         ),
-      ),
-    ]);
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext ctx) {
+                  return AlertDialog(
+                    title: Text(l10n.settingsResetConfirmTitle),
+                    content: Text(l10n.settingsResetConfirmDesc),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(false),
+                        child: Text(l10n.cancel),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(true),
+                        child: Text(
+                          l10n.settingsResetApp,
+                          style: const TextStyle(color: Colors.redAccent),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              if (confirm == true) {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                if (mounted) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const BootScreen()),
+                    (route) => false,
+                  );
+                }
+              }
+            },
+            icon: const Icon(Icons.restore, color: Colors.redAccent),
+            label: Text(
+              l10n.settingsResetApp,
+              style: const TextStyle(color: Colors.redAccent),
+            ),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              side: const BorderSide(color: Colors.redAccent),
+            ),
+          ),
+        ),
+      ],
+      subtitle: l10n.settingsAdvancedDesc,
+      onHeaderTap: () => setState(() => _advancedExpanded = !_advancedExpanded),
+      expanded: _advancedExpanded,
+    );
   }
 
   Widget _buildSaveButton(AppLocalizations l10n) {
@@ -1978,11 +2038,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildMonitorCard(l10n),
+                              // Everyday settings first; the wiring lives in
+                              // the Advanced drawer at the bottom.
                               _buildArmingCard(l10n),
                               _buildBackupCard(l10n),
                               _buildHealthCard(l10n),
                               _buildAboutCard(l10n),
+                              _buildAdvancedCard(l10n),
                               _buildSaveButton(l10n),
                               _buildSyncToWatchButton(context),
                             ],
@@ -2012,11 +2074,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const SizedBox(height: 40),
                     _buildProfileCard(l10n),
                     _buildAlertsCard(l10n),
-                    _buildMonitorCard(l10n),
+                    // Everyday settings first; the wiring lives in the
+                    // Advanced drawer at the bottom.
                     _buildArmingCard(l10n),
                     _buildBackupCard(l10n),
                     _buildHealthCard(l10n),
                     _buildAboutCard(l10n),
+                    _buildAdvancedCard(l10n),
                     const SizedBox(height: 16),
                     _buildSaveButton(l10n),
                     _buildSyncToWatchButton(context),
