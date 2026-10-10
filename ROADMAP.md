@@ -30,7 +30,9 @@ when every one is green, the product side is done.
    card renders as a shareable image as well as text)*
 4. **Daily-use depth.** Event → evidence tap-through (snapshot + jump to the
    replay moment), feed search/filter, arming schedule ("only watch when
-   I'm away").
+   I'm away"). *(done — a tap lands on the second inside the clip with the
+   still frame beside it, the feed pages past 50 events, and the desktop
+   card shows every match when you search)*
 5. **Craft.** No broken-looking state anywhere (error + retry, empty states,
    skeletons on every data screen), accessibility AA (semantics, scaling,
    contrast), full 7-locale parity, performance targets (cold start < 2 s,
@@ -43,8 +45,9 @@ when every one is green, the product side is done.
 7. **Distribution ready** *(the user ships, we arm)*. Store-ready assets:
    screenshots, listing copy, signing/release checklist.
 
-Work order: Gate 4 (daily-use depth) next, then 7 (the store assets are
-already drafted). Each item lands green (analyzer + tests + i10n parity).
+Work order: Gate 7 (distribution ready) is the only one left — screenshots
+and the release checklist sign-off. Each item lands green (analyzer +
+tests + i10n parity).
 
 ## Quick wins (hours each, big first-impression impact)
 

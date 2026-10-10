@@ -10,6 +10,9 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- The feed reaches past this morning: 200 events at a time instead of 50,
+  and "Show older events" when there is more — so a search is a search, not
+  a search of the last hour
 - Tapping an event shows the moment, not just the clip. Zone entries save a
   still frame, the feed carries a thumbnail of it, and the server serves it
   by the event's second — so you see what the camera saw before the video
