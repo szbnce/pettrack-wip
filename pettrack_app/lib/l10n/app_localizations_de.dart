@@ -1058,6 +1058,25 @@ class AppLocalizationsDe extends AppLocalizations {
   String get clipPinFailed => 'Anheften hat nicht geklappt.';
 
   @override
+  String get deleteClip => 'Clip löschen';
+
+  @override
+  String get deleteClipTitle => 'Diesen Clip löschen?';
+
+  @override
+  String get deleteClipBody =>
+      'Damit wird die Aufnahme dauerhaft vom Server entfernt — das lässt sich nicht rückgängig machen. Ein angehefteter Clip verliert auch seine Anheftung.';
+
+  @override
+  String get deleteClipConfirm => 'Löschen';
+
+  @override
+  String get clipDeleted => 'Clip gelöscht.';
+
+  @override
+  String get clipDeleteFailed => 'Der Clip konnte nicht gelöscht werden.';
+
+  @override
   String get noReplaysForDay => 'An diesem Tag keine Aufnahmen';
 
   @override

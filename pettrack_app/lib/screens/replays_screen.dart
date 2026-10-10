@@ -398,6 +398,87 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     }
   }
 
+  /// Ask first — this one is irreversible — then delete. True when the clip
+  /// is gone, so the player can close over it.
+  Future<bool> _confirmAndDeleteClip(
+    String filename,
+    AppLocalizations l10n,
+  ) async {
+    final theme = Theme.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteClipTitle),
+        content: Text(l10n.deleteClipBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: theme.colorScheme.error,
+              foregroundColor: theme.colorScheme.onError,
+            ),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.deleteClipConfirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return false;
+    return _deleteClip(filename, l10n);
+  }
+
+  /// Delete a clip now — the false alarm, the knocked-over camera. The pin
+  /// goes with it on the server; here the row leaves the grid and the day
+  /// strip stops counting it. Returns whether the server agreed.
+  Future<bool> _deleteClip(String filename, AppLocalizations l10n) async {
+    final messenger = ScaffoldMessenger.of(context);
+    // Remember the clip's day before it leaves, so the strip can follow.
+    String? dayKey;
+    for (final r in _replays) {
+      if (r is Map && r['filename'] == filename) {
+        final ts = (r['timestamp'] as num?)?.toInt();
+        if (ts != null) {
+          dayKey = _dayKey(DateTime.fromMillisecondsSinceEpoch(ts * 1000));
+        }
+        break;
+      }
+    }
+    try {
+      final response = await http
+          .delete(
+            Uri.parse(
+              '${widget.serverIp}/api/replays/${Uri.encodeComponent(filename)}',
+            ),
+            headers: AuthService.headers,
+          )
+          .timeout(const Duration(seconds: 4));
+      if (!mounted) return false;
+      if (response.statusCode != 200) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+      setState(() {
+        _replays.removeWhere((r) => r is Map && r['filename'] == filename);
+        final bucket = dayKey == null
+            ? null
+            : _timelineByDay[dayKey] as Map<String, dynamic>?;
+        if (bucket != null) {
+          final clips = (bucket['clips'] as num?)?.toInt() ?? 0;
+          if (clips > 0) bucket['clips'] = clips - 1;
+        }
+      });
+      messenger.showSnackBar(SnackBar(content: Text(l10n.clipDeleted)));
+      final selected = _selectedDay;
+      if (selected != null) _fetchDayHours(selected);
+      return true;
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.clipDeleteFailed)));
+      return false;
+    }
+  }
+
   /// Build a day's timelapse on the server (cached there) and play it.
   /// [date] is "YYYY-MM-DD"; null means today.
   Future<void> _openTimelapse({String? date}) async {
@@ -583,7 +664,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                 children: [
                   Flexible(child: player),
                   Container(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHighest,
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -620,6 +703,25 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
                               isPinned
                                   ? Icons.push_pin
                                   : Icons.push_pin_outlined,
+                            ),
+                          ),
+                        if (filename != null)
+                          IconButton(
+                            tooltip: l10n.deleteClip,
+                            onPressed: () async {
+                              final navigator = Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              );
+                              final gone = await _confirmAndDeleteClip(
+                                filename,
+                                l10n,
+                              );
+                              if (gone && mounted) navigator.pop();
+                            },
+                            icon: Icon(
+                              Icons.delete_outline,
+                              color: Theme.of(context).colorScheme.error,
                             ),
                           ),
                         TextButton.icon(

@@ -10,6 +10,10 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- Delete a clip now: the false alarm, the knocked-over camera — one tap in
+  the player, a confirmation, and the recording is gone for good. The pin
+  goes with it, and only a full session can do it (a monitor phone is a
+  camera, not a cleaner)
 - Plain-language settings: the notification toggles speak the way a pet
   owner would say them ("Tell me when Berci enters or leaves a zone") and
   the wiring — server address, pairing secret, account — sits in a

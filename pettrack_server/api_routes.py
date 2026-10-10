@@ -1140,3 +1140,17 @@ async def unpin_replay(filename: str):
     safe_filename = _existing_replay(filename)
     pins.unpin(safe_filename)
     return {"filename": safe_filename, "pinned": False}
+
+
+@router.delete("/api/replays/{filename}")
+async def delete_replay(filename: str, x_api_token: str = Header(None)):
+    """Delete a clip now — the one the pet knocked over, the false alarm.
+
+    Irreversible, so it takes a full session token (a monitor phone is a
+    camera, not a cleaner). The pin goes with the footage: a pin list entry
+    for a file that no longer exists is just noise in the folder."""
+    await require_full_token(x_api_token)
+    safe_filename = _existing_replay(filename)
+    os.remove(os.path.join("replays", safe_filename))
+    pins.unpin(safe_filename)
+    return {"filename": safe_filename, "deleted": True}

@@ -1029,6 +1029,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clipPinFailed => '无法更新固定状态。';
 
   @override
+  String get deleteClip => '删除片段';
+
+  @override
+  String get deleteClipTitle => '删除这个片段？';
+
+  @override
+  String get deleteClipBody => '录像会从服务器上彻底删除 — 无法撤销。已固定的片段也会同时取消固定。';
+
+  @override
+  String get deleteClipConfirm => '删除';
+
+  @override
+  String get clipDeleted => '片段已删除。';
+
+  @override
+  String get clipDeleteFailed => '无法删除片段。';
+
+  @override
   String get noReplaysForDay => '这一天没有录像';
 
   @override

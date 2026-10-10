@@ -1032,6 +1032,25 @@ class AppLocalizationsKo extends AppLocalizations {
   String get clipPinFailed => '고정을 변경하지 못했습니다.';
 
   @override
+  String get deleteClip => '클립 삭제';
+
+  @override
+  String get deleteClipTitle => '이 클립을 삭제할까요?';
+
+  @override
+  String get deleteClipBody =>
+      '녹화가 서버에서 영구히 삭제됩니다 — 되돌릴 수 없습니다. 고정된 클립은 고정도 함께 풀립니다.';
+
+  @override
+  String get deleteClipConfirm => '삭제';
+
+  @override
+  String get clipDeleted => '클립을 삭제했습니다.';
+
+  @override
+  String get clipDeleteFailed => '클립을 삭제하지 못했습니다.';
+
+  @override
   String get noReplaysForDay => '이 날의 녹화가 없습니다';
 
   @override

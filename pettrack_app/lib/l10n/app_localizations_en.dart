@@ -1046,6 +1046,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clipPinFailed => 'Could not update the pin.';
 
   @override
+  String get deleteClip => 'Delete clip';
+
+  @override
+  String get deleteClipTitle => 'Delete this clip?';
+
+  @override
+  String get deleteClipBody =>
+      'This removes the recording from the server for good — it can\'t be undone. A pinned clip loses its pin too.';
+
+  @override
+  String get deleteClipConfirm => 'Delete';
+
+  @override
+  String get clipDeleted => 'Clip deleted.';
+
+  @override
+  String get clipDeleteFailed => 'Could not delete the clip.';
+
+  @override
   String get noReplaysForDay => 'No replays for this day';
 
   @override

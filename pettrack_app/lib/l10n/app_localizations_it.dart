@@ -1058,6 +1058,25 @@ class AppLocalizationsIt extends AppLocalizations {
   String get clipPinFailed => 'Impossibile aggiornare la clip.';
 
   @override
+  String get deleteClip => 'Elimina clip';
+
+  @override
+  String get deleteClipTitle => 'Eliminare questa clip?';
+
+  @override
+  String get deleteClipBody =>
+      'La registrazione viene rimossa dal server per sempre — non si può annullare. Una clip fissata perde anche il suo puntamento.';
+
+  @override
+  String get deleteClipConfirm => 'Elimina';
+
+  @override
+  String get clipDeleted => 'Clip eliminata.';
+
+  @override
+  String get clipDeleteFailed => 'Impossibile eliminare la clip.';
+
+  @override
   String get noReplaysForDay => 'Nessuna ripresa per questo giorno';
 
   @override

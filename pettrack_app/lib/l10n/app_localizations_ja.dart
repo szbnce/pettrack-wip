@@ -1036,6 +1036,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get clipPinFailed => '固定を変更できませんでした。';
 
   @override
+  String get deleteClip => 'クリップを削除';
+
+  @override
+  String get deleteClipTitle => 'このクリップを削除しますか？';
+
+  @override
+  String get deleteClipBody => '録画がサーバーから完全に削除されます — 元に戻せません。固定したクリップは固定も外れます。';
+
+  @override
+  String get deleteClipConfirm => '削除';
+
+  @override
+  String get clipDeleted => 'クリップを削除しました。';
+
+  @override
+  String get clipDeleteFailed => 'クリップを削除できませんでした。';
+
+  @override
   String get noReplaysForDay => 'この日の録画はありません';
 
   @override

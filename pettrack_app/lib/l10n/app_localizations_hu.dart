@@ -1050,6 +1050,25 @@ class AppLocalizationsHu extends AppLocalizations {
   String get clipPinFailed => 'Nem sikerült módosítani a rögzítést.';
 
   @override
+  String get deleteClip => 'Klip törlése';
+
+  @override
+  String get deleteClipTitle => 'Törlöd ezt a klipet?';
+
+  @override
+  String get deleteClipBody =>
+      'Ezzel a felvétel végleg lekerül a szerverről — nem lehet visszacsinálni. Egy rögzített klip a rögzítését is elveszíti.';
+
+  @override
+  String get deleteClipConfirm => 'Törlés';
+
+  @override
+  String get clipDeleted => 'Klip törölve.';
+
+  @override
+  String get clipDeleteFailed => 'Nem sikerült törölni a klipet.';
+
+  @override
   String get noReplaysForDay => 'Erre a napra nincsenek felvételek';
 
   @override

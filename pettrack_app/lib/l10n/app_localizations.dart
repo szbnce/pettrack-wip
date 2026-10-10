@@ -1998,6 +1998,42 @@ abstract class AppLocalizations {
   /// **'Could not update the pin.'**
   String get clipPinFailed;
 
+  /// No description provided for @deleteClip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete clip'**
+  String get deleteClip;
+
+  /// No description provided for @deleteClipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this clip?'**
+  String get deleteClipTitle;
+
+  /// No description provided for @deleteClipBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes the recording from the server for good — it can\'t be undone. A pinned clip loses its pin too.'**
+  String get deleteClipBody;
+
+  /// No description provided for @deleteClipConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteClipConfirm;
+
+  /// No description provided for @clipDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Clip deleted.'**
+  String get clipDeleted;
+
+  /// No description provided for @clipDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not delete the clip.'**
+  String get clipDeleteFailed;
+
   /// No description provided for @noReplaysForDay.
   ///
   /// In en, this message translates to:
