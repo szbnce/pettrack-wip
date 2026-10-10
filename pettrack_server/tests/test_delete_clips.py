@@ -109,3 +109,45 @@ def test_the_list_lets_go_of_a_deleted_clip(client):
         "replays"
     ]
     assert all(r["filename"] != name for r in listing)
+
+
+def test_a_clip_is_dated_by_when_it_started_not_when_ffmpeg_finished(client):
+    """replay_<start>.mp4 names the moment recording began.
+
+    File mtime is when the conversion finished — up to a minute later — and
+    putting that on the timeline misplaces every clip and breaks the jump
+    from an event to its evidence.
+    """
+    token = _login(client)
+    name = _make_clip("replay_1728000123.mp4")
+
+    listing = client.get("/api/replays", headers={"x-api-token": token}).json()[
+        "replays"
+    ]
+    entry = next(r for r in listing if r["filename"] == name)
+    assert entry["timestamp"] == 1728000123
+
+
+def test_an_event_carries_its_still_frame(client):
+    """Zone entries save a snapshot; the feed marks which rows have one and
+    the endpoint hands it back. A moment without a frame is a 404, not a
+    broken image."""
+    token = _login(client)
+    os.makedirs("captured_images", exist_ok=True)
+    ts = 1728000456
+    with open(f"captured_images/frame_{ts}.jpg", "wb") as f:
+        f.write(b"\xff\xd8\xff\xe0fakejpeg")
+
+    resp = client.get(f"/api/event/snapshot/{ts}", headers={"x-api-token": token})
+    assert resp.status_code == 200
+    assert resp.content.startswith(b"\xff\xd8")
+
+    # One second of clock jitter either way still finds the frame.
+    assert client.get(
+        f"/api/event/snapshot/{ts + 1}", headers={"x-api-token": token}
+    ).status_code == 200
+
+    # A sound event never saved one — the client falls back to the clip.
+    assert client.get(
+        "/api/event/snapshot/999999999", headers={"x-api-token": token}
+    ).status_code == 404

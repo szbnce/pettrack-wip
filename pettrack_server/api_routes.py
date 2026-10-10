@@ -1,6 +1,7 @@
 import os
 import glob
 import json
+import re
 import socket
 from fastapi import APIRouter, Depends, HTTPException, Query, Header, Response, Request
 from fastapi.responses import FileResponse
@@ -451,6 +452,13 @@ async def report_sound_event(event: SoundEvent):
 @router.get("/api/activity")
 async def get_activity(limit: int = 50):
     events = await get_events(limit)
+    # One stat per event tells the client which rows can show a still frame
+    # without it having to probe and get a 404 for every one.
+    for ev in events:
+        ts = ev.get("timestamp")
+        ev["has_snapshot"] = (
+            _snapshot_near(int(ts)) is not None if ts is not None else False
+        )
     return {"events": events}
 
 @router.get("/api/timeline")
@@ -906,6 +914,46 @@ async def get_latest_frame():
     return Response(content=img_data, media_type=frame_media_type(img_data), headers=headers)
 
 
+def _snapshot_near(ts: int) -> str | None:
+    """The frame saved within a couple of seconds of [ts], if any.
+
+    Zone-entry snapshots land as captured_images/frame_<epoch>.<ext> in the
+    same second as the event row, but clock jitter and a slow disk can push
+    it one second either way.
+    """
+    folder = "captured_images"
+    if not os.path.isdir(folder):
+        return None
+    for offset in (0, -1, 1, -2, 2):
+        for ext in ("jpg", "png"):
+            path = os.path.join(folder, f"frame_{ts + offset}.{ext}")
+            if os.path.isfile(path):
+                return path
+    return None
+
+
+@router.get("/api/event/snapshot/{timestamp}")
+async def get_event_snapshot(timestamp: int):
+    """The still frame the camera saved when this event happened.
+
+    404 when there is none — zone exits and sound events never saved one —
+    so the client can fall back to the clip alone.
+    """
+    path = _snapshot_near(timestamp)
+    if path is None:
+        raise HTTPException(status_code=404, detail="No snapshot for this moment")
+    with open(path, "rb") as f:
+        img_data = f.read()
+    headers = {
+        "Last-Modified": formatdate(os.path.getmtime(path), usegmt=True)
+    }
+    return Response(
+        content=img_data,
+        media_type=frame_media_type(img_data),
+        headers=headers,
+    )
+
+
 @router.get("/api/frame/web")
 async def get_web_frame():
     if latest_frame_info["data"]:
@@ -949,9 +997,17 @@ async def list_replays():
             ):
                 continue
             file_path = os.path.join(folder, filename)
+            # replay_<start>.mp4 carries the moment recording began — when
+            # the event happened. File mtime is when ffmpeg finished writing,
+            # which can be a minute later and would misplace every clip on
+            # the timeline and in the evidence jump.
+            ts_match = re.match(r"replay_(\d+)\.mp4$", filename)
             files.append({
                 "filename": filename,
-                "timestamp": int(os.path.getmtime(file_path)),
+                "timestamp": (
+                    int(ts_match.group(1)) if ts_match
+                    else int(os.path.getmtime(file_path))
+                ),
                 "size": os.path.getsize(file_path),
                 "pinned": filename in pinned,
                 # Short-lived, file-scoped URL so clients never have to put

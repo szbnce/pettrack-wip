@@ -209,9 +209,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
   }
 
   /// Event → evidence: when a moment was handed in (feed row, alert tap),
-  /// play the clip nearest to it. Half an hour is the reach — further away
-  /// and the clip is not evidence of that moment; the day's grid is right
-  /// there either way.
+  /// play the clip nearest to it, starting at the second it happened. Two
+  /// minutes is the reach — further away and the clip is not evidence of
+  /// that moment; the day's grid is right there either way.
   void _jumpToMoment() {
     final moment = widget.initialTimestamp;
     if (moment == null || _jumpedToMoment || _isDemo) return;
@@ -225,7 +225,7 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
       ).showSnackBar(SnackBar(content: Text(l10n.evidenceNoClip)));
       return;
     }
-    _playVideo(nearest);
+    _playVideo(nearest, momentSeconds: moment);
   }
 
   /// The strip always covers the last two weeks, quiet days included, so
@@ -341,7 +341,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     );
   }
 
-  void _playVideo(Map<String, dynamic> replay) {
+  /// Play a clip. When [momentSeconds] is given — an event tap, an alert —
+  /// start at that second inside the clip instead of the opening frame.
+  void _playVideo(Map<String, dynamic> replay, {int? momentSeconds}) {
     if (_isDemo) {
       _demoPlayback();
       return;
@@ -356,6 +358,9 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
       heroTag: 'replay-${replay['filename']}',
       filename: replay['filename'] as String?,
       pinned: replay['pinned'] == true,
+      startAt: momentSeconds == null
+          ? null
+          : seekOffsetIn(replay, momentSeconds),
     );
   }
 
@@ -640,11 +645,12 @@ class _ReplaysScreenState extends State<ReplaysScreen> {
     String? heroTag,
     String? filename,
     bool pinned = false,
+    Duration? startAt,
   }) {
     final l10n = AppLocalizations.of(context)!;
     Widget player = Container(
       color: Colors.black,
-      child: VideoPlayerWidget(videoUrl: url),
+      child: VideoPlayerWidget(videoUrl: url, startAt: startAt),
     );
     if (heroTag != null) player = Hero(tag: heroTag, child: player);
     // Hoisted out of the builder so setDialogState keeps the flipped star

@@ -7,7 +7,11 @@ class VideoPlayerWidget extends StatefulWidget {
   /// Signed, file-scoped replay URL (the server embeds a short-lived token).
   final String videoUrl;
 
-  const VideoPlayerWidget({super.key, required this.videoUrl});
+  /// Where in the clip to start: the moment the event happened, not the
+  /// opening frame. Clamped to the clip's own length once it is known.
+  final Duration? startAt;
+
+  const VideoPlayerWidget({super.key, required this.videoUrl, this.startAt});
 
   @override
   State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
@@ -29,6 +33,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       ..initialize()
           .then((_) {
             if (!mounted) return;
+            // Land on the event, not the first frame — but never past the end.
+            final startAt = widget.startAt;
+            if (startAt != null && startAt > Duration.zero) {
+              final duration = _controller.value.duration;
+              _controller.seekTo(startAt > duration ? duration : startAt);
+            }
             setState(() {
               _initialized = true;
             });

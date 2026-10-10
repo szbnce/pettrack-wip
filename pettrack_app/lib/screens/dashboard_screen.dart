@@ -28,6 +28,7 @@ import '../utils/recap.dart';
 import '../utils/reconnect.dart';
 import '../utils/snooze.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/event_snapshot_thumb.dart';
 import '../widgets/no_camera_card.dart';
 import '../widgets/skeleton_box.dart';
 import '../widgets/highlight_card.dart';
@@ -240,6 +241,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 isLast: index == events.length - 1,
                 onTap: () => _openEvidenceAt((ev['timestamp'] as num).toInt()),
                 onLongPress: () => _teachEvent(ev, l10n),
+                hasSnapshot: ev['has_snapshot'] == true,
+                snapshotTimestamp: (ev['timestamp'] as num?)?.toInt(),
               );
             },
           ),
@@ -2007,7 +2010,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: events.length > 5 ? 5 : events.length,
+              // The desktop card is a "recent" preview — five rows when
+              // browsing. A search or a filter is asking a question, and
+              // the answer is every match, not a truncated hint.
+              itemCount: _feedQuery.isEmpty && _feedCategory == feedCategoryAll
+                  ? (events.length > 5 ? 5 : events.length)
+                  : events.length,
               separatorBuilder: (context, _) =>
                   Divider(color: Colors.white.withValues(alpha: 0.1)),
               itemBuilder: (context, index) {
@@ -2028,24 +2036,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     borderRadius: BorderRadius.circular(8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          Text(
-                            timeString,
-                            style: const TextStyle(
-                              color: Colors.white54,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+                          if (ev['has_snapshot'] == true) ...[
+                            EventSnapshotThumb(
+                              serverIp: widget.serverIp,
+                              timestamp: (ev['timestamp'] as num).toInt(),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                            const SizedBox(width: 12),
+                          ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  timeString,
+                                  style: const TextStyle(
+                                    color: Colors.white54,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  title,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -2573,6 +2594,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     bool isLast = false,
     VoidCallback? onTap,
     VoidCallback? onLongPress,
+    int? snapshotTimestamp,
+    bool hasSnapshot = false,
   }) {
     return IntrinsicHeight(
       child: Row(
@@ -2642,6 +2665,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
                         ),
+                        if (hasSnapshot && snapshotTimestamp != null) ...[
+                          const SizedBox(width: 12),
+                          EventSnapshotThumb(
+                            serverIp: widget.serverIp,
+                            timestamp: snapshotTimestamp,
+                            size: 56,
+                          ),
+                        ],
+                        const SizedBox(width: 8),
                         Text(
                           time,
                           style: const TextStyle(

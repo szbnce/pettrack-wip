@@ -10,6 +10,14 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- Tapping an event shows the moment, not just the clip. Zone entries save a
+  still frame, the feed carries a thumbnail of it, and the server serves it
+  by the event's second — so you see what the camera saw before the video
+  even loads
+- A clip opens on the second it happened. The evidence jump used to play
+  from the first frame and leave you hunting; the player now seeks to the
+  event inside the clip, and the match window is two minutes (clips are
+  half a minute — a clip from twenty minutes ago is history, not evidence)
 - A failed push is not a lost alert: if ntfy is unreachable the alert waits
   and goes out when the topic comes back — an hour at most, because a stale
   "your dog barked" is worse than silence. Quiet hours still mute the pet,
@@ -74,6 +82,15 @@ builds version together — Settings → About, the update check and
 
 ### Fixed
 
+- Clips are dated by when recording started, not when ffmpeg finished
+  writing. The server used file mtime — up to a minute after the moment —
+  which misplaced every clip on the timeline and made the evidence jump
+  land on the wrong footage. The filename always knew the real start; the
+  API now believes it
+- A filtered feed shows every match. The desktop event card used to cap at
+  five rows even when you had just searched, so a query with twelve hits
+  looked like it found three. Five is still the browsing preview; a filter
+  or a search shows all of them
 - Pairing errors say what actually went wrong. A wrong PIN, a stale QR code
   and a server that answered in a shape this app does not understand used to
   collapse into one raw HTTP error (or silence). Each now has its own
