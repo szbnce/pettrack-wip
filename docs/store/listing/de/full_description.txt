@@ -1,0 +1,61 @@
+PetTrack macht aus den Handys, die du schon hast, eine Haustierkamera: ein
+altes Handy wird zur Kamera, diese App ist der Anblick, und alles läuft auf
+einem Server zu Hause. Kein Abo, keine Cloud, kein Konto — die Videos
+deines Tieres verlassen dein Haus nicht.
+
+WAS DU BEKOMMST
+
+Live-Bild, das bleibt
+· Sieh dein Tier in Echtzeit und ruf es mit einem Ton, wenn du musst
+· Nachtmodus aus der Ferne für dunkle Räume
+· Die Verbindung stellt sich selbst wieder her — ein WLAN-Ausfall killt
+  die Ansicht nicht
+
+Ereignisse, die dich finden
+· Bewegung, Ton (Bellen / Miauen) und Zonen-Ereignisse, jedes mit Snapshot
+· Warnungen auf deinem Handy, plus optionale Remote-Warnungen über ntfy,
+  damit du auch in der Schule oder bei der Arbeit davon erfährst
+· Ruhezeiten und ein Bewachungsplan: nur überwachen, wenn du weg bist
+
+Beweis, kein Rätseln
+· Wiedergabe-Zeitstrahl: ein Tagesband mit Ereignis-Punkten — tippe auf
+  einen Punkt, sieh dir den Clip an
+· Vom Ereignis zum Snapshot bis zur exakten Stelle in der Wiedergabe
+· Tagesrückblick: die Höhepunkte des Tages deines Tieres
+· Wochen-Insights: Zeit in den Zonen, Ruhe versus Aktivität
+
+Für den Alltag gemacht
+· Zonen in Worten — „das Bett“, „die Tür“ — keine Technik-Knöpfe
+· Mehrere Kameras: mehrere alte Handys, ein Dashboard
+· Homescreen-Widget und eine Wear-OS-Begleitung
+· Home-Assistant-Integration über MQTT Discovery
+· Systemzustand: die App sagt dir Bescheid, wenn Kamera oder Speicher
+  Aufmerksamkeit brauchen
+· Backup und Wiederherstellung der ganzen Einrichtung in einer Datei
+· Sieben Sprachen: Englisch, Ungarisch, Deutsch, Italienisch, Japanisch,
+  Koreanisch und Chinesisch
+
+SO FUNKTIONIERT ES
+
+1. Installiere den freien Server auf einem Rechner zu Hause (Skript in
+   einer Zeile).
+2. Stell ein altes Handy im PetTrack-Modus „Kamera“ hin — das ist die
+   Kamera.
+3. Installiere diese App auf deinem Alltagshandy, scan den Kopplungscode,
+   fertig.
+
+Alles läuft in deinem Heim-WLAN. Zugriff von außen? Richte die App auf
+deine Tailscale-Adresse ein — die Doku zeigt es in einem Absatz.
+
+DATENSCHUTZ
+
+Selbst gehostet heißt selbst gehostet: Videos, Ereignisse und
+Gesundheitsdaten deines Tieres liegen auf deinem eigenen Server. Der
+einzige optionale Drittanbieter ist ntfy für Remote-Warnungen, und er
+bleibt aus, bis du ihn einschaltest. Vollständige Datenschutzerklärung:
+https://github.com/szbnce/PetTrack/blob/main/PRIVACY_POLICY.md
+
+OPEN SOURCE
+
+PetTrack ist GPL-3.0: die App, der Server und die Doku liegen alle offen —
+https://github.com/szbnce/PetTrack

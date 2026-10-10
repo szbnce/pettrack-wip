@@ -7,14 +7,24 @@ release checklist in `../RELEASE_CHECKLIST.md`.
 store/
 ├── listing/
 │   ├── en-US/          # English listing (the default locale)
-│   │   ├── title.txt             ≤ 30 chars
-│   │   ├── short_description.txt ≤ 80 chars
-│   │   └── full_description.txt  ≤ 4000 chars
-│   └── hu/             # Hungarian listing
+│   ├── hu/             # Hungarian
+│   ├── de/             # German
+│   ├── it/             # Italian
+│   ├── ja/             # Japanese
+│   ├── ko/             # Korean
+│   └── zh-CN/          # Chinese (Simplified)
+│       ├── title.txt             ≤ 30 characters
+│       ├── short_description.txt ≤ 80 characters
+│       └── full_description.txt  ≤ 4000 characters
 └── screenshots/
     ├── SHOT_LIST.md    # which screens, in which state
     └── *.png           # the actual shots (phone, 1080×2400)
 ```
+
+One folder per Play Store listing locale, matching the seven languages the
+app itself ships. Titles and short descriptions are counted in characters
+(CJK included) — the `.txt` files here already fit their limits; keep them
+that way when editing.
 
 ## Play Store limits (Google Play)
 

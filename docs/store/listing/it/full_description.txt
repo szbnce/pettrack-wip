@@ -1,0 +1,62 @@
+PetTrack trasforma i telefoni che già hai in un monitor per animali: un
+vecchio telefono diventa la telecamera, questa app è dove guardi, e tutto
+gira su un server a casa. Niente abbonamento, niente cloud, niente
+account — i video del tuo pet non escono mai di casa.
+
+COSA OTTIENI
+
+Dal vivo e sempre in piedi
+· Guarda il tuo pet in tempo reale e chiamalo con un suono quando serve
+· Modalità notte da remoto per le stanze buie
+· Lo streaming si ricollega da solo — un singhiozzo del Wi-Fi non uccide
+  la vista
+
+Eventi che ti trovano
+· Movimento, suono (abbaiare / miagolare) ed eventi di zona, ognuno con
+  uno scatto
+· Avvisi sul telefono, più avvisi remoti opzionali via ntfy così ne sei
+  informato a scuola o al lavoro
+· Orari silenziosi e un programma di armamento: sorveglia solo quando
+  non ci sei
+
+Prove, non indovinare
+· Timeline dei replay: una striscia del giorno con i punti evento — tocca
+  un punto, guarda il clip
+· Dall'evento allo scatto fino al momento esatto del replay
+· Riepilogo giornaliero: il meglio della giornata del tuo pet
+· Insight settimanali: tempo nelle zone, riposo contro attività
+
+Fatto per la vita di tutti i giorni
+· Zone in parole semplici — "il letto", "la porta" — non leve da ingegnere
+· Multi-telecamera: più vecchi telefoni, una sola dashboard
+· Widget sulla home screen e una compagna per Wear OS
+· Integrazione Home Assistant tramite MQTT discovery
+· Salute del sistema: l'app ti dice quando telecamera o disco hanno
+  bisogno di attenzione
+· Backup e ripristino di tutta la configurazione in un solo file
+· Sette lingue: inglese, ungherese, tedesco, italiano, giapponese,
+  coreano e cinese
+
+COME FUNZIONA
+
+1. Installa il server gratuito su un computer a casa (script di una riga).
+2. Appoggia un vecchio telefono in modalità monitor PetTrack — quella è la
+   telecamera.
+3. Installa questa app sul telefono di tutti i giorni, scansiona il codice
+   di abbinamento, fatto.
+
+Tutto funziona sul Wi-Fi di casa. Vuoi accedere da fuori? Punta l'app
+sul tuo indirizzo Tailscale — la documentazione lo spiega in un paragrafo.
+
+RISERVATEZZA
+
+Self-hosted significa self-hosted: video, eventi e dati sanitari del tuo
+pet vivono sul tuo server. L'unico servizio terzo opzionale è ntfy per gli
+avvisi remoti, e resta spento finché non lo attivi. Informativa sulla
+privacy completa:
+https://github.com/szbnce/PetTrack/blob/main/PRIVACY_POLICY.md
+
+OPEN SOURCE
+
+PetTrack è GPL-3.0: l'app, il server e la documentazione sono tutti
+all'aperto — https://github.com/szbnce/PetTrack
