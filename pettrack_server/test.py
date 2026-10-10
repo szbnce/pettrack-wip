@@ -12,8 +12,8 @@ import uuid
 
 load_dotenv()
 
-API_URL = "http://127.0.0.1:8000/api"
-WS_URL = "ws://127.0.0.1:8000/ws"
+API_URL = "http://127.0.0.1:9500/api"
+WS_URL = "ws://127.0.0.1:9500/ws"
 
 TOKEN = os.getenv("PETTRACK_SECRET")
 HEADERS = {"x-api-token": TOKEN}

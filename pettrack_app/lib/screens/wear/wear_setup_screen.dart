@@ -210,7 +210,7 @@ class _WearManualSetupScreenState extends State<WearManualSetupScreen> {
                         if (isIpOrLocal &&
                             uri.scheme != 'https' &&
                             !targetIp.contains(':$host')) {
-                          targetIp = '${uri.scheme}://$host:8000${uri.path}';
+                          targetIp = '${uri.scheme}://$host:9500${uri.path}';
                         }
                       }
 

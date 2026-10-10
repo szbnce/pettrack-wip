@@ -208,7 +208,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     var ip = input.trim();
     if (ip.startsWith('http://')) ip = ip.replaceAll('http://', '');
     if (ip.startsWith('https://')) ip = ip.replaceAll('https://', '');
-    if (!ip.contains(':')) ip = '$ip:8000';
+    if (!ip.contains(':')) ip = '$ip:9500';
     return ip;
   }
 
@@ -250,7 +250,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           RegExp(r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$').hasMatch(host) ||
           host == 'localhost';
       if (isIpOrLocal && uri.scheme != 'https') {
-        ip = '${uri.scheme}://$host:8000${uri.path}';
+        ip = '${uri.scheme}://$host:9500${uri.path}';
       }
     }
     _ipController.text = ip;

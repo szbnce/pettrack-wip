@@ -45,20 +45,20 @@ def _reset(monkeypatch):
 
 
 def test_advertises_pettrack_service():
-    assert discovery.start_advertiser(ip="192.168.1.10", port=8000)
+    assert discovery.start_advertiser(ip="192.168.1.10", port=9500)
     zc = _FakeZeroconf.instances[-1]
     assert len(zc.registered) == 1
     info = zc.registered[0]
     assert info.type == "_pettrack._tcp.local."
     assert info.name.endswith("._pettrack._tcp.local.")
-    assert info.port == 8000
+    assert info.port == 9500
     assert info.properties.get("app") == "pettrack"
     assert info.properties.get("name")
 
 
 def test_mdns_off_skips_advertisement(monkeypatch):
     monkeypatch.setenv("PETTRACK_MDNS", "off")
-    assert not discovery.start_advertiser(ip="192.168.1.10", port=8000)
+    assert not discovery.start_advertiser(ip="192.168.1.10", port=9500)
     assert _FakeZeroconf.instances == []
 
 
@@ -68,13 +68,13 @@ def test_instance_name_env_override(monkeypatch):
 
 
 def test_start_is_idempotent():
-    assert discovery.start_advertiser(ip="10.0.0.2", port=8000)
-    assert discovery.start_advertiser(ip="10.0.0.2", port=8000)
+    assert discovery.start_advertiser(ip="10.0.0.2", port=9500)
+    assert discovery.start_advertiser(ip="10.0.0.2", port=9500)
     assert len(_FakeZeroconf.instances) == 1
 
 
 def test_stop_unregisters_and_closes():
-    discovery.start_advertiser(ip="10.0.0.2", port=8000)
+    discovery.start_advertiser(ip="10.0.0.2", port=9500)
     zc = _FakeZeroconf.instances[-1]
     discovery.stop_advertiser()
     assert zc.registered == []
@@ -85,4 +85,4 @@ def test_stop_unregisters_and_closes():
 
 def test_missing_zeroconf_degrades_gracefully(monkeypatch):
     monkeypatch.setitem(sys.modules, "zeroconf", None)  # import raises ImportError
-    assert not discovery.start_advertiser(ip="10.0.0.2", port=8000)
+    assert not discovery.start_advertiser(ip="10.0.0.2", port=9500)

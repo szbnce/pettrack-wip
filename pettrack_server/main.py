@@ -79,12 +79,12 @@ async def startup_event():
         ip = "127.0.0.1"
 
     # Advertise on the LAN (mDNS) so apps can find this server without typing an IP.
-    start_advertiser(ip=ip, port=8000)
+    start_advertiser(ip=ip, port=9500)
 
     # Home Assistant MQTT discovery (no-op unless PETTRACK_MQTT_HOST is set).
     mqtt_bridge.start()
 
-    qr_data = f'{{"ip": "{ip}:8000", "secret": "{SECRET_TOKEN}"}}'
+    qr_data = f'{{"ip": "{ip}:9500", "secret": "{SECRET_TOKEN}"}}'
     qr_img = qrcode.make(qr_data)
     qr = qrcode.QRCode()
     qr.add_data(qr_data)
@@ -104,7 +104,7 @@ async def startup_event():
     qr.print_ascii(invert=True)
     print("="*55)
     print("OR ENTER THESE DETAILS MANUALLY:")
-    print(f"Server IP: {ip}:8000")
+    print(f"Server IP: {ip}:9500")
     print(f"Secret Token: {SECRET_TOKEN}")
     print("="*55)
     print(f"WEB DASHBOARD PIN: {web_pin}")
@@ -219,4 +219,4 @@ if __name__ == "__main__":
     if ssl_cert and ssl_key:
         ssl_kwargs = {"ssl_certfile": ssl_cert, "ssl_keyfile": ssl_key}
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level=log_level, **ssl_kwargs)
+    uvicorn.run("main:app", host="0.0.0.0", port=9500, log_level=log_level, **ssl_kwargs)

@@ -26,7 +26,7 @@ Map<String, String>? pairingFields(Object? data) {
 
 /// The payload the monitor phone's scanner expects: `{"ip","secret"}` with
 /// `ip` as host:port and no scheme, matching what the server prints as its
-/// QR. Built from an app-side server URL (`http://192.168.1.10:8000`) by
+/// QR. Built from an app-side server URL (`http://192.168.1.10:9500`) by
 /// dropping the scheme and any trailing slash.
 String pairingQrPayload(String serverUrl, String secret) {
   var host = serverUrl.trim();
