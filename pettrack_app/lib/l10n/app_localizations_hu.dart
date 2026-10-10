@@ -1208,6 +1208,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get feedNoMatch => 'Nincs találat';
 
   @override
+  String get feedLoadMore => 'Régebbi események mutatása';
+
+  @override
   String get feedExport => 'CSV exportálás';
 
   @override

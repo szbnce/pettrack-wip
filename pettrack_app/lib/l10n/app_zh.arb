@@ -541,6 +541,7 @@
   "feedFilterSounds": "声音",
   "feedFilterSystem": "系统",
   "feedNoMatch": "没有匹配的事件",
+  "feedLoadMore": "显示更早的事件",
   "feedExport": "导出 CSV",
   "feedExportEmpty": "暂无可导出的内容。",
   "feedExportFailed": "无法导出动态。",

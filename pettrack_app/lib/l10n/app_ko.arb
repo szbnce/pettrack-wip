@@ -541,6 +541,7 @@
   "feedFilterSounds": "소리",
   "feedFilterSystem": "시스템",
   "feedNoMatch": "일치하는 이벤트가 없습니다",
+  "feedLoadMore": "이전 이벤트 보기",
   "feedExport": "CSV 내보내기",
   "feedExportEmpty": "아직 내보낼 내용이 없습니다.",
   "feedExportFailed": "피드를 내보내지 못했습니다.",

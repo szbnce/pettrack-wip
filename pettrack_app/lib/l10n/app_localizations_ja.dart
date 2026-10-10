@@ -1192,6 +1192,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get feedNoMatch => '一致するイベントがありません';
 
   @override
+  String get feedLoadMore => '過去のイベントを表示';
+
+  @override
   String get feedExport => 'CSVを書き出す';
 
   @override

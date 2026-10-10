@@ -70,6 +70,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // Skeletons only for the very first fetch (and explicit retries) — the
   // 1s poll must never flash them over a feed that is already showing.
   bool _activityLoading = true;
+  // The feed starts at a generous page and can reach further back on demand.
+  // Fifty was a search that could not see past this morning.
+  int _activityLimit = 200;
+  bool _activityHasMore = false;
   // Feed search/filter: the query box and the category chips above the feed.
   final TextEditingController _feedSearchController = TextEditingController();
   String _feedQuery = '';
@@ -245,6 +249,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 snapshotTimestamp: (ev['timestamp'] as num?)?.toInt(),
               );
             },
+          ),
+        if (_activityHasMore)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Center(
+              child: TextButton(
+                onPressed: _loadMoreActivities,
+                child: Text(l10n.feedLoadMore),
+              ),
+            ),
           ),
       ],
     );
@@ -1024,11 +1038,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _fetchActivity();
   }
 
+  /// Reach further back: double the page and refetch. The poll keeps the
+  /// window fresh from here on, so "load more" is a one-way widening.
+  void _loadMoreActivities() {
+    if (_activityLimit >= 500) return;
+    setState(() => _activityLimit = (_activityLimit * 2).clamp(200, 500));
+    _fetchActivity();
+  }
+
   Future<void> _fetchActivity() async {
     try {
       final response = await http
           .get(
-            Uri.parse('${widget.serverIp}/api/activity?limit=50'),
+            Uri.parse(
+              '${widget.serverIp}/api/activity?limit=$_activityLimit',
+            ),
             headers: AuthService.headers,
           )
           .timeout(const Duration(seconds: 2));
@@ -1040,7 +1064,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         final newEvents = data['events'] as List<dynamic>;
 
         if (_activities.isEmpty && newEvents.isNotEmpty) {
-          setState(() => _activities = newEvents);
+          setState(() {
+            _activities = newEvents;
+            _activityHasMore = newEvents.length >= _activityLimit;
+          });
         } else if (_activities.length != newEvents.length ||
             (_activities.isNotEmpty &&
                 newEvents.isNotEmpty &&
@@ -1097,7 +1124,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
             }
           }
-          setState(() => _activities = newEvents);
+          setState(() {
+            _activities = newEvents;
+            _activityHasMore = newEvents.length >= _activityLimit;
+          });
         }
       } else if (mounted && !_activityError) {
         setState(() => _activityError = true);
@@ -2075,6 +2105,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 );
               },
+            ),
+          if (_activityHasMore)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Center(
+                child: TextButton(
+                  onPressed: _loadMoreActivities,
+                  child: Text(
+                    l10n.feedLoadMore,
+                    style: const TextStyle(color: Colors.white54),
+                  ),
+                ),
+              ),
             ),
         ],
       ),

@@ -2292,6 +2292,12 @@ abstract class AppLocalizations {
   /// **'No matching events'**
   String get feedNoMatch;
 
+  /// No description provided for @feedLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Show older events'**
+  String get feedLoadMore;
+
   /// No description provided for @feedExport.
   ///
   /// In en, this message translates to:

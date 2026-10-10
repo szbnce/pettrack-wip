@@ -448,6 +448,7 @@
   "feedFilterSounds": "Hangok",
   "feedFilterSystem": "Rendszer",
   "feedNoMatch": "Nincs találat",
+  "feedLoadMore": "Régebbi események mutatása",
   "feedExport": "CSV exportálás",
   "feedExportEmpty": "Még nincs mit exportálni.",
   "feedExportFailed": "Nem sikerült exportálni az eseményeket.",

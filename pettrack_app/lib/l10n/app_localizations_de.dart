@@ -1218,6 +1218,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get feedNoMatch => 'Keine passenden Ereignisse';
 
   @override
+  String get feedLoadMore => 'Ältere Ereignisse anzeigen';
+
+  @override
   String get feedExport => 'CSV exportieren';
 
   @override

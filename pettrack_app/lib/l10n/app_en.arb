@@ -648,6 +648,7 @@
   "feedFilterSounds": "Sounds",
   "feedFilterSystem": "System",
   "feedNoMatch": "No matching events",
+  "feedLoadMore": "Show older events",
   "feedExport": "Export CSV",
   "feedExportEmpty": "Nothing to export yet.",
   "feedExportFailed": "Could not export the feed.",

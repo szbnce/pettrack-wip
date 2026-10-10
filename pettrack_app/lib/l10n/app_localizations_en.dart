@@ -1204,6 +1204,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get feedNoMatch => 'No matching events';
 
   @override
+  String get feedLoadMore => 'Show older events';
+
+  @override
   String get feedExport => 'Export CSV';
 
   @override

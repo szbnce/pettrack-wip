@@ -91,12 +91,12 @@ async def log_event(event_type: str, zone_name: str = None, details: str = None)
     except Exception as e:
         print(f"ntfy bridge: push failed: {e}", flush=True)
 
-async def get_events(limit: int = 50):
+async def get_events(limit: int = 50, offset: int = 0):
     async with aiosqlite.connect(DB_PATH) as db:
         db.row_factory = aiosqlite.Row
         cursor = await db.execute(
-            "SELECT * FROM events ORDER BY timestamp DESC LIMIT ?",
-            (limit,)
+            "SELECT * FROM events ORDER BY timestamp DESC LIMIT ? OFFSET ?",
+            (limit, offset)
         )
         rows = await cursor.fetchall()
         return [dict(row) for row in rows]

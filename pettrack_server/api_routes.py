@@ -450,8 +450,11 @@ async def report_sound_event(event: SoundEvent):
     return {"status": "ok", "logged": True}
 
 @router.get("/api/activity")
-async def get_activity(limit: int = 50):
-    events = await get_events(limit)
+async def get_activity(
+    limit: int = Query(default=50, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+):
+    events = await get_events(limit, offset=offset)
     # One stat per event tells the client which rows can show a still frame
     # without it having to probe and get a 404 for every one.
     for ev in events:

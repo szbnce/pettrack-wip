@@ -541,6 +541,7 @@
   "feedFilterSounds": "Geräusche",
   "feedFilterSystem": "System",
   "feedNoMatch": "Keine passenden Ereignisse",
+  "feedLoadMore": "Ältere Ereignisse anzeigen",
   "feedExport": "CSV exportieren",
   "feedExportEmpty": "Noch nichts zu exportieren.",
   "feedExportFailed": "Der Feed konnte nicht exportiert werden.",

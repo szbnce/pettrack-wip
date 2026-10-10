@@ -1188,6 +1188,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get feedNoMatch => '일치하는 이벤트가 없습니다';
 
   @override
+  String get feedLoadMore => '이전 이벤트 보기';
+
+  @override
   String get feedExport => 'CSV 내보내기';
 
   @override

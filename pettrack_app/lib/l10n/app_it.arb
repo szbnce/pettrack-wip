@@ -541,6 +541,7 @@
   "feedFilterSounds": "Suoni",
   "feedFilterSystem": "Sistema",
   "feedNoMatch": "Nessun evento corrispondente",
+  "feedLoadMore": "Mostra eventi più vecchi",
   "feedExport": "Esporta CSV",
   "feedExportEmpty": "Ancora niente da esportare.",
   "feedExportFailed": "Impossibile esportare il diario.",

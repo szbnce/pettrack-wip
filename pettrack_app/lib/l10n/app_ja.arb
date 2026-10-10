@@ -541,6 +541,7 @@
   "feedFilterSounds": "音",
   "feedFilterSystem": "システム",
   "feedNoMatch": "一致するイベントがありません",
+  "feedLoadMore": "過去のイベントを表示",
   "feedExport": "CSVを書き出す",
   "feedExportEmpty": "書き出す内容がまだありません。",
   "feedExportFailed": "フィードを書き出せませんでした。",
