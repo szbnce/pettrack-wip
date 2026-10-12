@@ -2250,6 +2250,24 @@ abstract class AppLocalizations {
   /// **'No clip recorded near that moment'**
   String get evidenceNoClip;
 
+  /// No description provided for @eventWatchClip.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch the clip'**
+  String get eventWatchClip;
+
+  /// No description provided for @eventToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get eventToday;
+
+  /// No description provided for @eventYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get eventYesterday;
+
   /// No description provided for @feedSearchHint.
   ///
   /// In en, this message translates to:

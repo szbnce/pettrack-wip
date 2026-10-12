@@ -1161,6 +1161,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get evidenceNoClip => '该时刻附近没有录像片段';
 
   @override
+  String get eventWatchClip => '观看片段';
+
+  @override
+  String get eventToday => '今天';
+
+  @override
+  String get eventYesterday => '昨天';
+
+  @override
   String get feedSearchHint => '搜索事件';
 
   @override

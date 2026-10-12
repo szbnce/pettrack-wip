@@ -1167,6 +1167,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get evidenceNoClip => '그 순간 근처에 녹화된 클립이 없습니다';
 
   @override
+  String get eventWatchClip => '클립 보기';
+
+  @override
+  String get eventToday => '오늘';
+
+  @override
+  String get eventYesterday => '어제';
+
+  @override
   String get feedSearchHint => '이벤트 검색';
 
   @override

@@ -1197,6 +1197,15 @@ class AppLocalizationsDe extends AppLocalizations {
       'Kein Clip in der Nähe dieses Moments aufgezeichnet';
 
   @override
+  String get eventWatchClip => 'Clip ansehen';
+
+  @override
+  String get eventToday => 'Heute';
+
+  @override
+  String get eventYesterday => 'Gestern';
+
+  @override
   String get feedSearchHint => 'Ereignisse suchen';
 
   @override

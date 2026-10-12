@@ -10,6 +10,10 @@ builds version together — Settings → About, the update check and
 
 ### Added
 
+- An event opens as a moment, not a log line: a tap now shows the frame the
+  camera kept, what happened and where, and then the choice to watch the
+  clip — "Teach PetTrack" is on that sheet too, so the thing that used to
+  be a long-press secret is a visible button
 - The feed reaches past this morning: 200 events at a time instead of 50,
   and "Show older events" when there is more — so a search is a search, not
   a search of the last hour

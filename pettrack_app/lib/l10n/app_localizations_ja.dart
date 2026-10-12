@@ -1171,6 +1171,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get evidenceNoClip => 'その時刻の近くに録画クリップがありません';
 
   @override
+  String get eventWatchClip => 'クリップを見る';
+
+  @override
+  String get eventToday => '今日';
+
+  @override
+  String get eventYesterday => '昨日';
+
+  @override
   String get feedSearchHint => 'イベントを検索';
 
   @override

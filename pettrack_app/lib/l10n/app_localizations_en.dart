@@ -1183,6 +1183,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get evidenceNoClip => 'No clip recorded near that moment';
 
   @override
+  String get eventWatchClip => 'Watch the clip';
+
+  @override
+  String get eventToday => 'Today';
+
+  @override
+  String get eventYesterday => 'Yesterday';
+
+  @override
   String get feedSearchHint => 'Search events';
 
   @override

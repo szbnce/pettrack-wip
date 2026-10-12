@@ -28,6 +28,7 @@ import '../utils/recap.dart';
 import '../utils/reconnect.dart';
 import '../utils/snooze.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/event_detail_sheet.dart';
 import '../widgets/event_snapshot_thumb.dart';
 import '../widgets/no_camera_card.dart';
 import '../widgets/skeleton_box.dart';
@@ -243,7 +244,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 subtitle,
                 timeString,
                 isLast: index == events.length - 1,
-                onTap: () => _openEvidenceAt((ev['timestamp'] as num).toInt()),
+                onTap: () => _openEventDetail(ev, l10n),
                 onLongPress: () => _teachEvent(ev, l10n),
                 hasSnapshot: ev['has_snapshot'] == true,
                 snapshotTimestamp: (ev['timestamp'] as num?)?.toInt(),
@@ -671,6 +672,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
           initialTimestamp: timestampSeconds,
         ),
       ),
+    );
+  }
+
+  /// A feed row is a moment, so it opens like one — the frame, the words,
+  /// and then the choice to go to the footage. Only the clip itself is one
+  /// tap away; everything else used to be a long-press secret.
+  void _openEventDetail(dynamic ev, AppLocalizations l10n) {
+    final ts = (ev['timestamp'] as num?)?.toInt();
+    if (ts == null) return;
+    final (icon, color, title, subtitle) = _eventDisplay(ev, l10n);
+    showEventDetailSheet(
+      context: context,
+      serverIp: widget.serverIp,
+      event: ev,
+      icon: icon,
+      color: color,
+      title: title,
+      subtitle: subtitle,
+      onWatchClip: () => _openEvidenceAt(ts),
+      onTeach: () => _teachEvent(ev, l10n),
     );
   }
 
@@ -2060,8 +2081,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 return Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () =>
-                        _openEvidenceAt((ev['timestamp'] as num).toInt()),
+                    onTap: () => _openEventDetail(ev, l10n),
                     onLongPress: () => _teachEvent(ev, l10n),
                     borderRadius: BorderRadius.circular(8),
                     child: Padding(

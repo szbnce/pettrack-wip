@@ -1187,6 +1187,15 @@ class AppLocalizationsHu extends AppLocalizations {
   String get evidenceNoClip => 'Nincs felvétel ehhez a pillanathoz';
 
   @override
+  String get eventWatchClip => 'Klip megnyitása';
+
+  @override
+  String get eventToday => 'Ma';
+
+  @override
+  String get eventYesterday => 'Tegnap';
+
+  @override
   String get feedSearchHint => 'Események keresése';
 
   @override
