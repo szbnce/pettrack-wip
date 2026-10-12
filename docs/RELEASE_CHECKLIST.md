@@ -78,9 +78,9 @@ Self-hosted installs update themselves from the server. On the host, next
 to the running server (or wherever `PETTRACK_UPDATE_DIR` points):
 
 ```bash
-mkdir -p updates
-cp PetTrack.apk updates/PetTrack.apk
-echo '{"version": "X.Y.Z"}' > updates/update.json
+./manager.sh stage-update
+   # copies the APK in and writes the version for you
+   # (the version comes from pubspec.yaml — nothing to retype)
 ```
 
 No restart needed — Settings → About → "Check now" now offers "Install

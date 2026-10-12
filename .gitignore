@@ -140,3 +140,4 @@ pettrack_server/models/
 # Build artifacts (uploaded to GitHub Releases, not committed)
 PetTrack.apk
 PetTrack.ipa
+pettrack_server/updates/

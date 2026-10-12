@@ -388,9 +388,9 @@ Your server ships updates to the phones already running PetTrack. Drop the
 new build next to the server's data:
 
 ```bash
-mkdir -p updates
-cp PetTrack.apk updates/PetTrack.apk
-echo '{"version": "2.1.0"}' > updates/update.json
+./manager.sh stage-update
+   # copies the APK in and writes the version for you
+   # (the version comes from pubspec.yaml — nothing to retype)
 ```
 
 Then on the phone: **Settings → About & updates → Check now**. If the

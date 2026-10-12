@@ -9,6 +9,7 @@
 #   ./manager.sh all        # web + android + ios
 #   ./manager.sh install-android   # adb install PetTrack.apk
 #   ./manager.sh install-ios       # open PetTrack.ipa in Sideloadly
+#   ./manager.sh stage-update      # hand this build to the server's one-tap update
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -113,6 +114,30 @@ install_ios() {
     fi
 }
 
+# Hand the APK we just built to the server, so every installed app can
+# update itself from Settings -> About & updates. The version comes out of
+# pubspec.yaml rather than being retyped here, because a hand-typed version
+# that drifts is how "2.1.0 offered 2.0.0" bugs are born.
+stage_update() {
+    echo -e "${YELLOW}Staging one-tap update...${NC}"
+    if [ ! -f "PetTrack.apk" ]; then
+        echo -e "${RED}Error: PetTrack.apk not found. Build it first!${NC}"
+        return 1
+    fi
+    local version
+    version=$(sed -n 's/^version:[[:space:]]*\([^+]*\).*/\1/p' pettrack_app/pubspec.yaml | head -n 1)
+    if [ -z "$version" ]; then
+        echo -e "${RED}Error: no version in pettrack_app/pubspec.yaml${NC}"
+        return 1
+    fi
+    mkdir -p pettrack_server/updates
+    cp PetTrack.apk pettrack_server/updates/PetTrack.apk
+    printf '{"version": "%s"}\n' "$version" > pettrack_server/updates/update.json
+    echo -e "${GREEN}Staged v${version} as pettrack_server/updates/PetTrack.apk${NC}"
+    echo -e "${CYAN}Copy that folder onto the server (it is the 'updates' volume) and every${NC}"
+    echo -e "${CYAN}installed app will offer it under Settings -> About & updates.${NC}"
+}
+
 show_menu() {
     echo ""
     echo "1) Build Web"
@@ -121,9 +146,10 @@ show_menu() {
     echo "4) Build EVERYTHING (Web + Android + iOS)"
     echo "5) Install Android via ADB"
     echo "6) Install iOS via Sideloadly"
-    echo "7) Exit"
+    echo "7) Stage one-tap update for the server"
+    echo "8) Exit"
     echo ""
-    read -r -p "Select an option [1-7]: " choice
+    read -r -p "Select an option [1-8]: " choice
 
     case $choice in
         1) build_web; show_menu ;;
@@ -132,7 +158,8 @@ show_menu() {
         4) build_web; build_android; build_ios; show_menu ;;
         5) install_android; show_menu ;;
         6) install_ios; show_menu ;;
-        7) echo -e "${CYAN}Bye!${NC}"; exit 0 ;;
+        7) stage_update; show_menu ;;
+        8) echo -e "${CYAN}Bye!${NC}"; exit 0 ;;
         *) echo -e "${RED}Invalid option!${NC}"; show_menu ;;
     esac
 }
@@ -145,6 +172,7 @@ case "${1:-menu}" in
     all) build_web && build_android && build_ios ;;
     install-android) install_android ;;
     install-ios) install_ios ;;
+    stage-update) stage_update ;;
     menu) show_menu ;;
-    *) echo -e "${RED}Unknown target: $1${NC}"; echo "Use: web | android | ios | all | install-android | install-ios"; exit 1 ;;
+    *) echo -e "${RED}Unknown target: $1${NC}"; echo "Use: web | android | ios | all | install-android | install-ios | stage-update"; exit 1 ;;
 esac
