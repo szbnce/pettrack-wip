@@ -691,6 +691,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       title: title,
       subtitle: subtitle,
       onWatchClip: () => _openEvidenceAt(ts),
+      onShare: () => SharePlus.instance.share(
+        ShareParams(text: '$title\n$subtitle'),
+      ),
       onTeach: () => _teachEvent(ev, l10n),
     );
   }
