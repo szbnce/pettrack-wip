@@ -37,6 +37,12 @@ as a crash:
   clients that only know one of the two keys keep working.
 - Frame upload (`/ws`, `/api/frame/web`), status pokes and monitor PIN
   logins keep their historical shapes.
+- **The port moved to 9500.** A saved server address that spells the port
+  out (`http://192.168.1.10:8000`) keeps pointing at 8000 — the app never
+  rewrites an address a human typed. After moving the server, edit the
+  address in **Settings → Advanced** (or re-pair): bare IPs already come
+  out as `:9500`. A QR code carries the port, so a fresh scan is always
+  right.
 
 ## Upgrading a phone in place
 
