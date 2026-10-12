@@ -164,7 +164,7 @@ if [ -n "$HTTPS_HOST" ]; then
 # Managed by PetTrack setup_server.sh
 $HTTPS_HOST {
 $TLS_LINE
-	reverse_proxy 127.0.0.1:8000
+	reverse_proxy 127.0.0.1:9500
 }
 EOF
   sudo systemctl enable --now caddy 2>/dev/null || true
@@ -186,4 +186,4 @@ if [ "$SYSTEMD" = 0 ]; then
   echo "Start the server with:   ./run_linux_and_macos.sh"
 fi
 echo "Then open the dashboard at the address printed on first start"
-echo "(http://<server_ip>:8000 by default) and scan the QR code to pair phones."
+echo "(http://<server_ip>:9500 by default) and scan the QR code to pair phones."

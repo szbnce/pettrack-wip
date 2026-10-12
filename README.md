@@ -143,7 +143,7 @@ PetTrack is a lightweight Pet monitor that upcycles old phones, and uses them as
 ### Installation
 
 Both options get you to the same place: a PetTrack server with the web dashboard at
-`http://<server_ip>:8000`. Pick whichever you are more comfortable with.
+`http://<server_ip>:9500`. Pick whichever you are more comfortable with.
 
 #### Option A — Docker
 
@@ -170,7 +170,7 @@ Both options get you to the same place: a PetTrack server with the web dashboard
    ```sh
    docker logs pettrack
    ```
-4. Your server is now reachable at `http://<server_ip>:8000` (server API + web dashboard).
+4. Your server is now reachable at `http://<server_ip>:9500` (server API + web dashboard).
 
 Your data (replays, snapshots, database, secrets) lives in `./pettrack_server/`, so it
 survives container rebuilds.
@@ -208,7 +208,7 @@ survives container rebuilds.
    the web dashboard into `pettrack_server/static`.
 4. Read the terminal output and note the **4-digit PIN** (and the QR code for pairing phones).
 
-Your server is now reachable at `http://<server_ip>:8000` (server API + web dashboard).
+Your server is now reachable at `http://<server_ip>:9500` (server API + web dashboard).
 
 > Building the phone apps yourself? Install the [Flutter SDK](https://docs.flutter.dev/get-started/install)
 > as well — the web dashboard build in step 3 needs it.
@@ -259,7 +259,7 @@ iOS:
 
 Web:
 
-1. Open `http://<server_ip>:8000` on your own server (or the [demo](https://pettrackdemo.szabence.com)).
+1. Open `http://<server_ip>:9500` on your own server (or the [demo](https://pettrackdemo.szabence.com)).
 2. Select your language, select if you want to use it as a Monitor or Client, then enter the IP and Port (On the Monitor phone, you should use the local IP, not the external IP, on the Client you should use the external IP, if DDNS is set up, or Tailscale.)
 
 WearOS:
@@ -285,7 +285,7 @@ lives in [SECURITY.md](SECURITY.md).
   time-limited token — never the master secret itself.
 * By default the server is meant for a **trusted LAN**. If you want access from outside,
   use a VPN (e.g. [Tailscale](https://tailscale.com/)) or put a reverse proxy with HTTPS
-  (e.g. Caddy) in front of port 8000 — don't just port-forward plain HTTP to the internet.
+  (e.g. Caddy) in front of port 9500 — don't just port-forward plain HTTP to the internet.
 * Cross-origin browser access is disabled by default. If you host the web dashboard on a
   different origin, whitelist it with `PETTRACK_CORS_ORIGINS` in `.env`.
 

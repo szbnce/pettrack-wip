@@ -40,7 +40,7 @@ for people you trust on your network.
 **Transport.** Plain HTTP is acceptable only on a trusted LAN. For anything
 wider, terminate TLS in front (the bundled Caddy setup) or use the native
 TLS options (`PETTRACK_TLS_CERT` / `PETTRACK_TLS_KEY`), and reach the
-server over a VPN such as Tailscale rather than port-forwarding :8000.
+server over a VPN such as Tailscale rather than port-forwarding :9500.
 
 **Data at rest.** SQLite + clip files on your disk, file mode your OS
 enforces. The master secret lives in `.env` next to the server; the Fernet
