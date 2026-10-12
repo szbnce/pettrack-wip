@@ -168,6 +168,11 @@ builds version together — Settings → About, the update check and
 
 ### Changed
 
+- The server listens on **9500** instead of 8000 — the container, the
+  install script, Caddy, the pairing QR and the app's default all agree on
+  it now. A saved address that spelled the port out keeps pointing at the
+  old one (the app never rewrites what you typed), so edit it in Settings →
+  Advanced or scan the QR again; see docs/COMPATIBILITY.md
 - The setup wizard leads with the camera. "Read QR Code" is the first thing
   on page 1 — the address form is the fallback below the "OR" line, not the
   other way round — and the PIN button stays put (and stays dead) while a
